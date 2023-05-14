@@ -10,6 +10,6 @@ namespace Furesoft.PrattParser.Parselets;
 /// 
 /// See <see cref="IInfixParselet"/>.
 /// </summary>
-public interface IPrefixParselet<T> {
-   T Parse(Parser<T> parser, Token token);
+public interface IPrefixParselet<T, TokenType> {
+   T Parse(Parser<T, TokenType> parser, Token<TokenType> token);
 }

@@ -5,7 +5,7 @@ namespace Furesoft.PrattParser.Expressions;
 /// <summary>
 /// A postfix unary arithmetic expression like "a!"
 /// </summary>
-public class PostfixExpression : IExpression {
+public class PostfixExpression<TokenType> : IExpression {
    private IExpression _leftExpr;
    private TokenType _operator;
 

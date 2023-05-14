@@ -10,7 +10,7 @@ namespace Furesoft.PrattParser;
 /// ignored (except to separate names). Numbers and strings are not supported. This
 /// is really just the bare minimum to give the parser something to work with.
 /// </summary>
-public class Lexer {
+public class Lexer : ILexer<TokenType> {
    private readonly Dictionary<char, TokenType> _punctuators;
    private readonly string _source;
    private int _index;
@@ -31,16 +31,16 @@ public class Lexer {
       }
    }
 
-   public Token Next() {
+   public Token<TokenType> Next() {
       while (_index < _source.Length) {
-         char c = _source[_index++];
+         var c = _source[_index++];
 
          if (_punctuators.TryGetValue(c, out var tokenType)) {
             return new(tokenType, char.ToString(c));
          }
          else if (char.IsLetter(c)) {
             // Handle names.
-            int start = _index - 1;
+            var start = _index - 1;
             while (_index < _source.Length) {
                if (!char.IsLetter(_source[_index])) break;
                _index++;
@@ -57,6 +57,6 @@ public class Lexer {
       // Once we've reached the end of the string, just return EOF tokens. We'll
       // just keeping returning them as many times as we're asked so that the
       // parser's lookahead doesn't have to worry about running out of tokens.
-      return new(TokenType.EOF, String.Empty);
+      return new(TokenType.EOF, string.Empty);
    }
 }

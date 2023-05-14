@@ -18,7 +18,7 @@ public class CallExpression : IExpression {
    public void Print(StringBuilder sb) {
       _functionExpr.Print(sb);
       sb.Append('(');
-      for (int i = 0; i < _argumentExprs.Count; i++) {
+      for (var i = 0; i < _argumentExprs.Count; i++) {
          if (i > 0) sb.Append(", ");
          _argumentExprs[i].Print(sb);
       }

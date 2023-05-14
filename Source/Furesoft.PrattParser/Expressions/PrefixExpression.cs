@@ -5,7 +5,7 @@ namespace Furesoft.PrattParser.Expressions;
 /// <summary>
 /// A prefix unary arithmetic expression like "!a" or "-b".
 /// </summary>
-public class PrefixExpression : IExpression {
+public class PrefixExpression<TokenType> : IExpression {
    private TokenType _operator;
    private IExpression _rightExpr;
 
