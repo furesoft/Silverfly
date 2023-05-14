@@ -11,7 +11,7 @@ public class TestParser : Parser<IExpression> {
        Register("=", new AssignParselet());
        
        Register("?", new ConditionalParselet()); 
-       Register(")", new CallParselet());
+       Register("(", new CallParselet());
        Group("(", ")");
        
        
