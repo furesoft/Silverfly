@@ -5,11 +5,11 @@ namespace Furesoft.PrattParser.Expressions;
 /// <summary>
 /// A postfix unary arithmetic expression like "a!"
 /// </summary>
-public class PostfixExpression : IExpression {
-   private IExpression _leftExpr;
+public class PostfixAstNode : IAstNode {
+   private IAstNode _leftExpr;
    private Symbol _operator;
 
-   public PostfixExpression(IExpression left, Symbol op) {
+   public PostfixAstNode(IAstNode left, Symbol op) {
       _leftExpr = left;
       _operator = op;
    }

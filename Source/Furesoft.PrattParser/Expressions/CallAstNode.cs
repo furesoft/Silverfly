@@ -6,11 +6,11 @@ namespace Furesoft.PrattParser.Expressions;
 /// <summary>
 /// A function call like "a(b, c, d)".
 /// </summary>
-public class CallExpression : IExpression {
-   private IExpression _functionExpr;
-   private List<IExpression> _argumentExprs;
+public class CallAstNode : IAstNode {
+   private IAstNode _functionExpr;
+   private List<IAstNode> _argumentExprs;
 
-   public CallExpression(IExpression functionExpr, List<IExpression> argumentExpressions) {
+   public CallAstNode(IAstNode functionExpr, List<IAstNode> argumentExpressions) {
       _functionExpr = functionExpr;
       _argumentExprs = argumentExpressions;
    }

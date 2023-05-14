@@ -28,7 +28,7 @@ public class Parser<T> {
    public void Register(string token, IInfixParselet<T> parselet) {
        _infixParselets.Add(PredefinedSymbols.Pool.Get(token), parselet);
    }
-      
+
    public void Group(Symbol leftToken, Symbol rightToken)
    {
       Register(leftToken, (IPrefixParselet<T>)new GroupParselet(rightToken));

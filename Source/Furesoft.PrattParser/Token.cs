@@ -18,5 +18,9 @@ public sealed class Token {
       get;
    }
 
+   public int Line { get; set; }
+   
+   public int Column { get; set; }
+
    public override string ToString() { return Text; }
 }

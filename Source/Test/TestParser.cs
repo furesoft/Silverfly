@@ -4,7 +4,7 @@ using Furesoft.PrattParser.Parselets;
 
 namespace Test;
 
-public class TestParser : Parser<IExpression> {
+public class TestParser : Parser<IAstNode> {
    public TestParser(Lexer lexer) : base(lexer) 
    { 
        Register(PredefinedSymbols.Name, new NameParselet());

@@ -5,10 +5,7 @@ namespace Furesoft.PrattParser.Expressions;
 /// <summary>
 /// Interface for all expression AST node classes.
 /// </summary>
-public interface IExpression {
-   /// <summary>
-   /// Pretty-print the expression to a string.
-   /// </summary>
-   /// <param name="sb"></param>
+public interface IAstNode {
+    //public SourceRange Range { get; set; }
    void Print(StringBuilder sb);
 }

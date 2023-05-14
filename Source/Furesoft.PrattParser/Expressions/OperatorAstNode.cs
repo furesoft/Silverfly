@@ -5,12 +5,12 @@ namespace Furesoft.PrattParser.Expressions;
 /// <summary>
 /// A binary arithmetic expression like "a + b" or "c ^ d".
 /// </summary>
-public class OperatorExpression : IExpression {
-   private IExpression _leftExpr;
+public class OperatorAstNode : IAstNode {
+   private IAstNode _leftExpr;
    private Symbol _operator;
-   private IExpression _rightExpr;
+   private IAstNode _rightExpr;
 
-   public OperatorExpression(IExpression leftExpr, Symbol op, IExpression rightExpr) {
+   public OperatorAstNode(IAstNode leftExpr, Symbol op, IAstNode rightExpr) {
       _leftExpr = leftExpr;
       _operator = op;
       _rightExpr = rightExpr;

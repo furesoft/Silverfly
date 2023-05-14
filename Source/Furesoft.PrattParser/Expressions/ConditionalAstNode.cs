@@ -5,12 +5,12 @@ namespace Furesoft.PrattParser.Expressions;
 /// <summary>
 /// A ternary conditional expression like "a ? b : c".
 /// </summary>
-public class ConditionalExpression : IExpression {
-   private IExpression _conditionExpr;
-   private IExpression _thenExpr;
-   private IExpression _elseExpr;
+public class ConditionalAstNode : IAstNode {
+   private IAstNode _conditionExpr;
+   private IAstNode _thenExpr;
+   private IAstNode _elseExpr;
 
-   public ConditionalExpression(IExpression conditionExpr, IExpression thenExpr, IExpression elseExpr) {
+   public ConditionalAstNode(IAstNode conditionExpr, IAstNode thenExpr, IAstNode elseExpr) {
       _conditionExpr = conditionExpr;
       _thenExpr = thenExpr;
       _elseExpr = elseExpr;

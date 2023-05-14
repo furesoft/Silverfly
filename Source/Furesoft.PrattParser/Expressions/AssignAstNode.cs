@@ -5,11 +5,11 @@ namespace Furesoft.PrattParser.Expressions;
 /// <summary>
 /// An assignment expression like "a = b"
 /// </summary>
-public class AssignExpression : IExpression {
+public class AssignAstNode : IAstNode {
    private readonly string _name;
-   private readonly IExpression _valueExpr;
+   private readonly IAstNode _valueExpr;
 
-   public AssignExpression(string name, IExpression valueExpr) {
+   public AssignAstNode(string name, IAstNode valueExpr) {
       _name = name;
       _valueExpr = valueExpr;
    }
