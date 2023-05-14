@@ -15,6 +15,16 @@ public static class PredefinedSymbols
     
     public static Symbol Question = Pool.Get("?");
     
+    public static Symbol Ampersand = Pool.Get("&");
+    public static Symbol AmpersandAmpersand = Pool.Get("&&");
+    public static Symbol PipePipe = Pool.Get("||");
+    public static Symbol EqualsEquals = Pool.Get("==");
+    
+    public static Symbol Arrow = Pool.Get("->");
+    public static Symbol DoubleArrow = Pool.Get("=>");
+    
+    public static Symbol At = Pool.Get("@");
+    
     public static Symbol Plus = Pool.Get("+");
     public static Symbol Minus = Pool.Get("-");
     public static Symbol Asterisk = Pool.Get("*");

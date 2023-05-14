@@ -13,8 +13,7 @@ public class TestParser : Parser<IExpression> {
        Register("?", new ConditionalParselet()); 
        Register("(", new CallParselet());
        Group("(", ")");
-       
-       
+
        Prefix("+", BindingPower.Prefix); 
        Prefix("-", BindingPower.Prefix); 
        Prefix("~", BindingPower.Prefix); 
