@@ -34,6 +34,9 @@ public static class PredefinedSymbols
     public static Symbol LeftBracket = Pool.Get("<");
     public static Symbol RightBracket = Pool.Get(">");
     
+    public static Symbol LeftSquare = Pool.Get("[");
+    public static Symbol RightSquare = Pool.Get("]");
+    
     public static Symbol LeftCurly = Pool.Get("{");
     public static Symbol RightCurly = Pool.Get("}");
     
