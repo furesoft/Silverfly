@@ -14,24 +14,25 @@ public class TestParser : Parser<IExpression> {
 
       // Register the ones that need special parselets.
       Register(PredefinedSymbols.Name, new NameParselet());
-      Register(PredefinedSymbols.Equals, new AssignParselet());
-      Register(PredefinedSymbols.Question, new ConditionalParselet());
-      Group(PredefinedSymbols.LeftParen, PredefinedSymbols.RightParen);
-      Register(PredefinedSymbols.LeftParen, new CallParselet());
+      
+      Register("=", new AssignParselet());
+      Register("?", new ConditionalParselet());
+      Group("(", ")");
+      Register(")", new CallParselet());
 
       // Register the simple operator parselets.
-      Prefix(PredefinedSymbols.Plus, BindingPower.Prefix);
-      Prefix(PredefinedSymbols.Minus, BindingPower.Prefix);
-      Prefix(PredefinedSymbols.Tilde, BindingPower.Prefix);
-      Prefix(PredefinedSymbols.Bang, BindingPower.Prefix);
+      Prefix("+", BindingPower.Prefix);
+      Prefix("-", BindingPower.Prefix);
+      Prefix("~", BindingPower.Prefix);
+      Prefix("1", BindingPower.Prefix);
 
       // For kicks, we'll make "!" both prefix and postfix, kind of like ++.
-      Postfix(PredefinedSymbols.Bang, BindingPower.PostFix);
+      Postfix("!", BindingPower.PostFix);
 
-      InfixLeft(PredefinedSymbols.Plus, BindingPower.Sum);
-      InfixLeft(PredefinedSymbols.Minus, BindingPower.Sum);
-      InfixLeft(PredefinedSymbols.Asterisk, BindingPower.Product);
-      InfixLeft(PredefinedSymbols.Slash, BindingPower.Product);
-      InfixRight(PredefinedSymbols.Caret, BindingPower.Exponent);
+      InfixLeft("+", BindingPower.Sum);
+      InfixLeft("-", BindingPower.Sum);
+      InfixLeft("*", BindingPower.Product);
+      InfixLeft("/", BindingPower.Product);
+      InfixRight("^", BindingPower.Exponent);
    }
 }

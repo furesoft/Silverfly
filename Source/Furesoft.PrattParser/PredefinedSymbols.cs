@@ -2,7 +2,7 @@
 
 public class PredefinedSymbols
 {
-    private static SymbolPool Pool = new (0, 0);
+    public static SymbolPool Pool = new (0, 0);
     
     public static Symbol EOF = new(0, "\0", Pool);
     

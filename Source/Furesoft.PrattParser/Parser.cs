@@ -14,16 +14,29 @@ public class Parser<T> {
    }
 
    public void Register(Symbol token, IPrefixParselet<T> parselet) {
-      _prefixParselets.Add(token, parselet);
+       _prefixParselets.Add(token, parselet);
+   }
+   
+   public void Register(string token, IPrefixParselet<T> parselet) {
+       _prefixParselets.Add(PredefinedSymbols.Pool.Get(token), parselet);
    }
 
    public void Register(Symbol token, IInfixParselet<T> parselet) {
       _infixParselets.Add(token, parselet);
    }
+   
+   public void Register(string token, IInfixParselet<T> parselet) {
+       _infixParselets.Add(PredefinedSymbols.Pool.Get(token), parselet);
+   }
       
    public void Group(Symbol leftToken, Symbol rightToken)
    {
       Register(leftToken, (IPrefixParselet<T>)new GroupParselet(rightToken));
+   }
+
+   public void Group(string left, string right)
+   {
+       Group(PredefinedSymbols.Pool.Get(left), PredefinedSymbols.Pool.Get(right));
    }
 
    public T Parse(int precedence) {
@@ -82,6 +95,7 @@ public class Parser<T> {
 
    public Token Consume(Symbol expected) {
       var token = LookAhead(0);
+      
       if (!token.Type.Equals(expected)) {
          throw new ParseException("Expected token " + expected + " and found " + token.Type);
       }
@@ -122,11 +136,21 @@ public class Parser<T> {
        Register(token, (IInfixParselet<T>)new PostfixOperatorParselet(bindingPower));
    }
 
+   public void Postfix(string symbol, int bindingPower)
+   {
+       Postfix(PredefinedSymbols.Pool.Get(symbol), bindingPower);
+   }
+
    /// <summary>
    /// Registers a prefix unary operator parselet for the given token and binding power.
    /// </summary>
    public void Prefix(Symbol token, int bindingPower) {
        Register(token, (IPrefixParselet<T>)new PrefixOperatorParselet(bindingPower));
+   }
+   
+   public void Prefix(string symbol, int bindingPower)
+   {
+       Prefix(PredefinedSymbols.Pool.Get(symbol), bindingPower);
    }
 
    /// <summary>
@@ -135,11 +159,21 @@ public class Parser<T> {
    public void InfixLeft(Symbol token, int bindingPower) {
        Register(token, (IInfixParselet<T>)new BinaryOperatorParselet(bindingPower, false));
    }
+   
+   public void InfixLeft(string symbol, int bindingPower)
+   {
+       InfixLeft(PredefinedSymbols.Pool.Get(symbol), bindingPower);
+   }
 
    /// <summary>
    /// Registers a right-associative binary operator parselet for the given token and binding power.
    /// </summary>
    public void InfixRight(Symbol token, int bindingPower) {
        Register(token, (IInfixParselet<T>)new BinaryOperatorParselet(bindingPower, true));
+   }
+   
+   public void InfixRight(string symbol, int bindingPower)
+   {
+       InfixRight(PredefinedSymbols.Pool.Get(symbol), bindingPower);
    }
 }
