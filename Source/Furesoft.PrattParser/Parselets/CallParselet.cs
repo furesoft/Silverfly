@@ -9,7 +9,7 @@ namespace Furesoft.PrattParser.Parselets;
 public class CallParselet : IInfixParselet<IExpression> {
    public IExpression Parse(Parser<IExpression> parser, IExpression left, Token token) {
       // Parse the comma-separated arguments until we hit, ')'.
-      var args = parser.ParseSeperated(PredefinedSymbols.Comma, PredefinedSymbols.Comma);
+      var args = parser.ParseSeperated(PredefinedSymbols.Comma, PredefinedSymbols.RightParen);
 
       return new CallExpression(left, args);
    }

@@ -69,7 +69,7 @@ public class Symbol
         if (_id == 0)
             return string.Empty;
         else
-            return ":" + Name;
+            return Name;
     }
 
     public override int GetHashCode() { return 5432 + _id ^ (_pool.PoolId << 16); }

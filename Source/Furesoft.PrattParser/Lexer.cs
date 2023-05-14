@@ -25,8 +25,9 @@ public class Lexer : ILexer {
       _source = text;
 
       // Register all of the Symbols that are explicit punctuators.
-      foreach(var type in (Symbol[])Enum.GetValues(typeof(Symbol))) {
+      foreach(var type in PredefinedSymbols.Pool) {
          var punctuator = type.Punctuator();
+         
          if (punctuator != "\0") _punctuators.Add(punctuator, type);
       }
    }
@@ -47,6 +48,7 @@ public class Lexer : ILexer {
             }
 
             var name = _source.Substring(start, _index- start);
+            
             return new(PredefinedSymbols.Name, name);
          }
          else {

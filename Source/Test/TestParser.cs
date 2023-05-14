@@ -11,14 +11,14 @@ public class TestParser : Parser<IExpression> {
        Register("=", new AssignParselet());
        
        Register("?", new ConditionalParselet()); 
+       Register(")", new CallParselet());
        Group("(", ")");
        
-       Register(")", new CallParselet());
        
        Prefix("+", BindingPower.Prefix); 
        Prefix("-", BindingPower.Prefix); 
        Prefix("~", BindingPower.Prefix); 
-       Prefix("1", BindingPower.Prefix);
+       Prefix("!", BindingPower.Prefix);
        
        Postfix("!", BindingPower.PostFix);
        

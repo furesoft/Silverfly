@@ -2,7 +2,7 @@
 
 public class PredefinedSymbols
 {
-    public static SymbolPool Pool = new (0, 0);
+    public static SymbolPool Pool = GSymbol.Pool;
     
     public static Symbol EOF = new(0, "\0", Pool);
     
@@ -11,7 +11,7 @@ public class PredefinedSymbols
     public static Symbol Equals = new(3, "=", Pool);
     
     public static Symbol LeftParen = new(4, "(", Pool);
-    public static Symbol RightParen = new(5, "(", Pool);
+    public static Symbol RightParen = new(5, ")", Pool);
     
     public static Symbol Question = new(6, "?", Pool);
     

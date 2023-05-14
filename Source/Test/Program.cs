@@ -75,8 +75,8 @@ public static class Program {
          else {
             _failed++;
             Console.WriteLine("[FAIL] Source: " + source);
-            Console.WriteLine("     Expected: " + expected);
-            Console.WriteLine("       Actual: " + actual);
+            Console.WriteLine("     Expected: '" + expected + "'");
+            Console.WriteLine("       Actual: '" + actual + "'");
          }
       }
       catch (ParseException ex) {
