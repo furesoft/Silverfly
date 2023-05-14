@@ -6,15 +6,15 @@ namespace Furesoft.PrattParser.Parselets;
 /// Generic infix parselet for an unary arithmetic operator. Parses
 /// postfix unary "?" expressions.
 /// </summary>
-public class PostfixOperatorParselet<TokenType> : IInfixParselet<IExpression, TokenType> {
+public class PostfixOperatorParselet : IInfixParselet<IExpression> {
    private readonly int _bindingPower;
 
    public PostfixOperatorParselet(int bindingPower) {
       _bindingPower = bindingPower;
    }
 
-   public IExpression Parse(Parser<IExpression, TokenType> parser, IExpression left, Token<TokenType> token) {
-      return new PostfixExpression<TokenType>(left, token.Type);
+   public IExpression Parse(Parser<IExpression> parser, IExpression left, Token token) {
+      return new PostfixExpression(left, token.Type);
    }
 
    public int GetBindingPower() {

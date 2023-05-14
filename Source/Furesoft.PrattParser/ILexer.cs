@@ -1,6 +1,6 @@
 namespace Furesoft.PrattParser;
 
-public interface ILexer<TokenType>
+public interface ILexer
 {
-    Token<TokenType> Next();
+    Token Next();
 }

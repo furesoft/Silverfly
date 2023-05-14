@@ -7,10 +7,10 @@ namespace Furesoft.PrattParser.Expressions;
 /// </summary>
 public class OperatorExpression : IExpression {
    private IExpression _leftExpr;
-   private TokenType _operator;
+   private Symbol _operator;
    private IExpression _rightExpr;
 
-   public OperatorExpression(IExpression leftExpr, TokenType op, IExpression rightExpr) {
+   public OperatorExpression(IExpression leftExpr, Symbol op, IExpression rightExpr) {
       _leftExpr = leftExpr;
       _operator = op;
       _rightExpr = rightExpr;

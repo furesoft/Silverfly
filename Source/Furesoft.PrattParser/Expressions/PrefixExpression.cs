@@ -5,11 +5,11 @@ namespace Furesoft.PrattParser.Expressions;
 /// <summary>
 /// A prefix unary arithmetic expression like "!a" or "-b".
 /// </summary>
-public class PrefixExpression<TokenType> : IExpression {
-   private TokenType _operator;
+public class PrefixExpression : IExpression {
+   private Symbol _operator;
    private IExpression _rightExpr;
 
-   public PrefixExpression(TokenType op, IExpression rightExpr) {
+   public PrefixExpression(Symbol op, IExpression rightExpr) {
       _operator = op;
       this._rightExpr = rightExpr;
    }

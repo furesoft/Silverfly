@@ -10,8 +10,8 @@ namespace Furesoft.PrattParser;
 /// ignored (except to separate names). Numbers and strings are not supported. This
 /// is really just the bare minimum to give the parser something to work with.
 /// </summary>
-public class Lexer : ILexer<TokenType> {
-   private readonly Dictionary<char, TokenType> _punctuators;
+public class Lexer : ILexer {
+   private readonly Dictionary<string, Symbol> _punctuators;
    private readonly string _source;
    private int _index;
 
@@ -24,19 +24,19 @@ public class Lexer : ILexer<TokenType> {
       _index = 0;
       _source = text;
 
-      // Register all of the TokenTypes that are explicit punctuators.
-      foreach(var type in (TokenType[])Enum.GetValues(typeof(TokenType))) {
+      // Register all of the Symbols that are explicit punctuators.
+      foreach(var type in (Symbol[])Enum.GetValues(typeof(Symbol))) {
          var punctuator = type.Punctuator();
-         if (punctuator != '\0') _punctuators.Add(punctuator, type);
+         if (punctuator != "\0") _punctuators.Add(punctuator, type);
       }
    }
 
-   public Token<TokenType> Next() {
+   public Token Next() {
       while (_index < _source.Length) {
          var c = _source[_index++];
 
-         if (_punctuators.TryGetValue(c, out var tokenType)) {
-            return new(tokenType, char.ToString(c));
+         if (_punctuators.TryGetValue(c.ToString(), out var Symbol)) {
+            return new(Symbol, char.ToString(c));
          }
          else if (char.IsLetter(c)) {
             // Handle names.
@@ -47,7 +47,7 @@ public class Lexer : ILexer<TokenType> {
             }
 
             var name = _source.Substring(start, _index- start);
-            return new(TokenType.Name, name);
+            return new(PredefinedSymbols.Name, name);
          }
          else {
             // Ignore all other characters (whitespace, etc.)
@@ -57,6 +57,6 @@ public class Lexer : ILexer<TokenType> {
       // Once we've reached the end of the string, just return EOF tokens. We'll
       // just keeping returning them as many times as we're asked so that the
       // parser's lookahead doesn't have to worry about running out of tokens.
-      return new(TokenType.EOF, string.Empty);
+      return new(PredefinedSymbols.EOF, string.Empty);
    }
 }

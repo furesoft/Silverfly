@@ -7,7 +7,7 @@ namespace Furesoft.PrattParser.Parselets;
 /// difference when parsing, "+", "-", "*", "/", and "^" is binding power
 /// and associativity, so we can use a single parselet class for all of those.
 /// </summary>
-public class BinaryOperatorParselet : IInfixParselet<IExpression, TokenType> {
+public class BinaryOperatorParselet : IInfixParselet<IExpression> {
    private readonly int _bindingPower;
    private readonly bool _isRight;
 
@@ -16,7 +16,7 @@ public class BinaryOperatorParselet : IInfixParselet<IExpression, TokenType> {
       _isRight = isRight;
    }
 
-   public IExpression Parse(Parser<IExpression, TokenType> parser, IExpression left, Token<TokenType> token) {
+   public IExpression Parse(Parser<IExpression> parser, IExpression left, Token token) {
       // To handle right-associative operators like "^", we allow a slightly
       // lower binding power when parsing the right-hand side. This will let a
       // parselet with the same binding power appear on the right, which will then
