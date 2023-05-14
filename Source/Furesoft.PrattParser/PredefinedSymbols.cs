@@ -1,6 +1,6 @@
 ﻿namespace Furesoft.PrattParser;
 
-public class PredefinedSymbols
+public static class PredefinedSymbols
 {
     public static SymbolPool Pool = GSymbol.Pool;
     
