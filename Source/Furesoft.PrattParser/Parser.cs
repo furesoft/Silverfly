@@ -97,7 +97,7 @@ public class Parser<T> {
       var token = LookAhead(0);
       
       if (!token.Type.Equals(expected)) {
-         throw new ParseException("Expected token " + expected + " and found " + token.Type);
+         throw new ParseException($"Expected token {expected} and found {token.Type}({token})");
       }
 
       return Consume();

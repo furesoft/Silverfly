@@ -9,7 +9,7 @@ public static class SymbolExtensions {
    /// that can split an identifier like '+', this will get its text.
    /// </summary>
    public static string Punctuator(this Symbol type) {
-       if (type == PredefinedSymbols.Name || type == PredefinedSymbols.EOF)
+       if (type == PredefinedSymbols.Name || type == PredefinedSymbols.EOF || type.Name == string.Empty)
        {
            return "\0";
        }
