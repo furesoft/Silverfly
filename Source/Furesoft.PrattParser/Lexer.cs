@@ -17,6 +17,7 @@ public class Lexer : ILexer
     private readonly List<char> _ignoredChars = new();
     private readonly string _source;
     private int _index;
+    private int _line = 1, _column = 1;
 
     /// <summary>
     /// Creates a new <see cref="Lexer"/> to tokenize the given string.
@@ -53,17 +54,24 @@ public class Lexer : ILexer
     {
         _ignoredChars.Add(c);
     }
-    
+
     public void AddKeywords(params string[] keywords)
     {
         _keywords.AddRange(keywords.Select(_ => PredefinedSymbols.Pool.Get(_)));
     }
+
 
     public Token Next()
     {
         while (_index < _source.Length)
         {
             var c = _source[_index++];
+
+            if (c == '\r')
+            {
+                _line++;
+                _column = 1;
+            }
 
             if (_ignoredChars.Contains(c))
             {
@@ -72,7 +80,9 @@ public class Lexer : ILexer
 
             if (_punctuators.TryGetValue(c.ToString(), out var symbol))
             {
-                return new(symbol, char.ToString(c));
+                _column++;
+
+                return new(symbol, c.ToString(), _line, _column);
             }
 
             if (char.IsDigit(c))
@@ -85,10 +95,10 @@ public class Lexer : ILexer
                 return LexName();
             }
 
-            return new(PredefinedSymbols.Pool.Get("#invalid"), c.ToString());
+            return new(PredefinedSymbols.Pool.Get("#invalid"), c.ToString(), _line, _column);
         }
 
-        return new(PredefinedSymbols.EOF, string.Empty);
+        return new(PredefinedSymbols.EOF, string.Empty, _line, _column);
     }
 
     private Token LexName()
@@ -102,16 +112,17 @@ public class Lexer : ILexer
             }
 
             _index++;
+            _column++;
         }
 
         var name = _source.Substring(start, _index - start);
 
         if (_keywords.Any(_ => _.Name == name))
         {
-            return new(PredefinedSymbols.Pool.Get(name), name);
+            return new(PredefinedSymbols.Pool.Get(name), name, _line, _column);
         }
 
-        return new(PredefinedSymbols.Name, name);
+        return new(PredefinedSymbols.Name, name, _line, _column);
     }
 
     private Token LexNumber()
@@ -125,9 +136,10 @@ public class Lexer : ILexer
                 break;
             }
 
+            _column++;
             _index++;
         }
 
-        return new(PredefinedSymbols.Integer, _source.Substring(startIndex, _index - startIndex));
+        return new(PredefinedSymbols.Integer, _source.Substring(startIndex, _index - startIndex), _line, _column);
     }
 }
