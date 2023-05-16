@@ -7,19 +7,24 @@ namespace Furesoft.PrattParser.Parselets;
 /// expression must be a simple name like "a", and expressions are
 /// right-associative. (In other words, "a = b = c" is parsed as "a = (b = c)").
 /// </summary>
-public class AssignParselet : IInfixParselet<IAstNode> {
-   public IAstNode Parse(Parser<IAstNode> parser, IAstNode left, Token token) {
-      var right = parser.Parse(((int)BindingPower.Assignment) - 1);
+public class AssignParselet : IInfixParselet<IAstNode>
+{
+    public IAstNode Parse(Parser<IAstNode> parser, IAstNode left, Token token)
+    {
+        var right = parser.Parse((int)BindingPower.Assignment - 1);
 
-      if (!(left is NameAstNode))
-         throw new ParseException("The left-hand side of an assignment must be a name.");
+        if (!(left is NameAstNode))
+        {
+            throw new ParseException("The left-hand side of an assignment must be a name.");
+        }
 
-      var name = ((NameAstNode)left).Name;
-      
-      return new AssignAstNode(name, right);
-   }
+        var name = ((NameAstNode)left).Name;
 
-   public int GetBindingPower() {
-      return (int)BindingPower.Assignment;
-   }
+        return new AssignAstNode(name, right);
+    }
+
+    public int GetBindingPower()
+    {
+        return (int)BindingPower.Assignment;
+    }
 }

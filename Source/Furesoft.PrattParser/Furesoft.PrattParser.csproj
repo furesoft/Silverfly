@@ -13,19 +13,19 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Properties\" />
+    <Folder Include="Properties\"/>
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="ConsoleApp1\**" />
+    <Compile Remove="ConsoleApp1\**"/>
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Remove="ConsoleApp1\**" />
+    <EmbeddedResource Remove="ConsoleApp1\**"/>
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="ConsoleApp1\**" />
+    <None Remove="ConsoleApp1\**"/>
   </ItemGroup>
 
 </Project>

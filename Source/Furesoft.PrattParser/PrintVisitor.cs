@@ -38,7 +38,10 @@ public class PrintVisitor : IVisitor<string>
 
         for (var i = 0; i < call.ArgumentExprs.Count; i++)
         {
-            if (i > 0) sb.Append(", ");
+            if (i > 0)
+            {
+                sb.Append(", ");
+            }
 
             sb.Append(call.ArgumentExprs[i].Accept(this));
         }
@@ -93,7 +96,7 @@ public class PrintVisitor : IVisitor<string>
 
         return sb.ToString();
     }
-    
+
     public string Visit(PrefixOperatorAstNode prefix)
     {
         var sb = new StringBuilder();

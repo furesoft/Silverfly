@@ -58,23 +58,27 @@ public class Symbol
 {
     #region Public instance members
 
-    public int Id          { [DebuggerStepThrough] get { return _id; } }
-    public string Name     { [DebuggerStepThrough] get { return _name; } }
-    public SymbolPool Pool { [DebuggerStepThrough] get { return _pool; } }
-    public bool IsGlobal   { [DebuggerStepThrough] get { return _pool == GSymbol.Pool; } }
-		
+    public int Id { [DebuggerStepThrough] get => _id; }
+    public string Name { [DebuggerStepThrough] get => _name; }
+    public SymbolPool Pool { [DebuggerStepThrough] get => _pool; }
+    public bool IsGlobal { [DebuggerStepThrough] get => _pool == GSymbol.Pool; }
+
     [DebuggerStepThrough]
     public override string ToString()
     {
         if (_id == 0)
+        {
             return string.Empty;
+        }
         else
+        {
             return Name;
+        }
     }
 
-    public override int GetHashCode() { return 5432 + _id ^ (_pool.PoolId << 16); }
+    public override int GetHashCode() { return (5432 + _id) ^ (_pool.PoolId << 16); }
     public override bool Equals(object b) { return ReferenceEquals(this, b); }
-		
+
     #endregion
 
     #region Protected & private members
@@ -82,11 +86,15 @@ public class Symbol
     private readonly int _id;
     private readonly string _name;
     private readonly SymbolPool _pool;
-		
+
     /// <summary>For internal use only. Call GSymbol.Get() instead!</summary>
-    internal Symbol(int id, string name, SymbolPool pool) 
-    { _id = id; _name = name; _pool = pool; }
-		
+    internal Symbol(int id, string name, SymbolPool pool)
+    {
+        _id = id;
+        _name = name;
+        _pool = pool;
+    }
+
     /// <summary>For use by a derived class to produce a statically-typed 
     /// enumeration in a private pool. See the example under SymbolPool 
     /// (of SymbolEnum)</summary>
@@ -112,18 +120,18 @@ public class GSymbol
 {
     #region Public static members
 
-    static public Symbol Get(string name) { return Pool.Get(name); }
-    static public Symbol GetIfExists(string name) { return Pool.GetIfExists(name); }
-    static public Symbol GetById(int id) { return Pool.GetById(id); }
+    public static Symbol Get(string name) { return Pool.Get(name); }
+    public static Symbol GetIfExists(string name) { return Pool.GetIfExists(name); }
+    public static Symbol GetById(int id) { return Pool.GetById(id); }
 
-    static public readonly Symbol Empty;
-    static public readonly SymbolPool Pool;
+    public static readonly Symbol Empty;
+    public static readonly SymbolPool Pool;
 
     #endregion
 
     static GSymbol()
     {
-        Pool = new SymbolPool(0, 0);
+        Pool = new(0, 0);
         Empty = Pool.Get("");
         Debug.Assert(Empty.Id == 0 && Empty.Name == "");
         Debug.Assert(((Symbol)Empty).Pool == Pool);
@@ -160,7 +168,7 @@ public class SymbolPool : IEnumerable<Symbol>
     protected static int _nextPoolId = 1;
 
     public SymbolPool() : this(1, _nextPoolId++) { }
-		
+
     /// <summary>Initializes a new Symbol pool.</summary>
     /// <param name="firstID">The first Symbol created in the pool will have 
     /// the specified ID, and IDs will proceed downward from there.</param>
@@ -168,8 +176,8 @@ public class SymbolPool : IEnumerable<Symbol>
 
     protected internal SymbolPool(int firstID, int poolId)
     {
-        _map = new Dictionary<string, Symbol>();
-        _list = new List<Symbol>();
+        _map = new();
+        _list = new();
         _firstId = firstID;
         _poolId = poolId;
     }
@@ -191,33 +199,39 @@ public class SymbolPool : IEnumerable<Symbol>
         Get(name, out result);
         return result;
     }
-		
+
     /// <summary>Workaround for lack of covariant return types in C#</summary>
     protected virtual void Get(string name, out Symbol sym)
     {
         if (name == null)
-            sym = null;
-        else lock (_map)
         {
-            if (!_map.TryGetValue(name, out sym))
+            sym = null;
+        }
+        else
+        {
+            lock (_map)
             {
-                int newId = _firstId + _list.Count;
-                if (this == GSymbol.Pool)
+                if (!_map.TryGetValue(name, out sym))
                 {
-                    newId = -newId;
-                    name = string.Intern(name);
+                    var newId = _firstId + _list.Count;
+                    if (this == GSymbol.Pool)
+                    {
+                        newId = -newId;
+                        name = string.Intern(name);
+                    }
+
+                    sym = NewSymbol(newId, name);
+                    _list.Add(sym);
+                    _map.Add(name, sym);
                 }
-                sym = NewSymbol(newId, name);
-                _list.Add(sym);
-                _map.Add(name, sym);
             }
         }
     }
-		
+
     /// <summary>Factory method to create a new Symbol.</summary>
     protected virtual Symbol NewSymbol(int id, string name)
     {
-        return new Symbol(id, name, this);
+        return new(id, name, this);
     }
 
     /// <summary>Gets a symbol from this pool, if the name exists already.</summary>
@@ -228,21 +242,26 @@ public class SymbolPool : IEnumerable<Symbol>
     {
         Symbol sym;
         if (name == null)
-            return null;
-        else lock (_map)
         {
-            _map.TryGetValue(name, out sym);
-            return sym;
+            return null;
+        }
+        else
+        {
+            lock (_map)
+            {
+                _map.TryGetValue(name, out sym);
+                return sym;
+            }
         }
     }
-		
+
     /// <summary>Gets a symbol from the global pool, if it exists there already;
     /// otherwise, creates a Symbol in this pool.</summary>
     /// <param name="name">Name of a symbol to get or create</param>
     /// <returns>A symbol with the requested name</returns>
     public Symbol GetGlobalOrCreateHere(string name)
     {
-        Symbol sym = GSymbol.Pool.GetIfExists(name);
+        var sym = GSymbol.Pool.GetIfExists(name);
         return sym ?? Get(name);
     }
 
@@ -255,31 +274,33 @@ public class SymbolPool : IEnumerable<Symbol>
     /// in this pool or in the global pool.</exception>
     public Symbol GetById(int id)
     {
-        int index = id - _firstId;
-        if (this == GSymbol.Pool || unchecked((uint)index >= (uint)TotalCount)) {
+        var index = id - _firstId;
+        if (this == GSymbol.Pool || unchecked((uint)index >= (uint)TotalCount))
+        {
             index = -id;
-            lock(GSymbol.Pool._map) {
+            lock (GSymbol.Pool._map)
+            {
                 if (unchecked((uint)index < (uint)GSymbol.Pool._list.Count))
+                {
                     return GSymbol.Pool._list[index];
+                }
             }
-        } else {
-            lock(_map) {
+        }
+        else
+        {
+            lock (_map)
+            {
                 return _list[index];
             }
         }
+
         throw new ArgumentException("Invalid Symbol ID " + id.ToString(), "id");
     }
 
     /// <summary>Returns the number of Symbols created in this pool.</summary>
-    public int TotalCount
-    { 
-        get { return _list.Count; }
-    }
+    public int TotalCount => _list.Count;
 
-    protected internal int PoolId
-    {
-        get { return _poolId; }
-    }
+    protected internal int PoolId => _poolId;
 
     #region IEnumerable<Symbol> Members
 
@@ -287,7 +308,8 @@ public class SymbolPool : IEnumerable<Symbol>
     {
         return _list.GetEnumerator();
     }
-    System.Collections.IEnumerator  System.Collections.IEnumerable.GetEnumerator()
+
+    System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
     {
         return GetEnumerator();
     }
@@ -319,40 +341,49 @@ public class SymbolPool<SymbolE> : SymbolPool, IEnumerable<SymbolE>
     where SymbolE : Symbol
 {
     public delegate SymbolE SymbolFactory(Symbol prototype);
+
     protected SymbolFactory _factory;
-		
+
     public SymbolPool(SymbolFactory factory)
     {
         _factory = factory;
     }
+
     public SymbolPool(SymbolFactory factory, int firstID) : base(firstID)
     {
         _factory = factory;
     }
+
     public new SymbolE Get(string name)
     {
         return (SymbolE)base.Get(name);
     }
+
     protected override Symbol NewSymbol(int id, string name)
     {
-        return _factory(new Symbol(id, name, this));
+        return _factory(new(id, name, this));
     }
+
     public new SymbolE GetIfExists(string name)
     {
         return (SymbolE)base.GetIfExists(name);
     }
+
     public new SymbolE GetById(int id)
     {
         return (SymbolE)base.GetById(id);
     }
-		
+
     #region IEnumerable<Symbol> Members
 
     public new IEnumerator<SymbolE> GetEnumerator()
     {
         foreach (SymbolE symbol in _list)
+        {
             yield return symbol;
+        }
     }
+
     System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
     {
         return GetEnumerator();

@@ -9,7 +9,8 @@ namespace Furesoft.PrattParser.Parselets;
 /// in which case it simply doesn't consume any more tokens in its Parse() call.
 /// See <see cref="IPrefixParselet"/>.
 /// </summary>
-public interface IInfixParselet<T> {
-   T Parse(Parser<T> parser, T left, Token token);
-   int GetBindingPower();
+public interface IInfixParselet<T>
+{
+    T Parse(Parser<T> parser, T left, Token token);
+    int GetBindingPower();
 }

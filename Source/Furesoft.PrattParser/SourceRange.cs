@@ -2,6 +2,6 @@
 
 public struct SourceRange
 {
-    public SourcePoint Start  { get; set; }
-    public SourcePoint End  { get; set; }
+    public SourcePoint Start { get; set; }
+    public SourcePoint End { get; set; }
 }
