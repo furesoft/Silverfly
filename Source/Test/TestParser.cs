@@ -14,17 +14,17 @@ public class TestParser : Parser<IAstNode> {
        Register("(", new CallParselet());
        Group("(", ")");
 
-       Prefix("+", BindingPower.Prefix); 
-       Prefix("-", BindingPower.Prefix); 
-       Prefix("~", BindingPower.Prefix); 
-       Prefix("!", BindingPower.Prefix);
+       Prefix("+", (int)BindingPower.Prefix); 
+       Prefix("-", (int)BindingPower.Prefix); 
+       Prefix("~", (int)BindingPower.Prefix); 
+       Prefix("!", (int)BindingPower.Prefix);
        
-       Postfix("!", BindingPower.PostFix);
+       Postfix("!", (int)BindingPower.PostFix);
        
-       InfixLeft("+", BindingPower.Sum); 
-       InfixLeft("-", BindingPower.Sum); 
-       InfixLeft("*", BindingPower.Product); 
-       InfixLeft("/", BindingPower.Product); 
-       InfixRight("^", BindingPower.Exponent);
+       InfixLeft("+", (int)BindingPower.Sum); 
+       InfixLeft("-", (int)BindingPower.Sum); 
+       InfixLeft("*", (int)BindingPower.Product); 
+       InfixLeft("/", (int)BindingPower.Product); 
+       InfixRight("^", (int)BindingPower.Exponent);
    }
 }

@@ -9,7 +9,7 @@ namespace Furesoft.PrattParser.Parselets;
 /// </summary>
 public class AssignParselet : IInfixParselet<IAstNode> {
    public IAstNode Parse(Parser<IAstNode> parser, IAstNode left, Token token) {
-      var right = parser.Parse(BindingPower.Assignment - 1);
+      var right = parser.Parse(((int)BindingPower.Assignment) - 1);
 
       if (!(left is NameAstNode))
          throw new ParseException("The left-hand side of an assignment must be a name.");
@@ -20,6 +20,6 @@ public class AssignParselet : IInfixParselet<IAstNode> {
    }
 
    public int GetBindingPower() {
-      return BindingPower.Assignment;
+      return (int)BindingPower.Assignment;
    }
 }

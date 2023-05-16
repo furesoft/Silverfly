@@ -10,12 +10,12 @@ public class ConditionalParselet : IInfixParselet<IAstNode> {
       var thenArm = parser.Parse();
       parser.Consume(PredefinedSymbols.Colon);
       
-      var elseArm = parser.Parse(BindingPower.Conditional - 1);
+      var elseArm = parser.Parse((int)BindingPower.Conditional - 1);
 
       return new ConditionalAstNode(left, thenArm, elseArm);
    }
 
    public int GetBindingPower() {
-      return BindingPower.Conditional;
+      return (int)BindingPower.Conditional;
    }
 }

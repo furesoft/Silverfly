@@ -14,6 +14,6 @@ public class CallParselet : IInfixParselet<IAstNode> {
    }
 
    public int GetBindingPower() {
-      return BindingPower.Call;
+      return (int)BindingPower.Call;
    }
 }
