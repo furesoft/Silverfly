@@ -28,7 +28,7 @@ public sealed class Message
 
     public static Message Error(string message)
     {
-        return new Message(MessageSeverity.Error, message, SourceRange.Synthetic);
+        return new Message(MessageSeverity.Error, message, SourceRange.Empty);
     }
 
     public static Message Info(string message, SourceRange range)
