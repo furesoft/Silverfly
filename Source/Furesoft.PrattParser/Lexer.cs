@@ -79,13 +79,13 @@ public class Lexer : ILexer
 
     private bool IsMatch(string token)
     {
-        bool result = Peek(0) == token[0]; //ToDo: turn peek(1) to peek(0). need to be figured out where index++ is missing!!
+        bool result = Peek(0) == token[0];
 
         for (int i = 1; i < token.Length; i++)
         {
             if (result)
             {
-                result = result && Peek(i) == token[i]; //ToDo: turn peek(i+11) to peek(i). need to be figured out where index++ is missing!!
+                result = result && Peek(i) == token[i];
             }
         }
 
@@ -116,6 +116,7 @@ public class Lexer : ILexer
             {
                 if (IsMatch(punctuator.Key))
                 {
+                    _index--;
                     return LexSymbol(punctuator.Key);
                 }
             }
