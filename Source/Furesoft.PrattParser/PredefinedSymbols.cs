@@ -64,4 +64,5 @@ public static class PredefinedSymbols
     public static Symbol Degree = Pool.Get("°");
 
     public static Symbol String = Pool.Get("#string");
+    public static Symbol Integer = Pool.Get("#integer");
 }

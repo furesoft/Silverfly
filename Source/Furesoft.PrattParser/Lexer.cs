@@ -64,6 +64,11 @@ public class Lexer : ILexer
                 return new(symbol, char.ToString(c));
             }
 
+            if (char.IsDigit(c))
+            {
+                return new(PredefinedSymbols.Integer, LexNumber());
+            }
+
             if (char.IsLetter(c))
             {
                 // Handle names.
@@ -94,5 +99,17 @@ public class Lexer : ILexer
         }
 
         return new(PredefinedSymbols.EOF, string.Empty);
+    }
+
+    private string LexNumber()
+    {
+        int startIndex = _index;
+
+        while (char.IsDigit(_source[_index]))
+        {
+            _index++;
+        }
+
+        return _source.Substring(startIndex, _index);
     }
 }
