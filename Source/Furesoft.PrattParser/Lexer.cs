@@ -14,6 +14,7 @@ public class Lexer : ILexer
 {
     private readonly Dictionary<string, Symbol> _punctuators = new();
     private readonly List<Symbol> _keywords = new();
+    private readonly List<char> _ignoredChars = new();
     private readonly string _source;
     private int _index;
 
@@ -48,6 +49,11 @@ public class Lexer : ILexer
         _keywords.Add(PredefinedSymbols.Pool.Get(keyword));
     }
 
+    public void Ignore(char c)
+    {
+        _ignoredChars.Add(c);
+    }
+    
     public void AddKeywords(params string[] keywords)
     {
         _keywords.AddRange(keywords.Select(_ => PredefinedSymbols.Pool.Get(_)));
@@ -58,6 +64,11 @@ public class Lexer : ILexer
         while (_index < _source.Length)
         {
             var c = _source[_index++];
+
+            if (_ignoredChars.Contains(c))
+            {
+                continue;
+            }
 
             if (_punctuators.TryGetValue(c.ToString(), out var symbol))
             {
@@ -94,7 +105,7 @@ public class Lexer : ILexer
             }
             else
             {
-                // Ignore all other characters (whitespace, etc.)
+                return new Token(PredefinedSymbols.Pool.Get("#invalid"), c.ToString());
             }
         }
 

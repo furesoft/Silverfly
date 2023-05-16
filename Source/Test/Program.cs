@@ -68,6 +68,10 @@ public static class Program
     public static void Test(string source, string expected)
     {
         var lexer = new Lexer(source);
+        lexer.Ignore('\r');
+        lexer.Ignore(' ');
+        lexer.Ignore('\t');
+        
         var parser = new TestParser(lexer);
 
         var printVisitor = new PrintVisitor();
