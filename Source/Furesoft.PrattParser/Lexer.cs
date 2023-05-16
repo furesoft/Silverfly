@@ -166,7 +166,7 @@ public class Lexer : ILexer
 
     private Token LexNumber()
     {
-        var startIndex = _index - 1;
+        var startIndex = _index;
 
         while (_index < _source.Length)
         {

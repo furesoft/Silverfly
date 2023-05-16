@@ -9,6 +9,7 @@ public class TestParser : Parser<IAstNode>
     public TestParser(Lexer lexer) : base(lexer)
     {
         Register(PredefinedSymbols.Name, new NameParselet());
+        Register(PredefinedSymbols.Integer, new IntegerLiteralParselet());
         Register("=", new AssignParselet());
 
         Register("?", new ConditionalParselet());
