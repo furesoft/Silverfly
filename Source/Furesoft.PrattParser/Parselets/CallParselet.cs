@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Furesoft.PrattParser.Expressions;
 
 namespace Furesoft.PrattParser.Parselets;

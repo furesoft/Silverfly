@@ -19,7 +19,7 @@ public class PrefixOperatorParselet : IPrefixParselet<IAstNode> {
       // take *this* parselet's result as its left-hand argument.
       var right = parser.Parse(_bindingPower);
 
-      return new PrefixAstNode(token.Type, right);
+      return new PrefixOperatorAstNode(token.Type, right);
    }
 
    public int GetBindingPower() {

@@ -14,7 +14,7 @@ public class PostfixOperatorParselet : IInfixParselet<IAstNode> {
    }
 
    public IAstNode Parse(Parser<IAstNode> parser, IAstNode left, Token token) {
-      return new PostfixAstNode(left, token.Type);
+      return new PostfixOperatorAstNode(left, token.Type);
    }
 
    public int GetBindingPower() {

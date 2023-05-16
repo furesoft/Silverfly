@@ -23,7 +23,7 @@ public class BinaryOperatorParselet : IInfixParselet<IAstNode> {
       // take *this* parselet's result as its left-hand argument.
       var right = parser.Parse(_bindingPower - (_isRight ? 1 : 0));
 
-      return new OperatorAstNode(left, token.Type, right);
+      return new BinaryOperatorAstNode(left, token.Type, right);
    }
 
    public int GetBindingPower() {

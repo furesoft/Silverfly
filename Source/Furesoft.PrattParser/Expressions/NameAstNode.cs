@@ -13,8 +13,4 @@ public class NameAstNode : IAstNode {
    public string Name {
       get;
    }
-
-   public void Print(StringBuilder sb) {
-      sb.Append(Name);
-   }
 }

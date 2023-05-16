@@ -62,11 +62,15 @@ public static class Program {
       var lexer = new Lexer(source);
       var parser = new TestParser(lexer);
 
+      var printVisitor = new PrintVisitor();
+
       try {
          var result = parser.Parse();
             
          var builder = new StringBuilder();
-         result.Print(builder);
+
+         builder.Append(result.Accept(printVisitor));
+         
          var actual = builder.ToString();
 
          if (expected.Equals(actual)) {

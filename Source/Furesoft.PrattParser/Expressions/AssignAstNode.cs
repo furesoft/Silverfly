@@ -1,22 +1,14 @@
-using System.Text;
-
 namespace Furesoft.PrattParser.Expressions;
 
 /// <summary>
 /// An assignment expression like "a = b"
 /// </summary>
 public class AssignAstNode : IAstNode {
-   private readonly string _name;
-   private readonly IAstNode _valueExpr;
+    public string Name { get; }
+    public IAstNode ValueExpr { get; }
 
    public AssignAstNode(string name, IAstNode valueExpr) {
-      _name = name;
-      _valueExpr = valueExpr;
-   }
-
-   public void Print(StringBuilder sb) {
-      sb.Append('(').Append(_name).Append(" = ");
-      _valueExpr.Print(sb);
-      sb.Append(')');
+      Name = name;
+      ValueExpr = valueExpr;
    }
 }
