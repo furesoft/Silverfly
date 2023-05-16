@@ -77,7 +77,7 @@ public class Lexer : ILexer
 
             if (char.IsDigit(c))
             {
-                return new(PredefinedSymbols.Integer, LexNumber());
+                return LexNumber();
             }
 
             if (char.IsLetter(c))
@@ -114,15 +114,20 @@ public class Lexer : ILexer
         return new(PredefinedSymbols.Name, name);
     }
 
-    private string LexNumber()
+    private Token LexNumber()
     {
-        int startIndex = _index;
+        var startIndex = _index - 1;
 
-        while (char.IsDigit(_source[_index]))
+        while (_index < _source.Length)
         {
+            if (!char.IsDigit(_source[_index]))
+            {
+                break;
+            }
+
             _index++;
         }
 
-        return _source.Substring(startIndex, _index);
+        return new(PredefinedSymbols.Integer, _source.Substring(startIndex, _index - startIndex));
     }
 }
