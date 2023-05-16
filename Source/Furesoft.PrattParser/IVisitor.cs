@@ -1,8 +1,8 @@
-﻿using Furesoft.PrattParser.Expressions;
+﻿using Furesoft.PrattParser.Nodes;
 
 namespace Furesoft.PrattParser;
 
 public interface IVisitor<out T>
 {
-    T Visit(IAstNode node);
+    T Visit(AstNode node);
 }

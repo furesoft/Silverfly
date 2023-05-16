@@ -1,13 +1,13 @@
-using Furesoft.PrattParser.Expressions;
+using Furesoft.PrattParser.Nodes;
 
 namespace Furesoft.PrattParser.Parselets;
 
 /// <summary>
 /// Parselet for the condition or "ternary" operator, like "a ? b : c".
 /// </summary>
-public class ConditionalParselet : IInfixParselet<IAstNode>
+public class ConditionalParselet : IInfixParselet<AstNode>
 {
-    public IAstNode Parse(Parser<IAstNode> parser, IAstNode left, Token token)
+    public AstNode Parse(Parser<AstNode> parser, AstNode left, Token token)
     {
         var thenArm = parser.Parse();
         parser.Consume(PredefinedSymbols.Colon);

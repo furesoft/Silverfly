@@ -1,4 +1,4 @@
-using Furesoft.PrattParser.Expressions;
+using Furesoft.PrattParser.Nodes;
 
 namespace Furesoft.PrattParser.Parselets;
 
@@ -6,7 +6,7 @@ namespace Furesoft.PrattParser.Parselets;
 /// Generic infix parselet for an unary arithmetic operator. Parses
 /// postfix unary "?" expressions.
 /// </summary>
-public class PostfixOperatorParselet : IInfixParselet<IAstNode>
+public class PostfixOperatorParselet : IInfixParselet<AstNode>
 {
     private readonly int _bindingPower;
 
@@ -15,7 +15,7 @@ public class PostfixOperatorParselet : IInfixParselet<IAstNode>
         _bindingPower = bindingPower;
     }
 
-    public IAstNode Parse(Parser<IAstNode> parser, IAstNode left, Token token)
+    public AstNode Parse(Parser<AstNode> parser, AstNode left, Token token)
     {
         return new PostfixOperatorAstNode(left, token.Type);
     }

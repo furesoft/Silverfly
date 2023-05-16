@@ -1,10 +1,10 @@
 using Furesoft.PrattParser;
-using Furesoft.PrattParser.Expressions;
+using Furesoft.PrattParser.Nodes;
 using Furesoft.PrattParser.Parselets;
 
 namespace Test;
 
-public class TestParser : Parser<IAstNode>
+public class TestParser : Parser<AstNode>
 {
     public TestParser(Lexer lexer) : base(lexer)
     {

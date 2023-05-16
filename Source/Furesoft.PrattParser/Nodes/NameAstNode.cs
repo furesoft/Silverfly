@@ -1,11 +1,9 @@
-using System.Text;
-
-namespace Furesoft.PrattParser.Expressions;
+namespace Furesoft.PrattParser.Nodes;
 
 /// <summary>
 /// A simple variable name expression like "abc".
 /// </summary>
-public class NameAstNode : IAstNode
+public class NameAstNode : AstNode
 {
     public NameAstNode(string name)
     {

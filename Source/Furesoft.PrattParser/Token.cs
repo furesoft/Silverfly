@@ -6,6 +6,14 @@ namespace Furesoft.PrattParser;
 /// </summary>
 public sealed class Token
 {
+    public Symbol Type { get; }
+
+    public string Text { get; }
+
+    public int Line { get; }
+
+    public int Column { get; }
+
     public Token(Symbol type, string text, int line, int column)
     {
         Type = type;
@@ -13,20 +21,6 @@ public sealed class Token
         Line = line;
         Column = column;
     }
-
-    public Symbol Type
-    {
-        get;
-    }
-
-    public string Text
-    {
-        get;
-    }
-
-    public int Line { get; }
-
-    public int Column { get; }
-
+    
     public override string ToString() { return Text; }
 }

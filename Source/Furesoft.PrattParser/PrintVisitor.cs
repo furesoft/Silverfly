@@ -1,11 +1,11 @@
 ﻿using System.Text;
-using Furesoft.PrattParser.Expressions;
+using Furesoft.PrattParser.Nodes;
 
 namespace Furesoft.PrattParser;
 
 public class PrintVisitor : IVisitor<string>
 {
-    public virtual string Visit(IAstNode node)
+    public virtual string Visit(AstNode node)
     {
         return node switch
         {

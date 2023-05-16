@@ -1,6 +1,6 @@
-﻿namespace Furesoft.PrattParser.Expressions;
+﻿namespace Furesoft.PrattParser.Nodes;
 
-public class Literal : IAstNode
+public class Literal : AstNode
 {
     public object Value { get; }
 

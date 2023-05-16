@@ -2,6 +2,7 @@
 
 public struct SourceRange
 {
-    public SourcePoint Start { get; set; }
-    public SourcePoint End { get; set; }
+    public SourceSpan Start { get; set; }
+    public SourceSpan End { get; set; }
+    public static SourceRange Synthetic { get; } = new SourceRange();
 }

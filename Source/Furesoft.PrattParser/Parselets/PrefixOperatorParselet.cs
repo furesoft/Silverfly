@@ -1,11 +1,11 @@
-using Furesoft.PrattParser.Expressions;
+using Furesoft.PrattParser.Nodes;
 
 namespace Furesoft.PrattParser.Parselets;
 
 /// <summary>
 /// Generic prefix parselet for an unary arithmetic operator. Parses prefix unary "-", "+", "~", and "!" expressions.
 /// </summary>
-public class PrefixOperatorParselet : IPrefixParselet<IAstNode>
+public class PrefixOperatorParselet : IPrefixParselet<AstNode>
 {
     private readonly int _bindingPower;
 
@@ -14,7 +14,7 @@ public class PrefixOperatorParselet : IPrefixParselet<IAstNode>
         _bindingPower = bindingPower;
     }
 
-    public IAstNode Parse(Parser<IAstNode> parser, Token token)
+    public AstNode Parse(Parser<AstNode> parser, Token token)
     {
         // To handle right-associative operators like "^", we allow a slightly
         // lower binding power when parsing the right-hand side. This will let a

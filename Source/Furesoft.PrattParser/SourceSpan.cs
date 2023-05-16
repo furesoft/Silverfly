@@ -1,6 +1,6 @@
 ﻿namespace Furesoft.PrattParser;
 
-public struct SourcePoint
+public struct SourceSpan
 {
     public int Line { get; set; }
 

@@ -1,10 +1,10 @@
-﻿using Furesoft.PrattParser.Expressions;
+﻿using Furesoft.PrattParser.Nodes;
 
 namespace Furesoft.PrattParser.Parselets;
 
-public class IntegerLiteralParselet : IPrefixParselet<IAstNode>
+public class IntegerLiteralParselet : IPrefixParselet<AstNode>
 {
-    public IAstNode Parse(Parser<IAstNode> parser, Token token)
+    public AstNode Parse(Parser<AstNode> parser, Token token)
     {
         return new Literal(int.Parse(token.Text));
     }

@@ -1,4 +1,4 @@
-using Furesoft.PrattParser.Expressions;
+using Furesoft.PrattParser.Nodes;
 
 namespace Furesoft.PrattParser.Parselets;
 
@@ -7,9 +7,9 @@ namespace Furesoft.PrattParser.Parselets;
 /// expression must be a simple name like "a", and expressions are
 /// right-associative. (In other words, "a = b = c" is parsed as "a = (b = c)").
 /// </summary>
-public class AssignParselet : IInfixParselet<IAstNode>
+public class AssignParselet : IInfixParselet<AstNode>
 {
-    public IAstNode Parse(Parser<IAstNode> parser, IAstNode left, Token token)
+    public AstNode Parse(Parser<AstNode> parser, AstNode left, Token token)
     {
         var right = parser.Parse((int)BindingPower.Assignment - 1);
 
