@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Furesoft.PrattParser;
 
@@ -10,7 +11,8 @@ namespace Furesoft.PrattParser;
 /// is really just the bare minimum to give the parser something to work with.
 /// </summary>
 public class Lexer : ILexer {
-   private readonly Dictionary<string, Symbol> _punctuators;
+   private readonly Dictionary<string, Symbol> _punctuators = new();
+   private readonly List<Symbol> _keywords = new();
    private readonly string _source;
    private int _index;
 
@@ -19,8 +21,7 @@ public class Lexer : ILexer {
    /// </summary>
    /// <param name="text">String to tokenize</param>
    public Lexer(string text) {
-      _punctuators = new();
-      _index = 0;
+       _index = 0;
       _source = text;
 
       // Register all of the Symbols that are explicit punctuators.
@@ -31,33 +32,51 @@ public class Lexer : ILexer {
       }
    }
 
+   public void AddSymbol(string symbol)
+   {
+       _punctuators.Add(symbol, PredefinedSymbols.Pool.Get(symbol));
+   }
+
+   public void AddKeyword(string keyword)
+   {
+       _keywords.Add(PredefinedSymbols.Pool.Get(keyword));
+   }
+   
+   public void AddKeywords(params string[] keywords)
+   {
+       _keywords.AddRange(keywords.Select(_=> PredefinedSymbols.Pool.Get(_)));
+   }
+
    public Token Next() {
       while (_index < _source.Length) {
          var c = _source[_index++];
 
-         if (_punctuators.TryGetValue(c.ToString(), out var Symbol)) {
-            return new(Symbol, char.ToString(c));
+         if (_punctuators.TryGetValue(c.ToString(), out var symbol)) {
+            return new(symbol, char.ToString(c));
          }
-         else if (char.IsLetter(c)) {
-            // Handle names.
-            var start = _index - 1;
-            while (_index < _source.Length) {
-               if (!char.IsLetter(_source[_index])) break;
-               _index++;
-            }
 
-            var name = _source.Substring(start, _index- start);
+         if (char.IsLetter(c)) {
+             // Handle names.
+             var start = _index - 1;
+             while (_index < _source.Length) {
+                 if (!char.IsLetter(_source[_index])) break;
+                 _index++;
+             }
+
+             var name = _source.Substring(start, _index- start);
+
+             if (_keywords.Any(_ => _.Name == name))
+             {
+                 return new(PredefinedSymbols.Pool.Get(name), name);
+             }
             
-            return new(PredefinedSymbols.Name, name);
+             return new(PredefinedSymbols.Name, name);
          }
          else {
-            // Ignore all other characters (whitespace, etc.)
+             // Ignore all other characters (whitespace, etc.)
          }
       }
-
-      // Once we've reached the end of the string, just return EOF tokens. We'll
-      // just keeping returning them as many times as we're asked so that the
-      // parser's lookahead doesn't have to worry about running out of tokens.
+      
       return new(PredefinedSymbols.EOF, string.Empty);
    }
 }
