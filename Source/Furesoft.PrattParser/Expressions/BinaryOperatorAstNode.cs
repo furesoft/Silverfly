@@ -17,8 +17,4 @@ public class BinaryOperatorAstNode : IAstNode
         Operator = op;
         RightExpr = rightExpr;
     }
-
-    public void Print(StringBuilder sb)
-    {
-    }
 }

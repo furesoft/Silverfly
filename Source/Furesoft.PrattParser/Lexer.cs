@@ -64,7 +64,7 @@ public class Lexer : ILexer
 
     private char Peek(int distance)
     {
-        if (_index >= _source.Length)
+        if (_index + distance >= _source.Length)
         {
             return '\0';
         }
