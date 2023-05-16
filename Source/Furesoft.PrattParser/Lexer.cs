@@ -96,7 +96,7 @@ public class Lexer : ILexer
     {
         while (_index < _source.Length)
         {
-            var c = _source[_index++];
+            var c = _source[_index];
 
             if (c == '\r')
             {
@@ -111,14 +111,15 @@ public class Lexer : ILexer
                 
                 continue;
             }
-
+            
             foreach (var punctuator in _punctuators)
             {
-                if (IsMatch(punctuator.Key))
+                if (!IsMatch(punctuator.Key))
                 {
-                    _index--;
-                    return LexSymbol(punctuator.Key);
+                    continue;
                 }
+                
+                return LexSymbol(punctuator.Key);
             }
 
             if (char.IsDigit(c))
@@ -134,20 +135,20 @@ public class Lexer : ILexer
             return new("#invalid", c.ToString(), _line, _column);
         }
 
-        return new(PredefinedSymbols.EOF, string.Empty, _line, _column);
+        return new(PredefinedSymbols.EOF, "EndOfFile", _line, _column);
     }
 
     private Token LexSymbol(string punctuatorKey)
     {
         _column += punctuatorKey.Length;
         _index += punctuatorKey.Length;
-
+        
         return new(punctuatorKey, punctuatorKey, _line, _column);
     }
 
     private Token LexName()
     {
-        var start = _index - 1;
+        var start = _index;
         while (_index < _source.Length)
         {
             if (!char.IsLetter(_source[_index]))
