@@ -14,6 +14,9 @@ public static class PredefinedSymbols
     
     public static Symbol LessThan = Pool.Get("<");
     public static Symbol GreaterThan = Pool.Get(">");
+    
+    public static Symbol LessThanLessThan = Pool.Get("<<");
+    public static Symbol GreaterThanGreaterThan = Pool.Get(">>");
 
     public static Symbol Question = Pool.Get("?");
 
