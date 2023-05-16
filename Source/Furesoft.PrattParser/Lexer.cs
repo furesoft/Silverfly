@@ -72,15 +72,20 @@ public class Lexer : ILexer
         return _source[_index + distance];
     }
 
+    public bool IsKeyword(Symbol symbol)
+    {
+        return _keywords.Contains(symbol);
+    }
+
     private bool IsMatch(string token)
     {
-        bool result = Peek(1) == token[0]; //ToDo: turn peek(1) to peek(0). need to be figured out where index++ is missing!!
+        bool result = Peek(0) == token[0]; //ToDo: turn peek(1) to peek(0). need to be figured out where index++ is missing!!
 
         for (int i = 1; i < token.Length; i++)
         {
             if (result)
             {
-                result = result && Peek(i+1) == token[i]; //ToDo: turn peek(i+11) to peek(i). need to be figured out where index++ is missing!!
+                result = result && Peek(i) == token[i]; //ToDo: turn peek(i+11) to peek(i). need to be figured out where index++ is missing!!
             }
         }
 
@@ -114,13 +119,6 @@ public class Lexer : ILexer
                     return LexSymbol(punctuator.Key);
                 }
             }
-            
-            if (_punctuators.TryGetValue(c.ToString(), out var symbol))
-            {
-                _column++;
-
-                return new(symbol, c.ToString(), _line, _column);
-            }
 
             if (char.IsDigit(c))
             {
@@ -132,7 +130,7 @@ public class Lexer : ILexer
                 return LexName();
             }
 
-            return new(PredefinedSymbols.Pool.Get("#invalid"), c.ToString(), _line, _column);
+            return new("#invalid", c.ToString(), _line, _column);
         }
 
         return new(PredefinedSymbols.EOF, string.Empty, _line, _column);
@@ -143,7 +141,7 @@ public class Lexer : ILexer
         _column += punctuatorKey.Length;
         _index += punctuatorKey.Length;
 
-        return new(PredefinedSymbols.Pool.Get(punctuatorKey), punctuatorKey, _line, _column);
+        return new(punctuatorKey, punctuatorKey, _line, _column);
     }
 
     private Token LexName()
@@ -164,7 +162,7 @@ public class Lexer : ILexer
 
         if (_keywords.Any(_ => _.Name == name))
         {
-            return new(PredefinedSymbols.Pool.Get(name), name, _line, _column);
+            return new(name, name, _line, _column);
         }
 
         return new(PredefinedSymbols.Name, name, _line, _column);

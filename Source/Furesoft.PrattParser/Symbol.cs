@@ -76,6 +76,11 @@ public class Symbol
         }
     }
 
+    public static implicit operator Symbol(string name)
+    {
+        return GSymbol.Pool.Get(name);
+    }
+    
     public override int GetHashCode() { return (5432 + _id) ^ (_pool.PoolId << 16); }
     public override bool Equals(object b) { return ReferenceEquals(this, b); }
 

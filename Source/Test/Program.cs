@@ -73,6 +73,11 @@ public static class Program
         lexer.Ignore('\r');
         lexer.Ignore(' ');
         lexer.Ignore('\t');
+
+        var a = lexer.Next();
+        var op = lexer.Next();
+        var b = lexer.Next();
+        
         
         var parser = new TestParser(lexer);
 

@@ -158,11 +158,7 @@ public class Parser<T>
     {
         Register(token, (IInfixParselet<T>)new PostfixOperatorParselet(bindingPower));
     }
-
-    public void Postfix(string symbol, int bindingPower)
-    {
-        Postfix(PredefinedSymbols.Pool.Get(symbol), bindingPower);
-    }
+    
 
     /// <summary>
     /// Registers a prefix unary operator parselet for the given token and binding power.
@@ -170,11 +166,6 @@ public class Parser<T>
     public void Prefix(Symbol token, int bindingPower)
     {
         Register(token, (IPrefixParselet<T>)new PrefixOperatorParselet(bindingPower));
-    }
-
-    public void Prefix(string symbol, int bindingPower)
-    {
-        Prefix(PredefinedSymbols.Pool.Get(symbol), bindingPower);
     }
 
     /// <summary>
@@ -185,21 +176,11 @@ public class Parser<T>
         Register(token, (IInfixParselet<T>)new BinaryOperatorParselet(bindingPower, false));
     }
 
-    public void InfixLeft(string symbol, int bindingPower)
-    {
-        InfixLeft(PredefinedSymbols.Pool.Get(symbol), bindingPower);
-    }
-
     /// <summary>
     /// Registers a right-associative binary operator parselet for the given token and binding power.
     /// </summary>
     public void InfixRight(Symbol token, int bindingPower)
     {
         Register(token, (IInfixParselet<T>)new BinaryOperatorParselet(bindingPower, true));
-    }
-
-    public void InfixRight(string symbol, int bindingPower)
-    {
-        InfixRight(PredefinedSymbols.Pool.Get(symbol), bindingPower);
     }
 }
