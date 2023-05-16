@@ -138,6 +138,7 @@ public class GSymbol
     {
         Pool = new(0, 0);
         Empty = Pool.Get("");
+        
         Debug.Assert(Empty.Id == 0 && Empty.Name == "");
         Debug.Assert(((Symbol)Empty).Pool == Pool);
     }
