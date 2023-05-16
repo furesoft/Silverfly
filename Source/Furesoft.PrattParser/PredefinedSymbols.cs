@@ -63,6 +63,8 @@ public static class PredefinedSymbols
     public static Symbol EqualsEquals = Pool.Get("==");
     public static Symbol DotDot = Pool.Get("..");
     public static Symbol QuestionQuestion = Pool.Get("??");
+    public static Symbol QuestionDot = Pool.Get("?.");
+    public static Symbol ColonQuestion = Pool.Get(":?");
     
     public static Symbol Arrow = Pool.Get("->");
     public static Symbol DoubleArrow = Pool.Get("=>");
