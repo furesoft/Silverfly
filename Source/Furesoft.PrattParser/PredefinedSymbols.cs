@@ -8,7 +8,7 @@ public static class PredefinedSymbols
     
     public static Symbol Comma = Pool.Get(",");
     public static Symbol Colon = Pool.Get(":");
-    public static Symbol Equals = Pool.Get("=");
+    public new static Symbol Equals = Pool.Get("=");
     
     public static Symbol LeftParen = Pool.Get("(");
     public static Symbol RightParen = Pool.Get(")");
