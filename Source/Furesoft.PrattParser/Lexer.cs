@@ -32,6 +32,7 @@ public class Lexer : ILexer
             }
         }
         
+        // sort punctuators longest - smallest to make it possible to use symbols with more than one character
         _punctuators = new(_punctuators.OrderByDescending(_ => _.Key.Length));
     }
 
