@@ -6,6 +6,6 @@ public class IntegerLiteralParselet : IPrefixParselet<AstNode>
 {
     public AstNode Parse(Parser<AstNode> parser, Token token)
     {
-        return new Literal(int.Parse(token.Text));
+        return new LiteralNode(int.Parse(token.Text));
     }
 }
