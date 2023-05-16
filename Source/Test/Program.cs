@@ -12,6 +12,7 @@ public static class Program
     private static void Main(string[] args)
     {
         Test("a -> b", "(a -> b)");
+        Test("!5", "(!5)");
         
         // Function call.
         Test("a()", "a()");
