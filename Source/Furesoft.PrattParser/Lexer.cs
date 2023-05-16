@@ -82,34 +82,36 @@ public class Lexer : ILexer
 
             if (char.IsLetter(c))
             {
-                // Handle names.
-                var start = _index - 1;
-                while (_index < _source.Length)
-                {
-                    if (!char.IsLetter(_source[_index]))
-                    {
-                        break;
-                    }
-
-                    _index++;
-                }
-
-                var name = _source.Substring(start, _index - start);
-
-                if (_keywords.Any(_ => _.Name == name))
-                {
-                    return new(PredefinedSymbols.Pool.Get(name), name);
-                }
-
-                return new(PredefinedSymbols.Name, name);
+                return LexName();
             }
-            else
-            {
-                return new Token(PredefinedSymbols.Pool.Get("#invalid"), c.ToString());
-            }
+
+            return new(PredefinedSymbols.Pool.Get("#invalid"), c.ToString());
         }
 
         return new(PredefinedSymbols.EOF, string.Empty);
+    }
+
+    private Token LexName()
+    {
+        var start = _index - 1;
+        while (_index < _source.Length)
+        {
+            if (!char.IsLetter(_source[_index]))
+            {
+                break;
+            }
+
+            _index++;
+        }
+
+        var name = _source.Substring(start, _index - start);
+
+        if (_keywords.Any(_ => _.Name == name))
+        {
+            return new(PredefinedSymbols.Pool.Get(name), name);
+        }
+
+        return new(PredefinedSymbols.Name, name);
     }
 
     private string LexNumber()
