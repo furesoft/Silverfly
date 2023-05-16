@@ -38,6 +38,8 @@ public class Lexer : ILexer
                 _punctuators.Add(punctuator, type);
             }
         }
+        
+        _punctuators = new(_punctuators.OrderByDescending(_ => _.Key.Length));
     }
 
     public void AddSymbol(string symbol)
@@ -60,6 +62,30 @@ public class Lexer : ILexer
         _keywords.AddRange(keywords.Select(_ => PredefinedSymbols.Pool.Get(_)));
     }
 
+    private char Peek(int distance)
+    {
+        if (_index >= _source.Length)
+        {
+            return '\0';
+        }
+
+        return _source[_index + distance];
+    }
+
+    private bool IsMatch(string token)
+    {
+        bool result = Peek(1) == token[0]; //ToDo: turn peek(1) to peek(0). need to be figured out where index++ is missing!!
+
+        for (int i = 1; i < token.Length; i++)
+        {
+            if (result)
+            {
+                result = result && Peek(i+1) == token[i]; //ToDo: turn peek(i+11) to peek(i). need to be figured out where index++ is missing!!
+            }
+        }
+
+        return result;
+    }
 
     public Token Next()
     {
@@ -75,9 +101,20 @@ public class Lexer : ILexer
 
             if (_ignoredChars.Contains(c))
             {
+                _column++;
+                _index++;
+                
                 continue;
             }
 
+            foreach (var punctuator in _punctuators)
+            {
+                if (IsMatch(punctuator.Key))
+                {
+                    return LexSymbol(punctuator.Key);
+                }
+            }
+            
             if (_punctuators.TryGetValue(c.ToString(), out var symbol))
             {
                 _column++;
@@ -99,6 +136,14 @@ public class Lexer : ILexer
         }
 
         return new(PredefinedSymbols.EOF, string.Empty, _line, _column);
+    }
+
+    private Token LexSymbol(string punctuatorKey)
+    {
+        _column += punctuatorKey.Length;
+        _index += punctuatorKey.Length;
+
+        return new(PredefinedSymbols.Pool.Get(punctuatorKey), punctuatorKey, _line, _column);
     }
 
     private Token LexName()

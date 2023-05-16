@@ -11,6 +11,8 @@ public static class Program
 
     private static void Main(string[] args)
     {
+        Test("a -> b", "(a -> b)");
+        
         // Function call.
         Test("a()", "a()");
         Test("a(b)", "a(b)");

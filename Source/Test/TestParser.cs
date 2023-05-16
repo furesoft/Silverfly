@@ -27,5 +27,7 @@ public class TestParser : Parser<IAstNode>
         InfixLeft("*", (int)BindingPower.Product);
         InfixLeft("/", (int)BindingPower.Product);
         InfixRight("^", (int)BindingPower.Exponent);
+        
+        InfixLeft("->", (int)BindingPower.Product);
     }
 }
