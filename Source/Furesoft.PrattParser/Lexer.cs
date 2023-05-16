@@ -72,6 +72,11 @@ public class Lexer : ILexer
         return _source[_index + distance];
     }
 
+    public bool IsKeyword(Symbol symbol)
+    {
+        return _keywords.Contains(symbol);
+    }
+
     private bool IsMatch(string token)
     {
         bool result = Peek(1) == token[0]; //ToDo: turn peek(1) to peek(0). need to be figured out where index++ is missing!!
@@ -113,13 +118,6 @@ public class Lexer : ILexer
                 {
                     return LexSymbol(punctuator.Key);
                 }
-            }
-            
-            if (_punctuators.TryGetValue(c.ToString(), out var symbol))
-            {
-                _column++;
-
-                return new(symbol, c.ToString(), _line, _column);
             }
 
             if (char.IsDigit(c))
