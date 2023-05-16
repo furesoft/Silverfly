@@ -4,7 +4,7 @@ public static class PredefinedSymbols
 {
     public static SymbolPool Pool = GSymbol.Pool;
 
-    public static Symbol EOF = Pool.Get("\0");
+    public static Symbol EOF = Pool.Get("#eof");
 
     public static Symbol Comma = Pool.Get(",");
     public static Symbol Colon = Pool.Get(":");
