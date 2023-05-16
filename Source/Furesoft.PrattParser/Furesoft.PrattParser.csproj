@@ -1,8 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
-    <Version>1.0.4</Version>
+    <Version>1.0.5</Version>
     <LangVersion>preview</LangVersion>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Title>Furesoft.PrattParser</Title>
@@ -10,6 +9,7 @@
     <RepositoryUrl>https://github.com/furesoft/Furesoft.PrattParser</RepositoryUrl>
     <Description>A little framework to build parsers</Description>
     <PackageTags>parser, pratt</PackageTags>
+    <TargetFrameworks>net7.0;netstandard2.1</TargetFrameworks>
   </PropertyGroup>
 
   <ItemGroup>
