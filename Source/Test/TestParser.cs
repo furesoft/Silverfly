@@ -2,6 +2,7 @@ using Furesoft.PrattParser;
 using Furesoft.PrattParser.Nodes;
 using Furesoft.PrattParser.Parselets;
 using Furesoft.PrattParser.Parselets.Literals;
+using Furesoft.PrattParser.Parselets.Operators;
 
 namespace Test;
 
@@ -13,10 +14,11 @@ public class TestParser : Parser<AstNode>
         Register(PredefinedSymbols.Integer, new IntegerLiteralParselet());
         Register("=", new AssignParselet());
 
-        Register("?", new ConditionalParselet());
         Register("(", new CallParselet());
         Group("(", ")");
 
+        Ternary("?", ":", (int)BindingPower.Conditional);
+        
         Prefix("+", (int)BindingPower.Prefix);
         Prefix("-", (int)BindingPower.Prefix);
         Prefix("~", (int)BindingPower.Prefix);

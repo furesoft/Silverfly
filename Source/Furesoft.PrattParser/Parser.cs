@@ -23,11 +23,6 @@ public class Parser<T>
         _prefixParselets.Add(token, parselet);
     }
 
-    public void Register(string token, IPrefixParselet<T> parselet)
-    {
-        _prefixParselets.Add(PredefinedSymbols.Pool.Get(token), parselet);
-    }
-
     public void Register(Symbol token, IInfixParselet<T> parselet)
     {
         _infixParselets.Add(token, parselet);
@@ -186,5 +181,16 @@ public class Parser<T>
     public void InfixRight(Symbol token, int bindingPower)
     {
         Register(token, (IInfixParselet<T>)new BinaryOperatorParselet(bindingPower, true));
+    }
+
+    /// <summary>
+    /// Register a ternary operator like the :? operator
+    /// </summary>
+    /// <param name="firstSymbol"></param>
+    /// <param name="secondSymbol"></param>
+    /// <param name="bindingPower"></param>
+    public void Ternary(Symbol firstSymbol, Symbol secondSymbol, int bindingPower)
+    {
+        Register(firstSymbol, (IInfixParselet<T>)new TernaryOperatorParselet(secondSymbol, bindingPower));
     }
 }

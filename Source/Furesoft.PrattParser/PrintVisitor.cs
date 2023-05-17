@@ -12,7 +12,7 @@ public class PrintVisitor : IVisitor<string>
         {
             AssignAstNode assign => Visit(assign),
             CallAstNode call => Visit(call),
-            ConditionalAstNode cond => Visit(cond),
+            TernaryOperatorNode cond => Visit(cond),
             NameAstNode name => Visit(name),
             BinaryOperatorAstNode op => Visit(op),
             PostfixOperatorAstNode postfix => Visit(postfix),
@@ -53,17 +53,17 @@ public class PrintVisitor : IVisitor<string>
         return sb.ToString();
     }
 
-    public string Visit(ConditionalAstNode cond)
+    public string Visit(TernaryOperatorNode cond)
     {
         var sb = new StringBuilder();
 
         sb.Append('(');
-        sb.Append(cond.ConditionExpr.Accept(this));
+        sb.Append(cond.FirstExpr.Accept(this));
         sb.Append(" ? ");
 
-        sb.Append(cond.ThenExpr.Accept(this));
+        sb.Append(cond.SecondExpr.Accept(this));
         sb.Append(" : ");
-        sb.Append(cond.ElseExpr.Accept(this));
+        sb.Append(cond.ThirdExpr.Accept(this));
 
         sb.Append(')');
 
