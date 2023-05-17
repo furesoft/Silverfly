@@ -27,4 +27,9 @@ public struct SourceSpan
     {
         return !(left < right);
     }
+
+    public override string ToString()
+    {
+        return $"{Line}:{Column}";
+    }
 }

@@ -11,4 +11,9 @@ public struct SourceRange
     public SourceSpan Start { get; }
     public SourceSpan End { get; }
     public static SourceRange Empty { get; } = new();
+
+    public override string ToString()
+    {
+        return $"{Start} - {End}";
+    }
 }
