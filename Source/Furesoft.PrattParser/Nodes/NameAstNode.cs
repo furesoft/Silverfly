@@ -10,8 +10,5 @@ public class NameAstNode : AstNode
         Name = name;
     }
 
-    public string Name
-    {
-        get;
-    }
+    public string Name { get; }
 }

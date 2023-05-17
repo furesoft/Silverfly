@@ -23,4 +23,14 @@ public sealed class Token
     }
     
     public override string ToString() { return Text; }
+
+    public SourceSpan GetSourceSpanStart()
+    {
+        return new(Line, Column);
+    }
+    
+    public SourceSpan GetSourceSpanEnd()
+    {
+        return new(Line, Column + Text.Length);
+    }
 }

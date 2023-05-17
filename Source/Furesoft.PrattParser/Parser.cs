@@ -183,4 +183,9 @@ public class Parser<T>
     {
         Register(token, (IInfixParselet<T>)new BinaryOperatorParselet(bindingPower, true));
     }
+
+    public Token Prev()
+    {
+        return LookAhead(-1);
+    }
 }

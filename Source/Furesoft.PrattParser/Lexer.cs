@@ -6,7 +6,6 @@ namespace Furesoft.PrattParser;
 public class Lexer : ILexer
 {
     private readonly Dictionary<string, Symbol> _punctuators = new();
-    private readonly List<Symbol> _keywords = new();
     private readonly List<char> _ignoredChars = new();
     private readonly string _source;
     private int _index;
@@ -41,19 +40,9 @@ public class Lexer : ILexer
         _punctuators.Add(symbol, PredefinedSymbols.Pool.Get(symbol));
     }
 
-    public void AddKeyword(string keyword)
-    {
-        _keywords.Add(PredefinedSymbols.Pool.Get(keyword));
-    }
-
     public void Ignore(char c)
     {
         _ignoredChars.Add(c);
-    }
-
-    public void AddKeywords(params string[] keywords)
-    {
-        _keywords.AddRange(keywords.Select(_ => PredefinedSymbols.Pool.Get(_)));
     }
 
     private char Peek(int distance)
@@ -64,11 +53,6 @@ public class Lexer : ILexer
         }
 
         return _source[_index + distance];
-    }
-
-    public bool IsKeyword(Symbol symbol)
-    {
-        return _keywords.Contains(symbol);
     }
 
     private bool IsMatch(string token)
@@ -156,7 +140,7 @@ public class Lexer : ILexer
 
         var name = _source.Substring(start, _index - start);
 
-        if (_keywords.Any(_ => _.Name == name))
+        if (_punctuators.ContainsKey(name))
         {
             return new(name, name, _line, _column);
         }

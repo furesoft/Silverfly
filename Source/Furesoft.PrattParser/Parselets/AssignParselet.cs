@@ -20,7 +20,7 @@ public class AssignParselet : IInfixParselet<AstNode>
 
         var name = ((NameAstNode)left).Name;
 
-        return new AssignAstNode(name, right);
+        return new AssignAstNode(name, right).WithRange(left.Range.Start, right.Range.End);
     }
 
     public int GetBindingPower()

@@ -20,6 +20,7 @@ public class TestParser : Parser<AstNode>
         Prefix("-", (int)BindingPower.Prefix);
         Prefix("~", (int)BindingPower.Prefix);
         Prefix("!", (int)BindingPower.Prefix);
+        Prefix("not", (int)BindingPower.Prefix);
 
         Postfix("!", (int)BindingPower.PostFix);
 
