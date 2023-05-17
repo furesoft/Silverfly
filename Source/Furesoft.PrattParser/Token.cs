@@ -33,7 +33,7 @@ public sealed class Token
 
     public SourceSpan GetSourceSpanEnd()
     {
-        return new(Line, Column + Text.Length);
+        return new(Line, Column + Text.Length - 1);
     }
 
     public Token WithDocument(SourceDocument document)
