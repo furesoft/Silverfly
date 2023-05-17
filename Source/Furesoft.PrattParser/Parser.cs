@@ -6,13 +6,15 @@ namespace Furesoft.PrattParser;
 public class Parser<T>
 {
     private ILexer _lexer;
+    private readonly bool _expectEndOfFile;
     private List<Token> _read = new();
     private Dictionary<Symbol, IPrefixParselet<T>> _prefixParselets = new();
     private Dictionary<Symbol, IInfixParselet<T>> _infixParselets = new();
 
-    public Parser(ILexer lexer)
+    public Parser(ILexer lexer, bool expectEndOfFile = true)
     {
         _lexer = lexer;
+        _expectEndOfFile = expectEndOfFile;
     }
 
     public void Register(Symbol token, IPrefixParselet<T> parselet)
@@ -68,6 +70,11 @@ public class Parser<T>
             left = infix.Parse(this, left, token);
         }
 
+        if (_expectEndOfFile && !Match(PredefinedSymbols.EOF))
+        {
+            throw new ParseException("End Of File Expected");
+        }
+        
         return left;
     }
 
