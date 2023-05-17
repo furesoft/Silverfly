@@ -16,11 +16,9 @@ public class GroupParselet : IPrefixParselet<AstNode>
 
     public AstNode Parse(Parser<AstNode> parser, Token token)
     {
-        var leftParenToken = parser.Prev();
-        
         var expression = parser.Parse();
-        parser.Consume(_rightSymbol);
+        var rightToken = parser.Consume(_rightSymbol);
 
-        return expression.WithRange(leftParenToken, token);
+        return expression.WithRange(token, rightToken);
     }
 }

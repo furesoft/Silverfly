@@ -7,18 +7,19 @@ public class Lexer : ILexer
 {
     private readonly Dictionary<string, Symbol> _punctuators = new();
     private readonly List<char> _ignoredChars = new();
-    private readonly string _source;
     private int _index;
     private int _line = 1, _column = 1;
+
+    public SourceDocument Document { get; }
 
     /// <summary>
     /// Creates a new <see cref="Lexer"/> to tokenize the given string.
     /// </summary>
-    /// <param name="text">String to tokenize</param>
-    public Lexer(string text)
+    /// <param name="source">String to tokenize</param>
+    public Lexer(string source, string filename = "tmp.synthetic")
     {
         _index = 0;
-        _source = text;
+        Document = new() { Filename = filename, Source = source };
 
         // Register all of the Symbols that are explicit punctuators.
         foreach (var type in PredefinedSymbols.Pool)
@@ -47,12 +48,12 @@ public class Lexer : ILexer
 
     private char Peek(int distance)
     {
-        if (_index + distance >= _source.Length)
+        if (_index + distance >= Document.Source.Length)
         {
             return '\0';
         }
 
-        return _source[_index + distance];
+        return Document.Source[_index + distance];
     }
 
     private bool IsMatch(string token)
@@ -72,9 +73,9 @@ public class Lexer : ILexer
 
     public Token Next()
     {
-        while (_index < _source.Length)
+        while (_index < Document.Source.Length)
         {
-            var c = _source[_index];
+            var c = Document.Source[_index];
 
             if (c == '\r')
             {
@@ -97,23 +98,23 @@ public class Lexer : ILexer
                     continue;
                 }
                 
-                return LexSymbol(punctuator.Key);
+                return LexSymbol(punctuator.Key).WithDocument(Document);
             }
 
             if (char.IsDigit(c))
             {
-                return LexNumber();
+                return LexNumber().WithDocument(Document);
             }
 
             if (char.IsLetter(c))
             {
-                return LexName();
+                return LexName().WithDocument(Document);
             }
 
-            return new("#invalid", c.ToString(), _line, _column);
+            return new Token("#invalid", c.ToString(), _line, _column).WithDocument(Document);
         }
 
-        return new(PredefinedSymbols.EOF, "EndOfFile", _line, _column);
+        return new Token(PredefinedSymbols.EOF, "EndOfFile", _line, _column).WithDocument(Document);
     }
 
     private Token LexSymbol(string punctuatorKey)
@@ -127,9 +128,9 @@ public class Lexer : ILexer
     private Token LexName()
     {
         var start = _index;
-        while (_index < _source.Length)
+        while (_index < Document.Source.Length)
         {
-            if (!char.IsLetter(_source[_index]))
+            if (!char.IsLetter(Document.Source[_index]))
             {
                 break;
             }
@@ -138,7 +139,7 @@ public class Lexer : ILexer
             _column++;
         }
 
-        var name = _source.Substring(start, _index - start);
+        var name = Document.Source.Substring(start, _index - start);
 
         if (_punctuators.ContainsKey(name))
         {
@@ -152,9 +153,9 @@ public class Lexer : ILexer
     {
         var startIndex = _index;
 
-        while (_index < _source.Length)
+        while (_index < Document.Source.Length)
         {
-            if (!char.IsDigit(_source[_index]))
+            if (!char.IsDigit(Document.Source[_index]))
             {
                 break;
             }
@@ -163,6 +164,6 @@ public class Lexer : ILexer
             _index++;
         }
 
-        return new(PredefinedSymbols.Integer, _source.Substring(startIndex, _index - startIndex), _line, _column);
+        return new(PredefinedSymbols.Integer, Document.Source.Substring(startIndex, _index - startIndex), _line, _column);
     }
 }

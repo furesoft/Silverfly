@@ -12,7 +12,7 @@ public class CallParselet : IInfixParselet<AstNode>
         // Parse the comma-separated arguments until we hit, ')'.
         var args = parser.ParseSeperated(PredefinedSymbols.Comma, PredefinedSymbols.RightParen);
 
-        return new CallAstNode(left, args).WithRange(left.Range.Start, parser.Prev().GetSourceSpanEnd());
+        return new CallAstNode(left, args).WithRange(left.Range.Document, left.Range.Start, token.GetSourceSpanEnd());
     }
 
     public int GetBindingPower()

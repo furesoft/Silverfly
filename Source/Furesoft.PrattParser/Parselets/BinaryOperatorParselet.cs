@@ -26,7 +26,7 @@ public class BinaryOperatorParselet : IInfixParselet<AstNode>
         // take *this* parselet's result as its left-hand argument.
         var right = parser.Parse(_bindingPower - (_isRight ? 1 : 0));
 
-        return new BinaryOperatorAstNode(left, token.Type, right).WithRange(left.Range.Start, right.Range.End);
+        return new BinaryOperatorAstNode(left, token.Type, right).WithRange(left.Range.Document, left.Range.Start, right.Range.End);
     }
 
     public int GetBindingPower()

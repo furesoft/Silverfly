@@ -32,7 +32,7 @@ public abstract class AstNode
             }
         }
 
-        return new(minimumSpan, maximumSpan);
+        return new(sourceRanges.First().Document, minimumSpan, maximumSpan);
     }
 
     private IEnumerable<SourceRange> GetSourceRanges()
@@ -45,21 +45,21 @@ public abstract class AstNode
     
     public AstNode WithRange(Token token)
     {
-        Range = new(token.GetSourceSpanStart(), token.GetSourceSpanEnd());
+        Range = new(token.Document, token.GetSourceSpanStart(), token.GetSourceSpanEnd());
         
         return this;
     }
     
-    public AstNode WithRange(SourceSpan start, SourceSpan end)
+    public AstNode WithRange(SourceDocument document, SourceSpan start, SourceSpan end)
     {
-        Range = new(start, end);
+        Range = new(document, start, end);
         
         return this;
     }
     
     public AstNode WithRange(Token start, Token end)
     {
-        Range = new(start.GetSourceSpanStart(), end.GetSourceSpanEnd());
+        Range = new(start.Document, start.GetSourceSpanStart(), end.GetSourceSpanEnd());
         
         return this;
     }

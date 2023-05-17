@@ -14,6 +14,8 @@ public sealed class Token
 
     public int Column { get; }
 
+    public SourceDocument Document { get; set; }
+
     public Token(Symbol type, string text, int line, int column)
     {
         Type = type;
@@ -21,16 +23,23 @@ public sealed class Token
         Line = line;
         Column = column;
     }
-    
+
     public override string ToString() { return Text; }
 
     public SourceSpan GetSourceSpanStart()
     {
         return new(Line, Column);
     }
-    
+
     public SourceSpan GetSourceSpanEnd()
     {
         return new(Line, Column + Text.Length);
+    }
+
+    public Token WithDocument(SourceDocument document)
+    {
+        this.Document = document;
+        
+        return this;
     }
 }

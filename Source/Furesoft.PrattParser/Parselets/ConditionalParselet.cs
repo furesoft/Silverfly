@@ -14,7 +14,7 @@ public class ConditionalParselet : IInfixParselet<AstNode>
 
         var elseArm = parser.Parse((int)BindingPower.Conditional - 1);
 
-        return new ConditionalAstNode(left, thenArm, elseArm).WithRange(left.Range.Start, token.GetSourceSpanEnd());
+        return new ConditionalAstNode(left, thenArm, elseArm).WithRange(left.Range.Document, left.Range.Start, token.GetSourceSpanEnd());
     }
 
     public int GetBindingPower()

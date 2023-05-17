@@ -136,7 +136,7 @@ public class Parser<T>
         return token;
     }
 
-    private Token LookAhead(int distance)
+    private Token LookAhead(uint distance)
     {
         // Read in as many as needed.
         while (distance >= _read.Count)
@@ -145,7 +145,7 @@ public class Parser<T>
         }
 
         // Get the queued token.
-        return _read[distance];
+        return _read[(int)distance];
     }
 
     private int GetBindingPower()
@@ -189,10 +189,5 @@ public class Parser<T>
     public void InfixRight(Symbol token, int bindingPower)
     {
         Register(token, (IInfixParselet<T>)new BinaryOperatorParselet(bindingPower, true));
-    }
-
-    public Token Prev()
-    {
-        return LookAhead(-1);
     }
 }
