@@ -10,13 +10,13 @@ public class PrintVisitor : IVisitor<string>
     {
         return node switch
         {
-            AssignAstNode assign => Visit(assign),
-            CallAstNode call => Visit(call),
+            AssignNode assign => Visit(assign),
+            CallNode call => Visit(call),
             TernaryOperatorNode cond => Visit(cond),
             NameAstNode name => Visit(name),
-            BinaryOperatorAstNode op => Visit(op),
-            PostfixOperatorAstNode postfix => Visit(postfix),
-            PrefixOperatorAstNode prefix => Visit(prefix),
+            BinaryOperatorNode op => Visit(op),
+            PostfixOperatorNode postfix => Visit(postfix),
+            PrefixOperatorNode prefix => Visit(prefix),
             LiteralNode<bool> literal => Visit(literal),
             LiteralNode<int> literal => Visit(literal),
 
@@ -24,7 +24,7 @@ public class PrintVisitor : IVisitor<string>
         };
     }
 
-    public string Visit(AssignAstNode assign)
+    public string Visit(AssignNode assign)
     {
         var name = $"({assign.Name} = ";
         name += assign.ValueExpr.Accept(this);
@@ -32,7 +32,7 @@ public class PrintVisitor : IVisitor<string>
         return $"{name})";
     }
 
-    public string Visit(CallAstNode call)
+    public string Visit(CallNode call)
     {
         var sb = new StringBuilder();
 
@@ -76,7 +76,7 @@ public class PrintVisitor : IVisitor<string>
         return name.Name;
     }
 
-    public string Visit(BinaryOperatorAstNode binary)
+    public string Visit(BinaryOperatorNode binary)
     {
         var sb = new StringBuilder();
 
@@ -89,7 +89,7 @@ public class PrintVisitor : IVisitor<string>
         return sb.ToString();
     }
 
-    public string Visit(PostfixOperatorAstNode postfix)
+    public string Visit(PostfixOperatorNode postfix)
     {
         var sb = new StringBuilder();
 
@@ -100,7 +100,7 @@ public class PrintVisitor : IVisitor<string>
         return sb.ToString();
     }
 
-    public string Visit(PrefixOperatorAstNode prefix)
+    public string Visit(PrefixOperatorNode prefix)
     {
         var sb = new StringBuilder();
 
