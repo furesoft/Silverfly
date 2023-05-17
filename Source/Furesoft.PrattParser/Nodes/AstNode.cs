@@ -68,4 +68,9 @@ public abstract class AstNode
     {
         return visitor.Visit(this);
     }
+
+    public void Accept(IVisitor visitor)
+    {
+        visitor.Visit(this);
+    }
 }

@@ -6,3 +6,8 @@ public interface IVisitor<out T>
 {
     T Visit(AstNode node);
 }
+
+public interface IVisitor
+{
+    void Visit(AstNode node);
+}
