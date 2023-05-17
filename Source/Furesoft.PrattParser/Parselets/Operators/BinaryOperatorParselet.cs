@@ -1,6 +1,7 @@
 using Furesoft.PrattParser.Nodes;
+using Furesoft.PrattParser.Nodes.Operators;
 
-namespace Furesoft.PrattParser.Parselets;
+namespace Furesoft.PrattParser.Parselets.Operators;
 
 /// <summary>
 /// Generic infix parselet for a binary arithmetic operator. The only

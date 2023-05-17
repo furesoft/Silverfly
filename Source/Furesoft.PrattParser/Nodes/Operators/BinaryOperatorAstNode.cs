@@ -1,4 +1,4 @@
-namespace Furesoft.PrattParser.Nodes;
+namespace Furesoft.PrattParser.Nodes.Operators;
 
 /// <summary>
 /// A binary arithmetic expression like "a + b" or "c ^ d".

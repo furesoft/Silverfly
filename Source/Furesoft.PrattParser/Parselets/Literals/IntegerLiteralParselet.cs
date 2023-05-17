@@ -1,6 +1,6 @@
 ﻿using Furesoft.PrattParser.Nodes;
 
-namespace Furesoft.PrattParser.Parselets;
+namespace Furesoft.PrattParser.Parselets.Literals;
 
 public class IntegerLiteralParselet : IPrefixParselet<AstNode>
 {

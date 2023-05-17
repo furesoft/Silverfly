@@ -8,7 +8,7 @@ public class Lexer : ILexer
     private readonly Dictionary<string, Symbol> _punctuators = new();
     private readonly List<char> _ignoredChars = new();
     private int _index;
-    private int _line = 1, _column = 1;
+    private int _line = 1, _column = 0;
 
     public SourceDocument Document { get; }
 
@@ -111,6 +111,8 @@ public class Lexer : ILexer
                 return LexName().WithDocument(Document);
             }
 
+            Document.Messages.Add(Message.Error($"Invalid Character '{c}'"));
+            
             return new Token("#invalid", c.ToString(), _line, _column).WithDocument(Document);
         }
 

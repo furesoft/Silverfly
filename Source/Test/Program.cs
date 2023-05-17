@@ -11,13 +11,15 @@ public static class Program
 
     private static void Main(string[] args)
     {
+        Test("a(b)", "a(b)");
+        
         Test("a -> b", "(a -> b)");
         Test("! 5", "(!5)");
+        //Test("!5\rhello", "(!5)");
         Test("not 5", "(not5)");
-        
+
         // Function call.
         Test("a()", "a()");
-        Test("a(b)", "a(b)");
         Test("a(b, c)", "a(b, c)");
         Test("a(b)(c)", "a(b)(c)");
         Test("a(b) + c(d)", "(a(b) + c(d))");
@@ -80,34 +82,36 @@ public static class Program
 
         var printVisitor = new PrintVisitor();
 
-        try
+        var result = parser.Parse();
+
+        var builder = new StringBuilder();
+
+        builder.Append(result.Accept(printVisitor));
+
+        var actual = builder.ToString();
+
+        if (expected.Equals(actual))
         {
-            var result = parser.Parse();
-
-            var builder = new StringBuilder();
-
-            builder.Append(result.Accept(printVisitor));
-
-            var actual = builder.ToString();
-
-            if (expected.Equals(actual))
-            {
-                _passed++;
-            }
-            else
-            {
-                _failed++;
-                Console.WriteLine("[FAIL] Source: " + source);
-                Console.WriteLine("     Expected: '" + expected + "'");
-                Console.WriteLine("       Actual: '" + actual + "'");
-            }
+            _passed++;
         }
-        catch (ParseException ex)
+        else
+        {
+            _failed++;
+            Console.WriteLine("[FAIL] Source: " + source);
+            Console.WriteLine("     Expected: '" + expected + "'");
+            Console.WriteLine("       Actual: '" + actual + "'");
+        }
+
+        if (lexer.Document.Messages.Any())
         {
             _failed++;
             Console.WriteLine("[FAIL] Source: " + source);
             Console.WriteLine("     Expected: " + expected);
-            Console.WriteLine("        Error: " + ex.Message);
+
+            foreach (var message in lexer.Document.Messages)
+            {
+                Console.WriteLine($"        {message.Severity}: " + message);
+            }
         }
     }
 }

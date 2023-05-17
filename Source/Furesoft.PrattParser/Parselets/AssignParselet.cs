@@ -15,7 +15,7 @@ public class AssignParselet : IInfixParselet<AstNode>
 
         if (!(left is NameAstNode))
         {
-            throw new ParseException("The left-hand side of an assignment must be a name.");
+            token.Document.Messages.Add(Message.Error("The left-hand side of an assignment must be a name."));
         }
 
         var name = ((NameAstNode)left).Name;

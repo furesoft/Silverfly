@@ -1,4 +1,4 @@
-namespace Furesoft.PrattParser.Nodes;
+namespace Furesoft.PrattParser.Nodes.Operators;
 
 /// <summary>
 /// A prefix unary arithmetic expression like "!a" or "-b".

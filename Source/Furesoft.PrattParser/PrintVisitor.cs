@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using Furesoft.PrattParser.Nodes;
+using Furesoft.PrattParser.Nodes.Operators;
 
 namespace Furesoft.PrattParser;
 

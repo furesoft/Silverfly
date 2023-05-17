@@ -1,4 +1,4 @@
-namespace Furesoft.PrattParser.Nodes;
+namespace Furesoft.PrattParser.Nodes.Operators;
 
 /// <summary>
 /// A postfix unary arithmetic expression like "a!"

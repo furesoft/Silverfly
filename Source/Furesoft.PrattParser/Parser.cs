@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Furesoft.PrattParser.Parselets;
+using Furesoft.PrattParser.Parselets.Operators;
 
 namespace Furesoft.PrattParser;
 
@@ -53,7 +54,7 @@ public class Parser<T>
 
         if (!_prefixParselets.TryGetValue(token.Type, out var prefix))
         {
-            throw new ParseException("Could not parse \"" + token.Text + "\".");
+            token.Document.Messages.Add(Message.Error(("Could not parse \"" + token.Text + "\".")));
         }
 
         var left = prefix.Parse(this, token);
@@ -64,17 +65,12 @@ public class Parser<T>
 
             if (!_infixParselets.TryGetValue(token.Type, out var infix))
             {
-                throw new ParseException("Could not parse \"" + token.Text + "\".");
+                token.Document.Messages.Add(Message.Error(("Could not parse \"" + token.Text + "\".")));
             }
 
             left = infix.Parse(this, left, token);
         }
 
-        if (_expectEndOfFile && !Match(PredefinedSymbols.EOF))
-        {
-            throw new ParseException("End Of File Expected");
-        }
-        
         return left;
     }
 
@@ -112,6 +108,7 @@ public class Parser<T>
         }
 
         Consume();
+        
         return true;
     }
 
@@ -121,7 +118,7 @@ public class Parser<T>
 
         if (!token.Type.Equals(expected))
         {
-            throw new ParseException($"Expected token {expected} and found {token.Type}({token})");
+            token.Document.Messages.Add(Message.Error($"Expected token {expected} and found {token.Type}({token})"));
         }
 
         return Consume();
