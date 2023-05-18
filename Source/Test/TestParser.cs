@@ -12,8 +12,6 @@ public class TestParser : Parser<AstNode>
     {
         Register(PredefinedSymbols.Name, new NameParselet());
         
-        Register("=", new AssignParselet());
-
         Register("(", new CallParselet());
 
         Ternary("?", ":", (int)BindingPower.Conditional);
@@ -22,7 +20,8 @@ public class TestParser : Parser<AstNode>
         this.AddBitOperators();
         this.AddLogicalOperators();
         this.AddCommonLiterals();
-        
+        this.AddCommonAssignmentOperators();
+
         Prefix("not", (int)BindingPower.Prefix);
 
         Postfix("!", (int)BindingPower.PostFix);
