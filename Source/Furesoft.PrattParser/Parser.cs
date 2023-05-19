@@ -95,9 +95,7 @@ public class Parser<T>
 
     public bool Match(Symbol expected)
     {
-        var token = LookAhead(0);
-
-        if (!token.Type.Equals(expected))
+        if (!IsMatch(expected))
         {
             return false;
         }
@@ -105,6 +103,13 @@ public class Parser<T>
         Consume();
         
         return true;
+    }
+
+    public bool IsMatch(Symbol expected)
+    {
+        var token = LookAhead(0);
+
+        return token.Type.Equals(expected);
     }
 
     public Token Consume(Symbol expected)
