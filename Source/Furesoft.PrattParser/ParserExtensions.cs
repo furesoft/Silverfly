@@ -18,6 +18,26 @@ public static class ParserExtensions
         parser.InfixLeft("*", (int)BindingPower.Product);
         parser.InfixLeft("/", (int)BindingPower.Product);
     }
+
+    /// <summary>
+    /// Return true if a given symbol was found and consumed
+    /// </summary>
+    /// <param name="parser"></param>
+    /// <param name="optionalSymbol"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static bool Optional<T>(this Parser<T> parser, Symbol optionalSymbol)
+    {
+        if (!parser.IsMatch(optionalSymbol))
+        {
+            return false;
+        }
+
+        parser.Consume();
+            
+        return true;
+
+    }
     
     public static void AddLogicalOperators(this Parser<AstNode> parser)
     {
