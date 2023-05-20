@@ -105,11 +105,22 @@ public class Parser<T>
         return true;
     }
 
-    public bool IsMatch(Symbol expected)
+    public bool IsMatch(Symbol expected, uint distance = 0)
     {
-        var token = LookAhead(0);
+        var token = LookAhead(distance);
 
         return token.Type.Equals(expected);
+    }
+
+    public bool IsMatch(params Symbol[] expected)
+    {
+        var result = true;
+        for (uint i = 0; i < expected.Length; i++)
+        {
+            result &= IsMatch(expected[i], i);
+        }
+
+        return result;
     }
 
     public Token Consume(Symbol expected)
