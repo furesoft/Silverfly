@@ -4,7 +4,7 @@ using Furesoft.PrattParser.Nodes.Operators;
 
 namespace Furesoft.PrattParser;
 
-public class PrintVisitor : IVisitor<string>
+public class PrintVisitor : IVisitor<AstNode, string>
 {
     public virtual string Visit(AstNode node)
     {

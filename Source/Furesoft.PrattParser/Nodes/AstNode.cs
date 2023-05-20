@@ -64,12 +64,12 @@ public abstract class AstNode
         return this;
     }
 
-    public T Accept<T>(IVisitor<T> visitor)
+    public T Accept<T>(IVisitor<AstNode, T> visitor)
     {
         return visitor.Visit(this);
     }
 
-    public void Accept(IVisitor visitor)
+    public void Accept(IVisitor<AstNode> visitor)
     {
         visitor.Visit(this);
     }
