@@ -8,7 +8,7 @@ public class Lexer : ILexer
     private readonly Dictionary<string, Symbol> _punctuators = new();
     private readonly List<char> _ignoredChars = new();
     private int _index;
-    private int _line = 1, _column = 0;
+    private int _line = 1, _column = 1;
 
     public SourceDocument Document { get; }
 
@@ -58,9 +58,9 @@ public class Lexer : ILexer
 
     private bool IsMatch(string token)
     {
-        bool result = Peek(0) == token[0];
+        var result = Peek(0) == token[0];
 
-        for (int i = 1; i < token.Length; i++)
+        for (var i = 1; i < token.Length; i++)
         {
             if (result)
             {
@@ -121,14 +121,18 @@ public class Lexer : ILexer
 
     private Token LexSymbol(string punctuatorKey)
     {
+        var oldColumn = _column;
+
         _column += punctuatorKey.Length;
         _index += punctuatorKey.Length;
         
-        return new(punctuatorKey, punctuatorKey, _line, _column);
+        return new(punctuatorKey, punctuatorKey, _line, oldColumn);
     }
 
     private Token LexName()
     {
+        var oldColumn = _column;
+        
         var start = _index;
         while (_index < Document.Source.Length)
         {
@@ -145,14 +149,15 @@ public class Lexer : ILexer
 
         if (_punctuators.ContainsKey(name))
         {
-            return new(name, name, _line, _column);
+            return new(name, name, _line, oldColumn);
         }
 
-        return new(PredefinedSymbols.Name, name, _line, _column);
+        return new(PredefinedSymbols.Name, name, _line, oldColumn);
     }
 
     private Token LexNumber()
     {
+        var oldColumn = _column;
         var startIndex = _index;
 
         while (_index < Document.Source.Length)
@@ -166,6 +171,6 @@ public class Lexer : ILexer
             _index++;
         }
 
-        return new(PredefinedSymbols.Integer, Document.Source.Substring(startIndex, _index - startIndex), _line, _column);
+        return new(PredefinedSymbols.Integer, Document.Source.Substring(startIndex, _index - startIndex), _line, oldColumn);
     }
 }
