@@ -144,6 +144,14 @@ public class Parser<T>
         return token;
     }
 
+    public IEnumerable<Token> ConsumeMany(uint count)
+    {
+        for (int i = 0; i < count; i++)
+        {
+            yield return Consume();
+        }
+    }
+
     private Token LookAhead(uint distance)
     {
         // Read in as many as needed.
