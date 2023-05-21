@@ -3,9 +3,17 @@ using System.Linq;
 
 namespace Furesoft.PrattParser;
 
+public interface ILexerPart
+{
+    public char TriggerChar { get; set; }
+    
+    Token Build(Lexer lexer, ref int index, ref int column, ref int line);
+}
+
 public class Lexer : ILexer
 {
     private readonly Dictionary<string, Symbol> _punctuators = new();
+    private readonly List<ILexerPart> _parts = new();
     private readonly List<char> _ignoredChars = new();
     private int _index;
     private int _line = 1, _column = 1;
@@ -40,6 +48,11 @@ public class Lexer : ILexer
     public void AddSymbol(string symbol)
     {
         _punctuators.Add(symbol, PredefinedSymbols.Pool.Get(symbol));
+    }
+
+    public void AddPart(ILexerPart part)
+    {
+        _parts.Add(part);
     }
 
     public void UseString(Symbol leftSymbol, Symbol rightSymbol)
@@ -96,6 +109,14 @@ public class Lexer : ILexer
                 _index++;
 
                 continue;
+            }
+
+            foreach (var part in _parts)
+            {
+                if (c == part.TriggerChar)
+                {
+                    return part.Build(this, ref _index, ref _column, ref _line);
+                }
             }
 
             if (leftStr != null && rightStr != null)
