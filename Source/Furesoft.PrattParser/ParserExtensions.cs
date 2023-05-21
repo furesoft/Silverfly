@@ -62,6 +62,7 @@ public static class ParserExtensions
     {
         parser.Register(PredefinedSymbols.Integer, new IntegerLiteralParselet());
         parser.Register(PredefinedSymbols.Boolean, new BooleanLiteralParselet());
+        parser.Register(PredefinedSymbols.String, new StringLiteralParselet());
     }
 
     public static void AddCommonAssignmentOperators(this Parser<AstNode> parser)

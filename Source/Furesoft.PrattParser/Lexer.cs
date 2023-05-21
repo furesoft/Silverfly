@@ -9,6 +9,7 @@ public class Lexer : ILexer
     private readonly List<char> _ignoredChars = new();
     private int _index;
     private int _line = 1, _column = 1;
+    private Symbol leftStr, rightStr;
 
     public SourceDocument Document { get; }
 
@@ -19,7 +20,7 @@ public class Lexer : ILexer
     public Lexer(string source, string filename = "tmp.synthetic")
     {
         _index = 0;
-        Document = new() { Filename = filename, Source = source };
+        Document = new() {Filename = filename, Source = source};
 
         // Register all of the Symbols that are explicit punctuators.
         foreach (var type in PredefinedSymbols.Pool)
@@ -31,7 +32,7 @@ public class Lexer : ILexer
                 _punctuators.Add(punctuator, type);
             }
         }
-        
+
         // sort punctuators longest - smallest to make it possible to use symbols with more than one character
         _punctuators = new(_punctuators.OrderByDescending(_ => _.Key.Length));
     }
@@ -39,6 +40,12 @@ public class Lexer : ILexer
     public void AddSymbol(string symbol)
     {
         _punctuators.Add(symbol, PredefinedSymbols.Pool.Get(symbol));
+    }
+
+    public void UseString(Symbol leftSymbol, Symbol rightSymbol)
+    {
+        leftStr = leftSymbol;
+        rightStr = rightSymbol;
     }
 
     public void Ignore(char c)
@@ -87,17 +94,25 @@ public class Lexer : ILexer
             {
                 _column++;
                 _index++;
-                
+
                 continue;
             }
-            
+
+            if (leftStr != null && rightStr != null)
+            {
+                if (IsMatch(leftStr.Name))
+                {
+                    return LexString();
+                }
+            }
+
             foreach (var punctuator in _punctuators)
             {
                 if (!IsMatch(punctuator.Key))
                 {
                     continue;
                 }
-                
+
                 return LexSymbol(punctuator.Key).WithDocument(Document);
             }
 
@@ -112,11 +127,34 @@ public class Lexer : ILexer
             }
 
             Document.Messages.Add(Message.Error($"Invalid Character '{c}'"));
-            
+
             return new Token("#invalid", c.ToString(), _line, _column).WithDocument(Document);
         }
 
         return new Token(PredefinedSymbols.EOF, "EndOfFile", _line, _column).WithDocument(Document);
+    }
+
+    private Token LexString()
+    {
+        var oldColumn = _column;
+        var oldIndex = _index;
+        
+        _index++;
+        _column++;
+
+        while (!IsMatch(rightStr.Name))
+        {
+            _index++;
+            _column++;
+        }
+
+        var text = Document.Source.Substring(oldIndex +1, _index - oldIndex - 1);
+        
+        _index++;
+        _column++;
+
+        
+        return new(PredefinedSymbols.String, text, _line, oldColumn);
     }
 
     private Token LexSymbol(string punctuatorKey)
@@ -125,14 +163,14 @@ public class Lexer : ILexer
 
         _column += punctuatorKey.Length;
         _index += punctuatorKey.Length;
-        
+
         return new(punctuatorKey, punctuatorKey, _line, oldColumn);
     }
 
     private Token LexName()
     {
         var oldColumn = _column;
-        
+
         var start = _index;
         while (_index < Document.Source.Length)
         {
@@ -171,6 +209,7 @@ public class Lexer : ILexer
             _index++;
         }
 
-        return new(PredefinedSymbols.Integer, Document.Source.Substring(startIndex, _index - startIndex), _line, oldColumn);
+        return new(PredefinedSymbols.Integer, Document.Source.Substring(startIndex, _index - startIndex), _line,
+            oldColumn);
     }
 }

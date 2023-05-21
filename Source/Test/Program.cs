@@ -11,6 +11,8 @@ public static class Program
 
     private static void Main(string[] args)
     {
+        Test("'hello'", "'hello'");
+        
         Test("a(b)", "a(b)");
         
         Test("a -> b", "(a -> b)");
@@ -78,6 +80,7 @@ public static class Program
         lexer.Ignore('\r');
         lexer.Ignore(' ');
         lexer.Ignore('\t');
+        lexer.UseString("'","'");
 
         var parser = new TestParser(lexer);
 
