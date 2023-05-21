@@ -1,7 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Text;
 using Furesoft.PrattParser;
-using Furesoft.PrattParser.Matcher;
 
 namespace Test;
 
@@ -77,22 +76,13 @@ public static class Program
 
     public static void Test(string source, string expected)
     {
-        var lexer = new Lexer(source);
-        lexer.Ignore('\r');
-        lexer.Ignore(' ');
-        lexer.Ignore('\t');
-        lexer.UseString("'","'");
-        lexer.AddPart(new IntegerMatcher());
-
-        var parser = new TestParser(lexer);
-
         var printVisitor = new PrintVisitor();
 
-        var result = parser.Parse();
+        var result = TestParser.Parse<TestParser>(source);
 
         var builder = new StringBuilder();
 
-        builder.Append(result.Accept(printVisitor));
+        builder.Append(result.Tree.Accept(printVisitor));
 
         var actual = builder.ToString();
 
@@ -108,13 +98,13 @@ public static class Program
             Console.WriteLine("       Actual: '" + actual + "'");
         }
 
-        if (lexer.Document.Messages.Any())
+        if (result.Document.Messages.Any())
         {
             _failed++;
             Console.WriteLine("[FAIL] Source: " + source);
             Console.WriteLine("     Expected: " + expected);
 
-            foreach (var message in lexer.Document.Messages)
+            foreach (var message in result.Document.Messages)
             {
                 Console.WriteLine($"        {message.Severity}: " + message);
             }

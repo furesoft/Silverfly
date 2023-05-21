@@ -1,14 +1,13 @@
 using Furesoft.PrattParser;
+using Furesoft.PrattParser.Matcher;
 using Furesoft.PrattParser.Nodes;
 using Furesoft.PrattParser.Parselets;
-using Furesoft.PrattParser.Parselets.Literals;
-using Furesoft.PrattParser.Parselets.Operators;
 
 namespace Test;
 
 public class TestParser : Parser<AstNode>
 {
-    public TestParser(Lexer lexer) : base(lexer)
+    public TestParser()
     {
         Register(PredefinedSymbols.Name, new NameParselet());
         
@@ -29,5 +28,14 @@ public class TestParser : Parser<AstNode>
         InfixRight("^", (int)BindingPower.Exponent);
         
         InfixLeft("->", (int)BindingPower.Product);
+    }
+
+    protected override void InitLexer(Lexer lexer)
+    {
+        lexer.Ignore('\r');
+        lexer.Ignore(' ');
+        lexer.Ignore('\t');
+        lexer.UseString("'","'");
+        lexer.AddPart(new IntegerMatcher());
     }
 }

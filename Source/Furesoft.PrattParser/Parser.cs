@@ -4,19 +4,12 @@ using Furesoft.PrattParser.Parselets.Operators;
 
 namespace Furesoft.PrattParser;
 
-public class Parser<T>
+public abstract class Parser<T>
 {
     private ILexer _lexer;
-    private readonly bool _expectEndOfFile;
     private List<Token> _read = new();
     private Dictionary<Symbol, IPrefixParselet<T>> _prefixParselets = new();
     private Dictionary<Symbol, IInfixParselet<T>> _infixParselets = new();
-
-    public Parser(ILexer lexer, bool expectEndOfFile = true)
-    {
-        _lexer = lexer;
-        _expectEndOfFile = expectEndOfFile;
-    }
 
     public void Register(Symbol token, IPrefixParselet<T> parselet)
     {
@@ -41,6 +34,19 @@ public class Parser<T>
     public void Group(string left, string right)
     {
         Group(PredefinedSymbols.Pool.Get(left), PredefinedSymbols.Pool.Get(right));
+    }
+    
+    public static TranslationUnit<T> Parse<TParser>(string source, string filename = "syntethic.dsl") 
+        where TParser : Parser<T>, new()
+    {
+        var lexer = new Lexer(source, filename);
+
+        var parser = new TParser();
+        parser!._lexer = lexer;
+        
+        parser.InitLexer(lexer);
+
+        return new(parser.Parse(), lexer.Document);
     }
 
     public T Parse(int precedence)
@@ -74,6 +80,11 @@ public class Parser<T>
         return Parse(0);
     }
 
+    protected virtual void InitLexer(Lexer lexer)
+    {
+        
+    }
+    
     public List<T> ParseSeperated(Symbol seperator, Symbol terminator)
     {
         var args = new List<T>();
