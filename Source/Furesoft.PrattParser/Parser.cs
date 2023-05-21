@@ -80,10 +80,7 @@ public abstract class Parser<T>
         return Parse(0);
     }
 
-    protected virtual void InitLexer(Lexer lexer)
-    {
-        
-    }
+    protected abstract void InitLexer(Lexer lexer);
     
     public List<T> ParseSeperated(Symbol seperator, Symbol terminator)
     {

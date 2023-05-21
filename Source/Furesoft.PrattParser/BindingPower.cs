@@ -9,15 +9,37 @@ namespace Furesoft.PrattParser;
 /// Binding power implements operator precedence, which is a more common term, but
 /// given how Pratt parsing works, I think binding power is more apropos.
 /// </summary>
-public enum BindingPower
+public class BindingPower : Symbol
 {
     // Ordered in increasing binding power.
-    Assignment = 1,
-    Conditional = 2,
-    Sum = 3,
-    Product = 4,
-    Exponent = 5,
-    Prefix = 6,
-    PostFix = 7,
-    Call = 8
+    public static BindingPower Assignment;
+    public static BindingPower Conditional;
+    public static BindingPower Sum;
+    public static BindingPower Product;
+    public static BindingPower Exponent;
+    public static BindingPower Prefix;
+    public static BindingPower PostFix;
+    public static BindingPower Call;
+    
+    public new static SymbolPool<BindingPower> Pool => new(f => new(f));
+
+    internal BindingPower(int id, string name, SymbolPool pool) : base(id, name, pool)
+    {
+    }
+
+    static BindingPower()
+    {
+        Assignment = new(1, nameof(Assignment), Pool);
+        Conditional = new(2, nameof(Conditional), Pool);
+        Sum = new(3, nameof(Sum), Pool);
+        Product = new(4, nameof(Product), Pool);
+        Exponent = new(5, nameof(Exponent), Pool);
+        Prefix = new(6, nameof(Prefix), Pool);
+        PostFix = new(7, nameof(PostFix), Pool);
+        Call = new(8, nameof(Call), Pool);
+    }
+
+    protected BindingPower(Symbol prototype) : base(prototype)
+    {
+    }
 }
