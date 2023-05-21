@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Text;
 using Furesoft.PrattParser;
+using Furesoft.PrattParser.Matcher;
 
 namespace Test;
 
@@ -81,6 +82,7 @@ public static class Program
         lexer.Ignore(' ');
         lexer.Ignore('\t');
         lexer.UseString("'","'");
+        lexer.AddPart(new IntegerMatcher());
 
         var parser = new TestParser(lexer);
 

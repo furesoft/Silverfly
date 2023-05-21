@@ -1,23 +1,24 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using Furesoft.PrattParser.Matcher;
 
 namespace Furesoft.PrattParser;
 
 public interface ILexerPart
 {
-    public char TriggerChar { get; set; }
-    
+    bool Match(Lexer lexer, char c);
+
     Token Build(Lexer lexer, ref int index, ref int column, ref int line);
 }
 
 public class Lexer : ILexer
 {
-    private readonly Dictionary<string, Symbol> _punctuators = new();
+    private Dictionary<string, Symbol> _punctuators = new();
     private readonly List<ILexerPart> _parts = new();
     private readonly List<char> _ignoredChars = new();
     private int _index;
     private int _line = 1, _column = 1;
-    private Symbol leftStr, rightStr;
 
     public SourceDocument Document { get; }
 
@@ -42,12 +43,19 @@ public class Lexer : ILexer
         }
 
         // sort punctuators longest - smallest to make it possible to use symbols with more than one character
+        OrderSymbols();
+    }
+
+    private void OrderSymbols()
+    {
         _punctuators = new(_punctuators.OrderByDescending(_ => _.Key.Length));
     }
 
     public void AddSymbol(string symbol)
     {
         _punctuators.Add(symbol, PredefinedSymbols.Pool.Get(symbol));
+        
+        OrderSymbols();
     }
 
     public void AddPart(ILexerPart part)
@@ -57,8 +65,7 @@ public class Lexer : ILexer
 
     public void UseString(Symbol leftSymbol, Symbol rightSymbol)
     {
-        leftStr = leftSymbol;
-        rightStr = rightSymbol;
+        AddPart(new StringMatcher(leftSymbol, rightSymbol));
     }
 
     public void Ignore(char c)
@@ -66,7 +73,7 @@ public class Lexer : ILexer
         _ignoredChars.Add(c);
     }
 
-    private char Peek(int distance)
+    public char Peek(int distance)
     {
         if (_index + distance >= Document.Source.Length)
         {
@@ -76,7 +83,7 @@ public class Lexer : ILexer
         return Document.Source[_index + distance];
     }
 
-    private bool IsMatch(string token)
+    public bool IsMatch(string token)
     {
         var result = Peek(0) == token[0];
 
@@ -113,17 +120,9 @@ public class Lexer : ILexer
 
             foreach (var part in _parts)
             {
-                if (c == part.TriggerChar)
+                if (part.Match(this, c))
                 {
-                    return part.Build(this, ref _index, ref _column, ref _line);
-                }
-            }
-
-            if (leftStr != null && rightStr != null)
-            {
-                if (IsMatch(leftStr.Name))
-                {
-                    return LexString();
+                    return part.Build(this, ref _index, ref _column, ref _line).WithDocument(Document);
                 }
             }
 
@@ -137,11 +136,6 @@ public class Lexer : ILexer
                 return LexSymbol(punctuator.Key).WithDocument(Document);
             }
 
-            if (char.IsDigit(c))
-            {
-                return LexNumber().WithDocument(Document);
-            }
-
             if (char.IsLetter(c))
             {
                 return LexName().WithDocument(Document);
@@ -153,29 +147,6 @@ public class Lexer : ILexer
         }
 
         return new Token(PredefinedSymbols.EOF, "EndOfFile", _line, _column).WithDocument(Document);
-    }
-
-    private Token LexString()
-    {
-        var oldColumn = _column;
-        var oldIndex = _index;
-        
-        _index++;
-        _column++;
-
-        while (!IsMatch(rightStr.Name))
-        {
-            _index++;
-            _column++;
-        }
-
-        var text = Document.Source.Substring(oldIndex +1, _index - oldIndex - 1);
-        
-        _index++;
-        _column++;
-
-        
-        return new(PredefinedSymbols.String, text, _line, oldColumn);
     }
 
     private Token LexSymbol(string punctuatorKey)
@@ -212,25 +183,5 @@ public class Lexer : ILexer
         }
 
         return new(PredefinedSymbols.Name, name, _line, oldColumn);
-    }
-
-    private Token LexNumber()
-    {
-        var oldColumn = _column;
-        var startIndex = _index;
-
-        while (_index < Document.Source.Length)
-        {
-            if (!char.IsDigit(Document.Source[_index]))
-            {
-                break;
-            }
-
-            _column++;
-            _index++;
-        }
-
-        return new(PredefinedSymbols.Integer, Document.Source.Substring(startIndex, _index - startIndex), _line,
-            oldColumn);
     }
 }
