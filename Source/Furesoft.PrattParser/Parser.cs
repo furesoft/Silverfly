@@ -144,12 +144,15 @@ public class Parser<T>
         return token;
     }
 
-    public IEnumerable<Token> ConsumeMany(uint count)
+    public Token[] ConsumeMany(uint count)
     {
+        var result = new List<Token>();
         for (int i = 0; i < count; i++)
         {
-            yield return Consume();
+            result.Add(Consume());
         }
+
+        return result.ToArray();
     }
 
     private Token LookAhead(uint distance)

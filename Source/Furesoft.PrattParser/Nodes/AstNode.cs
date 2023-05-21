@@ -1,48 +1,9 @@
-using System.Collections.Generic;
-using System.Linq;
-
 namespace Furesoft.PrattParser.Nodes;
 
 public abstract class AstNode
 {
-    public virtual SourceRange Range { get; set; }
+    public SourceRange Range { get; set; }
 
-    // ToDo: Test Automatic SourceRange Calculation
-    protected SourceRange CalculateNodeRange()
-    {
-        var sourceRanges = GetSourceRanges();
-
-        SourceSpan minimumSpan = new(), maximumSpan = new();
-
-        // find lowest source range
-        foreach (var sourceRange in sourceRanges)
-        {
-            if (sourceRange.Start < minimumSpan)
-            {
-                minimumSpan = sourceRange.Start;
-            }
-        }
-
-        // find highest source range
-        foreach (var sourceRange in sourceRanges)
-        {
-            if (sourceRange.End > maximumSpan)
-            {
-                maximumSpan = sourceRange.End;
-            }
-        }
-
-        return new(sourceRanges.First().Document, minimumSpan, maximumSpan);
-    }
-
-    private IEnumerable<SourceRange> GetSourceRanges()
-    {
-        var properties = GetType().GetProperties();
-        var rangeProperties = properties.Where(_ => _.PropertyType == typeof(SourceRange)).ToArray();
-
-        return rangeProperties.Select(_ => (SourceRange)_.GetValue(this));
-    }
-    
     public AstNode WithRange(Token token)
     {
         Range = new(token.Document, token.GetSourceSpanStart(), token.GetSourceSpanEnd());

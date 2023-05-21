@@ -15,12 +15,12 @@ public sealed class Message
         Document = range.Document;
     }
 
-    public SourceRange Range { get; set; }
+    public SourceRange Range { get; }
 
     public SourceDocument Document { get; }
 
-    public MessageSeverity Severity { get; set; }
-    public string Text { get; set; }
+    public MessageSeverity Severity { get; }
+    public string Text { get; }
 
     public static Message Error(string message, SourceRange range)
     {
