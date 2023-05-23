@@ -1,6 +1,6 @@
 ﻿namespace Furesoft.PrattParser;
 
-public interface ILexerPart
+public interface ILexerMatcher
 {
     bool Match(Lexer lexer, char c);
 

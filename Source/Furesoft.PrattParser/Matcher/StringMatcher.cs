@@ -1,6 +1,6 @@
 ﻿namespace Furesoft.PrattParser.Matcher;
 
-public class StringMatcher : ILexerPart
+public class StringMatcher : ILexerMatcher
 {
     private readonly Symbol _leftStr;
     private readonly Symbol _rightStr;

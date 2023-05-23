@@ -1,6 +1,6 @@
 ﻿namespace Furesoft.PrattParser.Matcher;
 
-public class IntegerMatcher : ILexerPart
+public class IntegerMatcher : ILexerMatcher
 {
     public bool Match(Lexer lexer, char c)
     {

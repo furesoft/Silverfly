@@ -1,6 +1,6 @@
 ﻿namespace Furesoft.PrattParser.Matcher;
 
-public class SignedIntegerMatcher : ILexerPart
+public class SignedIntegerMatcher : ILexerMatcher
 {
     public bool Match(Lexer lexer, char c)
     {

@@ -8,7 +8,7 @@ namespace Furesoft.PrattParser;
 public class Lexer : ILexer
 {
     private Dictionary<string, Symbol> _punctuators = new();
-    private readonly List<ILexerPart> _parts = new();
+    private readonly List<ILexerMatcher> _parts = new();
     private readonly List<char> _ignoredChars = new();
     private int _index;
     private int _line = 1, _column = 1;
@@ -51,9 +51,9 @@ public class Lexer : ILexer
         OrderSymbols();
     }
 
-    public void AddPart(ILexerPart part)
+    public void AddPart(ILexerMatcher matcher)
     {
-        _parts.Add(part);
+        _parts.Add(matcher);
     }
 
     public void UseString(Symbol leftSymbol, Symbol rightSymbol)
