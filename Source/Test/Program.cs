@@ -12,6 +12,7 @@ public static class Program
     private static void Main(string[] args)
     {
         Test("'hello'", "'hello'");
+        Test("-521", "-521");
         
         Test("a(b)", "a(b)");
         

@@ -2,10 +2,10 @@
 
 namespace Furesoft.PrattParser.Parselets.Literals;
 
-public class IntegerLiteralParselet : IPrefixParselet<AstNode>
+public class SignedIntegerLiteralParselet : IPrefixParselet<AstNode>
 {
     public AstNode Parse(Parser<AstNode> parser, Token token)
     {
-        return new LiteralNode<uint>(uint.Parse(token.Text)).WithRange(token);
+        return new LiteralNode<int>(int.Parse(token.Text)).WithRange(token);
     }
 }

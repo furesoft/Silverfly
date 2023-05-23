@@ -18,6 +18,7 @@ public class PrintVisitor : IVisitor<AstNode, string>
             PostfixOperatorNode postfix => Visit(postfix),
             PrefixOperatorNode prefix => Visit(prefix),
             LiteralNode<bool> literal => Visit(literal),
+            LiteralNode<uint> literal => Visit(literal),
             LiteralNode<int> literal => Visit(literal),
             LiteralNode<string> literal => Visit(literal),
 
@@ -120,6 +121,11 @@ public class PrintVisitor : IVisitor<AstNode, string>
     public string Visit(LiteralNode<string> literalNode)
     {
         return $"'{literalNode.Value}'";
+    }
+    
+    public string Visit(LiteralNode<uint> literalNode)
+    {
+        return literalNode.Value.ToString();
     }
     
     public string Visit(LiteralNode<int> literalNode)
