@@ -51,14 +51,14 @@ public class Lexer : ILexer
         OrderSymbols();
     }
 
-    public void AddPart(ILexerMatcher matcher)
+    public void AddMatcher(ILexerMatcher matcher)
     {
         _parts.Add(matcher);
     }
 
     public void UseString(Symbol leftSymbol, Symbol rightSymbol)
     {
-        AddPart(new StringMatcher(leftSymbol, rightSymbol));
+        AddMatcher(new StringMatcher(leftSymbol, rightSymbol));
     }
 
     public void Ignore(char c)
