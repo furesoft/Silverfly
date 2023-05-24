@@ -14,12 +14,20 @@ public class NumberMatcher : ILexerMatcher
         
         AdvanceNumber(lexer, ref index, ref column);
 
+        // Handle Floating Point Numbers
         if (lexer.Peek(0) == '.')
         {
-            index++;
-            column++;
+            lexer.Advance();
             
             AdvanceNumber(lexer, ref index, ref column);
+
+            // Handle E-Notation
+            if (lexer.Peek(0) == 'e' || lexer.Peek(0) == 'E')
+            {
+                lexer.Advance();
+                
+                AdvanceNumber(lexer, ref index, ref column);
+            }
         }
 
         return new(PredefinedSymbols.Number, lexer.Document.Source.Substring(oldIndex, index - oldIndex),
@@ -30,8 +38,7 @@ public class NumberMatcher : ILexerMatcher
     {
         do
         {
-            index++;
-            column++;
+            lexer.Advance();;
         } while (index < lexer.Document.Source.Length && char.IsDigit(lexer.Document.Source[index]));
     }
 }
