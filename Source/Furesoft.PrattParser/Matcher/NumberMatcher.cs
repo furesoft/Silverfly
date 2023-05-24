@@ -4,14 +4,13 @@ public class NumberMatcher : ILexerMatcher
 {
     public bool Match(Lexer lexer, char c)
     {
-        return c == '-' && char.IsDigit(lexer.Peek(1));
+        return c == '-' && char.IsDigit(lexer.Peek(1)) || char.IsDigit(lexer.Peek(0));
     }
 
     public Token Build(Lexer lexer, ref int index, ref int column, ref int line)
     {
         var oldColumn = column;
         var oldIndex = index;
-        var isFloatingPoint = false;
         
         AdvanceNumber(lexer, ref index, ref column);
 
@@ -21,10 +20,9 @@ public class NumberMatcher : ILexerMatcher
             column++;
             
             AdvanceNumber(lexer, ref index, ref column);
-            isFloatingPoint = true;
         }
 
-        return new(isFloatingPoint ? PredefinedSymbols.FloatingPoint : PredefinedSymbols.SignedInteger, lexer.Document.Source.Substring(oldIndex, index - oldIndex),
+        return new(PredefinedSymbols.Number, lexer.Document.Source.Substring(oldIndex, index - oldIndex),
             line, oldColumn);
     }
 

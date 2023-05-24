@@ -11,6 +11,8 @@ public static class Program
 
     private static void Main(string[] args)
     {
+        Test("! 5", "(!5)");
+        
         Test("'hello'", "'hello'");
         Test("-521", "-521");
         Test("-521.33", "-521.33");
@@ -18,7 +20,6 @@ public static class Program
         Test("a(b)", "a(b)");
         
         Test("a -> b", "(a -> b)");
-        Test("! 5", "(!5)");
         Test("i++", "(i++)");
         //Test("!5\rhello", "(!5)");
         Test("not 5", "(not5)");

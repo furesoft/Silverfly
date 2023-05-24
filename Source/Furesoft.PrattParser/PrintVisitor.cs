@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Globalization;
+using System.Text;
 using Furesoft.PrattParser.Nodes;
 using Furesoft.PrattParser.Nodes.Operators;
 
@@ -121,7 +122,7 @@ public class PrintVisitor : IVisitor<AstNode, string>
     
     public string Visit(LiteralNode<double> literalNode)
     {
-        return literalNode.Value.ToString();
+        return literalNode.Value.ToString(CultureInfo.InvariantCulture);
     }
     
     public string Visit(LiteralNode<string> literalNode)
