@@ -47,8 +47,19 @@ public class Lexer : ILexer
     public void AddSymbol(string symbol)
     {
         _punctuators.Add(symbol, PredefinedSymbols.Pool.Get(symbol));
-        
+
         OrderSymbols();
+    }
+
+
+    /// <summary>
+    /// Advances the column and index of the char iterator
+    /// </summary>
+    /// <param name="distance">how many chars should be skipped</param>
+    public void Advance(int distance = 1)
+    {
+        _index += distance;
+        _column += distance;
     }
 
     public void AddMatcher(ILexerMatcher matcher)

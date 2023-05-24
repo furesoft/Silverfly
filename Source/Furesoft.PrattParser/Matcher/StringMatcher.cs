@@ -27,8 +27,7 @@ public class StringMatcher : ILexerMatcher
 
         while (!lexer.IsMatch(_rightStr.Name))
         {
-            index++;
-            column++;
+            lexer.Advance();
         }
 
         var text =lexer.Document.Source.Substring(oldIndex +1, index - oldIndex - 1);
