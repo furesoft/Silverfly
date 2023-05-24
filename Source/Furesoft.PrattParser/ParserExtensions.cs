@@ -60,7 +60,7 @@ public static class ParserExtensions
 
     public static void AddCommonLiterals(this Parser<AstNode> parser)
     {
-        parser.Register(PredefinedSymbols.Integer, new IntegerLiteralParselet());
+        parser.Register(PredefinedSymbols.FloatingPoint, new FloatingPointLiteralParselet());
         parser.Register(PredefinedSymbols.SignedInteger, new SignedIntegerLiteralParselet());
         parser.Register(PredefinedSymbols.Boolean, new BooleanLiteralParselet());
         parser.Register(PredefinedSymbols.String, new StringLiteralParselet());

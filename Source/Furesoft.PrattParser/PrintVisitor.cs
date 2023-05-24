@@ -20,6 +20,7 @@ public class PrintVisitor : IVisitor<AstNode, string>
             LiteralNode<bool> literal => Visit(literal),
             LiteralNode<uint> literal => Visit(literal),
             LiteralNode<int> literal => Visit(literal),
+            LiteralNode<double> literal => Visit(literal),
             LiteralNode<string> literal => Visit(literal),
 
             _ => ""
@@ -114,6 +115,11 @@ public class PrintVisitor : IVisitor<AstNode, string>
     }
 
     public string Visit(LiteralNode<bool> literalNode)
+    {
+        return literalNode.Value.ToString();
+    }
+    
+    public string Visit(LiteralNode<double> literalNode)
     {
         return literalNode.Value.ToString();
     }

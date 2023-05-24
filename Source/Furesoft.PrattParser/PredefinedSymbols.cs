@@ -57,8 +57,8 @@ public static class PredefinedSymbols
     public static Symbol Degree = Pool.Get("°");
 
     public static Symbol String = Pool.Get("#string");
-    public static Symbol Integer = Pool.Get("#integer");
     public static Symbol SignedInteger = Pool.Get("#signedinteger");
+    public static Symbol FloatingPoint = Pool.Get("#floatingPoint");
     public static Symbol Boolean = Pool.Get("#boolean");
     public static Symbol Name = Pool.Get("#name");
     

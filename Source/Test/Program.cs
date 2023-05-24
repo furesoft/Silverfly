@@ -13,6 +13,7 @@ public static class Program
     {
         Test("'hello'", "'hello'");
         Test("-521", "-521");
+        Test("-521.33", "-521.33");
         
         Test("a(b)", "a(b)");
         
