@@ -7,6 +7,11 @@ public class NumberParselet : IPrefixParselet<AstNode>
 {
     public AstNode Parse(Parser<AstNode> parser, Token token)
     {
+        if (token.Text.StartsWith("0x"))
+        {
+            return new LiteralNode<uint>(uint.Parse(token.Text[2..], NumberStyles.HexNumber));
+        }
+        
         if (!token.Text.StartsWith("-") && !token.Text.Contains("."))
         {
             return new LiteralNode<uint>(uint.Parse(token.Text)).WithRange(token);
