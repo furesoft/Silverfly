@@ -28,6 +28,8 @@ public class TestParser : Parser<AstNode>
         InfixRight("^", (int)BindingPower.Exponent);
         
         InfixLeft("->", (int)BindingPower.Product);
+
+        Block(PredefinedSymbols.Semicolon, PredefinedSymbols.EOF);
     }
 
     protected override void InitLexer(Lexer lexer)

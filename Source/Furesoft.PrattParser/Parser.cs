@@ -35,6 +35,11 @@ public abstract class Parser<T>
     {
         Group(PredefinedSymbols.Pool.Get(left), PredefinedSymbols.Pool.Get(right));
     }
+
+    public void Block(Symbol seperator, Symbol terminator)
+    {
+        Register(seperator, (IInfixParselet<T>)new BlockParselet(seperator, terminator));
+    }
     
     public static TranslationUnit<T> Parse<TParser>(string source, string filename = "syntethic.dsl") 
         where TParser : Parser<T>, new()
@@ -163,7 +168,7 @@ public abstract class Parser<T>
         return result.ToArray();
     }
 
-    private Token LookAhead(uint distance)
+    public Token LookAhead(uint distance)
     {
         // Read in as many as needed.
         while (distance >= _read.Count)

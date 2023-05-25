@@ -14,6 +14,7 @@ public class PrintVisitor : IVisitor<AstNode, string>
             AssignNode assign => Visit(assign),
             CallNode call => Visit(call),
             TernaryOperatorNode cond => Visit(cond),
+            BlockNode block => Visit(block),
             NameAstNode name => Visit(name),
             BinaryOperatorNode op => Visit(op),
             PostfixOperatorNode postfix => Visit(postfix),
@@ -26,6 +27,24 @@ public class PrintVisitor : IVisitor<AstNode, string>
 
             _ => ""
         };
+    }
+
+    public string Visit(BlockNode block)
+    {
+        var sb = new StringBuilder();
+
+        for (var i = 0; i < block.Children.Count; i++)
+        {
+            var child = block.Children[i];
+            sb.Append(child.Accept(this));
+            
+            if (i % 2 == 0)
+            {
+                sb.Append(block.SeperatorSymbol.Name + " ");
+            }
+        }
+
+        return sb.ToString();
     }
 
     public string Visit(AssignNode assign)

@@ -11,7 +11,9 @@ public static class Program
 
     private static void Main(string[] args)
     {
-        Test("3.1e5", $"({3.1e5})");
+        Test("3.1e5; 1 + 2", $"{3.1e5}; (1 + 2)");
+        
+        Test("3.1e5", $"{3.1e5}");
         Test("! 5", "(!5)");
         
         Test("'hello'", "'hello'");
