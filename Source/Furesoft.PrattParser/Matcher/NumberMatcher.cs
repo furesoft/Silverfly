@@ -1,4 +1,6 @@
-﻿namespace Furesoft.PrattParser.Matcher;
+﻿using System;
+
+namespace Furesoft.PrattParser.Matcher;
 
 public class NumberMatcher : ILexerMatcher
 {
@@ -29,7 +31,7 @@ public class NumberMatcher : ILexerMatcher
             goto createToken;
         }
 
-        AdvanceNumber(lexer, ref index);
+        AdvanceNumber(lexer, ref index, char.IsDigit);
 
         LexFloatingPointNumber(lexer, ref index, ref column);
 
@@ -43,10 +45,7 @@ public class NumberMatcher : ILexerMatcher
         lexer.Advance();
         lexer.Advance();
         
-        do
-        {
-            lexer.Advance();
-        } while (index < lexer.Document.Source.Length && IsValidBinChar(lexer.Document.Source[index]));
+        AdvanceNumber(lexer, ref index, IsValidBinChar);
     }
 
     private void LexHexNumber(Lexer lexer, ref int index)
@@ -54,15 +53,12 @@ public class NumberMatcher : ILexerMatcher
         lexer.Advance();
         lexer.Advance();
         
-        do
-        {
-            lexer.Advance();
-        } while (index < lexer.Document.Source.Length && IsValidHexChar(lexer.Document.Source[index]));
+        AdvanceNumber(lexer, ref index, IsValidHexChar);
     }
     
     private bool IsValidBinChar(char c)
     {
-        return c == '1' || c == '0';
+        return c is '1' or '0';
     }
 
 
@@ -72,25 +68,24 @@ public class NumberMatcher : ILexerMatcher
         {
             lexer.Advance();
 
-            AdvanceNumber(lexer, ref index);
+            AdvanceNumber(lexer, ref index, char.IsDigit);
 
             // Handle E-Notation
             if (lexer.Peek(0) == 'e' || lexer.Peek(0) == 'E')
             {
                 lexer.Advance();
 
-                AdvanceNumber(lexer, ref index);
+                AdvanceNumber(lexer, ref index, char.IsDigit);
             }
         }
     }
 
-    private static void AdvanceNumber(Lexer lexer, ref int index)
+    private static void AdvanceNumber(Lexer lexer, ref int index, Predicate<char> charPredicate)
     {
         do
         {
             lexer.Advance();
-            ;
-        } while (index < lexer.Document.Source.Length && char.IsDigit(lexer.Document.Source[index]));
+        } while (index < lexer.Document.Source.Length && charPredicate(lexer.Document.Source[index]));
     }
 
     private bool IsValidHexChar(char c) => char.IsDigit(c) || c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z';
