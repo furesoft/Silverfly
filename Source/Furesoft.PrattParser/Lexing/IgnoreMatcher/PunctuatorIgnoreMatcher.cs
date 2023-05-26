@@ -1,4 +1,4 @@
-﻿namespace Furesoft.PrattParser.IgnoreMatcher;
+﻿namespace Furesoft.PrattParser.Lexing.IgnoreMatcher;
 
 public class PunctuatorIgnoreMatcher : ILexerIgnoreMatcher
 {

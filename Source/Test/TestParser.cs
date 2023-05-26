@@ -1,5 +1,6 @@
 using Furesoft.PrattParser;
-using Furesoft.PrattParser.IgnoreMatcher.Comments;
+using Furesoft.PrattParser.Lexing;
+using Furesoft.PrattParser.Lexing.IgnoreMatcher.Comments;
 using Furesoft.PrattParser.Nodes;
 using Furesoft.PrattParser.Parselets;
 

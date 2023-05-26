@@ -1,8 +1,8 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using Furesoft.PrattParser.IgnoreMatcher;
-using Furesoft.PrattParser.Matcher;
+using Furesoft.PrattParser.Lexing;
+using Furesoft.PrattParser.Lexing.IgnoreMatcher;
+using Furesoft.PrattParser.Lexing.Matcher;
 using Furesoft.PrattParser.Text;
 
 namespace Furesoft.PrattParser;

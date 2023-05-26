@@ -1,4 +1,4 @@
-﻿namespace Furesoft.PrattParser.Matcher;
+﻿namespace Furesoft.PrattParser.Lexing.Matcher;
 
 public class StringMatcher : ILexerMatcher
 {
