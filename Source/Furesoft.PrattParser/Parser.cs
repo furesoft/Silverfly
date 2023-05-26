@@ -48,6 +48,22 @@ public abstract class Parser<T>
 
         var parser = new TParser();
         parser!._lexer = lexer;
+
+        foreach (var prefix in parser._prefixParselets)
+        {
+            if (!lexer.ContainsSymbol(prefix.Key.Name))
+            {
+                lexer.AddSymbol(prefix.Key.Name);
+            }
+        }
+        
+        foreach (var infix in parser._infixParselets)
+        {
+            if (!lexer.ContainsSymbol(infix.Key.Name))
+            {
+                lexer.AddSymbol(infix.Key.Name);
+            }
+        }
         
         parser.InitLexer(lexer);
 

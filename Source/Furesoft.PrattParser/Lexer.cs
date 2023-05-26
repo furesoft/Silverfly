@@ -187,4 +187,9 @@ public sealed class Lexer
         _index++;
         _column++;
     }
+
+    public bool ContainsSymbol(string tokenName)
+    {
+        return _punctuators.ContainsKey(tokenName);
+    }
 }

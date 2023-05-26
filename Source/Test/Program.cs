@@ -16,7 +16,7 @@ public static class Program
         Test("3.1e5; 1 + 2", $"{3.1e5}; (1 + 2)");
         
         Test("3.1e5", $"{3.1e5}");
-        Test("! 5", "(!5)");
+        Test("not 5", "(not5)");
         
         Test("'hello'", "'hello'");
         Test("-521", "-521");
