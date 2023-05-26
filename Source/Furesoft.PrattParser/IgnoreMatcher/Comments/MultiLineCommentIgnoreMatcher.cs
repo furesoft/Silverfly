@@ -1,4 +1,4 @@
-﻿namespace Furesoft.PrattParser.IgnoreMatcher;
+﻿namespace Furesoft.PrattParser.IgnoreMatcher.Comments;
 
 public class MultiLineCommentIgnoreMatcher : ILexerIgnoreMatcher
 {

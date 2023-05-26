@@ -1,6 +1,5 @@
 using Furesoft.PrattParser;
-using Furesoft.PrattParser.IgnoreMatcher;
-using Furesoft.PrattParser.Matcher;
+using Furesoft.PrattParser.IgnoreMatcher.Comments;
 using Furesoft.PrattParser.Nodes;
 using Furesoft.PrattParser.Parselets;
 
@@ -35,9 +34,9 @@ public class TestParser : Parser<AstNode>
 
     protected override void InitLexer(Lexer lexer)
     {
+        lexer.Ignore(' ');
         lexer.Ignore('\r');
         lexer.Ignore("\r\n");
-        lexer.Ignore(' ');
         lexer.Ignore('\t');
         lexer.MatchString("'","'");
         lexer.MatchNumber(true, true);

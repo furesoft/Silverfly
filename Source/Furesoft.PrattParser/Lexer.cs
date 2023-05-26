@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Furesoft.PrattParser.IgnoreMatcher;
 using Furesoft.PrattParser.Matcher;
 using Furesoft.PrattParser.Text;
 
@@ -11,7 +12,6 @@ public sealed class Lexer
     private Dictionary<string, Symbol> _punctuators = new();
     private readonly List<ILexerMatcher> _parts = new();
     private readonly List<ILexerIgnoreMatcher> _ignoreMatcher = new();
-    private readonly List<string> _ignoredChars = new();
     private int _index;
     private int _line = 1, _column = 1;
 
@@ -72,12 +72,12 @@ public sealed class Lexer
 
     public void Ignore(char c)
     {
-        _ignoredChars.Add(c.ToString());
+        Ignore(new PunctuatorIgnoreMatcher(c.ToString()));
     }
 
     public void Ignore(string c)
     {
-        _ignoredChars.Add(c);
+        Ignore(new PunctuatorIgnoreMatcher(c));
     }
 
     public void Ignore(ILexerIgnoreMatcher matcher)
@@ -128,12 +128,10 @@ public sealed class Lexer
                 _column = 1;
             }
 
-            if (Ignore())
+            if (AdvanceIgnoreMatcher(c))
             {
                 continue;
             }
-
-            AdvanceIgnoreMatcher(c);
 
             foreach (var part in _parts)
             {
@@ -166,25 +164,13 @@ public sealed class Lexer
         return new Token(PredefinedSymbols.EOF, "EndOfFile", _line, _column).WithDocument(Document);
     }
 
-    private void AdvanceIgnoreMatcher(char c)
+    private bool AdvanceIgnoreMatcher(char c)
     {
         foreach (var ignoreMatcher in _ignoreMatcher)
         {
             if (ignoreMatcher.Match(this, c))
             {
                 ignoreMatcher.Advance(this);
-            }
-        }
-    }
-
-    private bool Ignore()
-    {
-        foreach (var ignored in _ignoredChars)
-        {
-            if (IsMatch(ignored))
-            {
-                _column += ignored.Length;
-                _index += ignored.Length;
 
                 return true;
             }

@@ -11,7 +11,7 @@ public static class Program
 
     private static void Main(string[] args)
     {
-        Test("/* i need something new*/0xff", $"255");
+        Test("  /* i need something new*/0xff", $"255");
         Test("// this is a real long number\n0b11111111_11111111_11111111_11111111", uint.MaxValue.ToString());
         Test("3.1e5; 1 + 2", $"{3.1e5}; (1 + 2)");
         
