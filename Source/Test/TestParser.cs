@@ -37,7 +37,7 @@ public class TestParser : Parser<AstNode>
         lexer.Ignore('\r');
         lexer.Ignore(' ');
         lexer.Ignore('\t');
-        lexer.UseString("'","'");
-        lexer.AddMatcher(new NumberMatcher());
+        lexer.MatchString("'","'");
+        lexer.MatchNumber(true, true);
     }
 }

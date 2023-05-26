@@ -4,6 +4,15 @@ namespace Furesoft.PrattParser.Matcher;
 
 public class NumberMatcher : ILexerMatcher
 {
+    private bool _allowHex;
+    private bool _allowBin;
+
+    public NumberMatcher(bool allowHex, bool allowBin)
+    {
+        _allowHex = allowHex;
+        _allowBin = allowBin;
+    }
+
     public bool Match(Lexer lexer, char c)
     {
         var isnegative = c == '-' && char.IsDigit(lexer.Peek(1));
@@ -11,7 +20,7 @@ public class NumberMatcher : ILexerMatcher
         var isHexDigit = lexer.IsMatch("0x");
         var isBinaryDigit = lexer.IsMatch("0b");
 
-        return isHexDigit || isBinaryDigit || isnegative || isDigit;
+        return (isHexDigit && _allowHex) || (isBinaryDigit && _allowBin) || isnegative || isDigit;
     }
 
     public Token Build(Lexer lexer, ref int index, ref int column, ref int line)
@@ -21,13 +30,13 @@ public class NumberMatcher : ILexerMatcher
 
         if (lexer.IsMatch("0x"))
         {
-            LexHexNumber(lexer, ref index);
+            AdvanceHexNumber(lexer, ref index);
             goto createToken;
         }
 
         if (lexer.IsMatch("0b"))
         {
-            LexBinNumber(lexer, ref index);
+            AdvanceBinNumber(lexer, ref index);
             goto createToken;
         }
 
@@ -40,20 +49,14 @@ public class NumberMatcher : ILexerMatcher
             line, oldColumn);
     }
 
-    private void LexBinNumber(Lexer lexer, ref int index)
+    private void AdvanceBinNumber(Lexer lexer, ref int index)
     {
-        lexer.Advance();
-        lexer.Advance();
-        
-        AdvanceNumber(lexer, ref index, IsValidBinChar);
+        AdvanceNumber(lexer, ref index, IsValidBinChar, 2);
     }
 
-    private void LexHexNumber(Lexer lexer, ref int index)
+    private void AdvanceHexNumber(Lexer lexer, ref int index)
     {
-        lexer.Advance();
-        lexer.Advance();
-        
-        AdvanceNumber(lexer, ref index, IsValidHexChar);
+        AdvanceNumber(lexer, ref index, IsValidHexChar, 2);
     }
     
     private bool IsValidBinChar(char c)
@@ -66,22 +69,23 @@ public class NumberMatcher : ILexerMatcher
     {
         if (lexer.Peek(0) == '.')
         {
-            lexer.Advance();
-
-            AdvanceNumber(lexer, ref index, char.IsDigit);
+            AdvanceNumber(lexer, ref index, char.IsDigit, 1);
 
             // Handle E-Notation
             if (lexer.Peek(0) == 'e' || lexer.Peek(0) == 'E')
             {
-                lexer.Advance();
-
-                AdvanceNumber(lexer, ref index, char.IsDigit);
+                AdvanceNumber(lexer, ref index, char.IsDigit, 1);
             }
         }
     }
 
-    private static void AdvanceNumber(Lexer lexer, ref int index, Predicate<char> charPredicate)
+    private static void AdvanceNumber(Lexer lexer, ref int index, Predicate<char> charPredicate, int preskip = 0)
     {
+        for (int i = 0; i < preskip; i++)
+        {
+            lexer.Advance();
+        }
+        
         do
         {
             lexer.Advance();

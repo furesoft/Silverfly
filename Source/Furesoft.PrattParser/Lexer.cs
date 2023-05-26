@@ -47,19 +47,8 @@ public class Lexer : ILexer
     public void AddSymbol(string symbol)
     {
         _punctuators.Add(symbol, PredefinedSymbols.Pool.Get(symbol));
-
+        
         OrderSymbols();
-    }
-
-
-    /// <summary>
-    /// Advances the column and index of the char iterator
-    /// </summary>
-    /// <param name="distance">how many chars should be skipped</param>
-    public void Advance(int distance = 1)
-    {
-        _index += distance;
-        _column += distance;
     }
 
     public void AddMatcher(ILexerMatcher matcher)
@@ -67,9 +56,14 @@ public class Lexer : ILexer
         _parts.Add(matcher);
     }
 
-    public void UseString(Symbol leftSymbol, Symbol rightSymbol)
+    public void MatchString(Symbol leftSymbol, Symbol rightSymbol)
     {
         AddMatcher(new StringMatcher(leftSymbol, rightSymbol));
+    }
+
+    public void MatchNumber(bool allowHex, bool allowBin)
+    {
+        AddMatcher(new NumberMatcher(allowHex, allowBin));
     }
 
     public void Ignore(char c)
@@ -175,8 +169,7 @@ public class Lexer : ILexer
                 break;
             }
 
-            _index++;
-            _column++;
+            Advance();
         }
 
         var name = Document.Source.Substring(start, _index - start);
@@ -187,5 +180,11 @@ public class Lexer : ILexer
         }
 
         return new(PredefinedSymbols.Name, name, _line, oldColumn);
+    }
+
+    public void Advance()
+    {
+        _index++;
+        _column++;
     }
 }
