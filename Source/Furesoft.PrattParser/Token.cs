@@ -1,3 +1,5 @@
+using Furesoft.PrattParser.Text;
+
 namespace Furesoft.PrattParser;
 
 /// <summary>

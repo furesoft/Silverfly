@@ -1,9 +1,4 @@
-﻿namespace Furesoft.PrattParser;
-
-public enum MessageSeverity
-{
-    Error, Warning, Info, Hint,
-}
+﻿namespace Furesoft.PrattParser.Text;
 
 public sealed class Message
 {

@@ -1,6 +1,6 @@
-﻿namespace Furesoft.PrattParser;
+﻿namespace Furesoft.PrattParser.Text;
 
-public struct SourceRange
+public readonly struct SourceRange
 {
     public SourceRange(SourceDocument document, SourceSpan start, SourceSpan end)
     {

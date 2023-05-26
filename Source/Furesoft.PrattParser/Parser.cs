@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Furesoft.PrattParser.Parselets;
 using Furesoft.PrattParser.Parselets.Operators;
+using Furesoft.PrattParser.Text;
 
 namespace Furesoft.PrattParser;
 

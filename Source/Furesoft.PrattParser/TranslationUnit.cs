@@ -1,3 +1,5 @@
+using Furesoft.PrattParser.Text;
+
 namespace Furesoft.PrattParser;
 
 public class TranslationUnit<T>

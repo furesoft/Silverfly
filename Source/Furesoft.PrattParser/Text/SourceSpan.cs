@@ -1,6 +1,6 @@
-﻿namespace Furesoft.PrattParser;
+﻿namespace Furesoft.PrattParser.Text;
 
-public struct SourceSpan
+public readonly struct SourceSpan
 {
     public SourceSpan(int line, int column)
     {

@@ -1,4 +1,5 @@
 using Furesoft.PrattParser.Nodes;
+using Furesoft.PrattParser.Text;
 
 namespace Furesoft.PrattParser.Parselets;
 
