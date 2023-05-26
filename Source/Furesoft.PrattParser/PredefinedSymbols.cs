@@ -5,6 +5,7 @@ public static class PredefinedSymbols
     public static SymbolPool Pool = GSymbol.Pool;
 
     public static Symbol EOF = Pool.Get("#eof");
+    public static Symbol EOL = Pool.Get("\n");
     
     public static Symbol LeftParen = Pool.Get("(");
     public static Symbol RightParen = Pool.Get(")");
@@ -72,4 +73,6 @@ public static class PredefinedSymbols
     
     public static Symbol Arrow = Pool.Get("->");
     public static Symbol DoubleArrow = Pool.Get("=>");
+    
+    public static Symbol SlashSlash = Pool.Get("//");
 }

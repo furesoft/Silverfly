@@ -10,6 +10,7 @@ public sealed class Lexer
 {
     private Dictionary<string, Symbol> _punctuators = new();
     private readonly List<ILexerMatcher> _parts = new();
+    private readonly List<ILexerIgnoreMatcher> _ignoreMatcher = new();
     private readonly List<string> _ignoredChars = new();
     private int _index;
     private int _line = 1, _column = 1;
@@ -62,9 +63,11 @@ public sealed class Lexer
         AddMatcher(new StringMatcher(leftSymbol, rightSymbol));
     }
 
-    public void MatchNumber(bool allowHex, bool allowBin, Symbol floatingPointSymbol = null, Symbol seperatorSymbol = null)
+    public void MatchNumber(bool allowHex, bool allowBin, Symbol floatingPointSymbol = null,
+        Symbol seperatorSymbol = null)
     {
-        AddMatcher(new NumberMatcher(allowHex, allowBin, floatingPointSymbol ?? PredefinedSymbols.Dot, seperatorSymbol ?? PredefinedSymbols.Underscore));
+        AddMatcher(new NumberMatcher(allowHex, allowBin, floatingPointSymbol ?? PredefinedSymbols.Dot,
+            seperatorSymbol ?? PredefinedSymbols.Underscore));
     }
 
     public void Ignore(char c)
@@ -77,6 +80,11 @@ public sealed class Lexer
         _ignoredChars.Add(c);
     }
 
+    public void Ignore(ILexerIgnoreMatcher matcher)
+    {
+        _ignoreMatcher.Add(matcher);
+    }
+
     public char Peek(int distance)
     {
         if (_index + distance >= Document.Source.Length)
@@ -87,20 +95,21 @@ public sealed class Lexer
         return Document.Source[_index + distance];
     }
 
-    public bool IsMatch(string token)
+
+    public bool IsMatch(Symbol token)
     {
-        if (string.IsNullOrEmpty(token))
+        if (string.IsNullOrEmpty(token.Name))
         {
             return false;
         }
-        
-        var result = Peek(0) == token[0];
 
-        for (var i = 1; i < token.Length; i++)
+        var result = Peek(0) == token.Name[0];
+
+        for (var i = 1; i < token.Name.Length; i++)
         {
             if (result)
             {
-                result = result && Peek(i) == token[i];
+                result = result && Peek(i) == token.Name[i];
             }
         }
 
@@ -123,6 +132,8 @@ public sealed class Lexer
             {
                 continue;
             }
+
+            AdvanceIgnoreMatcher(c);
 
             foreach (var part in _parts)
             {
@@ -155,6 +166,17 @@ public sealed class Lexer
         return new Token(PredefinedSymbols.EOF, "EndOfFile", _line, _column).WithDocument(Document);
     }
 
+    private void AdvanceIgnoreMatcher(char c)
+    {
+        foreach (var ignoreMatcher in _ignoreMatcher)
+        {
+            if (ignoreMatcher.Match(this, c))
+            {
+                ignoreMatcher.Advance(this);
+            }
+        }
+    }
+
     private bool Ignore()
     {
         foreach (var ignored in _ignoredChars)
@@ -163,6 +185,7 @@ public sealed class Lexer
             {
                 _column += ignored.Length;
                 _index += ignored.Length;
+
                 return true;
             }
         }
@@ -205,10 +228,10 @@ public sealed class Lexer
         return new(PredefinedSymbols.Name, name, _line, oldColumn);
     }
 
-    public void Advance()
+    public void Advance(int distance = 1)
     {
-        _index++;
-        _column++;
+        _index += distance;
+        _column += distance;
     }
 
     public bool ContainsSymbol(string tokenName)

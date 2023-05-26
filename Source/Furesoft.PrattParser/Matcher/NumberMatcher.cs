@@ -88,11 +88,8 @@ public class NumberMatcher : ILexerMatcher
 
     private void AdvanceNumber(Lexer lexer, ref int index, Predicate<char> charPredicate, int preskip = 0)
     {
-        for (int i = 0; i < preskip; i++)
-        {
-            lexer.Advance();
-        }
-        
+        lexer.Advance(preskip);
+            
         do
         {
             lexer.Advance();

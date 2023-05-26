@@ -1,4 +1,5 @@
 using Furesoft.PrattParser;
+using Furesoft.PrattParser.IgnoreMatcher;
 using Furesoft.PrattParser.Matcher;
 using Furesoft.PrattParser.Nodes;
 using Furesoft.PrattParser.Parselets;
@@ -40,5 +41,6 @@ public class TestParser : Parser<AstNode>
         lexer.Ignore('\t');
         lexer.MatchString("'","'");
         lexer.MatchNumber(true, true);
+        lexer.Ignore(new SingleLineCommentIgnoreMatcher(PredefinedSymbols.SlashSlash, PredefinedSymbols.EOL));
     }
 }
