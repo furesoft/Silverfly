@@ -136,9 +136,19 @@ public abstract class Parser<T>
 
     public bool IsMatch(Symbol expected, uint distance = 0)
     {
+        EnsureSymbolIsRegistered(expected);
+        
         var token = LookAhead(distance);
 
         return token.Type.Equals(expected);
+    }
+
+    private void EnsureSymbolIsRegistered(Symbol expected)
+    {
+        if (!_lexer.ContainsSymbol(expected.Name))
+        {
+            _lexer.AddSymbol(expected.Name);
+        }
     }
 
     public bool IsMatch(params Symbol[] expected)
@@ -155,6 +165,8 @@ public abstract class Parser<T>
     public Token Consume(Symbol expected)
     {
         var token = LookAhead(0);
+        
+        EnsureSymbolIsRegistered(expected);
 
         if (!token.Type.Equals(expected))
         {

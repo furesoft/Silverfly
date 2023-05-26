@@ -9,7 +9,7 @@ public sealed class Lexer
 {
     private Dictionary<string, Symbol> _punctuators = new();
     private readonly List<ILexerMatcher> _parts = new();
-    private readonly List<char> _ignoredChars = new();
+    private readonly List<string> _ignoredChars = new();
     private int _index;
     private int _line = 1, _column = 1;
 
@@ -47,7 +47,7 @@ public sealed class Lexer
     public void AddSymbol(string symbol)
     {
         _punctuators.Add(symbol, PredefinedSymbols.Pool.Get(symbol));
-        
+
         OrderSymbols();
     }
 
@@ -67,6 +67,11 @@ public sealed class Lexer
     }
 
     public void Ignore(char c)
+    {
+        _ignoredChars.Add(c.ToString());
+    }
+
+    public void Ignore(string c)
     {
         _ignoredChars.Add(c);
     }
@@ -108,11 +113,8 @@ public sealed class Lexer
                 _column = 1;
             }
 
-            if (_ignoredChars.Contains(c))
+            if (Ignore())
             {
-                _column++;
-                _index++;
-
                 continue;
             }
 
@@ -145,6 +147,21 @@ public sealed class Lexer
         }
 
         return new Token(PredefinedSymbols.EOF, "EndOfFile", _line, _column).WithDocument(Document);
+    }
+
+    private bool Ignore()
+    {
+        foreach (var ignored in _ignoredChars)
+        {
+            if (IsMatch(ignored))
+            {
+                _column += ignored.Length;
+                _index += ignored.Length;
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private Token LexSymbol(string punctuatorKey)

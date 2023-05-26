@@ -35,6 +35,7 @@ public class TestParser : Parser<AstNode>
     protected override void InitLexer(Lexer lexer)
     {
         lexer.Ignore('\r');
+        lexer.Ignore("\r\n");
         lexer.Ignore(' ');
         lexer.Ignore('\t');
         lexer.MatchString("'","'");
