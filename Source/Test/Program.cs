@@ -11,7 +11,7 @@ public static class Program
 
     private static void Main(string[] args)
     {
-        Test("0b11111111111111111111111111111111", uint.MaxValue.ToString());
+        Test("0b11111111_11111111_11111111_11111111", uint.MaxValue.ToString());
         Test("0xff", $"255");
         Test("3.1e5; 1 + 2", $"{3.1e5}; (1 + 2)");
         

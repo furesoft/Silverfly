@@ -61,9 +61,9 @@ public sealed class Lexer
         AddMatcher(new StringMatcher(leftSymbol, rightSymbol));
     }
 
-    public void MatchNumber(bool allowHex, bool allowBin)
+    public void MatchNumber(bool allowHex, bool allowBin, Symbol floatingPointSymbol = null, Symbol seperatorSymbol = null)
     {
-        AddMatcher(new NumberMatcher(allowHex, allowBin));
+        AddMatcher(new NumberMatcher(allowHex, allowBin, floatingPointSymbol ?? PredefinedSymbols.Dot, seperatorSymbol ?? PredefinedSymbols.Underscore));
     }
 
     public void Ignore(char c)
@@ -88,6 +88,11 @@ public sealed class Lexer
 
     public bool IsMatch(string token)
     {
+        if (string.IsNullOrEmpty(token))
+        {
+            return false;
+        }
+        
         var result = Peek(0) == token[0];
 
         for (var i = 1; i < token.Length; i++)

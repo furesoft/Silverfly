@@ -9,7 +9,7 @@ public class NumberMatcher : ILexerMatcher
     private readonly Symbol _floatingPointSymbol;
     private readonly Symbol _seperatorSymbol;
 
-    public NumberMatcher(bool allowHex, bool allowBin, Symbol floatingPointSymbol, Symbol seperatorSymbol)
+    public NumberMatcher(bool allowHex, bool allowBin, Symbol floatingPointSymbol, Symbol seperatorSymbol = null)
     {
         _allowHex = allowHex;
         _allowBin = allowBin;
@@ -46,10 +46,13 @@ public class NumberMatcher : ILexerMatcher
 
         AdvanceNumber(lexer, ref index, char.IsDigit);
 
-        LexFloatingPointNumber(lexer, ref index);
+        AdvanceFloatingPointNumber(lexer, ref index);
 
         createToken:
-        return new(PredefinedSymbols.Number, lexer.Document.Source.Substring(oldIndex, index - oldIndex),
+        var textWithoutSeperator = lexer.Document.Source.Substring(oldIndex, index - oldIndex)
+            .Replace(_seperatorSymbol.Name, "");
+        
+        return new(PredefinedSymbols.Number, textWithoutSeperator,
             line, oldColumn);
     }
 
@@ -69,9 +72,9 @@ public class NumberMatcher : ILexerMatcher
     }
 
 
-    private void LexFloatingPointNumber(Lexer lexer, ref int index)
+    private void AdvanceFloatingPointNumber(Lexer lexer, ref int index)
     {
-        if (lexer.Peek(0) == _floatingPointSymbol)
+        if (lexer.IsMatch(_floatingPointSymbol.Name))
         {
             AdvanceNumber(lexer, ref index, char.IsDigit, 1);
 
@@ -83,7 +86,7 @@ public class NumberMatcher : ILexerMatcher
         }
     }
 
-    private static void AdvanceNumber(Lexer lexer, ref int index, Predicate<char> charPredicate, int preskip = 0)
+    private void AdvanceNumber(Lexer lexer, ref int index, Predicate<char> charPredicate, int preskip = 0)
     {
         for (int i = 0; i < preskip; i++)
         {
@@ -93,7 +96,7 @@ public class NumberMatcher : ILexerMatcher
         do
         {
             lexer.Advance();
-        } while (index < lexer.Document.Source.Length && charPredicate(lexer.Document.Source[index]));
+        } while (index < lexer.Document.Source.Length && charPredicate(lexer.Document.Source[index]) || lexer.IsMatch(_seperatorSymbol.Name));
     }
 
     private bool IsValidHexChar(char c) => char.IsDigit(c) || c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z';
