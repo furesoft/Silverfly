@@ -5,7 +5,7 @@ using Furesoft.PrattParser.Matcher;
 
 namespace Furesoft.PrattParser;
 
-public class Lexer : ILexer
+public sealed class Lexer
 {
     private Dictionary<string, Symbol> _punctuators = new();
     private readonly List<ILexerMatcher> _parts = new();

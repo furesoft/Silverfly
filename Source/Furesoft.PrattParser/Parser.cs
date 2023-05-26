@@ -6,7 +6,7 @@ namespace Furesoft.PrattParser;
 
 public abstract class Parser<T>
 {
-    private ILexer _lexer;
+    private Lexer _lexer;
     private List<Token> _read = new();
     private Dictionary<Symbol, IPrefixParselet<T>> _prefixParselets = new();
     private Dictionary<Symbol, IInfixParselet<T>> _infixParselets = new();
