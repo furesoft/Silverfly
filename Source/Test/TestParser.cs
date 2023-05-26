@@ -41,6 +41,7 @@ public class TestParser : Parser<AstNode>
         lexer.Ignore('\t');
         lexer.MatchString("'","'");
         lexer.MatchNumber(true, true);
-        lexer.Ignore(new SingleLineCommentIgnoreMatcher(PredefinedSymbols.SlashSlash, PredefinedSymbols.EOL));
+        lexer.Ignore(new SingleLineCommentIgnoreMatcher(PredefinedSymbols.SlashSlash));
+        lexer.Ignore(new MultiLineCommentIgnoreMatcher(PredefinedSymbols.SlashAsterisk, PredefinedSymbols.AsteriskSlash));
     }
 }

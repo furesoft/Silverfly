@@ -75,4 +75,6 @@ public static class PredefinedSymbols
     public static Symbol DoubleArrow = Pool.Get("=>");
     
     public static Symbol SlashSlash = Pool.Get("//");
+    public static Symbol SlashAsterisk = Pool.Get("/*");
+    public static Symbol AsteriskSlash = Pool.Get("*/");
 }
