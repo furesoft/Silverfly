@@ -6,11 +6,15 @@ public class NumberMatcher : ILexerMatcher
 {
     private bool _allowHex;
     private bool _allowBin;
+    private readonly Symbol _floatingPointSymbol;
+    private readonly Symbol _seperatorSymbol;
 
-    public NumberMatcher(bool allowHex, bool allowBin)
+    public NumberMatcher(bool allowHex, bool allowBin, Symbol floatingPointSymbol, Symbol seperatorSymbol)
     {
         _allowHex = allowHex;
         _allowBin = allowBin;
+        _floatingPointSymbol = floatingPointSymbol;
+        _seperatorSymbol = seperatorSymbol;
     }
 
     public bool Match(Lexer lexer, char c)
@@ -42,7 +46,7 @@ public class NumberMatcher : ILexerMatcher
 
         AdvanceNumber(lexer, ref index, char.IsDigit);
 
-        LexFloatingPointNumber(lexer, ref index, ref column);
+        LexFloatingPointNumber(lexer, ref index);
 
         createToken:
         return new(PredefinedSymbols.Number, lexer.Document.Source.Substring(oldIndex, index - oldIndex),
@@ -65,9 +69,9 @@ public class NumberMatcher : ILexerMatcher
     }
 
 
-    private static void LexFloatingPointNumber(Lexer lexer, ref int index, ref int column)
+    private void LexFloatingPointNumber(Lexer lexer, ref int index)
     {
-        if (lexer.Peek(0) == '.')
+        if (lexer.Peek(0) == _floatingPointSymbol)
         {
             AdvanceNumber(lexer, ref index, char.IsDigit, 1);
 
