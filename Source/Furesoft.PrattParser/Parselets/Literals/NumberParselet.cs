@@ -10,17 +10,17 @@ public class NumberParselet : IPrefixParselet<AstNode>
     {
         if (token.Text.StartsWith("0x"))
         {
-            return new LiteralNode<uint>(uint.Parse(token.Text[2..], NumberStyles.HexNumber));
+            return new LiteralNode<ulong>(uint.Parse(token.Text[2..], NumberStyles.HexNumber));
         }
         
         if (token.Text.StartsWith("0b"))
         {
-            return new LiteralNode<uint>(Convert.ToUInt32(token.Text[2..], 2));
+            return new LiteralNode<ulong>(Convert.ToUInt32(token.Text[2..], 2));
         }
         
         if (!token.Text.StartsWith("-") && !token.Text.Contains("."))
         {
-            return new LiteralNode<uint>(uint.Parse(token.Text)).WithRange(token);
+            return new LiteralNode<ulong>(ulong.Parse(token.Text)).WithRange(token);
         }
 
         if (token.Text.Contains('.'))
@@ -28,6 +28,6 @@ public class NumberParselet : IPrefixParselet<AstNode>
             return new LiteralNode<double>(double.Parse(token.Text, CultureInfo.InvariantCulture)).WithRange(token);
         }
         
-        return new LiteralNode<int>(int.Parse(token.Text)).WithRange(token);
+        return new LiteralNode<long>(long.Parse(token.Text)).WithRange(token);
     }
 }
