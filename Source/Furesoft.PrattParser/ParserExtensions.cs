@@ -67,11 +67,11 @@ public static class ParserExtensions
 
     public static void AddCommonAssignmentOperators(this Parser<AstNode> parser)
     {
-        parser.Register("=", new AssignParselet());
-        parser.Register("+=", new AssignParselet());
-        parser.Register("-=", new AssignParselet());
-        parser.Register("*=", new AssignParselet());
-        parser.Register("/=", new AssignParselet());
+        parser.InfixLeft("=", BindingPower.Assignment);
+        parser.InfixLeft("+=", BindingPower.Assignment);
+        parser.InfixLeft("-=", BindingPower.Assignment);
+        parser.InfixLeft("*=", BindingPower.Assignment);
+        parser.InfixLeft("/=", BindingPower.Assignment);
         
         parser.Prefix("++", (int)BindingPower.Prefix);
         parser.Prefix("--", (int)BindingPower.Prefix);

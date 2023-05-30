@@ -11,7 +11,6 @@ public class PrintVisitor : IVisitor<AstNode, string>
     {
         return node switch
         {
-            AssignNode assign => Visit(assign),
             CallNode call => Visit(call),
             TernaryOperatorNode cond => Visit(cond),
             BlockNode block => Visit(block),
@@ -45,14 +44,6 @@ public class PrintVisitor : IVisitor<AstNode, string>
         }
 
         return sb.ToString();
-    }
-
-    public string Visit(AssignNode assign)
-    {
-        var name = $"({assign.Name} = ";
-        name += assign.ValueExpr.Accept(this);
-
-        return $"{name})";
     }
 
     public string Visit(CallNode call)
