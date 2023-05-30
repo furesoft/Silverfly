@@ -37,7 +37,7 @@ public sealed class Lexer
             }
         }
 
-        // sort punctuators longest - smallest to make it possible to use symbols with more than one character
+        // sort punctuators longest -> smallest to make it possible to use symbols with more than one character
         OrderSymbols();
     }
 
@@ -48,6 +48,11 @@ public sealed class Lexer
 
     public void AddSymbol(string symbol)
     {
+        if (_punctuators.ContainsKey(symbol))
+        {
+            return;
+        }
+        
         _punctuators.Add(symbol, PredefinedSymbols.Pool.Get(symbol));
 
         OrderSymbols();
