@@ -11,7 +11,7 @@ public class TestParser : Parser<AstNode>
     public TestParser()
     {
         Register(PredefinedSymbols.Name, new NameParselet());
-        
+
         Register("(", new CallParselet());
 
         Ternary("?", ":", (int)BindingPower.Conditional);
