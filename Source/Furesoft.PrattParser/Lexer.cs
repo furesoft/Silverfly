@@ -75,6 +75,11 @@ public sealed class Lexer
             seperatorSymbol ?? PredefinedSymbols.Underscore));
     }
 
+    public void MatchBoolean()
+    {
+        AddMatcher(new BooleanMatcher());
+    }
+
     public void Ignore(char c)
     {
         Ignore(new PunctuatorIgnoreMatcher(c.ToString()));
