@@ -1,3 +1,4 @@
+using System;
 using Furesoft.PrattParser.Text;
 
 namespace Furesoft.PrattParser;
@@ -10,7 +11,7 @@ public sealed class Token
 {
     public Symbol Type { get; }
 
-    public string Text { get; }
+    public ReadOnlyMemory<char> Text { get; set; }
 
     public int Line { get; }
 
@@ -18,7 +19,7 @@ public sealed class Token
 
     public SourceDocument Document { get; set; }
 
-    public Token(Symbol type, string text, int line, int column)
+    public Token(Symbol type, ReadOnlyMemory<char> text, int line, int column)
     {
         Type = type;
         Text = text;
@@ -26,7 +27,13 @@ public sealed class Token
         Column = column;
     }
 
-    public override string ToString() { return Text; }
+    public Token(Symbol type, int line, int column)
+    : this(type, type.Name.AsMemory(), line, column)
+    {
+        
+    }
+
+    public override string ToString() { return Text.ToString(); }
 
     public SourceSpan GetSourceSpanStart()
     {

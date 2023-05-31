@@ -8,26 +8,28 @@ public class NumberParselet : IPrefixParselet<AstNode>
 {
     public AstNode Parse(Parser<AstNode> parser, Token token)
     {
-        if (token.Text.StartsWith("0x"))
+        var text = token.Text.ToString();
+        
+        if (text.StartsWith("0x"))
         {
-            return new LiteralNode<ulong>(uint.Parse(token.Text[2..], NumberStyles.HexNumber));
+            return new LiteralNode<ulong>(uint.Parse(token.Text.Slice(2).Span, NumberStyles.HexNumber));
         }
         
-        if (token.Text.StartsWith("0b"))
+        if (text.StartsWith("0b"))
         {
-            return new LiteralNode<ulong>(Convert.ToUInt32(token.Text[2..], 2));
+            return new LiteralNode<ulong>(Convert.ToUInt32(token.Text.Slice(2).ToString(), 2));
         }
         
-        if (!token.Text.StartsWith("-") && !token.Text.Contains("."))
+        if (!text.StartsWith("-") && !text.Contains("."))
         {
-            return new LiteralNode<ulong>(ulong.Parse(token.Text)).WithRange(token);
+            return new LiteralNode<ulong>(ulong.Parse(token.Text.Span)).WithRange(token);
         }
 
-        if (token.Text.Contains('.'))
+        if (text.Contains('.'))
         {
-            return new LiteralNode<double>(double.Parse(token.Text, CultureInfo.InvariantCulture)).WithRange(token);
+            return new LiteralNode<double>(double.Parse(text, CultureInfo.InvariantCulture)).WithRange(token);
         }
         
-        return new LiteralNode<long>(long.Parse(token.Text)).WithRange(token);
+        return new LiteralNode<long>(long.Parse(token.Text.Span)).WithRange(token);
     }
 }

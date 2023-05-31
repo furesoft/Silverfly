@@ -20,7 +20,7 @@ public class BooleanMatcher : ILexerMatcher
         {
             lexer.Advance("false".Length);
         }
-
-        return new(PredefinedSymbols.Boolean, lexer.Document.Source.Substring(oldIndex, index - oldIndex), line, column);
+        
+        return new(PredefinedSymbols.Boolean, lexer.Document.Source.Slice(oldIndex, index - oldIndex), line, oldColumn);
     }
 }

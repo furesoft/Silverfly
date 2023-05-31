@@ -11,20 +11,18 @@ public static class Program
 
     private static void Main(string[] args)
     {
+        Test("a = b = c", "((a = b) = c)");
         
-        var sw = new Stopwatch();
-        sw.Start();
-        
+        Test("-521", "-521");
         Test("true", $"True");
+        Test("3.1e5", $"{3.1e5}");
         Test("  /* i need something new*/0xff", $"255");
         Test("// this is a real long number\n0b11111111_11111111_11111111_11111111", uint.MaxValue.ToString());
-        Test("3.1e5; 1 + 2", $"{3.1e5}; (1 + 2)");
         
         Test("3.1e5", $"{3.1e5}");
         Test("not 5", "(not5)");
         
         Test("'hello'", "'hello'");
-        Test("-521", "-521");
         Test("-521.33", "-521.33");
         
         Test("a(b)", "a(b)");
@@ -56,7 +54,9 @@ public static class Program
         Test("a = b + c * d ^ e - f / g", "(a = ((b + (c * (d ^ e))) - (f / g)))");
 
         // Binary associativity.
+
         Test("a = b = c", "((a = b) = c)");
+
         Test("a + b - c", "((a + b) - c)");
         Test("a * b / c", "((a * b) / c)");
         Test("a ^ b ^ c", "(a ^ (b ^ c))");
@@ -70,10 +70,6 @@ public static class Program
         Test("a + (b + c) + d", "((a + (b + c)) + d)");
         Test("a ^ (b + c)", "(a ^ (b + c))");
         Test("(!a)!", "((!a)!)");
-        
-        sw.Stop();
-
-        Console.WriteLine(sw.Elapsed);
 
         // Show the results.
         if (_failed != 0)

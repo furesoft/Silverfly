@@ -6,6 +6,6 @@ public class StringLiteralParselet : IPrefixParselet<AstNode>
 {
     public AstNode Parse(Parser<AstNode> parser, Token token)
     {
-        return new LiteralNode<string>(token.Text).WithRange(token);
+        return new LiteralNode<string>(token.Text.ToString()).WithRange(token);
     }
 }
