@@ -49,10 +49,10 @@ public class NumberMatcher : ILexerMatcher
         AdvanceFloatingPointNumber(lexer, ref index);
 
         createToken:
-        var textWithoutSeperator = lexer.Document.Source.Substring(oldIndex, index - oldIndex)
+        var textWithoutSeperator = lexer.Document.Source.Slice(oldIndex, index - oldIndex).ToString()
             .Replace(_seperatorSymbol.Name, "");
         
-        return new(PredefinedSymbols.Number, textWithoutSeperator,
+        return new(PredefinedSymbols.Number, textWithoutSeperator.AsMemory(),
             line, oldColumn);
     }
 
@@ -93,7 +93,7 @@ public class NumberMatcher : ILexerMatcher
         do
         {
             lexer.Advance();
-        } while (index < lexer.Document.Source.Length && charPredicate(lexer.Document.Source[index]) || lexer.IsMatch(_seperatorSymbol.Name));
+        } while (index < lexer.Document.Source.Length && charPredicate(lexer.Peek(0)) || lexer.IsMatch(_seperatorSymbol.Name));
     }
 
     private bool IsValidHexChar(char c) => char.IsDigit(c) || c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z';

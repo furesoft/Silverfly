@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Furesoft.PrattParser.Lexing;
@@ -24,7 +25,7 @@ public sealed class Lexer
     public Lexer(string source, string filename = "tmp.synthetic")
     {
         _index = 0;
-        Document = new() {Filename = filename, Source = source};
+        Document = new() {Filename = filename, Source = source.AsMemory()};
 
         // Register all of the Symbols that are explicit punctuators.
         foreach (var type in PredefinedSymbols.Pool)
@@ -52,7 +53,7 @@ public sealed class Lexer
         {
             return;
         }
-        
+
         _punctuators.Add(symbol, PredefinedSymbols.Pool.Get(symbol));
 
         OrderSymbols();
@@ -102,7 +103,7 @@ public sealed class Lexer
             return '\0';
         }
 
-        return Document.Source[_index + distance];
+        return Document.Source.Slice(_index + distance, 1).Span[0];
     }
 
 
@@ -113,24 +114,19 @@ public sealed class Lexer
             return false;
         }
 
-        var result = Peek(0) == token.Name[0];
-
-        for (var i = 1; i < token.Name.Length; i++)
+        if (_index + token.Name.Length > Document.Source.Length)
         {
-            if (result)
-            {
-                result = result && Peek(i) == token.Name[i];
-            }
+            return false;
         }
 
-        return result;
+        return token.Name == Document.Source.Slice(_index, token.Name.Length).ToString();
     }
 
     public Token Next()
     {
         while (_index < Document.Source.Length)
         {
-            var c = Document.Source[_index];
+            var c = Peek(0);
 
             if (c == '\r')
             {
@@ -168,10 +164,10 @@ public sealed class Lexer
 
             Document.Messages.Add(Message.Error($"Invalid Character '{c}'"));
 
-            return new Token("#invalid", c.ToString(), _line, _column).WithDocument(Document);
+            return new Token("#invalid", c.ToString().AsMemory(), _line, _column).WithDocument(Document);
         }
 
-        return new Token(PredefinedSymbols.EOF, "EndOfFile", _line, _column).WithDocument(Document);
+        return new Token(PredefinedSymbols.EOF, _line, _column).WithDocument(Document);
     }
 
     private bool AdvanceIgnoreMatcher(char c)
@@ -196,7 +192,7 @@ public sealed class Lexer
         _column += punctuatorKey.Length;
         _index += punctuatorKey.Length;
 
-        return new(punctuatorKey, punctuatorKey, _line, oldColumn);
+        return new(punctuatorKey, _line, oldColumn);
     }
 
     private Token LexName()
@@ -206,7 +202,7 @@ public sealed class Lexer
         var start = _index;
         while (_index < Document.Source.Length)
         {
-            if (!char.IsLetter(Document.Source[_index]))
+            if (!char.IsLetter(Peek(0)))
             {
                 break;
             }
@@ -214,14 +210,15 @@ public sealed class Lexer
             Advance();
         }
 
-        var name = Document.Source.Substring(start, _index - start);
+        var nameSlice = Document.Source.Slice(start, _index - start);
+        var name = nameSlice.ToString();
 
         if (_punctuators.ContainsKey(name))
         {
-            return new(name, name, _line, oldColumn);
+            return new(name, nameSlice, _line, oldColumn);
         }
 
-        return new(PredefinedSymbols.Name, name, _line, oldColumn);
+        return new(PredefinedSymbols.Name, nameSlice, _line, oldColumn);
     }
 
     public void Advance(int distance = 1)

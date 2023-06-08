@@ -9,6 +9,6 @@ public class NameParselet : IPrefixParselet<AstNode>
 {
     public AstNode Parse(Parser<AstNode> parser, Token token)
     {
-        return new NameAstNode(token.Text).WithRange(token);
+        return new NameAstNode(token.Text.ToString()).WithRange(token);
     }
 }

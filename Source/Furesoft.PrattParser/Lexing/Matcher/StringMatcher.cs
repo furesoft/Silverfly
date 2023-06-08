@@ -30,7 +30,7 @@ public class StringMatcher : ILexerMatcher
             lexer.Advance();
         }
 
-        var text =lexer.Document.Source.Substring(oldIndex +1, index - oldIndex - 1);
+        var text = lexer.Document.Source.Slice(oldIndex +1, index - oldIndex - 1);
         
         index++;
         column++;
