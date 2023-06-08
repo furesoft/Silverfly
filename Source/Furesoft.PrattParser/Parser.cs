@@ -5,6 +5,15 @@ using Furesoft.PrattParser.Text;
 
 namespace Furesoft.PrattParser;
 
+public class Parser
+{
+    public static TranslationUnit<T> Parse<T, TParser>(string source, string filename = "syntethic.dsl")
+        where TParser : Parser<T>, new()
+    {
+        return Parser<T>.Parse<TParser>(source, filename);
+    }
+}
+
 public abstract class Parser<T>
 {
     private Lexer _lexer;
@@ -104,7 +113,7 @@ public abstract class Parser<T>
 
     protected abstract void InitLexer(Lexer lexer);
     
-    public List<T> ParseSeperated(Symbol seperator, Symbol terminator)
+    public List<T> ParseSeperated(Symbol seperator, Symbol terminator, int bindingPower = 0)
     {
         var args = new List<T>();
 
@@ -115,7 +124,7 @@ public abstract class Parser<T>
 
         do
         {
-            args.Add(Parse());
+            args.Add(Parse(bindingPower));
         } while (Match(seperator));
 
         Consume(terminator);
