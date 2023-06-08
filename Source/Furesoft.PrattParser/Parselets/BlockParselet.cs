@@ -6,11 +6,13 @@ public class BlockParselet : IInfixParselet<AstNode>
 {
     private readonly Symbol _seperator;
     private readonly Symbol _terminator;
+    private readonly int _bindingPower;
 
-    public BlockParselet(Symbol seperator, Symbol terminator)
+    public BlockParselet(Symbol seperator, Symbol terminator, int bindingPower)
     {
         _seperator = seperator;
         _terminator = terminator;
+        _bindingPower = bindingPower;
     }
 
     public AstNode Parse(Parser<AstNode> parser, AstNode left, Token token)
@@ -25,6 +27,6 @@ public class BlockParselet : IInfixParselet<AstNode>
 
     public int GetBindingPower()
     {
-        return BindingPower.Product + 1;
+        return _bindingPower;
     }
 }

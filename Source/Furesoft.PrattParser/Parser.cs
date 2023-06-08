@@ -46,9 +46,9 @@ public abstract class Parser<T>
         Group(PredefinedSymbols.Pool.Get(left), PredefinedSymbols.Pool.Get(right));
     }
 
-    public void Block(Symbol seperator, Symbol terminator)
+    public void Block(Symbol seperator, Symbol terminator, int bindingPower = 500)
     {
-        Register(seperator, (IInfixParselet<T>)new BlockParselet(seperator, terminator));
+        Register(seperator, (IInfixParselet<T>)new BlockParselet(seperator, terminator, bindingPower));
     }
     
     public static TranslationUnit<T> Parse<TParser>(string source, string filename = "syntethic.dsl") 
