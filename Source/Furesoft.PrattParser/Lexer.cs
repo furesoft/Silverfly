@@ -118,8 +118,11 @@ public sealed class Lexer
         {
             return false;
         }
-
-        return token.Name == Document.Source.Slice(_index, token.Name.Length).ToString();
+        
+        var nameSpan = token.Name.AsMemory().Span;
+        var documentSliceSpan = Document.Source.Slice(_index, token.Name.Length).Span;
+        
+        return nameSpan.CompareTo(documentSliceSpan, StringComparison.Ordinal) == 0;
     }
 
     public Token Next()
