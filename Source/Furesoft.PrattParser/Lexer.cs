@@ -131,33 +131,21 @@ public sealed class Lexer
         {
             var c = Peek(0);
 
-            if (c == '\r')
-            {
-                _line++;
-                _column = 1;
-            }
+            RecognizeLine(c);
 
             if (AdvanceIgnoreMatcher(c))
             {
                 continue;
             }
 
-            foreach (var part in _parts)
+            if (InvokeParts(c, out var token))
             {
-                if (part.Match(this, c))
-                {
-                    return part.Build(this, ref _index, ref _column, ref _line).WithDocument(Document);
-                }
+                return token;
             }
 
-            foreach (var punctuator in _punctuators)
+            if (InvokePunctuators(out var next))
             {
-                if (!IsMatch(punctuator.Key))
-                {
-                    continue;
-                }
-
-                return LexSymbol(punctuator.Key).WithDocument(Document);
+                return next;
             }
 
             if (char.IsLetter(c))
@@ -171,6 +159,53 @@ public sealed class Lexer
         }
 
         return new Token(PredefinedSymbols.EOF, _line, _column).WithDocument(Document);
+    }
+
+    private void RecognizeLine(char c)
+    {
+        if (c != '\r')
+        {
+            return;
+        }
+
+        _line++;
+        _column = 1;
+    }
+
+    private bool InvokePunctuators(out Token next)
+    {
+        foreach (var punctuator in _punctuators)
+        {
+            if (!IsMatch(punctuator.Key))
+            {
+                continue;
+            }
+
+            {
+                next = LexSymbol(punctuator.Key).WithDocument(Document);
+                return true;
+            }
+        }
+
+        next = null;
+        return false;
+    }
+
+    private bool InvokeParts(char c, out Token token)
+    {
+        foreach (var part in _parts)
+        {
+            if (part.Match(this, c))
+            {
+                {
+                    token = part.Build(this, ref _index, ref _column, ref _line).WithDocument(Document);
+                    return true;
+                }
+            }
+        }
+
+        token = null;
+        return false;
     }
 
     private bool AdvanceIgnoreMatcher(char c)
