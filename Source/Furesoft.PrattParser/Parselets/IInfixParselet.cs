@@ -10,6 +10,7 @@ namespace Furesoft.PrattParser.Parselets;
 /// See <see cref="IPrefixParselet"/>.
 /// </summary>
 public interface IInfixParselet<T>
+    where T : class
 {
     T Parse(Parser<T> parser, T left, Token token);
     int GetBindingPower();

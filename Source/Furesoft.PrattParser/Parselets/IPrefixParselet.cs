@@ -11,6 +11,7 @@ namespace Furesoft.PrattParser.Parselets;
 /// See <see cref="IInfixParselet"/>.
 /// </summary>
 public interface IPrefixParselet<T>
+    where T : class
 {
     T Parse(Parser<T> parser, Token token);
 }

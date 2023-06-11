@@ -20,7 +20,7 @@ public static class Program
         Test("// this is a real long number\n0b11111111_11111111_11111111_11111111", uint.MaxValue.ToString());
         
         Test("3.1e5", $"{3.1e5}");
-        Test("not 5", "(not5)");
+        Test("not 5", "(not 5)");
         
         Test("'hello'", "'hello'");
         Test("-521.33", "-521.33");
@@ -30,7 +30,6 @@ public static class Program
         Test("a -> b", "(a -> b)");
         Test("i++", "(i++)");
         //Test("!5\rhello", "(!5)");
-        Test("not 5", "(not5)");
 
         // Function call.
         Test("a()", "a()");

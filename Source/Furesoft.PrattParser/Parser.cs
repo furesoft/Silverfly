@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Furesoft.PrattParser.Nodes;
 using Furesoft.PrattParser.Parselets;
 using Furesoft.PrattParser.Parselets.Operators;
 using Furesoft.PrattParser.Text;
@@ -9,12 +10,14 @@ public class Parser
 {
     public static TranslationUnit<T> Parse<T, TParser>(string source, string filename = "syntethic.dsl")
         where TParser : Parser<T>, new()
+        where T : class
     {
         return Parser<T>.Parse<TParser>(source, filename);
     }
 }
 
 public abstract class Parser<T>
+    where T : class
 {
     private Lexer _lexer;
     private readonly List<Token> _read = new();
@@ -77,6 +80,7 @@ public abstract class Parser<T>
         if (!_prefixParselets.TryGetValue(token.Type, out var prefix))
         {
             token.Document.Messages.Add(Message.Error("Could not parse prefix \"" + token.Text + "\".", token.GetRange()));
+            return new InvalidNode(token) as T;
         }
 
         var left = prefix.Parse(this, token);

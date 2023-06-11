@@ -35,13 +35,13 @@ public class TestParser : Parser<AstNode>
 
     protected override void InitLexer(Lexer lexer)
     {
-        lexer.Ignore(' ');
-        lexer.Ignore('\r');
+        lexer.Ignore(' ', '\r', '\t');
         lexer.Ignore("\r\n");
-        lexer.Ignore('\t');
+        
         lexer.MatchBoolean();
         lexer.MatchString("'","'");
         lexer.MatchNumber(true, true);
+        
         lexer.Ignore(new SingleLineCommentIgnoreMatcher(PredefinedSymbols.SlashSlash));
         lexer.Ignore(new MultiLineCommentIgnoreMatcher(PredefinedSymbols.SlashAsterisk, PredefinedSymbols.AsteriskSlash));
     }

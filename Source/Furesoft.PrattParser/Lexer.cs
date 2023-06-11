@@ -86,6 +86,14 @@ public sealed class Lexer
         Ignore(new PunctuatorIgnoreMatcher(c.ToString()));
     }
 
+    public void Ignore(params char[] chars)
+    {
+        foreach (var c in chars)
+        {
+            Ignore(c);
+        }
+    }
+
     public void Ignore(string c)
     {
         Ignore(new PunctuatorIgnoreMatcher(c));
@@ -105,7 +113,6 @@ public sealed class Lexer
 
         return Document.Source.Slice(_index + distance, 1).Span[0];
     }
-
 
     public bool IsMatch(Symbol token)
     {

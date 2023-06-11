@@ -109,6 +109,12 @@ public class PrintVisitor : IVisitor<AstNode, string>
 
         sb.Append('(');
         sb.Append(postfix.Expr.Accept(this));
+        
+        if (char.IsLetter(postfix.Operator.Punctuator()[0]))
+        {
+            sb.Append(' ');
+        }
+        
         sb.Append(postfix.Operator.Punctuator()).Append(')');
 
         return sb.ToString();
@@ -120,6 +126,12 @@ public class PrintVisitor : IVisitor<AstNode, string>
 
         sb.Append('(');
         sb.Append(prefix.Operator.Punctuator());
+
+        if (char.IsLetter(prefix.Operator.Punctuator()[0]))
+        {
+            sb.Append(' ');
+        }
+        
         sb.Append(prefix.Expr.Accept(this)).Append(')');
 
         return sb.ToString();

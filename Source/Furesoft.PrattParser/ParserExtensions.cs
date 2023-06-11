@@ -27,6 +27,7 @@ public static class ParserExtensions
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
     public static bool Optional<T>(this Parser<T> parser, Symbol optionalSymbol)
+        where T : class
     {
         if (!parser.IsMatch(optionalSymbol))
         {
