@@ -172,7 +172,7 @@ public sealed class Lexer
         _column = 1;
     }
 
-    private bool InvokePunctuators(out Token next)
+    private bool InvokePunctuators(out Token token)
     {
         foreach (var punctuator in _punctuators)
         {
@@ -182,12 +182,12 @@ public sealed class Lexer
             }
 
             {
-                next = LexSymbol(punctuator.Key).WithDocument(Document);
+                token = LexSymbol(punctuator.Key).WithDocument(Document);
                 return true;
             }
         }
 
-        next = null;
+        token = default;
         return false;
     }
 
@@ -204,7 +204,7 @@ public sealed class Lexer
             }
         }
 
-        token = null;
+        token = default;
         return false;
     }
 

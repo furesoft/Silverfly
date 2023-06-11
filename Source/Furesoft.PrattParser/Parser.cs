@@ -17,9 +17,9 @@ public class Parser
 public abstract class Parser<T>
 {
     private Lexer _lexer;
-    private List<Token> _read = new();
-    private Dictionary<Symbol, IPrefixParselet<T>> _prefixParselets = new();
-    private Dictionary<Symbol, IInfixParselet<T>> _infixParselets = new();
+    private readonly List<Token> _read = new();
+    private readonly Dictionary<Symbol, IPrefixParselet<T>> _prefixParselets = new();
+    private readonly Dictionary<Symbol, IInfixParselet<T>> _infixParselets = new();
 
     public void Register(Symbol token, IPrefixParselet<T> parselet)
     {
@@ -31,19 +31,9 @@ public abstract class Parser<T>
         _infixParselets.Add(token, parselet);
     }
 
-    public void Register(string token, IInfixParselet<T> parselet)
-    {
-        _infixParselets.Add(PredefinedSymbols.Pool.Get(token), parselet);
-    }
-
     public void Group(Symbol leftToken, Symbol rightToken)
     {
         Register(leftToken, (IPrefixParselet<T>)new GroupParselet(rightToken));
-    }
-
-    public void Group(string left, string right)
-    {
-        Group(PredefinedSymbols.Pool.Get(left), PredefinedSymbols.Pool.Get(right));
     }
 
     public void Block(Symbol seperator, Symbol terminator, int bindingPower = 500)
@@ -56,28 +46,28 @@ public abstract class Parser<T>
     {
         var lexer = new Lexer(source, filename);
 
-        var parser = new TParser();
-        parser!._lexer = lexer;
+        var parser = new TParser
+        {
+            _lexer = lexer
+        };
 
-        foreach (var prefix in parser._prefixParselets)
+        AddLexerSymbols(lexer, parser._prefixParselets);
+        AddLexerSymbols(lexer, parser._infixParselets);
+
+        parser.InitLexer(lexer);
+
+        return new(parser.Parse(), lexer.Document);
+    }
+
+    private static void AddLexerSymbols<U>(Lexer lexer, Dictionary<Symbol, U> dict)
+    {
+        foreach (var prefix in dict)
         {
             if (!lexer.ContainsSymbol(prefix.Key.Name))
             {
                 lexer.AddSymbol(prefix.Key.Name);
             }
         }
-        
-        foreach (var infix in parser._infixParselets)
-        {
-            if (!lexer.ContainsSymbol(infix.Key.Name))
-            {
-                lexer.AddSymbol(infix.Key.Name);
-            }
-        }
-        
-        parser.InitLexer(lexer);
-
-        return new(parser.Parse(), lexer.Document);
     }
 
     public T Parse(int precedence)
@@ -86,7 +76,7 @@ public abstract class Parser<T>
 
         if (!_prefixParselets.TryGetValue(token.Type, out var prefix))
         {
-            token.Document.Messages.Add(Message.Error(("Could not parse \"" + token.Text + "\".")));
+            token.Document.Messages.Add(Message.Error("Could not parse prefix \"" + token.Text + "\".", token.GetRange()));
         }
 
         var left = prefix.Parse(this, token);
