@@ -34,6 +34,22 @@ public abstract class Parser<T>
         _infixParselets.Add(token, parselet);
     }
 
+    public void Register(IInfixParselet<T> parselet, params Symbol[] tokens)
+    {
+        foreach (var token in tokens)
+        {
+            Register(token, parselet);
+        }
+    }
+    
+    public void Register(IPrefixParselet<T> parselet, params Symbol[] tokens)
+    {
+        foreach (var token in tokens)
+        {
+            Register(token, parselet);
+        }
+    }
+
     public void Group(Symbol leftToken, Symbol rightToken)
     {
         Register(leftToken, (IPrefixParselet<T>)new GroupParselet(rightToken));
