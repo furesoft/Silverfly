@@ -133,7 +133,7 @@ public abstract class Parser<T>
 
         if (Match(terminator))
         {
-            return new();
+            return new List<T>();
         }
 
         do
@@ -142,6 +142,25 @@ public abstract class Parser<T>
         } while (Match(seperator));
 
         Consume(terminator);
+
+        return args;
+    }
+    
+    public List<T> ParseSeperated(Symbol seperator, Symbol[] terminators, int bindingPower = 0)
+    {
+        var args = new List<T>();
+
+        if (Match(terminators))
+        {
+            return new List<T>();
+        }
+
+        do
+        {
+            args.Add(Parse(bindingPower));
+        } while (Match(seperator));
+
+        Match(terminators);
 
         return args;
     }
@@ -156,6 +175,19 @@ public abstract class Parser<T>
         Consume();
 
         return true;
+    }
+
+    public bool Match(Symbol[] expected)
+    {
+        foreach (var symbol in expected)
+        {
+            if (Match(symbol))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public bool IsMatch(Symbol expected, uint distance = 0)
