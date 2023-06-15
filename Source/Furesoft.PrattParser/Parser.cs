@@ -14,6 +14,12 @@ public class Parser
     {
         return Parser<T>.Parse<TParser>(source, filename);
     }
+
+    public static TranslationUnit<AstNode> Parse<TParser>(string source, string filename = "syntethic.dsl")
+        where TParser : Parser<AstNode>, new()
+    {
+        return Parser<AstNode>.Parse<TParser>(source, filename);
+    }
 }
 
 public abstract class Parser<T>
@@ -41,7 +47,7 @@ public abstract class Parser<T>
             Register(token, parselet);
         }
     }
-    
+
     public void Register(IPrefixParselet<T> parselet, params Symbol[] tokens)
     {
         foreach (var token in tokens)
@@ -59,16 +65,13 @@ public abstract class Parser<T>
     {
         Register(seperator, (IInfixParselet<T>)new BlockParselet(seperator, terminator, bindingPower));
     }
-    
-    public static TranslationUnit<T> Parse<TParser>(string source, string filename = "syntethic.dsl") 
+
+    public static TranslationUnit<T> Parse<TParser>(string source, string filename = "syntethic.dsl")
         where TParser : Parser<T>, new()
     {
         var lexer = new Lexer(source, filename);
 
-        var parser = new TParser
-        {
-            _lexer = lexer
-        };
+        var parser = new TParser {_lexer = lexer};
 
         AddLexerSymbols(lexer, parser._prefixParselets);
         AddLexerSymbols(lexer, parser._infixParselets);
@@ -95,7 +98,8 @@ public abstract class Parser<T>
 
         if (!_prefixParselets.TryGetValue(token.Type, out var prefix))
         {
-            token.Document.Messages.Add(Message.Error("Could not parse prefix \"" + token.Text + "\".", token.GetRange()));
+            token.Document.Messages.Add(Message.Error("Could not parse prefix \"" + token.Text + "\".",
+                token.GetRange()));
             return new InvalidNode(token) as T;
         }
 
@@ -122,7 +126,7 @@ public abstract class Parser<T>
     }
 
     protected abstract void InitLexer(Lexer lexer);
-    
+
     public List<T> ParseSeperated(Symbol seperator, Symbol terminator, int bindingPower = 0)
     {
         var args = new List<T>();
@@ -150,14 +154,14 @@ public abstract class Parser<T>
         }
 
         Consume();
-        
+
         return true;
     }
 
     public bool IsMatch(Symbol expected, uint distance = 0)
     {
         EnsureSymbolIsRegistered(expected);
-        
+
         var token = LookAhead(distance);
 
         return token.Type.Equals(expected);
@@ -185,7 +189,7 @@ public abstract class Parser<T>
     public Token Consume(Symbol expected)
     {
         var token = LookAhead(0);
-        
+
         EnsureSymbolIsRegistered(expected);
 
         if (!token.Type.Equals(expected))
@@ -245,7 +249,7 @@ public abstract class Parser<T>
     {
         Register(token, (IInfixParselet<T>)new PostfixOperatorParselet(bindingPower));
     }
-    
+
 
     /// <summary>
     /// Registers a prefix unary operator parselet for the given token and binding power.
