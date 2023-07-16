@@ -76,7 +76,14 @@ public class NumberMatcher : ILexerMatcher
     {
         if (lexer.IsMatch(_floatingPointSymbol.Name))
         {
-            AdvanceNumber(lexer, ref index, char.IsDigit, 1);
+            lexer.Advance();
+            
+            if (!char.IsDigit(lexer.Peek(0)))
+            {
+                return;
+            }
+            
+            AdvanceNumber(lexer, ref index, char.IsDigit);
 
             // Handle E-Notation
             if (lexer.Peek(0) == 'e' || lexer.Peek(0) == 'E')

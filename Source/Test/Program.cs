@@ -11,7 +11,9 @@ public static class Program
 
     private static void Main(string[] args)
     {
+        Test("42.", "42");
         Test("a = b = c", "((a = b) = c)");
+        Test("42", "42");
         
         Test("-521", "-521");
         Test("true", $"True");
