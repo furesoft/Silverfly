@@ -76,13 +76,13 @@ public class NumberMatcher : ILexerMatcher
     {
         if (lexer.IsMatch(_floatingPointSymbol.Name))
         {
-            lexer.Advance();
             
-            if (!char.IsDigit(lexer.Peek(0)))
+            if (!char.IsDigit(lexer.Peek(1)))
             {
                 return;
             }
             
+            lexer.Advance();
             AdvanceNumber(lexer, ref index, char.IsDigit);
 
             // Handle E-Notation
