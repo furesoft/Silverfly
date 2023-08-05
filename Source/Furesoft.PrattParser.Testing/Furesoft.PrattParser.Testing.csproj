@@ -4,12 +4,20 @@
     <Version>1.0.49</Version>
     <LangVersion>preview</LangVersion>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Title>Furesoft.PrattParser</Title>
+    <Title>Furesoft.PrattParser.Testing</Title>
     <Copyright>furesoft</Copyright>
     <RepositoryUrl>https://github.com/furesoft/Furesoft.PrattParser</RepositoryUrl>
     <Description>A little framework to build parsers</Description>
     <PackageTags>parser, pratt</PackageTags>
     <TargetFrameworks>net7.0;netstandard2.1</TargetFrameworks>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Verify" Version="20.6.0"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Furesoft.PrattParser\Furesoft.PrattParser.csproj"/>
+  </ItemGroup>
 
 </Project>
