@@ -1,0 +1,17 @@
+﻿{
+  $type: TranslationUnit<AstNode>,
+  Tree: {
+    $type: PrefixOperatorNode,
+    Operator: not,
+    Expr: {
+      $type: LiteralNode<ulong>,
+      Value: 5,
+      Range: 1:5-1:5
+    },
+    Range: 1:1-1:5
+  },
+  Document: {
+    Filename: syntethic.dsl,
+    Source: not 5
+  }
+}

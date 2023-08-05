@@ -1,0 +1,32 @@
+﻿{
+  $type: TranslationUnit<AstNode>,
+  Tree: {
+    $type: PrefixOperatorNode,
+    Operator: ~,
+    Expr: {
+      $type: PrefixOperatorNode,
+      Operator: !,
+      Expr: {
+        $type: PrefixOperatorNode,
+        Operator: -,
+        Expr: {
+          $type: PrefixOperatorNode,
+          Operator: +,
+          Expr: {
+            $type: NameAstNode,
+            Name: a,
+            Range: 1:5-1:5
+          },
+          Range: 1:4-1:5
+        },
+        Range: 1:3-1:5
+      },
+      Range: 1:2-1:5
+    },
+    Range: 1:1-1:5
+  },
+  Document: {
+    Filename: syntethic.dsl,
+    Source: ~!-+a
+  }
+}

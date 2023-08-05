@@ -1,0 +1,12 @@
+﻿{
+  $type: TranslationUnit<AstNode>,
+  Tree: {
+    $type: LiteralNode<bool>,
+    Value: true,
+    Range: 1:1-1:4
+  },
+  Document: {
+    Filename: syntethic.dsl,
+    Source: true
+  }
+}

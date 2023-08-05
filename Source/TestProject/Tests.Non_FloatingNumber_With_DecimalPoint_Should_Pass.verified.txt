@@ -1,0 +1,12 @@
+﻿{
+  $type: TranslationUnit<AstNode>,
+  Tree: {
+    $type: LiteralNode<ulong>,
+    Value: 42,
+    Range: 1:1-1:2
+  },
+  Document: {
+    Filename: syntethic.dsl,
+    Source: 42.
+  }
+}

@@ -1,0 +1,22 @@
+﻿{
+  $type: TranslationUnit<AstNode>,
+  Tree: {
+    $type: BinaryOperatorNode,
+    LeftExpr: {
+      $type: NameAstNode,
+      Name: a,
+      Range: 1:1-1:1
+    },
+    Operator: ->,
+    RightExpr: {
+      $type: NameAstNode,
+      Name: b,
+      Range: 1:6-1:6
+    },
+    Range: 1:1-1:6
+  },
+  Document: {
+    Filename: syntethic.dsl,
+    Source: a -> b
+  }
+}
