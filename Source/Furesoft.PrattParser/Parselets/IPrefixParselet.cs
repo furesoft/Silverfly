@@ -1,3 +1,5 @@
+using Furesoft.PrattParser.Nodes;
+
 namespace Furesoft.PrattParser.Parselets;
 
 /// <summary>
@@ -10,8 +12,7 @@ namespace Furesoft.PrattParser.Parselets;
 /// 
 /// See <see cref="IInfixParselet"/>.
 /// </summary>
-public interface IPrefixParselet<T>
-    where T : class
+public interface IPrefixParselet
 {
-    T Parse(Parser<T> parser, Token token);
+    AstNode Parse(Parser parser, Token token);
 }

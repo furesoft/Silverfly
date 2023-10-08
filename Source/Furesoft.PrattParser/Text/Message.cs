@@ -1,21 +1,13 @@
 ﻿namespace Furesoft.PrattParser.Text;
 
-public sealed class Message
+public sealed class Message(MessageSeverity severity, string text, SourceRange range)
 {
-    public Message(MessageSeverity severity, string text, SourceRange range)
-    {
-        Severity = severity;
-        Text = text;
-        Range = range;
-        Document = range.Document;
-    }
+    public SourceRange Range { get; } = range;
 
-    public SourceRange Range { get; }
+    public SourceDocument Document { get; } = range.Document;
 
-    public SourceDocument Document { get; }
-
-    public MessageSeverity Severity { get; }
-    public string Text { get; }
+    public MessageSeverity Severity { get; } = severity;
+    public string Text { get; } = text;
 
     public static Message Error(string message, SourceRange range)
     {

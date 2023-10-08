@@ -2,21 +2,9 @@
 
 namespace Furesoft.PrattParser.Lexing.Matcher;
 
-public class NumberMatcher : ILexerMatcher
+public class NumberMatcher(bool allowHex, bool allowBin, Symbol floatingPointSymbol, Symbol seperatorSymbol = null)
+    : ILexerMatcher
 {
-    private bool _allowHex;
-    private bool _allowBin;
-    private readonly Symbol _floatingPointSymbol;
-    private readonly Symbol _seperatorSymbol;
-
-    public NumberMatcher(bool allowHex, bool allowBin, Symbol floatingPointSymbol, Symbol seperatorSymbol = null)
-    {
-        _allowHex = allowHex;
-        _allowBin = allowBin;
-        _floatingPointSymbol = floatingPointSymbol;
-        _seperatorSymbol = seperatorSymbol;
-    }
-
     public bool Match(Lexer lexer, char c)
     {
         var isnegative = c == '-' && char.IsDigit(lexer.Peek(1));
@@ -24,7 +12,7 @@ public class NumberMatcher : ILexerMatcher
         var isHexDigit = lexer.IsMatch("0x");
         var isBinaryDigit = lexer.IsMatch("0b");
 
-        return (isHexDigit && _allowHex) || (isBinaryDigit && _allowBin) || isnegative || isDigit;
+        return (isHexDigit && allowHex) || (isBinaryDigit && allowBin) || isnegative || isDigit;
     }
 
     public Token Build(Lexer lexer, ref int index, ref int column, ref int line)
@@ -50,7 +38,7 @@ public class NumberMatcher : ILexerMatcher
 
         createToken:
         var textWithoutSeperator = lexer.Document.Source.Slice(oldIndex, index - oldIndex).ToString()
-            .Replace(_seperatorSymbol.Name, "");
+            .Replace(seperatorSymbol.Name, "");
         
         return new(PredefinedSymbols.Number, textWithoutSeperator.AsMemory(),
             line, oldColumn);
@@ -74,7 +62,7 @@ public class NumberMatcher : ILexerMatcher
 
     private void AdvanceFloatingPointNumber(Lexer lexer, ref int index)
     {
-        if (lexer.IsMatch(_floatingPointSymbol.Name))
+        if (lexer.IsMatch(floatingPointSymbol.Name))
         {
             
             if (!char.IsDigit(lexer.Peek(1)))
@@ -100,7 +88,7 @@ public class NumberMatcher : ILexerMatcher
         do
         {
             lexer.Advance();
-        } while (index < lexer.Document.Source.Length && charPredicate(lexer.Peek(0)) || lexer.IsMatch(_seperatorSymbol.Name));
+        } while (index < lexer.Document.Source.Length && charPredicate(lexer.Peek(0)) || lexer.IsMatch(seperatorSymbol.Name));
     }
 
     private bool IsValidHexChar(char c) => char.IsDigit(c) || c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z';

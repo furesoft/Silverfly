@@ -27,12 +27,12 @@ public abstract class AstNode
         return this;
     }
 
-    public T Accept<T>(IVisitor<AstNode, T> visitor)
+    public T Accept<T>(IVisitor<T> visitor)
     {
         return visitor.Visit(this);
     }
 
-    public void Accept(IVisitor<AstNode> visitor)
+    public void Accept(IVisitor visitor)
     {
         visitor.Visit(this);
     }

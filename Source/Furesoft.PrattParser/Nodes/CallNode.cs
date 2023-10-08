@@ -5,14 +5,8 @@ namespace Furesoft.PrattParser.Nodes;
 /// <summary>
 /// A function call like "a(b, c, d)".
 /// </summary>
-public class CallNode : AstNode
+public class CallNode(AstNode functionExpr, List<AstNode> argumentExpressions) : AstNode
 {
-    public AstNode FunctionExpr { get; }
-    public List<AstNode> ArgumentExprs { get; }
-
-    public CallNode(AstNode functionExpr, List<AstNode> argumentExpressions)
-    {
-        FunctionExpr = functionExpr;
-        ArgumentExprs = argumentExpressions;
-    }
+    public AstNode FunctionExpr { get; } = functionExpr;
+    public List<AstNode> ArgumentExprs { get; } = argumentExpressions;
 }

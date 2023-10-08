@@ -6,7 +6,7 @@ namespace Furesoft.PrattParser;
 
 public static class ParserExtensions
 {
-    public static void AddArithmeticOperators(this Parser<AstNode> parser)
+    public static void AddArithmeticOperators(this Parser parser)
     {
         parser.Prefix("+", (int)BindingPower.Prefix);
         parser.Prefix("-", (int)BindingPower.Prefix);
@@ -26,8 +26,7 @@ public static class ParserExtensions
     /// <param name="optionalSymbol"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    public static bool Optional<T>(this Parser<T> parser, Symbol optionalSymbol)
-        where T : class
+    public static bool Optional(this Parser parser, Symbol optionalSymbol)
     {
         if (!parser.IsMatch(optionalSymbol))
         {
@@ -40,7 +39,7 @@ public static class ParserExtensions
 
     }
     
-    public static void AddLogicalOperators(this Parser<AstNode> parser)
+    public static void AddLogicalOperators(this Parser parser)
     {
         parser.Prefix("!", (int)BindingPower.Prefix);
         
@@ -48,7 +47,7 @@ public static class ParserExtensions
         parser.InfixLeft("||", (int)BindingPower.Sum);
     }
     
-    public static void AddBitOperators(this Parser<AstNode> parser)
+    public static void AddBitOperators(this Parser parser)
     {
         parser.Prefix("~", (int)BindingPower.Prefix);
         
@@ -59,14 +58,14 @@ public static class ParserExtensions
         parser.InfixLeft(">>", (int)BindingPower.Product);
     }
 
-    public static void AddCommonLiterals(this Parser<AstNode> parser)
+    public static void AddCommonLiterals(this Parser parser)
     {
         parser.Register(PredefinedSymbols.Number, new NumberParselet());
         parser.Register(PredefinedSymbols.Boolean, new BooleanLiteralParselet());
         parser.Register(PredefinedSymbols.String, new StringLiteralParselet());
     }
 
-    public static void AddCommonAssignmentOperators(this Parser<AstNode> parser)
+    public static void AddCommonAssignmentOperators(this Parser parser)
     {
         parser.InfixLeft("=", BindingPower.Assignment);
         parser.InfixLeft("+=", BindingPower.Assignment);

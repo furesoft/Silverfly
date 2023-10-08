@@ -1,20 +1,11 @@
 ﻿namespace Furesoft.PrattParser.Lexing.Matcher;
 
-public class StringMatcher : ILexerMatcher
+public class StringMatcher(Symbol leftStr, Symbol rightStr) : ILexerMatcher
 {
-    private readonly Symbol _leftStr;
-    private readonly Symbol _rightStr;
-
-    public StringMatcher(Symbol leftStr, Symbol rightStr)
-    {
-        _leftStr = leftStr;
-        _rightStr = rightStr;
-    }
-
     public bool Match(Lexer lexer, char c)
     {
-        return _leftStr != null && _rightStr != null &&
-                             lexer.IsMatch(_leftStr.Name);
+        return leftStr != null && rightStr != null &&
+                             lexer.IsMatch(leftStr.Name);
     }
 
     public Token Build(Lexer lexer, ref int index, ref int column, ref int line)
@@ -25,7 +16,7 @@ public class StringMatcher : ILexerMatcher
         index++;
         column++;
 
-        while (!lexer.IsMatch(_rightStr.Name))
+        while (!lexer.IsMatch(rightStr.Name))
         {
             lexer.Advance();
         }

@@ -1,11 +1,6 @@
 ﻿namespace Furesoft.PrattParser.Nodes;
 
-public class LiteralNode<T> : AstNode
+public class LiteralNode<T>(T value) : AstNode
 {
-    public T Value { get; }
-
-    public LiteralNode(T value)
-    {
-        Value = value;
-    }
+    public T Value { get; } = value;
 }

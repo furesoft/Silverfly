@@ -6,41 +6,24 @@ using Furesoft.PrattParser.Text;
 
 namespace Furesoft.PrattParser;
 
-public class Parser
+public abstract class Parser
 {
-    public static TranslationUnit<T> Parse<T, TParser>(string source, string filename = "syntethic.dsl")
-        where TParser : Parser<T>, new()
-        where T : class
-    {
-        return Parser<T>.Parse<TParser>(source, filename);
-    }
-
-    public static TranslationUnit<AstNode> Parse<TParser>(string source, string filename = "syntethic.dsl")
-        where TParser : Parser<AstNode>, new()
-    {
-        return Parser<AstNode>.Parse<TParser>(source, filename);
-    }
-}
-
-public abstract class Parser<T>
-    where T : class
-{
-    private Lexer _lexer;
+    private readonly Dictionary<Symbol, IInfixParselet> _infixParselets = new();
+    private readonly Dictionary<Symbol, IPrefixParselet> _prefixParselets = new();
     private readonly List<Token> _read = new();
-    private readonly Dictionary<Symbol, IPrefixParselet<T>> _prefixParselets = new();
-    private readonly Dictionary<Symbol, IInfixParselet<T>> _infixParselets = new();
+    private Lexer _lexer;
 
-    public void Register(Symbol token, IPrefixParselet<T> parselet)
+    public void Register(Symbol token, IPrefixParselet parselet)
     {
         _prefixParselets.Add(token, parselet);
     }
 
-    public void Register(Symbol token, IInfixParselet<T> parselet)
+    public void Register(Symbol token, IInfixParselet parselet)
     {
         _infixParselets.Add(token, parselet);
     }
 
-    public void Register(IInfixParselet<T> parselet, params Symbol[] tokens)
+    public void Register(IInfixParselet parselet, params Symbol[] tokens)
     {
         foreach (var token in tokens)
         {
@@ -48,7 +31,7 @@ public abstract class Parser<T>
         }
     }
 
-    public void Register(IPrefixParselet<T> parselet, params Symbol[] tokens)
+    public void Register(IPrefixParselet parselet, params Symbol[] tokens)
     {
         foreach (var token in tokens)
         {
@@ -58,16 +41,17 @@ public abstract class Parser<T>
 
     public void Group(Symbol leftToken, Symbol rightToken)
     {
-        Register(leftToken, (IPrefixParselet<T>)new GroupParselet(rightToken));
+        Register(leftToken, new GroupParselet(rightToken));
     }
 
     public void Block(Symbol seperator, Symbol terminator, int bindingPower = 500)
     {
-        Register(seperator, (IInfixParselet<T>)new BlockParselet(seperator, terminator, bindingPower));
+        Register(seperator, new BlockParselet(seperator, terminator, bindingPower));
     }
 
-    public static TranslationUnit<T> Parse<TParser>(string source, string filename = "syntethic.dsl")
-        where TParser : Parser<T>, new()
+
+    public static TranslationUnit Parse<TParser>(string source, string filename = "syntethic.dsl")
+        where TParser : Parser, new()
     {
         var lexer = new Lexer(source, filename);
 
@@ -92,7 +76,7 @@ public abstract class Parser<T>
         }
     }
 
-    public T Parse(int precedence)
+    public AstNode Parse(int precedence)
     {
         var token = Consume();
 
@@ -100,7 +84,7 @@ public abstract class Parser<T>
         {
             token.Document.Messages.Add(Message.Error("Could not parse prefix \"" + token.Text + "\".",
                 token.GetRange()));
-            return new InvalidNode(token) as T;
+            return new InvalidNode(token);
         }
 
         var left = prefix.Parse(this, token);
@@ -111,7 +95,7 @@ public abstract class Parser<T>
 
             if (!_infixParselets.TryGetValue(token.Type, out var infix))
             {
-                token.Document.Messages.Add(Message.Error(("Could not parse \"" + token.Text + "\".")));
+                token.Document.Messages.Add(Message.Error("Could not parse \"" + token.Text + "\"."));
             }
 
             left = infix.Parse(this, left, token);
@@ -120,20 +104,20 @@ public abstract class Parser<T>
         return left;
     }
 
-    public T Parse()
+    public AstNode Parse()
     {
         return Parse(0);
     }
 
     protected abstract void InitLexer(Lexer lexer);
 
-    public List<T> ParseSeperated(Symbol seperator, Symbol terminator, int bindingPower = 0)
+    public List<AstNode> ParseSeperated(Symbol seperator, Symbol terminator, int bindingPower = 0)
     {
-        var args = new List<T>();
+        var args = new List<AstNode>();
 
         if (Match(terminator))
         {
-            return new List<T>();
+            return new();
         }
 
         do
@@ -145,14 +129,14 @@ public abstract class Parser<T>
 
         return args;
     }
-    
-    public List<T> ParseSeperated(Symbol seperator, Symbol[] terminators, int bindingPower = 0)
+
+    public List<AstNode> ParseSeperated(Symbol seperator, Symbol[] terminators, int bindingPower = 0)
     {
-        var args = new List<T>();
+        var args = new List<AstNode>();
 
         if (Match(terminators))
         {
-            return new List<T>();
+            return new();
         }
 
         do
@@ -244,7 +228,7 @@ public abstract class Parser<T>
     public Token[] ConsumeMany(uint count)
     {
         var result = new List<Token>();
-        for (int i = 0; i < count; i++)
+        for (var i = 0; i < count; i++)
         {
             result.Add(Consume());
         }
@@ -275,46 +259,46 @@ public abstract class Parser<T>
     }
 
     /// <summary>
-    /// Registers a postfix unary operator parselet for the given token and binding power.
+    ///     Registers a postfix unary operator parselet for the given token and binding power.
     /// </summary>
     public void Postfix(Symbol token, int bindingPower)
     {
-        Register(token, (IInfixParselet<T>)new PostfixOperatorParselet(bindingPower));
+        Register(token, new PostfixOperatorParselet(bindingPower));
     }
 
 
     /// <summary>
-    /// Registers a prefix unary operator parselet for the given token and binding power.
+    ///     Registers a prefix unary operator parselet for the given token and binding power.
     /// </summary>
     public void Prefix(Symbol token, int bindingPower)
     {
-        Register(token, (IPrefixParselet<T>)new PrefixOperatorParselet(bindingPower));
+        Register(token, new PrefixOperatorParselet(bindingPower));
     }
 
     /// <summary>
-    ///  Registers a left-associative binary operator parselet for the given token and binding power.
+    ///     Registers a left-associative binary operator parselet for the given token and binding power.
     /// </summary>
     public void InfixLeft(Symbol token, int bindingPower)
     {
-        Register(token, (IInfixParselet<T>)new BinaryOperatorParselet(bindingPower, false));
+        Register(token, new BinaryOperatorParselet(bindingPower, false));
     }
 
     /// <summary>
-    /// Registers a right-associative binary operator parselet for the given token and binding power.
+    ///     Registers a right-associative binary operator parselet for the given token and binding power.
     /// </summary>
     public void InfixRight(Symbol token, int bindingPower)
     {
-        Register(token, (IInfixParselet<T>)new BinaryOperatorParselet(bindingPower, true));
+        Register(token, new BinaryOperatorParselet(bindingPower, true));
     }
 
     /// <summary>
-    /// Register a ternary operator like the :? operator
+    ///     Register a ternary operator like the :? operator
     /// </summary>
     /// <param name="firstSymbol"></param>
     /// <param name="secondSymbol"></param>
     /// <param name="bindingPower"></param>
     public void Ternary(Symbol firstSymbol, Symbol secondSymbol, int bindingPower)
     {
-        Register(firstSymbol, (IInfixParselet<T>)new TernaryOperatorParselet(secondSymbol, bindingPower));
+        Register(firstSymbol, new TernaryOperatorParselet(secondSymbol, bindingPower));
     }
 }

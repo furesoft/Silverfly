@@ -1,11 +1,13 @@
-﻿namespace Furesoft.PrattParser;
+﻿using Furesoft.PrattParser.Nodes;
 
-public interface IVisitor<in TNode, out TReturn>
+namespace Furesoft.PrattParser;
+
+public interface IVisitor<out TReturn>
 {
-    TReturn Visit(TNode node);
+    TReturn Visit(AstNode node);
 }
 
-public interface IVisitor<in TNode>
+public interface IVisitor
 {
-    void Visit(TNode node);
+    void Visit(AstNode node);
 }

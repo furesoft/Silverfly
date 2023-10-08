@@ -1,27 +1,20 @@
 ﻿namespace Furesoft.PrattParser.Text;
 
-public readonly struct SourceRange
+public readonly struct SourceRange(SourceDocument document, SourceSpan start, SourceSpan end)
 {
-    public SourceRange(SourceDocument document, SourceSpan start, SourceSpan end)
-    {
-        Document = document;
-        Start = start;
-        End = end;
-    }
-
-    public SourceDocument Document { get; }
-    public SourceSpan Start { get; }
-    public SourceSpan End { get; }
+    public SourceDocument Document { get; } = document;
+    public SourceSpan Start { get; } = start;
+    public SourceSpan End { get; } = end;
     public static SourceRange Empty { get; } = new();
     
     public bool Contains(int line, int column)
     {
-        var inLeft = false;
+        bool inLeft;
         if (Start.Line < line) inLeft = true;
         else if (Start.Line > line) inLeft = false;
         else inLeft = Start.Column <= column;
 
-        var inRight = false;
+        bool inRight;
         if (End.Line > line) inRight = true;
         else if (End.Line < line) inRight = false;
         else inRight = End.Column >= column;

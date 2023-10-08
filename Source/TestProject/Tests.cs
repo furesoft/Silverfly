@@ -1,7 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
 using Argon;
+using Furesoft.PrattParser;
 using Furesoft.PrattParser.Testing;
-using Test;
 using static VerifyTests.VerifierSettings;
 
 namespace TestProject;
@@ -189,9 +189,15 @@ public class Tests
         return Test("-42.5");
     }
 
+    [Test]
+    public Task Block_Should_Pass()
+    {
+        return Test("-42.5;13");
+    }
+
     public static Task Test(string source)
     {
-        var result = TestParser.Parse<TestParser>(source);
+        var result = Parser.Parse<TestParser>(source);
 
         return Verify(result);
     }

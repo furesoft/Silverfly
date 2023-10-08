@@ -4,9 +4,9 @@ using Furesoft.PrattParser.Nodes;
 
 namespace Furesoft.PrattParser.Parselets.Literals;
 
-public class NumberParselet : IPrefixParselet<AstNode>
+public class NumberParselet : IPrefixParselet
 {
-    public AstNode Parse(Parser<AstNode> parser, Token token)
+    public AstNode Parse(Parser parser, Token token)
     {
         var text = token.Text.ToString();
         

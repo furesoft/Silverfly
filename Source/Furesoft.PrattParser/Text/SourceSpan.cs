@@ -1,16 +1,10 @@
 ﻿namespace Furesoft.PrattParser.Text;
 
-public readonly struct SourceSpan
+public readonly struct SourceSpan(int line, int column)
 {
-    public SourceSpan(int line, int column)
-    {
-        Line = line;
-        Column = column;
-    }
+    public int Line { get; } = line;
 
-    public int Line { get; }
-
-    public int Column { get; }
+    public int Column { get; } = column;
 
     public static bool operator <(SourceSpan left, SourceSpan right)
     {

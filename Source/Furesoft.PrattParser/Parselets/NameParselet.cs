@@ -5,9 +5,9 @@ namespace Furesoft.PrattParser.Parselets;
 /// <summary>
 /// Simple parselet for a named variable like "abc".
 /// </summary>
-public class NameParselet : IPrefixParselet<AstNode>
+public class NameParselet : IPrefixParselet
 {
-    public AstNode Parse(Parser<AstNode> parser, Token token)
+    public AstNode Parse(Parser parser, Token token)
     {
         return new NameAstNode(token.Text.ToString()).WithRange(token);
     }

@@ -1,30 +1,21 @@
 ﻿namespace Furesoft.PrattParser.Lexing.IgnoreMatcher.Comments;
 
-public class MultiLineCommentIgnoreMatcher : ILexerIgnoreMatcher
+public class MultiLineCommentIgnoreMatcher(Symbol start, Symbol end) : ILexerIgnoreMatcher
 {
-    private readonly Symbol _start;
-    private readonly Symbol _end;
-
-    public MultiLineCommentIgnoreMatcher(Symbol start, Symbol end)
-    {
-        _start = start;
-        _end = end;
-    }
-    
     public bool Match(Lexer lexer, char c)
     {
-        return lexer.IsMatch(_start);
+        return lexer.IsMatch(start);
     }
 
     public void Advance(Lexer lexer)
     {
-        lexer.Advance(_start.Name.Length);
+        lexer.Advance(start.Name.Length);
 
-        while (!lexer.IsMatch(_end))
+        while (!lexer.IsMatch(end))
         {
             lexer.Advance();
         }
         
-        lexer.Advance(_end.Name.Length);
+        lexer.Advance(end.Name.Length);
     }
 }
