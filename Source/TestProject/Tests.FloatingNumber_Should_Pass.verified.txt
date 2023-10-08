@@ -1,5 +1,5 @@
 ﻿{
-  $type: TranslationUnit<AstNode>,
+  $type: TranslationUnit,
   Tree: {
     $type: LiteralNode<double>,
     Value: 42.5,
