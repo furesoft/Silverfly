@@ -111,6 +111,7 @@ public abstract class Parser
 
     protected abstract void InitLexer(Lexer lexer);
 
+
     public List<AstNode> ParseSeperated(Symbol seperator, Symbol terminator, int bindingPower = 0)
     {
         var args = new List<AstNode>();
