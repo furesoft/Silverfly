@@ -1,20 +1,18 @@
-using Furesoft.PrattParser.Nodes;
+using Furesoft.PrattParser.Parselets.Builder.Elements;
 
 namespace Furesoft.PrattParser.Parselets.Builder;
 
-public abstract class SyntaxElement {
+public abstract class SyntaxElement
+{
     public abstract void Parse(Parser parser);
 
-    public static SyntaxElement operator +(SyntaxElement first, SyntaxElement second) {
+    public static SyntaxElement operator +(SyntaxElement first, SyntaxElement second)
+    {
         return new AndElement(first, second);
     }
-}
 
-public class AndElement(SyntaxElement first, SyntaxElement second) : SyntaxElement
-{
-    public override void Parse(Parser parser)
+    public static implicit operator SyntaxElement(string keyword)
     {
-        first.Parse(parser);
-        second.Parse(parser);
+        return new KeywordElement(keyword);
     }
 }

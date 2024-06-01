@@ -10,6 +10,8 @@ public class BuilderParselet<TNode>(int bindingPower, SyntaxElement definition) 
 
     public AstNode Parse(Parser parser, AstNode left, Token token)
     {
+        definition.Parse(parser);
+
         return Activator.CreateInstance<TNode>();
     }
 }
