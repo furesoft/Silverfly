@@ -198,8 +198,8 @@ public class SymbolPool : IEnumerable<Symbol>
 
     protected internal SymbolPool(int firstID, int poolId)
     {
-        _map = new();
-        _list = new();
+        _map = [];
+        _list = [];
         _firstId = firstID;
         _poolId = poolId;
     }

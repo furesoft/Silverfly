@@ -30,4 +30,6 @@ public class BindingPower : Symbol
     protected BindingPower(Symbol prototype) : base(prototype)
     {
     }
+
+    public static implicit operator int(BindingPower power) => power.Id;
 }

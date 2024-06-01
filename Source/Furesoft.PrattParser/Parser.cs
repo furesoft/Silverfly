@@ -8,9 +8,9 @@ namespace Furesoft.PrattParser;
 
 public abstract class Parser
 {
-    private readonly Dictionary<Symbol, IInfixParselet> _infixParselets = new();
-    private readonly Dictionary<Symbol, IPrefixParselet> _prefixParselets = new();
-    private readonly List<Token> _read = new();
+    private readonly Dictionary<Symbol, IInfixParselet> _infixParselets = [];
+    private readonly Dictionary<Symbol, IPrefixParselet> _prefixParselets = [];
+    private readonly List<Token> _read = [];
     private Lexer _lexer;
 
     public void Register(Symbol token, IPrefixParselet parselet)
@@ -69,7 +69,7 @@ public abstract class Parser
     {
         foreach (var prefix in dict)
         {
-            if (!lexer.ContainsSymbol(prefix.Key.Name))
+            if (!lexer.ContainsSymbol(prefix.Key.Name) && !prefix.Key.Name.StartsWith("#"))
             {
                 lexer.AddSymbol(prefix.Key.Name);
             }
@@ -117,7 +117,7 @@ public abstract class Parser
 
         if (Match(terminator))
         {
-            return new();
+            return [];
         }
 
         do
@@ -136,7 +136,7 @@ public abstract class Parser
 
         if (Match(terminators))
         {
-            return new();
+            return [];
         }
 
         do

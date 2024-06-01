@@ -10,9 +10,9 @@ namespace Furesoft.PrattParser;
 
 public sealed class Lexer
 {
-    private Dictionary<string, Symbol> _punctuators = new();
-    private readonly List<ILexerMatcher> _parts = new();
-    private readonly List<ILexerIgnoreMatcher> _ignoreMatcher = new();
+    private Dictionary<string, Symbol> _punctuators = [];
+    private readonly List<ILexerMatcher> _parts = [];
+    private readonly List<ILexerIgnoreMatcher> _ignoreMatcher = [];
     private int _index;
     private int _line = 1, _column = 1;
 
