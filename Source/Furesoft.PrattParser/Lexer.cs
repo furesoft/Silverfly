@@ -8,6 +8,7 @@ using Furesoft.PrattParser.Text;
 
 namespace Furesoft.PrattParser;
 
+//ToDo: Add Ability to use a word combination as single keyword e.g. "12 unless if true"
 public sealed class Lexer
 {
     private Dictionary<string, Symbol> _punctuators = [];
