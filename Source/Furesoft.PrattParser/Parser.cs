@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Xml;
 using Furesoft.PrattParser.Nodes;
 using Furesoft.PrattParser.Parselets;
 using Furesoft.PrattParser.Parselets.Builder;
@@ -58,7 +59,20 @@ public abstract class Parser
         Register(start, new BlockParselet(terminator, seperator, wrapExpressions));
     }
 
-    public void Builder<TNode>(SyntaxElement definition)
+    public void ExprBuilder<TNode>(SyntaxElement definition)
+        where TNode : AstNode
+    {
+        Builder<TNode>(definition, NodeType.Expression);
+    }
+
+    public void StmtBuilder<TNode>(SyntaxElement definition)
+        where TNode : AstNode
+    {
+        Builder<TNode>(definition, NodeType.Statement);
+    }
+
+
+    private void Builder<TNode>(SyntaxElement definition, NodeType type)
         where TNode : AstNode
     {
         var parselet = new BuilderParselet<TNode>(BindingPower.Product, definition);
@@ -66,7 +80,16 @@ public abstract class Parser
 
         if (keyword != null)
         {
-            Register(keyword, parselet);
+            switch (type)
+            {
+                default:
+                case NodeType.Expression:
+                    Register(keyword, (IInfixParselet)parselet);
+                    break;
+                case NodeType.Statement:
+                    Register(keyword, (IStatementParselet)parselet);
+                    break;
+            }
         }
     }
 

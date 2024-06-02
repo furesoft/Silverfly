@@ -6,7 +6,7 @@ using Furesoft.PrattParser.Nodes;
 
 namespace Furesoft.PrattParser.Parselets.Builder;
 
-public class BuilderParselet<TNode>(int bindingPower, SyntaxElement definition) : IPrefixParselet
+public class BuilderParselet<TNode>(int bindingPower, SyntaxElement definition) : IPrefixParselet, IStatementParselet
     where TNode : AstNode
 {
     public int GetBindingPower() => bindingPower;
@@ -35,13 +35,13 @@ public class BuilderParselet<TNode>(int bindingPower, SyntaxElement definition) 
         {
             node = Activator.CreateInstance<TNode>();
 
-            SetProperties(node, result);
+            BuilderParselet<TNode>.SetProperties(node, result);
         }
 
         return node;
     }
 
-    private void SetProperties(TNode node, List<(string Name, AstNode Node)> result)
+    private static void SetProperties(TNode node, List<(string Name, AstNode Node)> result)
     {
         var nodeType = node.GetType();
 

@@ -9,6 +9,11 @@ public static class Helpers
         return new ExprElement(name);
     }
 
+    public static SyntaxElement stmt(string name = null)
+    {
+        return new StmtElement(name);
+    }
+
     public static SyntaxElement sepBy(Symbol seperator, Symbol terminator, string name = null) {
         return new SepByElement(name, seperator, terminator);
     }

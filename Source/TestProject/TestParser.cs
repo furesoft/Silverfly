@@ -23,18 +23,18 @@ public class TestParser : Parser
         this.AddCommonLiterals();
         this.AddCommonAssignmentOperators();
 
-        Prefix("not", (int)BindingPower.Prefix);
+        Prefix("not", BindingPower.Prefix);
 
-        Postfix("!", (int)BindingPower.PostFix);
+        Postfix("!", BindingPower.PostFix);
 
-        InfixRight("^", (int)BindingPower.Exponent);
+        InfixRight("^", BindingPower.Exponent);
 
-        InfixLeft("->", (int)BindingPower.Product);
+        InfixLeft("->", BindingPower.Product);
 
-        Block(PredefinedSymbols.SOF, PredefinedSymbols.EOF, 
+        Block(PredefinedSymbols.SOF, PredefinedSymbols.EOF,
             seperator: PredefinedSymbols.Semicolon);
 
-        Builder<IfNode>(
+        StmtBuilder<IfNode>(
             "if" + expr("Cond") + "then" +
                 expr("Body") +
             "else" +
