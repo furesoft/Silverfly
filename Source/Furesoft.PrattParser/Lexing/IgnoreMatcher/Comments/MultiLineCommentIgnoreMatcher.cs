@@ -15,7 +15,7 @@ public class MultiLineCommentIgnoreMatcher(Symbol start, Symbol end) : ILexerIgn
         {
             lexer.Advance();
         }
-        
+
         lexer.Advance(end.Name.Length);
     }
 }

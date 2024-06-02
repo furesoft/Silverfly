@@ -195,6 +195,12 @@ public class Tests
         return Test("-42.5;13");
     }
 
+    [Test]
+    public Task Dynamic_Should_Pass()
+    {
+        return Test("if true then 1 else 2");
+    }
+
     public static Task Test(string source)
     {
         var result = Parser.Parse<TestParser>(source);

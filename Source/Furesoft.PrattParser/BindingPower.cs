@@ -20,7 +20,7 @@ public class BindingPower : Symbol
     public static readonly BindingPower Prefix = new(6, nameof(Prefix), Pool);
     public static readonly BindingPower PostFix = new(7, nameof(PostFix), Pool);
     public static readonly BindingPower Call = new(8, nameof(Call), Pool);
-    
+
     public new static SymbolPool<BindingPower> Pool => new(f => new(f));
 
     internal BindingPower(int id, string name, SymbolPool pool) : base(id, name, pool)

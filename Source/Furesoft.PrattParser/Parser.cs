@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using Furesoft.PrattParser.Nodes;
 using Furesoft.PrattParser.Parselets;
+using Furesoft.PrattParser.Parselets.Builder;
+using Furesoft.PrattParser.Parselets.Builder.Elements;
 using Furesoft.PrattParser.Parselets.Operators;
 using Furesoft.PrattParser.Text;
 
@@ -12,6 +14,8 @@ public abstract class Parser
     private readonly Dictionary<Symbol, IPrefixParselet> _prefixParselets = [];
     private readonly List<Token> _read = [];
     private Lexer _lexer;
+
+    public SourceDocument Document => _lexer.Document;
 
     public void Register(Symbol token, IPrefixParselet parselet)
     {
@@ -49,13 +53,40 @@ public abstract class Parser
         Register(seperator, new BlockParselet(seperator, terminator, bindingPower));
     }
 
+    public void Builder<TNode>(SyntaxElement definition)
+        where TNode : AstNode
+    {
+        var parselet = new BuilderParselet<TNode>(BindingPower.Product, definition);
+        var keyword = GetKeyword(definition);
+
+        if (keyword != null)
+        {
+            Register(keyword, parselet);
+        }
+    }
+
+    static string GetKeyword(SyntaxElement element)
+    {
+        if (element is KeywordElement keywordElement)
+        {
+            return keywordElement.Keyword;
+        }
+
+        if (element is AndElement and)
+        {
+            return GetKeyword(and.First);
+        }
+
+        return null;
+    }
+
 
     public static TranslationUnit Parse<TParser>(string source, string filename = "syntethic.dsl")
         where TParser : Parser, new()
     {
         var lexer = new Lexer(source, filename);
 
-        var parser = new TParser {_lexer = lexer};
+        var parser = new TParser { _lexer = lexer };
 
         AddLexerSymbols(lexer, parser._prefixParselets);
         AddLexerSymbols(lexer, parser._infixParselets);

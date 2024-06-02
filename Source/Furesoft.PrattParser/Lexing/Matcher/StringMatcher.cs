@@ -12,7 +12,7 @@ public class StringMatcher(Symbol leftStr, Symbol rightStr) : ILexerMatcher
     {
         var oldColumn = column;
         var oldIndex = index;
-        
+
         index++;
         column++;
 
@@ -21,12 +21,12 @@ public class StringMatcher(Symbol leftStr, Symbol rightStr) : ILexerMatcher
             lexer.Advance();
         }
 
-        var text = lexer.Document.Source.Slice(oldIndex +1, index - oldIndex - 1);
-        
+        var text = lexer.Document.Source.Slice(oldIndex + 1, index - oldIndex - 1);
+
         index++;
         column++;
 
-        
+
         return new(PredefinedSymbols.String, text, line, oldColumn);
     }
 }

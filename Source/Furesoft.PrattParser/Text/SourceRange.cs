@@ -6,7 +6,7 @@ public readonly struct SourceRange(SourceDocument document, SourceSpan start, So
     public SourceSpan Start { get; } = start;
     public SourceSpan End { get; } = end;
     public static SourceRange Empty { get; } = new();
-    
+
     public bool Contains(int line, int column)
     {
         bool inLeft;

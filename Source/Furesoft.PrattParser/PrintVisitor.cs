@@ -36,7 +36,7 @@ public class PrintVisitor : IVisitor<string>
         {
             var child = block.Children[i];
             sb.Append(child.Accept(this));
-            
+
             if (i % 2 == 0)
             {
                 sb.Append(block.SeperatorSymbol.Name + " ");
@@ -109,12 +109,12 @@ public class PrintVisitor : IVisitor<string>
 
         sb.Append('(');
         sb.Append(postfix.Expr.Accept(this));
-        
+
         if (char.IsLetter(postfix.Operator.Punctuator()[0]))
         {
             sb.Append(' ');
         }
-        
+
         sb.Append(postfix.Operator.Punctuator()).Append(')');
 
         return sb.ToString();
@@ -131,7 +131,7 @@ public class PrintVisitor : IVisitor<string>
         {
             sb.Append(' ');
         }
-        
+
         sb.Append(prefix.Expr.Accept(this)).Append(')');
 
         return sb.ToString();
@@ -141,22 +141,22 @@ public class PrintVisitor : IVisitor<string>
     {
         return literalNode.Value.ToString();
     }
-    
+
     public string Visit(LiteralNode<double> literalNode)
     {
         return literalNode.Value.ToString(CultureInfo.InvariantCulture);
     }
-    
+
     public string Visit(LiteralNode<string> literalNode)
     {
         return $"'{literalNode.Value}'";
     }
-    
+
     public string Visit(LiteralNode<ulong> literalNode)
     {
         return literalNode.Value.ToString();
     }
-    
+
     public string Visit(LiteralNode<long> literalNode)
     {
         return literalNode.Value.ToString();

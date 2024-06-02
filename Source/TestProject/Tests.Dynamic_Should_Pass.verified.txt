@@ -1,0 +1,26 @@
+﻿{
+  $type: TranslationUnit,
+  Tree: {
+    $type: IfNode,
+    Cond: {
+      $type: LiteralNode<bool>,
+      Value: true,
+      Range: 1:4-1:7
+    },
+    Body: {
+      $type: LiteralNode<ulong>,
+      Value: 1,
+      Range: 1:14-1:14
+    },
+    ElseBody: {
+      $type: LiteralNode<ulong>,
+      Value: 2,
+      Range: 1:21-1:21
+    },
+    Range: 1:1-1:25
+  },
+  Document: {
+    Filename: syntethic.dsl,
+    Source: if true then 1 else 2
+  }
+}
