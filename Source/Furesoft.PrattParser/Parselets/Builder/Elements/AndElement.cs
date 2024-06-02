@@ -8,7 +8,7 @@ public class AndElement(SyntaxElement first, SyntaxElement second) : SyntaxEleme
     public SyntaxElement First { get; } = first;
     public SyntaxElement Second { get; } = second;
 
-    public override void Parse(Parser parser, List<AstNode> result)
+    public override void Parse(Parser parser, List<(string, AstNode)> result)
     {
         First.CurrentToken = CurrentToken;
 

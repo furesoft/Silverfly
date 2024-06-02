@@ -33,7 +33,11 @@ public class TestParser : Parser
 
         Block(PredefinedSymbols.Semicolon, PredefinedSymbols.EOF);
 
-        Builder<IfNode>("if" + expr() + "then" + expr() + "else" + expr());
+        Builder<IfNode>(
+            "if" + expr("Cond") + "then" +
+                expr("Body") +
+            "else" +
+                expr("ElseBody"));
     }
 
     protected override void InitLexer(Lexer lexer)

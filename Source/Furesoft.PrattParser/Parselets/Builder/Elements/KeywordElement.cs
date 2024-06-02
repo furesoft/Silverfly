@@ -8,7 +8,7 @@ public class KeywordElement(string keyword) : SyntaxElement
 {
     public string Keyword { get; } = keyword;
 
-    public override void Parse(Parser parser, List<AstNode> result)
+    public override void Parse(Parser parser, List<(string, AstNode)> result)
     {
         if (CurrentToken != default)
         {

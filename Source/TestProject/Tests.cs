@@ -1,18 +1,10 @@
 ﻿using System.Runtime.CompilerServices;
 using Argon;
 using Furesoft.PrattParser;
-using Furesoft.PrattParser.Nodes;
 using Furesoft.PrattParser.Testing;
 using static VerifyTests.VerifierSettings;
 
 namespace TestProject;
-
-public class IfNode(AstNode cond, AstNode body, AstNode elseBody) : AstNode
-{
-    public AstNode Cond { get; } = cond;
-    public AstNode Body { get; } = body;
-    public AstNode ElseBody { get; } = elseBody;
-}
 
 [TestFixture]
 public class Tests

@@ -7,7 +7,7 @@ namespace Furesoft.PrattParser.Parselets.Builder;
 public abstract class SyntaxElement
 {
     public Token CurrentToken;
-    public abstract void Parse(Parser parser, List<AstNode> result);
+    public abstract void Parse(Parser parser, List<(string, AstNode)> result);
 
     public static SyntaxElement operator +(SyntaxElement first, SyntaxElement second)
     {
