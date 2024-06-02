@@ -1,17 +1,24 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using Furesoft.PrattParser.Nodes;
 
 namespace Furesoft.PrattParser.Parselets.Builder;
 
-public class BuilderParselet<TNode>(int bindingPower, SyntaxElement definition) : IInfixParselet
+public class BuilderParselet<TNode>(int bindingPower, SyntaxElement definition) : IPrefixParselet
     where TNode : AstNode
 {
     public int GetBindingPower() => bindingPower;
 
-    public AstNode Parse(Parser parser, AstNode left, Token token)
+    public AstNode Parse(Parser parser, Token token)
     {
-        definition.Parse(parser);
+        var result = new List<AstNode>();
 
-        return Activator.CreateInstance<TNode>();
+        definition.CurrentToken = token;
+        definition.Parse(parser, result);
+
+        var node = (TNode)Activator.CreateInstance(typeof(TNode), [.. result]);
+
+        return node.WithRange(token, parser.LookAhead(0));
     }
 }

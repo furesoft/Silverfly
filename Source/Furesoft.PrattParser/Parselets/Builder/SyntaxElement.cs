@@ -1,10 +1,13 @@
+using System.Collections.Generic;
+using Furesoft.PrattParser.Nodes;
 using Furesoft.PrattParser.Parselets.Builder.Elements;
 
 namespace Furesoft.PrattParser.Parselets.Builder;
 
 public abstract class SyntaxElement
 {
-    public abstract void Parse(Parser parser);
+    public Token CurrentToken;
+    public abstract void Parse(Parser parser, List<AstNode> result);
 
     public static SyntaxElement operator +(SyntaxElement first, SyntaxElement second)
     {

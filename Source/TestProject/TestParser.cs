@@ -1,6 +1,9 @@
+using System.Linq.Expressions;
 using Furesoft.PrattParser;
 using Furesoft.PrattParser.Lexing.IgnoreMatcher.Comments;
+using Furesoft.PrattParser.Nodes;
 using Furesoft.PrattParser.Parselets;
+using static Furesoft.PrattParser.Parselets.Builder.Helpers;
 
 namespace TestProject;
 
@@ -12,7 +15,7 @@ public class TestParser : Parser
 
         Register("(", new CallParselet());
 
-        Ternary("?", ":", (int)BindingPower.Conditional);
+        Ternary("?", ":", BindingPower.Conditional);
 
         this.AddArithmeticOperators();
         this.AddBitOperators();
@@ -29,10 +32,14 @@ public class TestParser : Parser
         InfixLeft("->", (int)BindingPower.Product);
 
         Block(PredefinedSymbols.Semicolon, PredefinedSymbols.EOF);
+
+        Builder<IfNode>("if" + expr() + "then" + expr() + "else" + expr());
     }
 
     protected override void InitLexer(Lexer lexer)
     {
+        lexer.AddSymbols("if", "then", "else");
+
         lexer.Ignore(' ', '\r', '\t');
         lexer.Ignore("\r\n");
 

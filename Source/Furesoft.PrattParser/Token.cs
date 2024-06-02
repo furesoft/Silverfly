@@ -22,7 +22,7 @@ public struct Token(Symbol type, ReadOnlyMemory<char> text, int line, int column
     public Token(Symbol type, int line, int column)
     : this(type, type.Name.AsMemory(), line, column)
     {
-        
+
     }
 
     public override string ToString() { return Text.ToString(); }
@@ -40,12 +40,20 @@ public struct Token(Symbol type, ReadOnlyMemory<char> text, int line, int column
     public Token WithDocument(SourceDocument document)
     {
         this.Document = document;
-        
+
         return this;
     }
 
     public SourceRange GetRange()
     {
         return new(Document, GetSourceSpanStart(), GetSourceSpanEnd());
+    }
+
+    public static bool operator ==(Token left, Token right) {
+        return left.Equals(right);
+    }
+
+    public static bool operator !=(Token left, Token right) {
+        return !left.Equals(right);
     }
 }

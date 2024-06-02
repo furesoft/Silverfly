@@ -10,10 +10,10 @@ public class DocumentConverter : WriteOnlyJsonConverter<SourceDocument>
         writer.WriteStartObject();
         writer.WritePropertyName("Filename");
         writer.WriteRawValue(value.Filename);
-            
+
         writer.WritePropertyName("Source");
         writer.WriteRawValue(value.Source.ToString());
-            
+
         writer.WriteEndObject();
     }
 }

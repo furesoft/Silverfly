@@ -1,10 +1,18 @@
 ﻿using System.Runtime.CompilerServices;
 using Argon;
 using Furesoft.PrattParser;
+using Furesoft.PrattParser.Nodes;
 using Furesoft.PrattParser.Testing;
 using static VerifyTests.VerifierSettings;
 
 namespace TestProject;
+
+public class IfNode(AstNode cond, AstNode body, AstNode elseBody) : AstNode
+{
+    public AstNode Cond { get; } = cond;
+    public AstNode Body { get; } = body;
+    public AstNode ElseBody { get; } = elseBody;
+}
 
 [TestFixture]
 public class Tests
@@ -193,6 +201,12 @@ public class Tests
     public Task Block_Should_Pass()
     {
         return Test("-42.5;13");
+    }
+
+    [Test]
+    public Task Dynamic_Should_Pass()
+    {
+        return Test("if true then 1 else 2");
     }
 
     public static Task Test(string source)

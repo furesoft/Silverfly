@@ -13,10 +13,10 @@ public readonly struct SourceSpan(int line, int column)
             return true;
         }
 
-        return left.Line == right.Line && 
+        return left.Line == right.Line &&
                left.Column < right.Column;
     }
-    
+
     public static bool operator >(SourceSpan left, SourceSpan right)
     {
         return !(left < right);

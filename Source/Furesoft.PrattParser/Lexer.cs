@@ -25,7 +25,7 @@ public sealed class Lexer
     public Lexer(string source, string filename = "tmp.synthetic")
     {
         _index = 0;
-        Document = new() {Filename = filename, Source = source.AsMemory()};
+        Document = new() { Filename = filename, Source = source.AsMemory() };
 
         // Register all of the Symbols that are explicit punctuators.
         foreach (var type in PredefinedSymbols.Pool)
@@ -125,10 +125,10 @@ public sealed class Lexer
         {
             return false;
         }
-        
+
         var nameSpan = token.Name.AsMemory().Span;
         var documentSliceSpan = Document.Source.Slice(_index, token.Name.Length).Span;
-        
+
         return nameSpan.CompareTo(documentSliceSpan, StringComparison.Ordinal) == 0;
     }
 
@@ -275,5 +275,13 @@ public sealed class Lexer
     public bool ContainsSymbol(string tokenName)
     {
         return _punctuators.ContainsKey(tokenName);
+    }
+
+    public void AddSymbols(params string[] symbols)
+    {
+        foreach (var symbol in symbols)
+        {
+            AddSymbol(symbol);
+        }
     }
 }
