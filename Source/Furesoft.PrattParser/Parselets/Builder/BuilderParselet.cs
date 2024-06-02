@@ -31,7 +31,7 @@ public class BuilderParselet<TNode>(int bindingPower, SyntaxElement definition) 
             node = (TNode)Activator.CreateInstance(typeof(TNode),
             [.. result.Select(_ => _.Node)]);
         }
-        catch (MissingMethodException ex)
+        catch (MissingMethodException)
         {
             node = Activator.CreateInstance<TNode>();
 
