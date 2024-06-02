@@ -1,14 +1,24 @@
 ﻿{
   $type: TranslationUnit,
   Tree: {
-    $type: PrefixOperatorNode,
-    Operator: not,
-    Expr: {
-      $type: LiteralNode<ulong>,
-      Value: 5,
-      Range: 1:5-1:5
+    $type: BlockNode,
+    SeperatorSymbol: ;,
+    Children: {
+      $type: List<AstNode>,
+      $values: [
+        {
+          $type: PrefixOperatorNode,
+          Operator: not,
+          Expr: {
+            $type: LiteralNode<ulong>,
+            Value: 5,
+            Range: 1:5-1:5
+          },
+          Range: 1:1-1:5
+        }
+      ]
     },
-    Range: 1:1-1:5
+    Range: 1:1-1:9
   },
   Document: {
     Filename: syntethic.dsl,

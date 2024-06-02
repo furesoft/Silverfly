@@ -3,7 +3,7 @@ using Furesoft.PrattParser.Nodes;
 namespace Furesoft.PrattParser.Parselets;
 
 /// <summary>
-/// One of the two parselet interfaces used by the Pratt parser. An
+/// One of the parselet interfaces used by the Pratt parser. An
 /// <see cref="IInfixParselet"/> is associated with a token that appears in the
 /// middle of the expression it parses. Its Parse() method will be called after the
 /// left-hand side has been parsed, and it in turn is responsible for parsing

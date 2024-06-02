@@ -1,14 +1,24 @@
 ﻿{
   $type: TranslationUnit,
   Tree: {
-    $type: PostfixOperatorNode,
-    Expr: {
-      $type: NameAstNode,
-      Name: i,
-      Range: 1:1-1:1
+    $type: BlockNode,
+    SeperatorSymbol: ;,
+    Children: {
+      $type: List<AstNode>,
+      $values: [
+        {
+          $type: PostfixOperatorNode,
+          Expr: {
+            $type: NameAstNode,
+            Name: i,
+            Range: 1:1-1:1
+          },
+          Operator: ++,
+          Range: 1:1-1:3
+        }
+      ]
     },
-    Operator: ++,
-    Range: 1:1-1:3
+    Range: 1:1-1:7
   },
   Document: {
     Filename: syntethic.dsl,

@@ -12,6 +12,7 @@ public abstract class Parser
 {
     private readonly Dictionary<Symbol, IInfixParselet> _infixParselets = [];
     private readonly Dictionary<Symbol, IPrefixParselet> _prefixParselets = [];
+    private readonly Dictionary<Symbol, IStatementParselet> _statementParselets = [];
     private readonly List<Token> _read = [];
     private Lexer _lexer;
 
@@ -25,6 +26,10 @@ public abstract class Parser
     public void Register(Symbol token, IInfixParselet parselet)
     {
         _infixParselets.Add(token, parselet);
+    }
+
+    public void Register(Symbol token, IStatementParselet parselet) {
+        _statementParselets.Add(token, parselet);
     }
 
     public void Register(IInfixParselet parselet, params Symbol[] tokens)
@@ -48,9 +53,9 @@ public abstract class Parser
         Register(leftToken, new GroupParselet(rightToken));
     }
 
-    public void Block(Symbol seperator, Symbol terminator, int bindingPower = 500)
+    public void Block(Symbol start, Symbol terminator, Symbol seperator = null, bool wrapExpressions = false)
     {
-        Register(seperator, new BlockParselet(seperator, terminator, bindingPower));
+        Register(start, new BlockParselet(terminator, seperator, wrapExpressions));
     }
 
     public void Builder<TNode>(SyntaxElement definition)
@@ -80,8 +85,25 @@ public abstract class Parser
         return null;
     }
 
+    public AstNode ParseStatement(bool wrapExpressions = false)
+    {
+        var token = LookAhead(0);
+        if (_statementParselets.TryGetValue(token.Type, out var parselet))
+        {
+            Consume();
 
-    public static TranslationUnit Parse<TParser>(string source, string filename = "syntethic.dsl")
+            return parselet.Parse(this, token);
+        }
+
+        var expression = ParseExpression();
+
+        return wrapExpressions ? new ExpressionStatement(expression) : expression;
+    }
+
+
+    public static TranslationUnit Parse<TParser>(string source,
+    string filename = "syntethic.dsl",
+    bool useToplevelStatements = false)
         where TParser : Parser, new()
     {
         var lexer = new Lexer(source, filename);
@@ -90,10 +112,13 @@ public abstract class Parser
 
         AddLexerSymbols(lexer, parser._prefixParselets);
         AddLexerSymbols(lexer, parser._infixParselets);
+        AddLexerSymbols(lexer, parser._statementParselets);
 
         parser.InitLexer(lexer);
 
-        return new(parser.Parse(), lexer.Document);
+        return new(useToplevelStatements
+                    ? parser.ParseStatement()
+                    : parser.ParseExpression(), lexer.Document);
     }
 
     private static void AddLexerSymbols<U>(Lexer lexer, Dictionary<Symbol, U> dict)
@@ -135,7 +160,7 @@ public abstract class Parser
         return left;
     }
 
-    public AstNode Parse()
+    public AstNode ParseExpression()
     {
         return Parse(0);
     }

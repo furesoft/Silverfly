@@ -7,6 +7,6 @@ public class ExprElement(string name) : SyntaxElement
 {
     public override void Parse(Parser parser, List<(string, AstNode)> result)
     {
-        result.Add((name, parser.Parse()));
+        result.Add((name, parser.ParseExpression()));
     }
 }

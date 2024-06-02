@@ -10,7 +10,7 @@ public class TernaryOperatorParselet(Symbol lastSymbol, int bindingPower) : IInf
 {
     public AstNode Parse(Parser parser, AstNode firstExpr, Token token)
     {
-        var secondExpr = parser.Parse();
+        var secondExpr = parser.ParseExpression();
         parser.Consume(lastSymbol);
 
         var thirdExpr = parser.Parse(GetBindingPower() - 1);

@@ -31,7 +31,8 @@ public class TestParser : Parser
 
         InfixLeft("->", (int)BindingPower.Product);
 
-        Block(PredefinedSymbols.Semicolon, PredefinedSymbols.EOF);
+        Block(PredefinedSymbols.SOF, PredefinedSymbols.EOF, 
+            seperator: PredefinedSymbols.Semicolon);
 
         Builder<IfNode>(
             "if" + expr("Cond") + "then" +

@@ -1,8 +1,18 @@
 ﻿{
   $type: TranslationUnit,
   Tree: {
-    $type: LiteralNode<ulong>,
-    Value: 4294967295
+    $type: BlockNode,
+    SeperatorSymbol: ;,
+    Children: {
+      $type: List<AstNode>,
+      $values: [
+        {
+          $type: LiteralNode<ulong>,
+          Value: 4294967295
+        }
+      ]
+    },
+    Range: 1:1-1:71
   },
   Document: {
     Filename: syntethic.dsl,

@@ -24,7 +24,7 @@ public sealed class Lexer
     /// <param name="source">String to tokenize</param>
     public Lexer(string source, string filename = "tmp.synthetic")
     {
-        _index = 0;
+        _index = -1;
         Document = new() { Filename = filename, Source = source.AsMemory() };
 
         // Register all of the Symbols that are explicit punctuators.
@@ -134,6 +134,13 @@ public sealed class Lexer
 
     public Token Next()
     {
+        if (_index == -1)
+        {
+            _index++;
+
+            return new Token(PredefinedSymbols.SOF, _line, _column).WithDocument(Document);
+        }
+
         while (_index < Document.Source.Length)
         {
             var c = Peek(0);

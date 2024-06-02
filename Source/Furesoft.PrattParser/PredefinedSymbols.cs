@@ -5,6 +5,9 @@ public static class PredefinedSymbols
     public static SymbolPool Pool = GSymbol.Pool;
 
     public static Symbol EOF = Pool.Get("#eof");
+
+    /// <summary>Represents the start of the document</summary>
+    public static Symbol SOF = Pool.Get("#sof");
     public static Symbol EOL = Pool.Get("\n");
 
     public static Symbol LeftParen = Pool.Get("(");

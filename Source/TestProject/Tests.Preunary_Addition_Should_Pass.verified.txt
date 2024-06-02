@@ -1,24 +1,34 @@
 ﻿{
   $type: TranslationUnit,
   Tree: {
-    $type: BinaryOperatorNode,
-    LeftExpr: {
-      $type: PrefixOperatorNode,
-      Operator: !,
-      Expr: {
-        $type: NameAstNode,
-        Name: a,
-        Range: 1:2-1:2
-      },
-      Range: 1:1-1:2
+    $type: BlockNode,
+    SeperatorSymbol: ;,
+    Children: {
+      $type: List<AstNode>,
+      $values: [
+        {
+          $type: BinaryOperatorNode,
+          LeftExpr: {
+            $type: PrefixOperatorNode,
+            Operator: !,
+            Expr: {
+              $type: NameAstNode,
+              Name: a,
+              Range: 1:2-1:2
+            },
+            Range: 1:1-1:2
+          },
+          Operator: +,
+          RightExpr: {
+            $type: NameAstNode,
+            Name: b,
+            Range: 1:6-1:6
+          },
+          Range: 1:1-1:6
+        }
+      ]
     },
-    Operator: +,
-    RightExpr: {
-      $type: NameAstNode,
-      Name: b,
-      Range: 1:6-1:6
-    },
-    Range: 1:1-1:6
+    Range: 1:1-1:10
   },
   Document: {
     Filename: syntethic.dsl,

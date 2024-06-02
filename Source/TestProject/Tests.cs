@@ -203,7 +203,7 @@ public class Tests
 
     public static Task Test(string source)
     {
-        var result = Parser.Parse<TestParser>(source);
+        var result = Parser.Parse<TestParser>(source, useToplevelStatements: true);
 
         return Verify(result);
     }

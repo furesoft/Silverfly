@@ -1,9 +1,19 @@
 ﻿{
   $type: TranslationUnit,
   Tree: {
-    $type: LiteralNode<long>,
-    Value: -42,
-    Range: 1:1-1:3
+    $type: BlockNode,
+    SeperatorSymbol: ;,
+    Children: {
+      $type: List<AstNode>,
+      $values: [
+        {
+          $type: LiteralNode<long>,
+          Value: -42,
+          Range: 1:1-1:3
+        }
+      ]
+    },
+    Range: 1:1-1:7
   },
   Document: {
     Filename: syntethic.dsl,

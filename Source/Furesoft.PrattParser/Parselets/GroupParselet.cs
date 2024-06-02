@@ -9,7 +9,7 @@ public class GroupParselet(Symbol rightSymbol) : IPrefixParselet
 {
     public AstNode Parse(Parser parser, Token token)
     {
-        var expression = parser.Parse();
+        var expression = parser.ParseExpression();
         var rightToken = parser.Consume(rightSymbol);
 
         return expression.WithRange(token, rightToken);

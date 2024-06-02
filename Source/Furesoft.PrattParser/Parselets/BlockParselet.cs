@@ -1,19 +1,24 @@
-﻿using Furesoft.PrattParser.Nodes;
+﻿using System.Collections.Generic;
+using Furesoft.PrattParser.Nodes;
 
 namespace Furesoft.PrattParser.Parselets;
-
-public class BlockParselet(Symbol seperator, Symbol terminator, int bindingPower) : IInfixParselet
+public class BlockParselet(Symbol terminator, Symbol seperator = null, bool wrapExpressions = false) : IStatementParselet
 {
-    public AstNode Parse(Parser parser, AstNode left, Token token)
+    public AstNode Parse(Parser parser, Token token)
     {
-        var node = new BlockNode { SeperatorSymbol = seperator, Children = parser.ParseSeperated(seperator, terminator) };
-        node.Children.Insert(0, left);
+        var statements = new List<AstNode>();
 
-        return node.WithRange(left.Range.Document, left.Range.Start, parser.LookAhead(0).GetSourceSpanEnd());
-    }
+        while (!parser.Match(terminator))
+        {
+            statements.Add(parser.ParseStatement(wrapExpressions));
 
-    public int GetBindingPower()
-    {
-        return bindingPower;
+            if (seperator != null && parser.IsMatch(seperator))
+            {
+                parser.Consume(seperator);
+            }
+        }
+
+        return new BlockNode(seperator, statements)
+            .WithRange(token, parser.LookAhead(0));
     }
 }

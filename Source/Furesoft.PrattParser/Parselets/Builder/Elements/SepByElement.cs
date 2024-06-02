@@ -9,10 +9,6 @@ public class SepByElement(string name, Symbol seperator, Symbol terminator) : Sy
     {
         var parsed = parser.ParseSeperated(seperator, terminator);
 
-        result.Add((name, new BlockNode
-        {
-            SeperatorSymbol = seperator,
-            Children = parsed
-        }));
+        result.Add((name, new BlockNode(seperator, parsed)));
     }
 }
