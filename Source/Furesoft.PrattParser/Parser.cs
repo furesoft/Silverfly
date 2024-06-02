@@ -185,6 +185,11 @@ public abstract class Parser
 
     public AstNode ParseExpression()
     {
+        if (IsMatch(PredefinedSymbols.SOF))
+        {
+            Consume(PredefinedSymbols.SOF);
+        }
+
         return Parse(0);
     }
 
@@ -210,7 +215,7 @@ public abstract class Parser
         return args;
     }
 
-    public List<AstNode> ParseSeperated(Symbol seperator, Symbol[] terminators, int bindingPower = 0)
+    public List<AstNode> ParseSeperated(Symbol seperator, int bindingPower = 0, params Symbol[] terminators)
     {
         var args = new List<AstNode>();
 
