@@ -9,7 +9,7 @@ namespace TestProject;
 
 public class TestParser : Parser
 {
-    public TestParser()
+    protected override void Init()
     {
         Register(PredefinedSymbols.Name, new NameParselet());
 
@@ -43,14 +43,12 @@ public class TestParser : Parser
 
     protected override void InitLexer(Lexer lexer)
     {
-        lexer.AddSymbols("if", "then", "else");
-
         lexer.Ignore(' ', '\r', '\t');
         lexer.Ignore("\r\n");
 
         lexer.MatchBoolean();
         lexer.MatchString("'", "'");
-        lexer.MatchNumber(allowHey: true, allowBin: true);
+        lexer.MatchNumber(allowHex: true, allowBin: true);
 
         lexer.Ignore(new SingleLineCommentIgnoreMatcher(PredefinedSymbols.SlashSlash));
         lexer.Ignore(

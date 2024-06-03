@@ -29,7 +29,8 @@ public abstract class Parser
         _infixParselets.Add(token, parselet);
     }
 
-    public void Register(Symbol token, IStatementParselet parselet) {
+    public void Register(Symbol token, IStatementParselet parselet)
+    {
         _statementParselets.Add(token, parselet);
     }
 
@@ -71,10 +72,27 @@ public abstract class Parser
         Builder<TNode>(definition, NodeType.Statement);
     }
 
+    private static void GetKeywordsFromDefinition(SyntaxElement definition, List<string> result)
+    {
+        if (definition is KeywordElement kw)
+        {
+            result.Add(kw.Keyword);
+
+            return;
+        }
+
+        if (definition is AndElement and)
+        {
+            GetKeywordsFromDefinition(and.First, result);
+            GetKeywordsFromDefinition(and.Second, result);
+        }
+    }
 
     private void Builder<TNode>(SyntaxElement definition, NodeType type)
         where TNode : AstNode
     {
+        AddSymbolsFromBuilderToLexer(definition);
+
         var parselet = new BuilderParselet<TNode>(BindingPower.Product, definition);
         var keyword = GetKeyword(definition);
 
@@ -91,6 +109,14 @@ public abstract class Parser
                     break;
             }
         }
+    }
+
+    private void AddSymbolsFromBuilderToLexer(SyntaxElement definition)
+    {
+        var allSymbols = new List<string>();
+        GetKeywordsFromDefinition(definition, allSymbols);
+
+        _lexer.AddSymbols([.. allSymbols]);
     }
 
     static string GetKeyword(SyntaxElement element)
@@ -124,14 +150,14 @@ public abstract class Parser
     }
 
 
-    public static TranslationUnit Parse<TParser>(string source,
-    string filename = "syntethic.dsl",
-    bool useToplevelStatements = false)
+    public static TranslationUnit Parse<TParser>(string source, string filename = "syntethic.dsl", bool useToplevelStatements = false)
         where TParser : Parser, new()
     {
         var lexer = new Lexer(source, filename);
 
         var parser = new TParser { _lexer = lexer };
+
+        parser.Init();
 
         AddLexerSymbols(lexer, parser._prefixParselets);
         AddLexerSymbols(lexer, parser._infixParselets);
@@ -194,6 +220,7 @@ public abstract class Parser
     }
 
     protected abstract void InitLexer(Lexer lexer);
+    protected abstract void Init();
 
 
     public List<AstNode> ParseSeperated(Symbol seperator, Symbol terminator, int bindingPower = 0)
