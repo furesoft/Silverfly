@@ -5,6 +5,6 @@ namespace TestProject;
 public class IfNode : AstNode
 {
     public AstNode Cond { get; set; }
-    public AstNode Body { get; set; }
-    public AstNode ElseBody { get; set; }
+    public BlockNode Body { get; set; }
+    public BlockNode ElseBody { get; set; }
 }

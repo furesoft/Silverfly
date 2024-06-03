@@ -6,9 +6,10 @@ using static VerifyTests.VerifierSettings;
 
 namespace TestProject;
 
-[TestFixture]
-public class Tests
+public abstract class SnapshotTestBase
 {
+    public static VerifySettings settings = new VerifySettings();
+
     [ModuleInitializer]
     public static void Init()
     {
@@ -19,8 +20,14 @@ public class Tests
             _.Converters.Add(new RangeConverter());
             _.TypeNameHandling = TypeNameHandling.All;
         });
-    }
 
+        settings.UseDirectory("TestResults");
+    }
+}
+
+[TestFixture]
+public class Tests : SnapshotTestBase
+{
     [Test]
     public Task Non_FloatingNumber_With_DecimalPoint_Should_Pass()
     {
@@ -205,6 +212,6 @@ public class Tests
     {
         var result = Parser.Parse<TestParser>(source, useToplevelStatements: true);
 
-        return Verify(result);
+        return Verify(result, settings);
     }
 }

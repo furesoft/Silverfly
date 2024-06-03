@@ -50,7 +50,7 @@ public class TestParser : Parser
 
         lexer.MatchBoolean();
         lexer.MatchString("'", "'");
-        lexer.MatchNumber(true, true);
+        lexer.MatchNumber(allowHey: true, allowBin: true);
 
         lexer.Ignore(new SingleLineCommentIgnoreMatcher(PredefinedSymbols.SlashSlash));
         lexer.Ignore(
