@@ -21,7 +21,7 @@ public interface IVisitor<out TReturn>
 public interface IVisitor
 {
     void Visit(AstNode node);
-    public void Visit(BlockNode block)
+    void Visit(BlockNode block)
     {
         foreach (var child in block.Children)
         {
