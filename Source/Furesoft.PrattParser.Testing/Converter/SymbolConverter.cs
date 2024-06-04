@@ -1,6 +1,6 @@
 ﻿using VerifyTests;
 
-namespace Furesoft.PrattParser.Testing;
+namespace Furesoft.PrattParser.Testing.Converter;
 
 public class SymbolConverter : WriteOnlyJsonConverter<Symbol>
 {

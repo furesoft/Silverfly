@@ -1,7 +1,8 @@
+using System;
 using Furesoft.PrattParser.Text;
 using VerifyTests;
 
-namespace Furesoft.PrattParser.Testing;
+namespace Furesoft.PrattParser.Testing.Converter;
 
 public class RangeConverter : WriteOnlyJsonConverter<SourceRange>
 {
