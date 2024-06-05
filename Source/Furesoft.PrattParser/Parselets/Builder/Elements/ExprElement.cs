@@ -13,6 +13,6 @@ public class ExprElement(string name) : SyntaxElement
 
     public override string ToString()
     {
-        return "expr";
+        return (!string.IsNullOrEmpty(name) ? name + ":" : "") + "expr";
     }
 }

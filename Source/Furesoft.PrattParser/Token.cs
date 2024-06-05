@@ -25,14 +25,14 @@ public struct Token(Symbol type, ReadOnlyMemory<char> text, int line, int column
 
     }
 
-    public override string ToString() { return Text.ToString(); }
+    public override readonly string ToString() => Text.ToString();
 
-    public SourceSpan GetSourceSpanStart()
+    public readonly SourceSpan GetSourceSpanStart()
     {
         return new(Line, Column);
     }
 
-    public SourceSpan GetSourceSpanEnd()
+    public readonly SourceSpan GetSourceSpanEnd()
     {
         return new(Line, Column + Text.Length - 1);
     }
@@ -49,11 +49,23 @@ public struct Token(Symbol type, ReadOnlyMemory<char> text, int line, int column
         return new(Document, GetSourceSpanStart(), GetSourceSpanEnd());
     }
 
-    public static bool operator ==(Token left, Token right) {
+    public static bool operator ==(Token left, Token right)
+    {
         return left.Equals(right);
     }
 
-    public static bool operator !=(Token left, Token right) {
+    public static bool operator !=(Token left, Token right)
+    {
         return !left.Equals(right);
+    }
+
+    public override readonly bool Equals(object obj)
+    {
+        return base.Equals(obj);
+    }
+
+    public override readonly int GetHashCode()
+    {
+        return base.GetHashCode();
     }
 }
