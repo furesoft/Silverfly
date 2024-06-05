@@ -207,7 +207,7 @@ public class Tests : SnapshotParserTestBase
 
     public static Task Test(string source)
     {
-        var result = Parser.Parse<TestParser>(source, useToplevelStatements: true);
+        var result = Parser.Parse<TestParser>(source, useStatementsAtToplevel: true);
 
         return Verify(result, settings);
     }

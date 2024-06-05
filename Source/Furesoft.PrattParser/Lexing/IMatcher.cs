@@ -1,6 +1,6 @@
 ﻿namespace Furesoft.PrattParser.Lexing;
 
-public interface ILexerMatcher
+public interface IMatcher
 {
     bool Match(Lexer lexer, char c);
 

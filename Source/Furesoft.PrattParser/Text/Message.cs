@@ -1,5 +1,6 @@
 ﻿namespace Furesoft.PrattParser.Text;
 
+/// <summary>Represents an error message for lexing or parsing</summary>
 public sealed class Message(MessageSeverity severity, string text, SourceRange range)
 {
     public SourceRange Range { get; } = range;

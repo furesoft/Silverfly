@@ -10,7 +10,7 @@ namespace TestProject;
 
 public class TestParser : Parser
 {
-    protected override void Init()
+    protected override void InitParselets()
     {
         Register(PredefinedSymbols.Name, new NameParselet());
 

@@ -27,15 +27,9 @@ public struct Token(Symbol type, ReadOnlyMemory<char> text, int line, int column
 
     public override readonly string ToString() => Text.ToString();
 
-    public readonly SourceSpan GetSourceSpanStart()
-    {
-        return new(Line, Column);
-    }
+    public readonly SourceSpan GetSourceSpanStart() => new(Line, Column);
 
-    public readonly SourceSpan GetSourceSpanEnd()
-    {
-        return new(Line, Column + Text.Length - 1);
-    }
+    public readonly SourceSpan GetSourceSpanEnd() => new(Line, Column + Text.Length - 1);
 
     public Token WithDocument(SourceDocument document)
     {
@@ -44,28 +38,13 @@ public struct Token(Symbol type, ReadOnlyMemory<char> text, int line, int column
         return this;
     }
 
-    public readonly SourceRange GetRange()
-    {
-        return new(Document, GetSourceSpanStart(), GetSourceSpanEnd());
-    }
+    public readonly SourceRange GetRange() => new(Document, GetSourceSpanStart(), GetSourceSpanEnd());
 
-    public static bool operator ==(Token left, Token right)
-    {
-        return left.Equals(right);
-    }
+    public static bool operator ==(Token left, Token right) => left.Equals(right);
 
-    public static bool operator !=(Token left, Token right)
-    {
-        return !left.Equals(right);
-    }
+    public static bool operator !=(Token left, Token right) => !left.Equals(right);
 
-    public override readonly bool Equals(object obj)
-    {
-        return base.Equals(obj);
-    }
+    public override readonly bool Equals(object obj) => base.Equals(obj);
 
-    public override readonly int GetHashCode()
-    {
-        return base.GetHashCode();
-    }
+    public override readonly int GetHashCode() => base.GetHashCode();
 }

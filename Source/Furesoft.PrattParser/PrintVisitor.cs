@@ -14,7 +14,7 @@ public class PrintVisitor : IVisitor<string>
             CallNode call => Visit(call),
             TernaryOperatorNode cond => Visit(cond),
             BlockNode block => Visit(block),
-            NameAstNode name => Visit(name),
+            NameNode name => Visit(name),
             BinaryOperatorNode op => Visit(op),
             PostfixOperatorNode postfix => Visit(postfix),
             PrefixOperatorNode prefix => Visit(prefix),
@@ -30,111 +30,111 @@ public class PrintVisitor : IVisitor<string>
 
     public string Visit(BlockNode block)
     {
-        var sb = new StringBuilder();
+        var builder = new StringBuilder();
 
         for (var i = 0; i < block.Children.Count; i++)
         {
             var child = block.Children[i];
-            sb.Append(child.Accept(this));
+            builder.Append(child.Accept(this));
 
             if (i % 2 == 0)
             {
-                sb.Append(block.SeperatorSymbol.Name + " ");
+                builder.Append(block.SeperatorSymbol.Name + " ");
             }
         }
 
-        return sb.ToString();
+        return builder.ToString();
     }
 
     public string Visit(CallNode call)
     {
-        var sb = new StringBuilder();
+        var builder = new StringBuilder();
 
-        sb.Append(call.FunctionExpr.Accept(this));
-        sb.Append('(');
+        builder.Append(call.FunctionExpr.Accept(this));
+        builder.Append('(');
 
-        for (var i = 0; i < call.ArgumentExprs.Count; i++)
+        for (var i = 0; i < call.Arguments.Count; i++)
         {
             if (i > 0)
             {
-                sb.Append(", ");
+                builder.Append(", ");
             }
 
-            sb.Append(call.ArgumentExprs[i].Accept(this));
+            builder.Append(call.Arguments[i].Accept(this));
         }
 
-        sb.Append(')');
+        builder.Append(')');
 
-        return sb.ToString();
+        return builder.ToString();
     }
 
     public string Visit(TernaryOperatorNode cond)
     {
-        var sb = new StringBuilder();
+        var builder = new StringBuilder();
 
-        sb.Append('(');
-        sb.Append(cond.FirstExpr.Accept(this));
-        sb.Append(" ? ");
+        builder.Append('(');
+        builder.Append(cond.FirstExpr.Accept(this));
+        builder.Append(" ? ");
 
-        sb.Append(cond.SecondExpr.Accept(this));
-        sb.Append(" : ");
-        sb.Append(cond.ThirdExpr.Accept(this));
+        builder.Append(cond.SecondExpr.Accept(this));
+        builder.Append(" : ");
+        builder.Append(cond.ThirdExpr.Accept(this));
 
-        sb.Append(')');
+        builder.Append(')');
 
-        return sb.ToString();
+        return builder.ToString();
     }
 
-    public string Visit(NameAstNode name)
+    public string Visit(NameNode name)
     {
         return name.Name;
     }
 
     public string Visit(BinaryOperatorNode binary)
     {
-        var sb = new StringBuilder();
+        var builder = new StringBuilder();
 
-        sb.Append('(');
-        sb.Append(binary.LeftExpr.Accept(this));
-        sb.Append(' ').Append(binary.Operator.Punctuator()).Append(' ');
-        sb.Append(binary.RightExpr.Accept(this));
-        sb.Append(')');
+        builder.Append('(');
+        builder.Append(binary.LeftExpr.Accept(this));
+        builder.Append(' ').Append(binary.Operator.Punctuator()).Append(' ');
+        builder.Append(binary.RightExpr.Accept(this));
+        builder.Append(')');
 
-        return sb.ToString();
+        return builder.ToString();
     }
 
     public string Visit(PostfixOperatorNode postfix)
     {
-        var sb = new StringBuilder();
+        var builder = new StringBuilder();
 
-        sb.Append('(');
-        sb.Append(postfix.Expr.Accept(this));
+        builder.Append('(');
+        builder.Append(postfix.Expr.Accept(this));
 
         if (char.IsLetter(postfix.Operator.Punctuator()[0]))
         {
-            sb.Append(' ');
+            builder.Append(' ');
         }
 
-        sb.Append(postfix.Operator.Punctuator()).Append(')');
+        builder.Append(postfix.Operator.Punctuator()).Append(')');
 
-        return sb.ToString();
+        return builder.ToString();
     }
 
     public string Visit(PrefixOperatorNode prefix)
     {
-        var sb = new StringBuilder();
+        var builder = new StringBuilder();
 
-        sb.Append('(');
-        sb.Append(prefix.Operator.Punctuator());
+        builder.Append('(');
+        builder.Append(prefix.Operator.Punctuator());
 
         if (char.IsLetter(prefix.Operator.Punctuator()[0]))
         {
-            sb.Append(' ');
+            builder.Append(' ');
         }
 
-        sb.Append(prefix.Expr.Accept(this)).Append(')');
+        builder.Append(prefix.Expr.Accept(this)).Append(')');
 
-        return sb.ToString();
+        return builder.ToString();
     }
 
     public string Visit(LiteralNode<bool> literalNode)

@@ -12,12 +12,12 @@ public class NumberParselet : IPrefixParselet
 
         if (text.StartsWith("0x"))
         {
-            return new LiteralNode<ulong>(uint.Parse(token.Text.Slice(2).Span, NumberStyles.HexNumber));
+            return new LiteralNode<ulong>(ulong.Parse(token.Text[2..].Span, NumberStyles.HexNumber));
         }
 
         if (text.StartsWith("0b"))
         {
-            return new LiteralNode<ulong>(Convert.ToUInt32(token.Text.Slice(2).ToString(), 2));
+            return new LiteralNode<ulong>(Convert.ToUInt32(token.Text[2..].ToString(), 2));
         }
 
         if (!text.StartsWith("-") && !text.Contains("."))

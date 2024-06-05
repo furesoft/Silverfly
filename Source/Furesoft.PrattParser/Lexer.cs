@@ -12,8 +12,8 @@ namespace Furesoft.PrattParser;
 public sealed class Lexer
 {
     private Dictionary<string, Symbol> _punctuators = [];
-    private readonly List<ILexerMatcher> _parts = [];
-    private readonly List<ILexerIgnoreMatcher> _ignoreMatcher = [];
+    private readonly List<IMatcher> _parts = [];
+    private readonly List<IIgnoreMatcher> _ignoreMatcher = [];
     private int _index;
     private int _line = 1, _column = 1;
 
@@ -60,7 +60,7 @@ public sealed class Lexer
         OrderSymbols();
     }
 
-    public void AddMatcher(ILexerMatcher matcher)
+    public void AddMatcher(IMatcher matcher)
     {
         _parts.Add(matcher);
     }
@@ -100,7 +100,7 @@ public sealed class Lexer
         Ignore(new PunctuatorIgnoreMatcher(c));
     }
 
-    public void Ignore(ILexerIgnoreMatcher matcher)
+    public void Ignore(IIgnoreMatcher matcher)
     {
         _ignoreMatcher.Add(matcher);
     }
@@ -263,7 +263,7 @@ public sealed class Lexer
             Advance();
         }
 
-        var nameSlice = Document.Source.Slice(start, _index - start);
+        var nameSlice = Document.Source[start.._index];
         var name = nameSlice.ToString();
 
         if (_punctuators.ContainsKey(name))

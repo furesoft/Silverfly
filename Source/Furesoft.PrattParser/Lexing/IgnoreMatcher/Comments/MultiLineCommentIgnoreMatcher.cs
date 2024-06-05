@@ -1,6 +1,6 @@
 ﻿namespace Furesoft.PrattParser.Lexing.IgnoreMatcher.Comments;
 
-public class MultiLineCommentIgnoreMatcher(Symbol start, Symbol end) : ILexerIgnoreMatcher
+public class MultiLineCommentIgnoreMatcher(Symbol start, Symbol end) : IIgnoreMatcher
 {
     public bool Match(Lexer lexer, char c)
     {

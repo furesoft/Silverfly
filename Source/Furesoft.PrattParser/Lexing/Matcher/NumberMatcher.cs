@@ -3,7 +3,7 @@
 namespace Furesoft.PrattParser.Lexing.Matcher;
 
 public class NumberMatcher(bool allowHex, bool allowBin, Symbol floatingPointSymbol, Symbol seperatorSymbol = null)
-    : ILexerMatcher
+    : IMatcher
 {
     public bool Match(Lexer lexer, char c)
     {
@@ -37,7 +37,7 @@ public class NumberMatcher(bool allowHex, bool allowBin, Symbol floatingPointSym
         AdvanceFloatingPointNumber(lexer, ref index);
 
 createToken:
-        var textWithoutSeperator = lexer.Document.Source.Slice(oldIndex, index - oldIndex).ToString()
+        var textWithoutSeperator = lexer.Document.Source[oldIndex..index].ToString()
             .Replace(seperatorSymbol.Name, "");
 
         return new(PredefinedSymbols.Number, textWithoutSeperator.AsMemory(),
@@ -59,12 +59,10 @@ createToken:
         return c is '1' or '0';
     }
 
-
     private void AdvanceFloatingPointNumber(Lexer lexer, ref int index)
     {
         if (lexer.IsMatch(floatingPointSymbol.Name))
         {
-
             if (!char.IsDigit(lexer.Peek(1)))
             {
                 return;

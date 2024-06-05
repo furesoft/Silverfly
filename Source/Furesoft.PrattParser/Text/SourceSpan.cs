@@ -1,5 +1,6 @@
 ﻿namespace Furesoft.PrattParser.Text;
 
+/// <summary>Represents a part of the source file</summary>
 public readonly struct SourceSpan(int line, int column)
 {
     public int Line { get; } = line;

@@ -8,7 +8,7 @@ namespace Furesoft.PrattParser.Parselets.Operators;
 /// difference when parsing, "+", "-", "*", "/", and "^" is binding power
 /// and associativity, so we can use a single parselet class for all of those.
 /// </summary>
-public class BinaryOperatorParselet(int bindingPower, bool isRight) : IInfixParselet
+public class BinaryOperatorParselet(int bindingPower, bool isRightAssociative) : IInfixParselet
 {
     public AstNode Parse(Parser parser, AstNode left, Token token)
     {
@@ -16,13 +16,10 @@ public class BinaryOperatorParselet(int bindingPower, bool isRight) : IInfixPars
         // lower binding power when parsing the right-hand side. This will let a
         // parselet with the same binding power appear on the right, which will then
         // take *this* parselet's result as its left-hand argument.
-        var right = parser.Parse(bindingPower - (isRight ? 1 : 0));
+        var rightExpr = parser.Parse(bindingPower - (isRightAssociative ? 1 : 0));
 
-        return new BinaryOperatorNode(left, token.Type, right).WithRange(left.Range.Document, left.Range.Start, right.Range.End);
+        return new BinaryOperatorNode(left, token.Type, rightExpr).WithRange(left.Range.Document, left.Range.Start, rightExpr.Range.End);
     }
 
-    public int GetBindingPower()
-    {
-        return bindingPower;
-    }
+    public int GetBindingPower() => bindingPower;
 }

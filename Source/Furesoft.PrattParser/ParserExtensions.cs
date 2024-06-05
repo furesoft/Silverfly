@@ -1,5 +1,5 @@
-﻿using Furesoft.PrattParser.Nodes;
-using Furesoft.PrattParser.Parselets;
+﻿using System.Collections.Generic;
+using Furesoft.PrattParser.Nodes;
 using Furesoft.PrattParser.Parselets.Literals;
 
 namespace Furesoft.PrattParser;
@@ -78,5 +78,43 @@ public static class ParserExtensions
 
         parser.Postfix("--", BindingPower.PostFix);
         parser.Postfix("++", BindingPower.PostFix);
+    }
+
+    public static List<AstNode> ParseSeperated(this Parser parser, Symbol seperator, Symbol terminator, int bindingPower = 0)
+    {
+        var args = new List<AstNode>();
+
+        if (parser.Match(terminator))
+        {
+            return [];
+        }
+
+        do
+        {
+            args.Add(parser.Parse(bindingPower));
+        } while (parser.Match(seperator));
+
+        parser.Consume(terminator);
+
+        return args;
+    }
+
+    public static List<AstNode> ParseSeperated(this Parser parser, Symbol seperator, int bindingPower = 0, params Symbol[] terminators)
+    {
+        var args = new List<AstNode>();
+
+        if (parser.Match(terminators))
+        {
+            return [];
+        }
+
+        do
+        {
+            args.Add(parser.Parse(bindingPower));
+        } while (parser.Match(seperator));
+
+        parser.Match(terminators);
+
+        return args;
     }
 }

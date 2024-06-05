@@ -1,6 +1,6 @@
 ﻿namespace Furesoft.PrattParser.Lexing.Matcher;
 
-public class BooleanMatcher : ILexerMatcher
+public class BooleanMatcher : IMatcher
 {
     public bool Match(Lexer lexer, char c)
     {
@@ -21,6 +21,6 @@ public class BooleanMatcher : ILexerMatcher
             lexer.Advance("false".Length);
         }
 
-        return new(PredefinedSymbols.Boolean, lexer.Document.Source.Slice(oldIndex, index - oldIndex), line, oldColumn);
+        return new(PredefinedSymbols.Boolean, lexer.Document.Source[oldIndex..index], line, oldColumn);
     }
 }

@@ -14,11 +14,13 @@ public static class Helpers
         return new StmtElement(name);
     }
 
-    public static SyntaxElement sepBy(Symbol seperator, Symbol terminator, string name = null) {
+    public static SyntaxElement sepBy(Symbol seperator, Symbol terminator, string name = null)
+    {
         return new SepByElement(name, seperator, terminator);
     }
 
-    public static SyntaxElement keyword(Symbol keyword, string name = null) {
+    public static SyntaxElement keyword(Symbol keyword, string name = null)
+    {
         return new KeywordElement(keyword.Name, name);
     }
 }

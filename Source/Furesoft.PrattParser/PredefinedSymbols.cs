@@ -22,9 +22,10 @@ public static class PredefinedSymbols
     public static Symbol LessThanLessThan = Pool.Get("<<");
     public static Symbol GreaterThanGreaterThan = Pool.Get(">>");
 
-    public static Symbol Question = Pool.Get("?");
+    public static Symbol QuestionMark = Pool.Get("?");
 
     public static Symbol Ampersand = Pool.Get("&");
+    public static Symbol AmpersandAmpersand = Pool.Get("&&");
 
     public static Symbol At = Pool.Get("@");
 
@@ -48,6 +49,8 @@ public static class PredefinedSymbols
     public new static Symbol Equals = Pool.Get("=");
 
     public static Symbol Pipe = Pool.Get("|");
+    public static Symbol PipePipe = Pool.Get("||");
+
     public static Symbol Semicolon = Pool.Get(";");
     public static Symbol Dollar = Pool.Get("$");
     public static Symbol Percentage = Pool.Get("%");
@@ -65,14 +68,12 @@ public static class PredefinedSymbols
     public static Symbol Boolean = Pool.Get("#boolean");
     public static Symbol Name = Pool.Get("#name");
 
-
-    public static Symbol AmpersandAmpersand = Pool.Get("&&");
-    public static Symbol PipePipe = Pool.Get("||");
     public static Symbol EqualsEquals = Pool.Get("==");
     public static Symbol DotDot = Pool.Get("..");
     public static Symbol QuestionQuestion = Pool.Get("??");
     public static Symbol QuestionDot = Pool.Get("?.");
     public static Symbol ColonQuestion = Pool.Get(":?");
+    public static Symbol ColonEquals = Pool.Get(":=");
 
     public static Symbol Arrow = Pool.Get("->");
     public static Symbol DoubleArrow = Pool.Get("=>");

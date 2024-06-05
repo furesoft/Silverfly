@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Xml;
 using Furesoft.PrattParser.Nodes;
 using Furesoft.PrattParser.Parselets;
 using Furesoft.PrattParser.Parselets.Builder;
@@ -60,12 +59,14 @@ public abstract class Parser
         Register(start, new BlockParselet(terminator, seperator, wrapExpressions));
     }
 
+    /// <summary>Add a dynamic parselet to parse an expression based on a declarative definition</summary>
     public void ExprBuilder<TNode>(SyntaxElement definition)
         where TNode : AstNode
     {
         Builder<TNode>(definition, NodeType.Expression);
     }
 
+    /// <summary>Add a dynamic parselet to parse a statement based on a declarative definition</summary>
     public void StmtBuilder<TNode>(SyntaxElement definition)
         where TNode : AstNode
     {
@@ -141,6 +142,7 @@ public abstract class Parser
     public AstNode ParseStatement(bool wrapExpressions = false)
     {
         var token = LookAhead(0);
+
         if (_statementParselets.TryGetValue(token.Type, out var parselet))
         {
             Consume();
@@ -154,14 +156,14 @@ public abstract class Parser
     }
 
 
-    public static TranslationUnit Parse<TParser>(string source, string filename = "syntethic.dsl", bool useToplevelStatements = false)
+    public static TranslationUnit Parse<TParser>(string source, string filename = "syntethic.dsl", bool useStatementsAtToplevel = false)
         where TParser : Parser, new()
     {
         var lexer = new Lexer(source, filename);
 
         var parser = new TParser { _lexer = lexer };
 
-        parser.Init();
+        parser.InitParselets();
 
         AddLexerSymbols(lexer, parser._prefixParselets);
         AddLexerSymbols(lexer, parser._infixParselets);
@@ -169,12 +171,12 @@ public abstract class Parser
 
         parser.InitLexer(lexer);
 
-        return new(useToplevelStatements
+        return new(useStatementsAtToplevel
                     ? parser.ParseStatement()
                     : parser.ParseExpression(), lexer.Document);
     }
 
-    private static void AddLexerSymbols<U>(Lexer lexer, Dictionary<Symbol, U> dict)
+    private static void AddLexerSymbols<TParselet>(Lexer lexer, Dictionary<Symbol, TParselet> dict)
     {
         foreach (var prefix in dict)
         {
@@ -224,46 +226,7 @@ public abstract class Parser
     }
 
     protected abstract void InitLexer(Lexer lexer);
-    protected abstract void Init();
-
-
-    public List<AstNode> ParseSeperated(Symbol seperator, Symbol terminator, int bindingPower = 0)
-    {
-        var args = new List<AstNode>();
-
-        if (Match(terminator))
-        {
-            return [];
-        }
-
-        do
-        {
-            args.Add(Parse(bindingPower));
-        } while (Match(seperator));
-
-        Consume(terminator);
-
-        return args;
-    }
-
-    public List<AstNode> ParseSeperated(Symbol seperator, int bindingPower = 0, params Symbol[] terminators)
-    {
-        var args = new List<AstNode>();
-
-        if (Match(terminators))
-        {
-            return [];
-        }
-
-        do
-        {
-            args.Add(Parse(bindingPower));
-        } while (Match(seperator));
-
-        Match(terminators);
-
-        return args;
-    }
+    protected abstract void InitParselets();
 
     public bool Match(Symbol expected)
     {
@@ -307,6 +270,7 @@ public abstract class Parser
         }
     }
 
+    /// <summary>Checks if a sequence of symbols match
     public bool IsMatch(params Symbol[] expected)
     {
         var result = true;
@@ -318,6 +282,7 @@ public abstract class Parser
         return result;
     }
 
+    /// <summary>If the <paramref name="expected"/> is matched consume it
     public Token Consume(Symbol expected)
     {
         var token = LookAhead(0);
@@ -332,6 +297,7 @@ public abstract class Parser
         return Consume();
     }
 
+    /// <summary>Returns the next <see cref="Token"/>
     public Token Consume()
     {
         // Make sure we've read the token.
@@ -341,6 +307,7 @@ public abstract class Parser
         return token;
     }
 
+    /// <summary>Consumes as many tokens as given in <paramref name="count"/></summary>
     public Token[] ConsumeMany(uint count)
     {
         var result = new List<Token>();
@@ -349,9 +316,10 @@ public abstract class Parser
             result.Add(Consume());
         }
 
-        return result.ToArray();
+        return [.. result];
     }
 
+    /// <summary>Get the next token(s) and add it to a cache to reuse it later</summary>
     public Token LookAhead(uint distance)
     {
         // Read in as many as needed.

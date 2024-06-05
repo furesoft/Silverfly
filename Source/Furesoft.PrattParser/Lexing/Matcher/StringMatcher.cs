@@ -1,6 +1,7 @@
 ﻿namespace Furesoft.PrattParser.Lexing.Matcher;
 
-public class StringMatcher(Symbol leftStr, Symbol rightStr) : ILexerMatcher
+//ToDo: implement escape and unicode chars
+public class StringMatcher(Symbol leftStr, Symbol rightStr) : IMatcher
 {
     public bool Match(Lexer lexer, char c)
     {
@@ -25,7 +26,6 @@ public class StringMatcher(Symbol leftStr, Symbol rightStr) : ILexerMatcher
 
         index++;
         column++;
-
 
         return new(PredefinedSymbols.String, text, line, oldColumn);
     }
