@@ -39,12 +39,12 @@ public struct Token(Symbol type, ReadOnlyMemory<char> text, int line, int column
 
     public Token WithDocument(SourceDocument document)
     {
-        this.Document = document;
+        Document = document;
 
         return this;
     }
 
-    public SourceRange GetRange()
+    public readonly SourceRange GetRange()
     {
         return new(Document, GetSourceSpanStart(), GetSourceSpanEnd());
     }

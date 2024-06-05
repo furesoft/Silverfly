@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Furesoft.PrattParser.Text;
 
 namespace Furesoft.PrattParser.Parselets.Builder.Elements;
 
@@ -9,7 +10,15 @@ public class OrElement(SyntaxElement first, SyntaxElement second) : BinaryElemen
         First.CurrentToken = CurrentToken;
         Second.CurrentToken = CurrentToken;
 
-        return First.Parse(parser, result) || Second.Parse(parser, result);
+        var parseResult = First.Parse(parser, result) || Second.Parse(parser, result);
+        PropagateMessages();
+
+        if (!parseResult)
+        {
+            Messages.Add(Message.Error($"Expected '{First}' or '{Second}'"));
+        }
+
+        return parseResult;
     }
 
     public override string ToString()

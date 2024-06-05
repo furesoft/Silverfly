@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Furesoft.PrattParser.Nodes;
+using Furesoft.PrattParser.Text;
 
 namespace Furesoft.PrattParser.Parselets.Builder.Elements;
 
@@ -9,14 +9,21 @@ public class AndElement(SyntaxElement first, SyntaxElement second) : BinaryEleme
     {
         First.CurrentToken = CurrentToken;
 
+        PropagateMessages();
+
         if (First.Parse(parser, result))
         {
             if (Second.Parse(parser, result))
             {
                 return true;
             }
+            else
+            {
+                Messages.Add(Message.Error($"Expected '{Second}'"));
+            }
         }
 
+        Messages.Add(Message.Error($"Expected '{First}'"));
         return false;
     }
 

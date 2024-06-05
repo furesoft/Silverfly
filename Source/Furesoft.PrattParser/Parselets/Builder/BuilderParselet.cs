@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Furesoft.PrattParser.Nodes;
-using Furesoft.PrattParser.Text;
 
 namespace Furesoft.PrattParser.Parselets.Builder;
 
@@ -13,18 +12,17 @@ public class BuilderParselet<TNode>(int bindingPower, SyntaxElement definition) 
 
     public AstNode Parse(Parser parser, Token token)
     {
-        var result = new List<(string Name, object Node)>();
+        var parsedNodes = new List<(string, object)>();
 
         definition.CurrentToken = token;
-        var r = definition.Parse(parser, result);
+        var parsedSuccessfull = definition.Parse(parser, parsedNodes);
 
-        if (!r)
+        if (!parsedSuccessfull)
         {
-            //ToDo: Add Better Error Message
-            token.Document.Messages.Add(Message.Error($"Unable to parse builded pattern: {definition}"));
+            token.Document.Messages.AddRange(definition.Messages);
         }
 
-        var node = InitNode(result);
+        var node = InitNode(parsedNodes);
 
         return node.WithRange(token, parser.LookAhead(0));
     }
