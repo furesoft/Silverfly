@@ -7,6 +7,11 @@ public readonly struct SourceRange(SourceDocument document, SourceSpan start, So
     public SourceSpan End { get; } = end;
     public static SourceRange Empty { get; } = new();
 
+    public static SourceRange From(SourceDocument document, int startLine, int startColumn, int endLine, int endColumn)
+    {
+        return new SourceRange(document, new SourceSpan(startLine, startColumn), new SourceSpan(endLine, endColumn));
+    }
+
     public bool Contains(int line, int column)
     {
         bool inLeft;

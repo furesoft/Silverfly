@@ -115,6 +115,8 @@ public sealed class Lexer
         return Document.Source.Slice(_index + distance, 1).Span[0];
     }
 
+    public bool IsBetween(char first, char second) => Peek(0) >= first && Peek(0) <= second;
+
     public bool IsMatch(Symbol token)
     {
         if (string.IsNullOrEmpty(token.Name))
@@ -168,7 +170,7 @@ public sealed class Lexer
                 return LexName().WithDocument(Document);
             }
 
-            Document.Messages.Add(Message.Error($"Invalid Character '{c}'"));
+            Document.Messages.Add(Message.Error($"Invalid Character '{c}'", SourceRange.From(Document, _line, _column, _line, _column)));
 
             return new Token("#invalid", c.ToString().AsMemory(), _line, _column).WithDocument(Document);
         }
