@@ -134,6 +134,18 @@ public class Tests : SnapshotParserTestBase
     }
 
     [Test]
+    public Task String_Escape_Should_Pass()
+    {
+        return Test("'hel\tlo'");
+    }
+
+    [Test]
+    public Task String_Unicode_Should_Pass()
+    {
+        return Test("'hel\\u00F61lo'");
+    }
+
+    [Test]
     public Task PostFix_Operator_Should_Pass()
     {
         return Test("i++");
