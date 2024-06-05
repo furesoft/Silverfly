@@ -1,8 +1,5 @@
 ﻿namespace Furesoft.PrattParser.Lexing.IgnoreMatcher.Comments;
 
-public class SingleLineCommentIgnoreMatcher : MultiLineCommentIgnoreMatcher
+public class SingleLineCommentIgnoreMatcher(Symbol start) : MultiLineCommentIgnoreMatcher(start, PredefinedSymbols.EOL)
 {
-    public SingleLineCommentIgnoreMatcher(Symbol start) : base(start, PredefinedSymbols.EOL)
-    {
-    }
 }

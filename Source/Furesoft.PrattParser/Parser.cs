@@ -103,7 +103,7 @@ public abstract class Parser
             {
                 default:
                 case NodeType.Expression:
-                    Register(keyword, (IInfixParselet)parselet);
+                    Register(keyword, (IPrefixParselet)parselet);
                     break;
                 case NodeType.Statement:
                     Register(keyword, (IStatementParselet)parselet);

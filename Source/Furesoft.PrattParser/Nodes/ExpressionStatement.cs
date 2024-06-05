@@ -1,11 +1,6 @@
 namespace Furesoft.PrattParser.Nodes;
 
-public class ExpressionStatement : StatementNode
+public class ExpressionStatement(AstNode expression) : StatementNode
 {
-    public AstNode Expression { get; }
-
-    public ExpressionStatement(AstNode expression)
-    {
-        Expression = expression;
-    }
+    public AstNode Expression { get; } = expression;
 }

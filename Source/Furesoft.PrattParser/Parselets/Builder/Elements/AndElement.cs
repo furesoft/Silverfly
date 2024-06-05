@@ -3,12 +3,8 @@ using Furesoft.PrattParser.Nodes;
 
 namespace Furesoft.PrattParser.Parselets.Builder.Elements;
 
-public class AndElement : BinaryElement
+public class AndElement(SyntaxElement first, SyntaxElement second) : BinaryElement(first, second)
 {
-    public AndElement(SyntaxElement first, SyntaxElement second) : base(first, second)
-    {
-    }
-
     public override bool Parse(Parser parser, List<(string, object)> result)
     {
         First.CurrentToken = CurrentToken;
