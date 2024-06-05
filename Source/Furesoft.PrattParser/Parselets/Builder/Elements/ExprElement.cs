@@ -5,8 +5,15 @@ namespace Furesoft.PrattParser.Parselets.Builder.Elements;
 
 public class ExprElement(string name) : SyntaxElement
 {
-    public override void Parse(Parser parser, List<(string, AstNode)> result)
+    public override bool Parse(Parser parser, List<(string, AstNode)> result)
     {
         result.Add((name, parser.ParseExpression()));
+
+        return true;
+    }
+
+    public override string ToString()
+    {
+        return "expr";
     }
 }

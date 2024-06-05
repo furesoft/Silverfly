@@ -3,16 +3,29 @@ using Furesoft.PrattParser.Nodes;
 
 namespace Furesoft.PrattParser.Parselets.Builder.Elements;
 
-public class AndElement(SyntaxElement first, SyntaxElement second) : SyntaxElement
+public class AndElement : BinaryElement
 {
-    public SyntaxElement First { get; } = first;
-    public SyntaxElement Second { get; } = second;
+    public AndElement(SyntaxElement first, SyntaxElement second) : base(first, second)
+    {
+    }
 
-    public override void Parse(Parser parser, List<(string, AstNode)> result)
+    public override bool Parse(Parser parser, List<(string, AstNode)> result)
     {
         First.CurrentToken = CurrentToken;
 
-        First.Parse(parser, result);
-        Second.Parse(parser, result);
+        if (First.Parse(parser, result))
+        {
+            if (Second.Parse(parser, result))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public override string ToString()
+    {
+        return $"{First} {Second}";
     }
 }

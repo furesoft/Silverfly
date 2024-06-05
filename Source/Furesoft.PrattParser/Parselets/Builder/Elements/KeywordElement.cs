@@ -8,27 +8,34 @@ public class KeywordElement(string keyword) : SyntaxElement
 {
     public string Keyword { get; } = keyword;
 
-    public override void Parse(Parser parser, List<(string, AstNode)> result)
+    public override bool Parse(Parser parser, List<(string, AstNode)> result)
     {
         if (CurrentToken != default)
         {
             if (CurrentToken.Type != (Symbol)Keyword)
             {
-                AddErrorMessage(parser);
+                return false;
             }
         }
         else
         {
             if (!parser.Match(Keyword))
             {
-                AddErrorMessage(parser);
+                return false;
             }
         }
+
+        return true;
     }
 
-    private void AddErrorMessage(Parser parser)
+    public void AddErrorMessage(Parser parser)
     {
         parser.Document.Messages.Add(
                             Message.Error($"Expected '{Keyword}' got '{parser.LookAhead(0).Text}'"));
+    }
+
+    public override string ToString()
+    {
+        return Keyword;
     }
 }

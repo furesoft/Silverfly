@@ -81,7 +81,7 @@ public abstract class Parser
             return;
         }
 
-        if (definition is AndElement and)
+        if (definition is BinaryElement and)
         {
             GetKeywordsFromDefinition(and.First, result);
             GetKeywordsFromDefinition(and.Second, result);
@@ -94,9 +94,10 @@ public abstract class Parser
         AddSymbolsFromBuilderToLexer(definition);
 
         var parselet = new BuilderParselet<TNode>(BindingPower.Product, definition);
-        var keyword = GetKeyword(definition);
+        var recognitionKeywords = new List<string>();
+        GetRecognitionKeywords(definition, recognitionKeywords);
 
-        if (keyword != null)
+        foreach (var keyword in recognitionKeywords)
         {
             switch (type)
             {
@@ -119,19 +120,22 @@ public abstract class Parser
         _lexer.AddSymbols([.. allSymbols]);
     }
 
-    static string GetKeyword(SyntaxElement element)
+    static void GetRecognitionKeywords(SyntaxElement element, List<string> keywords)
     {
         if (element is KeywordElement keywordElement)
         {
-            return keywordElement.Keyword;
+            keywords.Add(keywordElement.Keyword);
         }
 
         if (element is AndElement and)
         {
-            return GetKeyword(and.First);
+            GetRecognitionKeywords(and.First, keywords);
         }
-
-        return null;
+        else if (element is OrElement or)
+        {
+            GetRecognitionKeywords(or.First, keywords);
+            GetRecognitionKeywords(or.Second, keywords);
+        }
     }
 
     public AstNode ParseStatement(bool wrapExpressions = false)
