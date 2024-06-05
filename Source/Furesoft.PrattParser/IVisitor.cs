@@ -6,7 +6,8 @@ namespace Furesoft.PrattParser;
 public interface IVisitor<out TReturn>
 {
     TReturn Visit(AstNode node);
-    public IEnumerable<TReturn> Visit(BlockNode block) {
+    IEnumerable<TReturn> Visit(BlockNode block)
+    {
         var result = new List<TReturn>();
 
         foreach (var child in block.Children)
