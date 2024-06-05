@@ -3,6 +3,7 @@ using Furesoft.PrattParser;
 using Furesoft.PrattParser.Lexing.IgnoreMatcher.Comments;
 using Furesoft.PrattParser.Nodes;
 using Furesoft.PrattParser.Parselets;
+using Furesoft.PrattParser.Parselets.Builder.Elements;
 using static Furesoft.PrattParser.Parselets.Builder.Helpers;
 
 namespace TestProject;
@@ -39,6 +40,11 @@ public class TestParser : Parser
                 expr("Body") +
             "else" +
                 expr("ElseBody"));
+
+        ExprBuilder<IfNode>(
+            (keyword("ifnt") | "unless") + expr("Cond") + "then" +
+                expr("Body")
+        );
     }
 
     protected override void InitLexer(Lexer lexer)

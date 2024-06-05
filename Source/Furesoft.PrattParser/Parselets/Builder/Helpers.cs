@@ -17,4 +17,8 @@ public static class Helpers
     public static SyntaxElement sepBy(Symbol seperator, Symbol terminator, string name = null) {
         return new SepByElement(name, seperator, terminator);
     }
+
+    public static SyntaxElement keyword(Symbol keyword, string name = null) {
+        return new KeywordElement(keyword.Name, name);
+    }
 }

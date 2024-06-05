@@ -4,11 +4,11 @@ using Furesoft.PrattParser.Text;
 
 namespace Furesoft.PrattParser.Parselets.Builder.Elements;
 
-public class KeywordElement(string keyword) : SyntaxElement
+public class KeywordElement(string keyword, string name = null) : SyntaxElement
 {
     public string Keyword { get; } = keyword;
 
-    public override bool Parse(Parser parser, List<(string, AstNode)> result)
+    public override bool Parse(Parser parser, List<(string, object)> result)
     {
         if (CurrentToken != default)
         {
@@ -23,6 +23,11 @@ public class KeywordElement(string keyword) : SyntaxElement
             {
                 return false;
             }
+        }
+
+        if (!string.IsNullOrEmpty(name))
+        {
+            result.Add((Keyword, CurrentToken));
         }
 
         return true;

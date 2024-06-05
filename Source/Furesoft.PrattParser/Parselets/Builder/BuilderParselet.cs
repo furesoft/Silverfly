@@ -13,7 +13,7 @@ public class BuilderParselet<TNode>(int bindingPower, SyntaxElement definition) 
 
     public AstNode Parse(Parser parser, Token token)
     {
-        var result = new List<(string Name, AstNode Node)>();
+        var result = new List<(string Name, object Node)>();
 
         definition.CurrentToken = token;
         var r = definition.Parse(parser, result);
@@ -29,7 +29,7 @@ public class BuilderParselet<TNode>(int bindingPower, SyntaxElement definition) 
         return node.WithRange(token, parser.LookAhead(0));
     }
 
-    private TNode InitNode(List<(string Name, AstNode Node)> result)
+    private TNode InitNode(List<(string Name, object Node)> result)
     {
         TNode node;
         try
@@ -47,7 +47,7 @@ public class BuilderParselet<TNode>(int bindingPower, SyntaxElement definition) 
         return node;
     }
 
-    private static void SetProperties(TNode node, List<(string Name, AstNode Node)> result)
+    private static void SetProperties(TNode node, List<(string, object)> result)
     {
         var nodeType = node.GetType();
 

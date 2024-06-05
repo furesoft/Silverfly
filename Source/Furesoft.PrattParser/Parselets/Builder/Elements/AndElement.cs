@@ -9,7 +9,7 @@ public class AndElement : BinaryElement
     {
     }
 
-    public override bool Parse(Parser parser, List<(string, AstNode)> result)
+    public override bool Parse(Parser parser, List<(string, object)> result)
     {
         First.CurrentToken = CurrentToken;
 

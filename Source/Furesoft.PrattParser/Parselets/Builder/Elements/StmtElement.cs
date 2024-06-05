@@ -5,7 +5,7 @@ namespace Furesoft.PrattParser.Parselets.Builder.Elements;
 
 public class StmtElement(string name) : SyntaxElement
 {
-    public override bool Parse(Parser parser, List<(string, AstNode)> result)
+    public override bool Parse(Parser parser, List<(string, object)> result)
     {
         result.Add((name, parser.ParseStatement()));
 

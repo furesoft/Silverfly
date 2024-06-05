@@ -5,7 +5,7 @@ namespace Furesoft.PrattParser.Parselets.Builder.Elements;
 
 public class SepByElement(string name, Symbol seperator, Symbol terminator) : SyntaxElement
 {
-    public override bool Parse(Parser parser, List<(string, AstNode)> result)
+    public override bool Parse(Parser parser, List<(string, object)> result)
     {
         var parsed = parser.ParseSeperated(seperator, terminator);
 
