@@ -117,7 +117,7 @@ public sealed class Lexer
 
     public bool IsBetween(char first, char second) => Peek(0) >= first && Peek(0) <= second;
 
-    public bool IsMatch(Symbol token)
+    public bool IsMatch(Symbol token, bool ignoreCase = false)
     {
         if (string.IsNullOrEmpty(token.Name))
         {
@@ -132,7 +132,9 @@ public sealed class Lexer
         var nameSpan = token.Name.AsMemory().Span;
         var documentSliceSpan = Document.Source.Slice(_index, token.Name.Length).Span;
 
-        return nameSpan.CompareTo(documentSliceSpan, StringComparison.Ordinal) == 0;
+        var comparisonType = ignoreCase ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal;
+
+        return nameSpan.CompareTo(documentSliceSpan, comparisonType) == 0;
     }
 
     public Token Next()

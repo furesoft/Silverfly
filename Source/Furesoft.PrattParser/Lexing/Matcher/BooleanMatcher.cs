@@ -1,10 +1,10 @@
 ﻿namespace Furesoft.PrattParser.Lexing.Matcher;
 
-public class BooleanMatcher : IMatcher
+public class BooleanMatcher(bool ignoreCasing = false) : IMatcher
 {
     public bool Match(Lexer lexer, char c)
     {
-        return lexer.IsMatch("true") || lexer.IsMatch("false");
+        return lexer.IsMatch("true", ignoreCasing) || lexer.IsMatch("false", ignoreCasing);
     }
 
     public Token Build(Lexer lexer, ref int index, ref int column, ref int line)
@@ -12,11 +12,11 @@ public class BooleanMatcher : IMatcher
         var oldColumn = column;
         var oldIndex = index;
 
-        if (lexer.IsMatch("true"))
+        if (lexer.IsMatch("true", ignoreCasing))
         {
             lexer.Advance("true".Length);
         }
-        if (lexer.IsMatch("false"))
+        if (lexer.IsMatch("false", ignoreCasing))
         {
             lexer.Advance("false".Length);
         }
