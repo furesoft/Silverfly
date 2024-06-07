@@ -51,7 +51,7 @@ public abstract class Parser
 
     public void Group(Symbol leftToken, Symbol rightToken)
     {
-        Register(leftToken, new GroupParselet(rightToken));
+        Register(leftToken, new GroupParselet(leftToken, rightToken));
     }
 
     public void Block(Symbol start, Symbol terminator, Symbol seperator = null, bool wrapExpressions = false)

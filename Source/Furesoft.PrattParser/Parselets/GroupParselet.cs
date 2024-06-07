@@ -5,13 +5,17 @@ namespace Furesoft.PrattParser.Parselets;
 /// <summary>
 /// Parses parentheses used to group an expression, like "(b + c)".
 /// </summary>
-public class GroupParselet(Symbol rightSymbol) : IPrefixParselet
+public class GroupParselet(Symbol leftSymbol, Symbol rightSymbol) : IPrefixParselet
 {
+    public Symbol LeftSymbol { get; } = leftSymbol;
+    public Symbol RightSymbol { get; } = rightSymbol;
+
     public AstNode Parse(Parser parser, Token token)
     {
         var expression = parser.ParseExpression();
-        var rightToken = parser.Consume(rightSymbol);
+        var rightToken = parser.Consume(RightSymbol);
 
-        return expression.WithRange(token, rightToken);
+        return new GroupNode(leftSymbol, rightSymbol, expression)
+                .WithRange(token, rightToken);
     }
 }
