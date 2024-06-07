@@ -22,12 +22,12 @@ public class BuilderParselet<TNode>(int bindingPower, SyntaxElement definition) 
             token.Document.Messages.AddRange(definition.Messages);
         }
 
-        var node = InitNode(parsedNodes);
+        var node = CreateNode(parsedNodes);
 
         return node.WithRange(token, parser.LookAhead(0));
     }
 
-    private TNode InitNode(List<(string Name, object Node)> result)
+    private static TNode CreateNode(List<(string Name, object Node)> result)
     {
         TNode node;
         try
