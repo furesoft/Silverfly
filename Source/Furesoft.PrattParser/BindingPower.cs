@@ -11,15 +11,15 @@ namespace Furesoft.PrattParser;
 /// </summary>
 public class BindingPower : Symbol
 {
-    // Ordered in increasing binding power.
-    public static readonly BindingPower Assignment = new(1, nameof(Assignment), Pool);
-    public static readonly BindingPower Conditional = new(2, nameof(Conditional), Pool);
-    public static readonly BindingPower Sum = new(3, nameof(Sum), Pool);
-    public static readonly BindingPower Product = new(4, nameof(Product), Pool);
-    public static readonly BindingPower Exponent = new(5, nameof(Exponent), Pool);
-    public static readonly BindingPower Prefix = new(6, nameof(Prefix), Pool);
-    public static readonly BindingPower PostFix = new(7, nameof(PostFix), Pool);
-    public static readonly BindingPower Call = new(8, nameof(Call), Pool);
+    // Ordered in increasing binding power, with gaps for future additions.
+    public static readonly BindingPower Assignment = new(10, nameof(Assignment), Pool);
+    public static readonly BindingPower Conditional = new(20, nameof(Conditional), Pool);
+    public static readonly BindingPower Sum = new(30, nameof(Sum), Pool);
+    public static readonly BindingPower Product = new(40, nameof(Product), Pool);
+    public static readonly BindingPower Exponent = new(50, nameof(Exponent), Pool);
+    public static readonly BindingPower Prefix = new(60, nameof(Prefix), Pool);
+    public static readonly BindingPower PostFix = new(70, nameof(PostFix), Pool);
+    public static readonly BindingPower Call = new(80, nameof(Call), Pool);
 
     public new static SymbolPool<BindingPower> Pool => new(f => new(f));
 
