@@ -8,15 +8,15 @@ public static class ParserExtensions
 {
     public static void AddArithmeticOperators(this Parser parser)
     {
-        parser.Prefix("+", BindingPower.Prefix);
-        parser.Prefix("-", BindingPower.Prefix);
+        parser.Prefix("+", "Prefix");
+        parser.Prefix("-", "Prefix");
 
         parser.Group("(", ")");
 
-        parser.InfixLeft("+", BindingPower.Sum);
-        parser.InfixLeft("-", BindingPower.Sum);
-        parser.InfixLeft("*", BindingPower.Product);
-        parser.InfixLeft("/", BindingPower.Product);
+        parser.InfixLeft("+", "Sum");
+        parser.InfixLeft("-", "Sum");
+        parser.InfixLeft("*", "Product");
+        parser.InfixLeft("/", "Product");
     }
 
     /// <summary>
@@ -41,21 +41,20 @@ public static class ParserExtensions
 
     public static void AddLogicalOperators(this Parser parser)
     {
-        parser.Prefix("!", BindingPower.Prefix);
-
-        parser.InfixLeft("&&", BindingPower.Product);
-        parser.InfixLeft("||", BindingPower.Sum);
+        parser.Prefix("!", "Prefix");
+        parser.InfixLeft("&&", "Product");
+        parser.InfixLeft("||", "Sum");
     }
 
     public static void AddBitOperators(this Parser parser)
     {
-        parser.Prefix("~", BindingPower.Prefix);
+        parser.Prefix("~", "Prefix");
 
-        parser.InfixLeft("&", BindingPower.Product);
-        parser.InfixLeft("|", BindingPower.Sum);
+        parser.InfixLeft("&", "Product");
+        parser.InfixLeft("|", "Sum");
 
-        parser.InfixLeft("<<", BindingPower.Product);
-        parser.InfixLeft(">>", BindingPower.Product);
+        parser.InfixLeft("<<", "Product");
+        parser.InfixLeft(">>", "Product");
     }
 
     public static void AddCommonLiterals(this Parser parser)
@@ -67,17 +66,17 @@ public static class ParserExtensions
 
     public static void AddCommonAssignmentOperators(this Parser parser)
     {
-        parser.InfixLeft("=", BindingPower.Assignment);
-        parser.InfixLeft("+=", BindingPower.Assignment);
-        parser.InfixLeft("-=", BindingPower.Assignment);
-        parser.InfixLeft("*=", BindingPower.Assignment);
-        parser.InfixLeft("/=", BindingPower.Assignment);
+        parser.InfixLeft("=", "Assignment");
+        parser.InfixLeft("+=", "Assignment");
+        parser.InfixLeft("-=", "Assignment");
+        parser.InfixLeft("*=", "Assignment");
+        parser.InfixLeft("/=", "Assignment");
 
-        parser.Prefix("++", BindingPower.Prefix);
-        parser.Prefix("--", BindingPower.Prefix);
+        parser.Prefix("++", "Prefix");
+        parser.Prefix("--", "Prefix");
 
-        parser.Postfix("--", BindingPower.PostFix);
-        parser.Postfix("++", BindingPower.PostFix);
+        parser.Postfix("--", "PostFix");
+        parser.Postfix("++", "PostFix");
     }
 
     public static List<AstNode> ParseSeperated(this Parser parser, Symbol seperator, Symbol terminator, int bindingPower = 0)

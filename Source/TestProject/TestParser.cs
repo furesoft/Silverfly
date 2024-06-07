@@ -14,9 +14,9 @@ public class TestParser : Parser
     {
         Register(PredefinedSymbols.Name, new NameParselet());
 
-        Register("(", new CallParselet());
+        Register("(", new CallParselet(BindingPowers.Get("Call").Id));
 
-        Ternary("?", ":", BindingPower.Conditional);
+        Ternary("?", ":", "Conditional");
 
         this.AddArithmeticOperators();
         this.AddBitOperators();
@@ -24,13 +24,13 @@ public class TestParser : Parser
         this.AddCommonLiterals();
         this.AddCommonAssignmentOperators();
 
-        Prefix("not", BindingPower.Prefix);
+        Prefix("not");
 
-        Postfix("!", BindingPower.PostFix);
+        Postfix("!");
 
-        InfixRight("^", BindingPower.Exponent);
+        InfixRight("^", "Exponent");
 
-        InfixLeft("->", BindingPower.Product);
+        InfixLeft("->", "Product");
 
         Block(PredefinedSymbols.SOF, PredefinedSymbols.EOF,
             seperator: PredefinedSymbols.Semicolon);

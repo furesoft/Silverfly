@@ -59,7 +59,7 @@ public class Symbol
 {
     #region Public instance members
 
-    public int Id { [DebuggerStepThrough] get; }
+    public int Id { [DebuggerStepThrough] get; set; }
     public string Name { [DebuggerStepThrough] get; }
     public SymbolPool Pool { [DebuggerStepThrough] get; }
     public bool IsGlobal { [DebuggerStepThrough] get => Pool == GSymbol.Pool; }

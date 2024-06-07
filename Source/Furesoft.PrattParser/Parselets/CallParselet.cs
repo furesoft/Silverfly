@@ -5,7 +5,7 @@ namespace Furesoft.PrattParser.Parselets;
 /// <summary>
 /// Parselet to parse a function call like "a(b, c, d)".
 /// </summary>
-public class CallParselet : IInfixParselet
+public class CallParselet(int bindingPower) : IInfixParselet
 {
     public AstNode Parse(Parser parser, AstNode left, Token token)
     {
@@ -15,8 +15,5 @@ public class CallParselet : IInfixParselet
         return new CallNode(left, args).WithRange(left.Range.Document, left.Range.Start, token.GetSourceSpanEnd());
     }
 
-    public int GetBindingPower()
-    {
-        return (int)BindingPower.Call;
-    }
+    public int GetBindingPower() => bindingPower;
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Furesoft.PrattParser.Nodes;
 using Furesoft.PrattParser.Parselets;
@@ -8,13 +9,15 @@ using Furesoft.PrattParser.Text;
 
 namespace Furesoft.PrattParser;
 
-public abstract class Parser
+public abstract partial class Parser
 {
     private readonly Dictionary<Symbol, IInfixParselet> _infixParselets = [];
     private readonly Dictionary<Symbol, IPrefixParselet> _prefixParselets = [];
     private readonly Dictionary<Symbol, IStatementParselet> _statementParselets = [];
     private readonly List<Token> _read = [];
     private Lexer _lexer;
+
+    public SymbolPool BindingPowers { get; internal set; }
 
     public SourceDocument Document => _lexer.Document;
 
@@ -94,7 +97,7 @@ public abstract class Parser
     {
         AddSymbolsFromBuilderToLexer(definition);
 
-        var parselet = new BuilderParselet<TNode>(BindingPower.Product, definition);
+        var parselet = new BuilderParselet<TNode>(BindingPowers.Get("Product"), definition); //Todo: enable custom binding power
         var recognitionKeywords = new List<string>();
         GetRecognitionKeywords(definition, recognitionKeywords);
 
@@ -163,6 +166,11 @@ public abstract class Parser
 
         var parser = new TParser { _lexer = lexer };
 
+        var bindingPowerBuilder = new BindingPowerBuilder();
+
+        parser.InitBindingPower(bindingPowerBuilder); // Have to be initialized before parselets to allow named reference
+        parser.BindingPowers = bindingPowerBuilder.BuildPool();
+
         parser.InitParselets();
 
         AddLexerSymbols(lexer, parser._prefixParselets);
@@ -227,6 +235,18 @@ public abstract class Parser
 
     protected abstract void InitLexer(Lexer lexer);
     protected abstract void InitParselets();
+
+    protected virtual void InitBindingPower(BindingPowerBuilder precedence)
+    {
+        precedence
+            .StrongerThan("Exponent", "Product")
+            .StrongerThan("Product", "Sum")
+            .StrongerThan("Sum", "Conditional")
+            .StrongerThan("Conditional", "Assignment")
+            .StrongerThan("Prefix", "Exponent")
+            .StrongerThan("Postfix", "Call")
+            .StrongerThan("Prefix", "Postfix");
+    }
 
     public bool Match(Symbol expected)
     {
@@ -345,34 +365,34 @@ public abstract class Parser
     /// <summary>
     ///     Registers a postfix unary operator parselet for the given token and binding power.
     /// </summary>
-    public void Postfix(Symbol token, int bindingPower)
+    public void Postfix(Symbol token, string bindingPowerName = "Postfix")
     {
-        Register(token, new PostfixOperatorParselet(bindingPower));
+        Register(token, new PostfixOperatorParselet(BindingPowers.Get(bindingPowerName)));
     }
 
 
     /// <summary>
     ///     Registers a prefix unary operator parselet for the given token and binding power.
     /// </summary>
-    public void Prefix(Symbol token, int bindingPower)
+    public void Prefix(Symbol token, string bindingPowerName = "Prefix")
     {
-        Register(token, new PrefixOperatorParselet(bindingPower));
+        Register(token, new PrefixOperatorParselet(BindingPowers.Get(bindingPowerName)));
     }
 
     /// <summary>
     ///     Registers a left-associative binary operator parselet for the given token and binding power.
     /// </summary>
-    public void InfixLeft(Symbol token, int bindingPower)
+    public void InfixLeft(Symbol token, string bindingPowerName)
     {
-        Register(token, new BinaryOperatorParselet(bindingPower, false));
+        Register(token, new BinaryOperatorParselet(BindingPowers.Get(bindingPowerName), false));
     }
 
     /// <summary>
     ///     Registers a right-associative binary operator parselet for the given token and binding power.
     /// </summary>
-    public void InfixRight(Symbol token, int bindingPower)
+    public void InfixRight(Symbol token, string bindingPowerName)
     {
-        Register(token, new BinaryOperatorParselet(bindingPower, true));
+        Register(token, new BinaryOperatorParselet(BindingPowers.Get(bindingPowerName), true));
     }
 
     /// <summary>
@@ -381,8 +401,8 @@ public abstract class Parser
     /// <param name="firstSymbol"></param>
     /// <param name="secondSymbol"></param>
     /// <param name="bindingPower"></param>
-    public void Ternary(Symbol firstSymbol, Symbol secondSymbol, int bindingPower)
+    public void Ternary(Symbol firstSymbol, Symbol secondSymbol, string bindingPowerName)
     {
-        Register(firstSymbol, new TernaryOperatorParselet(secondSymbol, bindingPower));
+        Register(firstSymbol, new TernaryOperatorParselet(secondSymbol, BindingPowers.Get(bindingPowerName)));
     }
 }
