@@ -253,7 +253,8 @@ public abstract partial class Parser
             .StrongerThan("Conditional", "Assignment")
             .StrongerThan("Prefix", "Exponent")
             .StrongerThan("Postfix", "Call")
-            .StrongerThan("Prefix", "Postfix");
+            .StrongerThan("Prefix", "Postfix")
+            .StrongerThan("Prefix", "Sum");
     }
 
     public bool Match(Symbol expected)
