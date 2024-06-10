@@ -42,7 +42,20 @@ public class BuilderParselet<TNode>(int bindingPower, SyntaxElement definition) 
             SetProperties(node, result);
         }
 
+        SetParentForProperties(result, node);
+
         return node;
+    }
+
+    private static void SetParentForProperties(List<(string Name, object Node)> result, TNode node)
+    {
+        foreach (var (Name, Node) in result)
+        {
+            if (Node is AstNode n)
+            {
+                n.WithParent(node);
+            }
+        }
     }
 
     private static void SetProperties(TNode node, List<(string, object)> result)

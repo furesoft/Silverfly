@@ -155,7 +155,15 @@ public abstract partial class Parser
 
         var expression = ParseExpression();
 
-        return wrapExpressions ? new ExpressionStatement(expression) : expression;
+        if (wrapExpressions)
+        {
+            var exprStmt = new ExpressionStatement();
+            expression.WithParent(exprStmt);
+
+            return exprStmt;
+        }
+
+        return expression;
     }
 
 

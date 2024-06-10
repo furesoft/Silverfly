@@ -1,16 +1,16 @@
-﻿using System.Collections.Generic;
-using Furesoft.PrattParser.Nodes;
+﻿using Furesoft.PrattParser.Nodes;
 
 namespace Furesoft.PrattParser.Parselets;
 public class BlockParselet(Symbol terminator, Symbol seperator = null, bool wrapExpressions = false) : IStatementParselet
 {
     public AstNode Parse(Parser parser, Token token)
     {
-        var statements = new List<AstNode>();
+        var block = new BlockNode(seperator, terminator);
 
         while (!parser.Match(terminator))
         {
-            statements.Add(parser.ParseStatement(wrapExpressions));
+            var node = parser.ParseStatement(wrapExpressions);
+            block.Children.Add(node.WithParent(block));
 
             if (seperator != null && parser.IsMatch(seperator))
             {
@@ -18,7 +18,7 @@ public class BlockParselet(Symbol terminator, Symbol seperator = null, bool wrap
             }
         }
 
-        return new BlockNode(seperator, statements)
+        return block
             .WithRange(token, parser.LookAhead(0));
     }
 }

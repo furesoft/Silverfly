@@ -15,8 +15,14 @@ public class TernaryOperatorParselet(Symbol lastSymbol, int bindingPower) : IInf
 
         var thirdExpr = parser.Parse(GetBindingPower() - 1);
 
-        return new TernaryOperatorNode(firstExpr, secondExpr, thirdExpr).WithRange(firstExpr.Range.Document,
+        var node = new TernaryOperatorNode(firstExpr, secondExpr, thirdExpr).WithRange(firstExpr.Range.Document,
             firstExpr.Range.Start, token.GetSourceSpanEnd());
+
+        firstExpr.WithParent(node);
+        secondExpr.WithParent(node);
+        thirdExpr.WithParent(node);
+
+        return node;
     }
 
     public int GetBindingPower() => bindingPower;

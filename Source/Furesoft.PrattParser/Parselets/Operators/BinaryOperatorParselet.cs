@@ -18,7 +18,12 @@ public class BinaryOperatorParselet(int bindingPower, bool isRightAssociative) :
         // take *this* parselet's result as its left-hand argument.
         var rightExpr = parser.Parse(bindingPower - (isRightAssociative ? 1 : 0));
 
-        return new BinaryOperatorNode(left, token.Type, rightExpr).WithRange(left.Range.Document, left.Range.Start, rightExpr.Range.End);
+        var node = new BinaryOperatorNode(left, token.Type, rightExpr).WithRange(left.Range.Document, left.Range.Start, rightExpr.Range.End);
+
+        left.WithParent(node);
+        rightExpr.WithParent(node);
+
+        return node;
     }
 
     public int GetBindingPower() => bindingPower;

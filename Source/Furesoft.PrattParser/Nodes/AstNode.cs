@@ -4,7 +4,8 @@ namespace Furesoft.PrattParser.Nodes;
 
 public abstract class AstNode
 {
-    public SourceRange Range { get; set; }
+    public SourceRange Range { get; private set; }
+    public AstNode Parent { get; private set; }
 
     public AstNode WithRange(Token token)
     {
@@ -23,6 +24,13 @@ public abstract class AstNode
     public AstNode WithRange(Token start, Token end)
     {
         Range = new(start.Document, start.GetSourceSpanStart(), end.GetSourceSpanEnd());
+
+        return this;
+    }
+
+    public AstNode WithParent(AstNode parent)
+    {
+        Parent = parent;
 
         return this;
     }

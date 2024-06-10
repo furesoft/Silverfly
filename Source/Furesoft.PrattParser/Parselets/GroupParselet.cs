@@ -15,7 +15,11 @@ public class GroupParselet(Symbol leftSymbol, Symbol rightSymbol) : IPrefixParse
         var expression = parser.ParseExpression();
         var rightToken = parser.Consume(RightSymbol);
 
-        return new GroupNode(leftSymbol, rightSymbol, expression)
+        var node = new GroupNode(leftSymbol, rightSymbol, expression)
                 .WithRange(token, rightToken);
+
+        expression.WithParent(node);
+
+        return node;
     }
 }
