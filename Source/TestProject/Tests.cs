@@ -104,6 +104,30 @@ public class Tests : SnapshotParserTestBase
     }
 
     [Test]
+    public Task Number_Binary_Should_Pass()
+    {
+        return Test("0b10101");
+    }
+
+    [Test]
+    public Task Number_Seperator_Should_Pass()
+    {
+        return Test("1_000_000");
+    }
+
+    [Test]
+    public Task BinaryNumber_Seperator_Should_Pass()
+    {
+        return Test("0b10_01");
+    }
+
+    [Test]
+    public Task HexNumber_Seperator_Should_Pass()
+    {
+        return Test("0xF_F");
+    }
+
+    [Test]
     public Task Hex_Number_With_Comment_Should_Pass()
     {
         return Test("  /* i need something new*/0xff");
