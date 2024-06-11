@@ -1,9 +1,6 @@
-using System.Linq.Expressions;
 using Furesoft.PrattParser;
 using Furesoft.PrattParser.Lexing.IgnoreMatcher.Comments;
-using Furesoft.PrattParser.Nodes;
 using Furesoft.PrattParser.Parselets;
-using Furesoft.PrattParser.Parselets.Builder.Elements;
 using static Furesoft.PrattParser.Parselets.Builder.Helpers;
 
 namespace TestProject;
@@ -52,7 +49,7 @@ public class TestParser : Parser
         lexer.Ignore(' ', '\r', '\t');
         lexer.Ignore("\r\n");
 
-        lexer.MatchBoolean();
+        lexer.MatchBoolean(ignoreCasing: true);
         lexer.MatchString("'", "'");
         lexer.MatchNumber(allowHex: true, allowBin: true);
 

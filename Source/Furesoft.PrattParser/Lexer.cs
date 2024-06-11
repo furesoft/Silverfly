@@ -77,9 +77,9 @@ public sealed class Lexer
             seperatorSymbol ?? PredefinedSymbols.Underscore));
     }
 
-    public void MatchBoolean()
+    public void MatchBoolean(bool ignoreCasing = false)
     {
-        AddMatcher(new BooleanMatcher());
+        AddMatcher(new BooleanMatcher(ignoreCasing));
     }
 
     public void Ignore(char c)

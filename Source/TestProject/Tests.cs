@@ -92,6 +92,12 @@ public class Tests : SnapshotParserTestBase
     }
 
     [Test]
+    public Task Boolean_CaseInsensitive_Should_Pass()
+    {
+        return Test("TrUe");
+    }
+
+    [Test]
     public Task FloatingNumber_Should_Pass()
     {
         return Test("42.5");

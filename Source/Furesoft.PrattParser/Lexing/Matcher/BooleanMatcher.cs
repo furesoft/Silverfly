@@ -16,7 +16,7 @@ public class BooleanMatcher(bool ignoreCasing = false) : IMatcher
         {
             lexer.Advance("true".Length);
         }
-        if (lexer.IsMatch("false", ignoreCasing))
+        else if (lexer.IsMatch("false", ignoreCasing))
         {
             lexer.Advance("false".Length);
         }
