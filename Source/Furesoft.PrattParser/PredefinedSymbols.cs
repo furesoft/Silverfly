@@ -62,6 +62,7 @@ public static class PredefinedSymbols
 
     public static Symbol Section = Pool.Get("§");
     public static Symbol Degree = Pool.Get("°");
+    public static Symbol Hash = Pool.Get("#");
 
     public static Symbol String = Pool.Get("#string");
     public static Symbol Number = Pool.Get("#number");
