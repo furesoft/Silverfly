@@ -2,14 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Furesoft.PrattParser.Lexing;
-using Furesoft.PrattParser.Lexing.IgnoreMatcher;
-using Furesoft.PrattParser.Lexing.Matcher;
 using Furesoft.PrattParser.Text;
 
 namespace Furesoft.PrattParser;
 
 //ToDo: Add Ability to use a word combination as single keyword e.g. "12 unless if true"
-public sealed class Lexer
+public sealed partial class Lexer
 {
     private Dictionary<string, Symbol> _punctuators = [];
     private readonly List<IMatcher> _parts = [];
@@ -63,41 +61,6 @@ public sealed class Lexer
     public void AddMatcher(IMatcher matcher)
     {
         _parts.Add(matcher);
-    }
-
-    public void MatchString(Symbol leftSymbol, Symbol rightSymbol)
-    {
-        AddMatcher(new StringMatcher(leftSymbol, rightSymbol));
-    }
-
-    public void MatchNumber(bool allowHex, bool allowBin, Symbol floatingPointSymbol = null,
-        Symbol seperatorSymbol = null)
-    {
-        AddMatcher(new NumberMatcher(allowHex, allowBin, floatingPointSymbol ?? PredefinedSymbols.Dot,
-            seperatorSymbol ?? PredefinedSymbols.Underscore));
-    }
-
-    public void MatchBoolean(bool ignoreCasing = false)
-    {
-        AddMatcher(new BooleanMatcher(ignoreCasing));
-    }
-
-    public void Ignore(char c)
-    {
-        Ignore(new PunctuatorIgnoreMatcher(c.ToString()));
-    }
-
-    public void Ignore(params char[] chars)
-    {
-        foreach (var c in chars)
-        {
-            Ignore(c);
-        }
-    }
-
-    public void Ignore(string c)
-    {
-        Ignore(new PunctuatorIgnoreMatcher(c));
     }
 
     public void Ignore(IIgnoreMatcher matcher)
@@ -252,6 +215,7 @@ public sealed class Lexer
         return new(punctuatorKey, _line, oldColumn);
     }
 
+    //ToDo: Allow custom name rule definition
     private Token LexName()
     {
         var oldColumn = _column;
@@ -287,13 +251,5 @@ public sealed class Lexer
     public bool ContainsSymbol(string tokenName)
     {
         return _punctuators.ContainsKey(tokenName);
-    }
-
-    public void AddSymbols(params string[] symbols)
-    {
-        foreach (var symbol in symbols)
-        {
-            AddSymbol(symbol);
-        }
     }
 }

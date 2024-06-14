@@ -46,8 +46,8 @@ public class TestParser : Parser
 
     protected override void InitLexer(Lexer lexer)
     {
-        lexer.Ignore(' ', '\r', '\t');
-        lexer.Ignore("\r\n");
+        lexer.IgnoreWhitespace();
+        lexer.Ignore("\r", "\r\n");
 
         lexer.MatchBoolean(ignoreCasing: true);
         lexer.MatchString("'", "'");
