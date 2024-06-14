@@ -4,19 +4,17 @@ using Furesoft.PrattParser.Parselets.Literals;
 
 namespace Furesoft.PrattParser;
 
-public static class ParserExtensions
+public partial class Parser
 {
-    public static void AddArithmeticOperators(this Parser parser)
+    protected void AddArithmeticOperators()
     {
-        parser.Prefix("+", "Prefix");
-        parser.Prefix("-", "Prefix");
-
-        parser.Group("(", ")");
-
-        parser.InfixLeft("+", "Sum");
-        parser.InfixLeft("-", "Sum");
-        parser.InfixLeft("*", "Product");
-        parser.InfixLeft("/", "Product");
+        Prefix("+", "Prefix");
+        Prefix("-", "Prefix");
+        Group("(", ")");
+        InfixLeft("+", "Sum");
+        InfixLeft("-", "Sum");
+        InfixLeft("*", "Product");
+        InfixLeft("/", "Product");
     }
 
     /// <summary>
@@ -26,7 +24,7 @@ public static class ParserExtensions
     /// <param name="optionalSymbol"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    public static bool Optional(this Parser parser, Symbol optionalSymbol)
+    public bool Optional(Parser parser, Symbol optionalSymbol)
     {
         if (!parser.IsMatch(optionalSymbol))
         {
@@ -39,80 +37,76 @@ public static class ParserExtensions
 
     }
 
-    public static void AddLogicalOperators(this Parser parser)
+    protected void AddLogicalOperators()
     {
-        parser.Prefix("!", "Prefix");
-        parser.InfixLeft("&&", "Product");
-        parser.InfixLeft("||", "Sum");
+        Prefix("!", "Prefix");
+        InfixLeft("&&", "Product");
+        InfixLeft("||", "Sum");
     }
 
-    public static void AddBitOperators(this Parser parser)
+    protected void AddBitOperators()
     {
-        parser.Prefix("~", "Prefix");
-
-        parser.InfixLeft("&", "Product");
-        parser.InfixLeft("|", "Sum");
-
-        parser.InfixLeft("<<", "Product");
-        parser.InfixLeft(">>", "Product");
+        Prefix("~", "Prefix");
+        InfixLeft("&", "Product");
+        InfixLeft("|", "Sum");
+        InfixLeft("<<", "Product");
+        InfixLeft(">>", "Product");
     }
 
-    public static void AddCommonLiterals(this Parser parser)
+    protected void AddCommonLiterals()
     {
-        parser.Register(PredefinedSymbols.Number, new NumberParselet());
-        parser.Register(PredefinedSymbols.Boolean, new BooleanLiteralParselet());
-        parser.Register(PredefinedSymbols.String, new StringLiteralParselet());
+        Register(PredefinedSymbols.Number, new NumberParselet());
+        Register(PredefinedSymbols.Boolean, new BooleanLiteralParselet());
+        Register(PredefinedSymbols.String, new StringLiteralParselet());
     }
 
-    public static void AddCommonAssignmentOperators(this Parser parser)
+    protected void AddCommonAssignmentOperators()
     {
-        parser.InfixLeft("=", "Assignment");
-        parser.InfixLeft("+=", "Assignment");
-        parser.InfixLeft("-=", "Assignment");
-        parser.InfixLeft("*=", "Assignment");
-        parser.InfixLeft("/=", "Assignment");
-
-        parser.Prefix("++", "Prefix");
-        parser.Prefix("--", "Prefix");
-
-        parser.Postfix("--", "PostFix");
-        parser.Postfix("++", "PostFix");
+        InfixLeft("=", "Assignment");
+        InfixLeft("+=", "Assignment");
+        InfixLeft("-=", "Assignment");
+        InfixLeft("*=", "Assignment");
+        InfixLeft("/=", "Assignment");
+        Prefix("++", "Prefix");
+        Prefix("--", "Prefix");
+        Postfix("--", "PostFix");
+        Postfix("++", "PostFix");
     }
 
-    public static List<AstNode> ParseSeperated(this Parser parser, Symbol seperator, Symbol terminator, int bindingPower = 0)
+    public List<AstNode> ParseSeperated(Symbol seperator, Symbol terminator, int bindingPower = 0)
     {
         var args = new List<AstNode>();
 
-        if (parser.Match(terminator))
+        if (Match(terminator))
         {
             return [];
         }
 
         do
         {
-            args.Add(parser.Parse(bindingPower));
-        } while (parser.Match(seperator));
+            args.Add(Parse(bindingPower));
+        } while (Match(seperator));
 
-        parser.Consume(terminator);
+        Consume(terminator);
 
         return args;
     }
 
-    public static List<AstNode> ParseSeperated(this Parser parser, Symbol seperator, int bindingPower = 0, params Symbol[] terminators)
+    public List<AstNode> ParseSeperated(Symbol seperator, int bindingPower = 0, params Symbol[] terminators)
     {
         var args = new List<AstNode>();
 
-        if (parser.Match(terminators))
+        if (Match(terminators))
         {
             return [];
         }
 
         do
         {
-            args.Add(parser.Parse(bindingPower));
-        } while (parser.Match(seperator));
+            args.Add(Parse(bindingPower));
+        } while (Match(seperator));
 
-        parser.Match(terminators);
+        Match(terminators);
 
         return args;
     }

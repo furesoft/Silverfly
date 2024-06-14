@@ -174,7 +174,7 @@ public sealed class Lexer
 
             Document.Messages.Add(Message.Error($"Invalid Character '{c}'", SourceRange.From(Document, _line, _column, _line, _column)));
 
-            return new Token("#invalid", c.ToString().AsMemory(), _line, _column).WithDocument(Document);
+            return Token.Invalid(c, _line, _column).WithDocument(Document);
         }
 
         return new Token(PredefinedSymbols.EOF, _line, _column).WithDocument(Document);

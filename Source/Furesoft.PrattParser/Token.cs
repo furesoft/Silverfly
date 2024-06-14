@@ -9,6 +9,8 @@ namespace Furesoft.PrattParser;
 /// </summary>
 public struct Token(Symbol type, ReadOnlyMemory<char> text, int line, int column)
 {
+    public static Token Invalid(char c, int line, int column) => new("#invalid", c.ToString().AsMemory(), line, column);
+
     public Symbol Type { get; } = type;
 
     public ReadOnlyMemory<char> Text { get; set; } = text;

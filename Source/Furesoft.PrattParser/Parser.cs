@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Furesoft.PrattParser.Nodes;
 using Furesoft.PrattParser.Parselets;
@@ -321,6 +320,7 @@ public abstract partial class Parser
         if (!token.Type.Equals(expected))
         {
             token.Document.Messages.Add(Message.Error($"Expected token {expected} and found {token.Type}({token})"));
+            return Token.Invalid('\0', token.Line, token.Column);
         }
 
         return Consume();
@@ -374,7 +374,7 @@ public abstract partial class Parser
     /// <summary>
     ///     Registers a postfix unary operator parselet for the given token and binding power.
     /// </summary>
-    public void Postfix(Symbol token, string bindingPowerName = "Postfix")
+    protected void Postfix(Symbol token, string bindingPowerName = "Postfix")
     {
         Register(token, new PostfixOperatorParselet(BindingPowers.Get(bindingPowerName)));
     }
@@ -383,7 +383,7 @@ public abstract partial class Parser
     /// <summary>
     ///     Registers a prefix unary operator parselet for the given token and binding power.
     /// </summary>
-    public void Prefix(Symbol token, string bindingPowerName = "Prefix")
+    protected void Prefix(Symbol token, string bindingPowerName = "Prefix")
     {
         Register(token, new PrefixOperatorParselet(BindingPowers.Get(bindingPowerName)));
     }
@@ -391,7 +391,7 @@ public abstract partial class Parser
     /// <summary>
     ///     Registers a left-associative binary operator parselet for the given token and binding power.
     /// </summary>
-    public void InfixLeft(Symbol token, string bindingPowerName)
+    protected void InfixLeft(Symbol token, string bindingPowerName)
     {
         Register(token, new BinaryOperatorParselet(BindingPowers.Get(bindingPowerName), false));
     }
@@ -399,7 +399,7 @@ public abstract partial class Parser
     /// <summary>
     ///     Registers a right-associative binary operator parselet for the given token and binding power.
     /// </summary>
-    public void InfixRight(Symbol token, string bindingPowerName)
+    protected void InfixRight(Symbol token, string bindingPowerName)
     {
         Register(token, new BinaryOperatorParselet(BindingPowers.Get(bindingPowerName), true));
     }
@@ -410,7 +410,7 @@ public abstract partial class Parser
     /// <param name="firstSymbol"></param>
     /// <param name="secondSymbol"></param>
     /// <param name="bindingPower"></param>
-    public void Ternary(Symbol firstSymbol, Symbol secondSymbol, string bindingPowerName)
+    protected void Ternary(Symbol firstSymbol, Symbol secondSymbol, string bindingPowerName)
     {
         Register(firstSymbol, new TernaryOperatorParselet(secondSymbol, BindingPowers.Get(bindingPowerName)));
     }
