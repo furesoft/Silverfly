@@ -91,12 +91,49 @@ public abstract partial class Parser
         }
     }
 
+    private static bool TryMatchOperatorKind<TFirst, TSecond>(SyntaxElement definition, out TFirst first, out TSecond second)
+    {
+        if (definition is AndElement andElement)
+        {
+            if (andElement.First is TFirst firstElement && andElement.Second is TSecond secondElement)
+            {
+                first = firstElement;
+                second = secondElement;
+
+                return true;
+            }
+        }
+
+        first = default;
+        second = default;
+
+        return false;
+    }
+
+    protected void Operator(SyntaxElement definition, string precedenceName = null)
+    {
+        if (TryMatchOperatorKind<KeywordElement, ExprElement>(definition, out var prefixKw, out var prefixExpr))
+        {
+            Prefix(prefixKw.Keyword, precedenceName);
+        }
+        else if (TryMatchOperatorKind<ExprElement, KeywordElement>(definition, out var postfixExpr, out var postfixKw))
+        {
+            Postfix(postfixKw.Keyword, precedenceName);
+        }
+    }
+
     private void Builder<TNode>(SyntaxElement definition, NodeType type)
         where TNode : AstNode
     {
         AddSymbolsFromBuilderToLexer(definition);
 
         var parselet = new BuilderParselet<TNode>(BindingPowers.Get("Product"), definition); //Todo: enable custom binding power
+
+        if (definition is AndElement andElement && andElement.First is KeywordElement kw && andElement.Second is ExprElement)
+        {
+            Prefix(kw.Keyword);
+        }
+
         var recognitionKeywords = new List<string>();
         GetRecognitionKeywords(definition, recognitionKeywords);
 

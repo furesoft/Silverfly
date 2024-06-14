@@ -15,15 +15,14 @@ public class TestParser : Parser
 
         Ternary("?", ":", "Conditional");
 
-        this.AddArithmeticOperators();
-        this.AddBitOperators();
-        this.AddLogicalOperators();
-        this.AddCommonLiterals();
-        this.AddCommonAssignmentOperators();
+        AddArithmeticOperators();
+        AddBitOperators();
+        AddLogicalOperators();
+        AddCommonLiterals();
+        AddCommonAssignmentOperators();
 
-        Prefix("not");
-
-        Postfix("!");
+        Operator("not" + expr());
+        Operator(expr() + "!");
 
         InfixRight("^", "Exponent");
 
