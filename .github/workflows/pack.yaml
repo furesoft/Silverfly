@@ -33,6 +33,6 @@ jobs:
 
       - name: Publish package
         run: |
-          dotnet nuget push ./nuget/*.nupkg -s https://nuget.pkg.github.com/${GITHUB_OWNER}/index.json -k ${{ secrets.GITHUB_TOKEN }}
+          dotnet nuget push ./nuget/*.nupkg -s https://nuget.pkg.github.com/${GITHUB_OWNER}/index.json -k ${{ secrets.gh }}
         env:
           GITHUB_OWNER: ${{ github.repository_owner }}
