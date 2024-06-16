@@ -17,7 +17,7 @@ jobs:
           dotnet-version: '8.x'
 
       - name: Go To Right Folder
-        run: cd Source/Furesoft.PrattParser
+        run: ls -la && cd Source/Furesoft.PrattParser
 
       - name: Install dependencies
         run: dotnet restore
