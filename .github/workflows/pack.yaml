@@ -31,12 +31,6 @@ jobs:
           name: nuget-package
           path: ./nuget/*.nupkg
 
-      - name: Publish to GitHub Packages
-        uses: docker/login-action@v1
-        with:
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Publish package
         run: |
           dotnet nuget push ./nuget/*.nupkg -s https://nuget.pkg.github.com/${GITHUB_OWNER}/index.json -k ${{ secrets.GITHUB_TOKEN }}
