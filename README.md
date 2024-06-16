@@ -12,5 +12,4 @@ To use the Furesoft PrattParser framework, you can install it via NuGet:
 
 ```sh
 dotnet add package Furesoft.PrattParser
-
-
+```
