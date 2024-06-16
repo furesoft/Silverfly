@@ -1,8 +1,9 @@
 name: Build and Publish NuGet Package
 
 on:
-  release:
-    types: [created]
+  push:
+    branches:
+      - main
 
 jobs:
   build-and-publish:
