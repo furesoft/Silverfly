@@ -17,16 +17,13 @@ jobs:
         with:
           dotnet-version: '8.x'
 
-      - name: Go To Right Folder
-        run: ls -la Source/Furesoft.PrattParser && cd Source/Furesoft.PrattParser
-
       - name: Install dependencies
-        run: dotnet restore
+        run: dotnet restore Source/Furesoft.PrattParser/Furesoft.PrattParser.csproj
 
       - name: Build and package
         run: |
-          dotnet build -c Release
-          dotnet pack -c Release -o ./nuget
+          dotnet build -c Release Source/Furesoft.PrattParser/Furesoft.PrattParser.csproj
+          dotnet pack -c Release -o ./nuget Source/Furesoft.PrattParser/Furesoft.PrattParser.csproj
 
       - name: Publish to NuGet
         uses: actions/upload-artifact@v4
