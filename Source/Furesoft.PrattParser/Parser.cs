@@ -114,11 +114,13 @@ public abstract partial class Parser
     {
         if (TryMatchOperatorKind<KeywordElement, ExprElement>(definition, out var prefixKw, out var prefixExpr))
         {
-            Prefix(prefixKw.Keyword, precedenceName);
+            _lexer.AddSymbol(prefixKw.Keyword);
+            Prefix(prefixKw.Keyword, precedenceName ?? "Prefix");
         }
         else if (TryMatchOperatorKind<ExprElement, KeywordElement>(definition, out var postfixExpr, out var postfixKw))
         {
-            Postfix(postfixKw.Keyword, precedenceName);
+            _lexer.AddSymbol(postfixKw.Keyword);
+            Postfix(postfixKw.Keyword, precedenceName ?? "Postfix");
         }
     }
 

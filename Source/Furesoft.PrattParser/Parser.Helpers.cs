@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Furesoft.PrattParser.Nodes;
+using Furesoft.PrattParser.Parselets;
 using Furesoft.PrattParser.Parselets.Literals;
 
 namespace Furesoft.PrattParser;
@@ -8,8 +10,8 @@ public partial class Parser
 {
     protected void AddArithmeticOperators()
     {
-        Prefix("+", "Prefix");
-        Prefix("-", "Prefix");
+        Prefix("+");
+        Prefix("-");
         Group("(", ")");
         InfixLeft("+", "Sum");
         InfixLeft("-", "Sum");
@@ -39,7 +41,7 @@ public partial class Parser
 
     protected void AddLogicalOperators()
     {
-        Prefix("!", "Prefix");
+        Prefix("!");
         InfixLeft("&&", "Product");
         InfixLeft("||", "Sum");
     }
@@ -67,10 +69,10 @@ public partial class Parser
         InfixLeft("-=", "Assignment");
         InfixLeft("*=", "Assignment");
         InfixLeft("/=", "Assignment");
-        Prefix("++", "Prefix");
-        Prefix("--", "Prefix");
-        Postfix("--", "PostFix");
-        Postfix("++", "PostFix");
+        Prefix("++");
+        Prefix("--");
+        Postfix("--");
+        Postfix("++");
     }
 
     public List<AstNode> ParseSeperated(Symbol seperator, Symbol terminator, int bindingPower = 0)
