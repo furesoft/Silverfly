@@ -33,8 +33,12 @@ jobs:
           name: nuget-package
           path: ./nuget/*.nupkg
 
-      - name: Publish package
+      - name: Publish package To GH
         run: |
-          dotnet nuget push ./nuget/*.nupkg -s https://nuget.pkg.github.com/${GITHUB_OWNER}/index.json -k ${{ secrets.GITHUB_TOKEN }}
+          dotnet nuget push ./nuget/*.nupkg -s https://nuget.pkg.github.com/${GITHUB_OWNER}/index.json -k ${{ secrets.GITHUB_TOKEN }} --skip-duplicate
         env:
           GITHUB_OWNER: ${{ github.repository_owner }}
+
+      - name: Publish package To Nuget
+        run: |
+          dotnet nuget push ./nuget/*.nupkg --api-key "${{ secrets.NUGET_APIKEY }}" --source https://api.nuget.org/v3/index.json --skip-duplicate
