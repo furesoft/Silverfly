@@ -6,10 +6,4 @@ Furesoft PrattParser is a versatile parsing framework that provides extensive su
 [![Build and Publish NuGet Package](https://github.com/furesoft/Furesoft.PrattParser/actions/workflows/pack.yaml/badge.svg)](https://github.com/furesoft/Furesoft.PrattParser/actions/workflows/pack.yaml)
 
 
-## Installation
-
-To use the Furesoft PrattParser framework, you can install it via NuGet:
-
-```sh
-dotnet add package Furesoft.PrattParser
-```
+You can find a brief instruction in the wiki.
