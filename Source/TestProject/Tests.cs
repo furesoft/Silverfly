@@ -229,24 +229,6 @@ public class Tests : SnapshotParserTestBase
         return Test("-42.5;13");
     }
 
-    [Test]
-    public Task Dynamic_Should_Pass()
-    {
-        return Test("if true then 1 else 2");
-    }
-
-    [Test]
-    public Task Dynamic_ifnt_Should_Pass()
-    {
-        return Test("ifnt true then 1");
-    }
-
-    [Test]
-    public Task Dynamic_unless_Should_Pass()
-    {
-        return Test("unless true then 1");
-    }
-
     public static Task Test(string source)
     {
         var result = Parser.Parse<TestParser>(source, useStatementsAtToplevel: true);

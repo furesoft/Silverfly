@@ -1,7 +1,6 @@
 using Furesoft.PrattParser;
 using Furesoft.PrattParser.Lexing.IgnoreMatcher.Comments;
 using Furesoft.PrattParser.Parselets;
-using static Furesoft.PrattParser.Parselets.Builder.Helpers;
 
 namespace TestProject;
 
@@ -21,8 +20,8 @@ public class TestParser : Parser
         AddCommonLiterals();
         AddCommonAssignmentOperators();
 
-        Operator("not" + expr());
-        Operator(expr() + "!");
+        Prefix("not");
+        Postfix("!");
 
         InfixRight("^", "Exponent");
 
@@ -30,17 +29,6 @@ public class TestParser : Parser
 
         Block(PredefinedSymbols.SOF, PredefinedSymbols.EOF,
             seperator: PredefinedSymbols.Semicolon);
-
-        StmtBuilder<IfNode>(
-            "if" + expr("Cond") + "then" +
-                expr("Body") +
-            "else" +
-                expr("ElseBody"));
-
-        ExprBuilder<IfNode>(
-            (keyword("ifnt") | "unless") + expr("Cond") + "then" +
-                expr("Body")
-        );
     }
 
     protected override void InitLexer(Lexer lexer)
