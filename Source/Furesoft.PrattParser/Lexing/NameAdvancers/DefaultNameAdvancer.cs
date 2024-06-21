@@ -1,4 +1,4 @@
-namespace Furesoft.PrattParser;
+namespace Furesoft.PrattParser.Lexing.NameAdvancers;
 
 public class DefaultNameAdvancer : INameAdvancer
 {

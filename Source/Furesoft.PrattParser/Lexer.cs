@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Furesoft.PrattParser.Lexing;
+using Furesoft.PrattParser.Lexing.NameAdvancers;
 using Furesoft.PrattParser.Text;
 
 namespace Furesoft.PrattParser;
