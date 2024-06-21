@@ -49,14 +49,14 @@ public abstract partial class Parser
         }
     }
 
-    public void Group(Symbol leftToken, Symbol rightToken)
+    public void Group(Symbol leftToken, Symbol rightToken, Symbol tag = null)
     {
-        Register(leftToken, new GroupParselet(leftToken, rightToken));
+        Register(leftToken, new GroupParselet(leftToken, rightToken, tag));
     }
 
-    public void Block(Symbol start, Symbol terminator, Symbol seperator = null, bool wrapExpressions = false)
+    public void Block(Symbol start, Symbol terminator, Symbol seperator = null, bool wrapExpressions = false, Symbol tag = null)
     {
-        Register(start, new BlockParselet(terminator, seperator, wrapExpressions));
+        Register(start, new BlockParselet(terminator, seperator, wrapExpressions, tag));
     }
 
     public AstNode ParseStatement(bool wrapExpressions = false)
