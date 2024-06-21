@@ -1,6 +1,4 @@
-﻿
-namespace Furesoft.PrattParser.Lexing.Matcher;
-
+﻿namespace Furesoft.PrattParser.Lexing.Matcher;
 
 public class BooleanMatcher(bool ignoreCasing = false) : IMatcher
 {

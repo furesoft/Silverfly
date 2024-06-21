@@ -6,6 +6,7 @@ using Furesoft.PrattParser.Text;
 
 namespace Furesoft.PrattParser;
 
+//Todo: Add Synchronisation Mechanism For Better Error Reporting
 public abstract partial class Parser
 {
     private readonly Dictionary<Symbol, IInfixParselet> _infixParselets = [];

@@ -11,7 +11,7 @@ public class StringMatcher(Symbol leftStr, Symbol rightStr, bool allowEscapeChar
 
     public bool Match(Lexer lexer, char c)
     {
-        return _leftStr != null && _rightStr != null && lexer.IsMatch(_leftStr.Name);
+        return _leftStr != null && _rightStr != null && lexer.IsMatch(_leftStr);
     }
 
     public Token Build(Lexer lexer, ref int index, ref int column, ref int line)

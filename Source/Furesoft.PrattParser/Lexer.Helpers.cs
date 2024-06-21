@@ -6,9 +6,9 @@ namespace Furesoft.PrattParser;
 
 public partial class Lexer
 {
-    public void MatchString(Symbol leftSymbol, Symbol rightSymbol)
+    public void MatchString(Symbol leftSymbol, Symbol rightSymbol, bool allowEscapeChars = true, bool allowUnicodeChars = true)
     {
-        AddMatcher(new StringMatcher(leftSymbol, rightSymbol));
+        AddMatcher(new StringMatcher(leftSymbol, rightSymbol, allowEscapeChars, allowUnicodeChars));
     }
 
     public void MatchNumber(bool allowHex, bool allowBin, Symbol floatingPointSymbol = null,

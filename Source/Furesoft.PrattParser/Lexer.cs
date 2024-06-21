@@ -112,7 +112,7 @@ public sealed partial class Lexer
             return new Token(PredefinedSymbols.SOF, _line, _column).WithDocument(Document);
         }
 
-        while (_index < Document.Source.Length)
+        while (IsNotAtEnd())
         {
             var c = Peek(0);
 
@@ -138,7 +138,7 @@ public sealed partial class Lexer
                 return LexName().WithDocument(Document);
             }
 
-            Document.Messages.Add(Message.Error($"Invalid Character '{c}'", SourceRange.From(Document, _line, _column, _line, _column)));
+            Document.Messages.Add(Message.Error($"Unknown Character '{c}'", SourceRange.From(Document, _line, _column, _line, _column)));
 
             return Token.Invalid(c, _line, _column).WithDocument(Document);
         }
@@ -166,10 +166,8 @@ public sealed partial class Lexer
                 continue;
             }
 
-            {
-                token = LexSymbol(punctuator.Key).WithDocument(Document);
-                return true;
-            }
+            token = LexSymbol(punctuator.Key).WithDocument(Document);
+            return true;
         }
 
         token = default;
@@ -182,10 +180,8 @@ public sealed partial class Lexer
         {
             if (part.Match(this, c))
             {
-                {
-                    token = part.Build(this, ref _index, ref _column, ref _line).WithDocument(Document);
-                    return true;
-                }
+                token = part.Build(this, ref _index, ref _column, ref _line).WithDocument(Document);
+                return true;
             }
         }
 
