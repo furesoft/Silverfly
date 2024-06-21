@@ -38,12 +38,10 @@ public sealed partial class Lexer
                 _punctuators.Add(punctuator, type);
             }
         }
-
-        // sort punctuators longest -> smallest to make it possible to use symbols with more than one character
-        OrderSymbols();
     }
 
-    private void OrderSymbols()
+    // sort punctuators longest -> smallest to make it possible to use symbols with more than one character
+    internal void OrderSymbols()
     {
         _punctuators = new(_punctuators.OrderByDescending(_ => _.Key.Length));
     }
@@ -56,8 +54,6 @@ public sealed partial class Lexer
         }
 
         _punctuators.Add(symbol, PredefinedSymbols.Pool.Get(symbol));
-
-        OrderSymbols();
     }
 
     public void AddMatcher(IMatcher matcher)

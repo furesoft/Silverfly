@@ -77,7 +77,7 @@ public class Symbol
 
     public string Punctuator()
     {
-        if (this == PredefinedSymbols.Name || this == PredefinedSymbols.EOF || Name == string.Empty)
+        if (this == PredefinedSymbols.Name || this == PredefinedSymbols.EOF || this == PredefinedSymbols.SOF || Name == string.Empty)
         {
             return "\0";
         }

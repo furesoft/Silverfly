@@ -104,6 +104,8 @@ public abstract partial class Parser
 
         parser.InitLexer(lexer);
 
+        lexer.OrderSymbols();
+
         return new(useStatementsAtToplevel
                     ? parser.ParseStatement()
                     : parser.ParseExpression(), lexer.Document);
