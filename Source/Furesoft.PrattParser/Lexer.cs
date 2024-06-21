@@ -14,6 +14,7 @@ public sealed partial class Lexer
     private readonly List<IIgnoreMatcher> _ignoreMatcher = [];
     private int _index;
     private int _line = 1, _column = 1;
+    private INameAdvancer _nameAdvancer = new DefaultNameAdvancer();
 
     public SourceDocument Document { get; }
 
@@ -61,6 +62,11 @@ public sealed partial class Lexer
     public void AddMatcher(IMatcher matcher)
     {
         _parts.Add(matcher);
+    }
+
+    public void UseNameAdvancer(INameAdvancer advancer)
+    {
+        _nameAdvancer = advancer;
     }
 
     public void Ignore(IIgnoreMatcher matcher)
@@ -130,7 +136,7 @@ public sealed partial class Lexer
                 return next;
             }
 
-            if (char.IsLetter(c))
+            if (_nameAdvancer.IsNameStart(c))
             {
                 return LexName().WithDocument(Document);
             }
@@ -215,21 +221,13 @@ public sealed partial class Lexer
         return new(punctuatorKey, _line, oldColumn);
     }
 
-    //ToDo: Allow custom name rule definition
     private Token LexName()
     {
         var oldColumn = _column;
 
         var start = _index;
-        while (_index < Document.Source.Length)
-        {
-            if (!char.IsLetter(Peek(0)))
-            {
-                break;
-            }
 
-            Advance();
-        }
+        _nameAdvancer.AdvanceName(this);
 
         var nameSlice = Document.Source[start.._index];
         var name = nameSlice.ToString();
@@ -241,6 +239,9 @@ public sealed partial class Lexer
 
         return new(PredefinedSymbols.Name, nameSlice, _line, oldColumn);
     }
+
+
+    public bool IsNotAtEnd() => _index < Document.Source.Length;
 
     public void Advance(int distance = 1)
     {
