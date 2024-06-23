@@ -14,6 +14,16 @@ public class DocumentConverter : WriteOnlyJsonConverter<SourceDocument>
         writer.WritePropertyName("Source");
         writer.WriteRawValue(value.Source.ToString());
 
+        writer.WritePropertyName("Messages");
+        writer.WriteStartArray();
+
+        foreach (var msg in value.Messages)
+        {
+            writer.WriteRawValue(msg.ToString());
+        }
+
+        writer.WriteEndArray();
+
         writer.WriteEndObject();
     }
 }
