@@ -3,6 +3,7 @@ using Furesoft.PrattParser.Nodes;
 
 namespace Furesoft.PrattParser;
 
+//ToDo: Extend Visitor To Visit All Kind Of Node Types With Own Method
 public interface IVisitor<out TReturn>
 {
     TReturn Visit(AstNode node);
