@@ -14,6 +14,13 @@ public abstract class AstNode
         return this;
     }
 
+    public AstNode WithRange(SourceRange range)
+    {
+        Range = range;
+
+        return this;
+    }
+
     public AstNode WithRange(SourceDocument document, SourceSpan start, SourceSpan end)
     {
         Range = new(document, start, end);
