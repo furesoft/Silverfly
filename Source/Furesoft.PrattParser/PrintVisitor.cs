@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using System.Text;
 using Furesoft.PrattParser.Nodes;
 using Furesoft.PrattParser.Nodes.Operators;
@@ -24,8 +25,33 @@ public class PrintVisitor : IVisitor<string>
             LiteralNode<double> literal => Visit(literal),
             LiteralNode<string> literal => Visit(literal),
 
-            _ => ""
+            _ => VisitOther(node)
         };
+    }
+
+    private string VisitOther(AstNode node)
+    {
+        var builder = new StringBuilder();
+
+        builder.Append('(');
+        builder.Append(node.GetType().Name); // get the class name
+
+        var properties = node.GetType().GetProperties();
+        foreach (var property in properties)
+        {
+            builder.Append(' ');
+            builder.Append(property.Name);
+            builder.Append('=');
+            builder.Append(property.GetValue(node));
+            builder.Append(',');
+        }
+
+        // remove the trailing comma
+        builder.Length -= 1;
+
+        builder.Append(')');
+
+        return builder.ToString();
     }
 
     public string Visit(BlockNode block)
@@ -50,8 +76,13 @@ public class PrintVisitor : IVisitor<string>
     {
         var builder = new StringBuilder();
 
-        builder.Append(call.FunctionExpr.Accept(this));
         builder.Append('(');
+        builder.Append('(' + call.FunctionExpr.Accept(this) + ")");
+
+        if (call.Arguments.Count > 0)
+        {
+            builder.Append(' ');
+        }
 
         for (var i = 0; i < call.Arguments.Count; i++)
         {
