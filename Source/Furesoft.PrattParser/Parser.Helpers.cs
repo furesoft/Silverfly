@@ -75,6 +75,20 @@ public partial class Parser
         return args.ToImmutableList();
     }
 
+    public ImmutableList<AstNode> ParseList(Symbol terminator, int bindingPower = 0)
+    {
+        var args = new List<AstNode>();
+
+        do
+        {
+            args.Add(Parse(bindingPower));
+        } while (!IsMatch(terminator));
+
+        Consume(terminator);
+
+        return args.ToImmutableList();
+    }
+
     public List<AstNode> ParseSeperated(Symbol seperator, int bindingPower = 0, params Symbol[] terminators)
     {
         var args = new List<AstNode>();
