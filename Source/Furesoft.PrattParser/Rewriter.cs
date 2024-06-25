@@ -1,6 +1,7 @@
 using System.Linq;
 using Furesoft.PrattParser.Nodes;
 using Furesoft.PrattParser.Nodes.Operators;
+using System.Collections.Immutable;
 
 namespace Furesoft.PrattParser;
 
@@ -17,7 +18,7 @@ public abstract class Rewriter : IVisitor<AstNode>
 
     public virtual AstNode Rewrite(CallNode call)
     {
-        var args = call.Arguments.Select(arg => arg.Accept(this)).ToList();
+        var args = call.Arguments.Select(arg => arg.Accept(this)).ToImmutableList();
 
         return new CallNode(call.FunctionExpr, args);
     }
@@ -54,7 +55,7 @@ public abstract class Rewriter : IVisitor<AstNode>
 
     private AstNode Rewrite(BlockNode block)
     {
-        var children = block.Children.Select(Visit).ToList();
+        var children = block.Children.Select(Visit).ToImmutableList();
 
         return new BlockNode(block.SeperatorSymbol, block.Terminator)
             .WithChildren(children);

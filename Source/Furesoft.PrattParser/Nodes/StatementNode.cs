@@ -1,5 +1,5 @@
 namespace Furesoft.PrattParser.Nodes;
 
-public abstract class StatementNode : AstNode
+public abstract record StatementNode : AstNode
 {
 }

@@ -1,15 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.Immutable;
 
 namespace Furesoft.PrattParser.Nodes;
 
-public class BlockNode(Symbol seperator, Symbol terminator) : AstNode
+public record BlockNode(Symbol SeperatorSymbol, Symbol Terminator) : AstNode
 {
-    public Symbol SeperatorSymbol { get; set; } = seperator;
-    public Symbol Terminator { get; } = terminator;
-    public List<AstNode> Children { get; set; } = [];
+    public ImmutableList<AstNode> Children { get; set; }
 
-    public BlockNode WithChildren(List<AstNode> nodes)
+    public BlockNode WithChildren(ImmutableList<AstNode> nodes)
     {
         Children = nodes;
 

@@ -9,7 +9,11 @@
     <RepositoryUrl>https://github.com/furesoft/Furesoft.PrattParser</RepositoryUrl>
     <Description>A little framework to build parsers</Description>
     <PackageTags>parser, pratt</PackageTags>
-    <TargetFrameworks>net8.0;netstandard2.1</TargetFrameworks>
+    <TargetFrameworks>net8.0</TargetFrameworks>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Collections.Immutable" Version="8.0.0" />
+  </ItemGroup>
 
 </Project>
