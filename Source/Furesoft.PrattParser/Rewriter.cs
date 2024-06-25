@@ -5,6 +5,7 @@ using System.Collections.Immutable;
 
 namespace Furesoft.PrattParser;
 
+//ToDo: rewrite with "with-syntax"
 public abstract class Rewriter : IVisitor<AstNode>
 {
     public virtual AstNode Rewrite<T>(LiteralNode<T> literal) => literal;
