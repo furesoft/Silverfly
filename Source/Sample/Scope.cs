@@ -26,6 +26,6 @@ public class Scope
             return Bindings[name];
         }
 
-        return scope.Parent?.Get(name);
+        return Parent?.Get(name);
     }
 }
