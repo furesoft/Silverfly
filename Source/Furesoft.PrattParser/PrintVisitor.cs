@@ -19,11 +19,7 @@ public class PrintVisitor : IVisitor<string>
             BinaryOperatorNode op => Visit(op),
             PostfixOperatorNode postfix => Visit(postfix),
             PrefixOperatorNode prefix => Visit(prefix),
-            LiteralNode<bool> literal => Visit(literal),
-            LiteralNode<ulong> literal => Visit(literal),
-            LiteralNode<long> literal => Visit(literal),
-            LiteralNode<double> literal => Visit(literal),
-            LiteralNode<string> literal => Visit(literal),
+            LiteralNode literal => Visit(literal),
 
             _ => VisitOther(node)
         };
@@ -168,27 +164,7 @@ public class PrintVisitor : IVisitor<string>
         return builder.ToString();
     }
 
-    public string Visit(LiteralNode<bool> literalNode)
-    {
-        return literalNode.Value.ToString();
-    }
-
-    public string Visit(LiteralNode<double> literalNode)
-    {
-        return literalNode.Value.ToString(CultureInfo.InvariantCulture);
-    }
-
-    public string Visit(LiteralNode<string> literalNode)
-    {
-        return $"'{literalNode.Value}'";
-    }
-
-    public string Visit(LiteralNode<ulong> literalNode)
-    {
-        return literalNode.Value.ToString();
-    }
-
-    public string Visit(LiteralNode<long> literalNode)
+    public string Visit(LiteralNode literalNode)
     {
         return literalNode.Value.ToString();
     }

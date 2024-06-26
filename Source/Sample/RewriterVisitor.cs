@@ -6,11 +6,11 @@ namespace Sample;
 
 public class RewriterVisitor : Rewriter
 {
-    public override AstNode Rewrite<T>(LiteralNode<T> literal)
+    public override AstNode Rewrite(LiteralNode literal)
     {
-        if (literal is LiteralNode<ulong> intLit)
+        if (literal.Value is ulong value)
         {
-            return new LiteralNode<double>(intLit.Value);
+            return new LiteralNode((double)value);
         }
 
         return literal;

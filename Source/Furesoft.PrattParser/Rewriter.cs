@@ -8,7 +8,7 @@ namespace Furesoft.PrattParser;
 //ToDo: rewrite with "with-syntax"
 public abstract class Rewriter : IVisitor<AstNode>
 {
-    public virtual AstNode Rewrite<T>(LiteralNode<T> literal) => literal;
+    public virtual AstNode Rewrite(LiteralNode literal) => literal;
     public virtual AstNode Rewrite(BinaryOperatorNode binary)
     {
         var left = binary.LeftExpr.Accept(this);
@@ -28,13 +28,9 @@ public abstract class Rewriter : IVisitor<AstNode>
     {
         var rewrittenNode = node;
 
-        if (node is LiteralNode<ulong> lLit)
+        if (node is LiteralNode lit)
         {
-            rewrittenNode = Rewrite(lLit);
-        }
-        else if (node is LiteralNode<double> dLit)
-        {
-            rewrittenNode = Rewrite(dLit);
+            rewrittenNode = Rewrite(lit);
         }
         else if (node is CallNode call)
         {

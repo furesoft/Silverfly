@@ -12,9 +12,9 @@ public class EvaluationVisitor : IVisitor<double>
         {
             return Visit(block.Children.Last());
         }
-        else if (node is LiteralNode<double> literal)
+        else if (node is LiteralNode literal)
         {
-            return literal.Value;
+            return (double)literal.Value;
         }
         else if (node is BinaryOperatorNode binNode)
         {
