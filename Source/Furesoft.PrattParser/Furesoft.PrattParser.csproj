@@ -10,10 +10,15 @@
     <Description>A little framework to build parsers</Description>
     <PackageTags>parser, pratt</PackageTags>
     <TargetFrameworks>net8.0</TargetFrameworks>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="System.Collections.Immutable" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="../../README.md" Pack="true" PackagePath="\"/>
   </ItemGroup>
 
 </Project>
