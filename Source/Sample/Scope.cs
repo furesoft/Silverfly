@@ -2,28 +2,29 @@ namespace Sample;
 
 public class Scope
 {
-    public Scope Parent { get; set; }
-    public Dictionary<string, object> Bindings { get; set; } = [];
+    public Scope? Parent { get; set; }
+    public Dictionary<string, Func<object[], object>> Bindings { get; set; } = [];
 
-    public static Scope Root = new Scope();
+    public static readonly Scope Root = new();
 
     public Scope NewSubScope()
     {
-        return new Scope {
+        return new Scope
+        {
             Parent = this
         };
     }
 
-    public void Define(string name, object value)
+    public void Define(string name, Func<object[], object> value)
     {
         Bindings[name] = value;
     }
 
-    public object Get(string name)
+    public Func<object[], object>? Get(string name)
     {
-        if (Bindings.ContainsKey(name))
+        if (Bindings.TryGetValue(name, out var value))
         {
-            return Bindings[name];
+            return value;
         }
 
         return Parent?.Get(name);
