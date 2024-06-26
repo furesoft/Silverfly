@@ -49,9 +49,10 @@ public abstract class Rewriter : IVisitor<AstNode>
             rewrittenNode = Rewrite(block);
         }
 
-        return rewrittenNode
-            .WithRange(node.Range)
-            .WithParent(node.Parent);
+        return rewrittenNode with {
+            Range = node.Range,
+            Parent = node.Parent
+        };
     }
 
     private AstNode Rewrite(BlockNode block)
