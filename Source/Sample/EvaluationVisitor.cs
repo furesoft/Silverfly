@@ -1,6 +1,7 @@
 using Furesoft.PrattParser;
 using Furesoft.PrattParser.Nodes;
 using Furesoft.PrattParser.Nodes.Operators;
+using Sample.Nodes;
 
 namespace Sample;
 
@@ -34,11 +35,11 @@ public class EvaluationVisitor : IVisitor<double>
         }
         else if (node is VariableBindingNode binding)
         {
-            currentScope.Define(binding.Name.Text, Visit(binding.Value))
+            currentScope.Define(binding.Name.Text.ToString(), Visit(binding.Value));
         }
         else if (node is NameNode name)
         {
-            return currentScope.Get(name.Name);
+            return (double)currentScope.Get(name.Name);
         }
 
         return 0;

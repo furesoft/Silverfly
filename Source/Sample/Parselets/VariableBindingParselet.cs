@@ -1,3 +1,8 @@
+using Furesoft.PrattParser;
+using Furesoft.PrattParser.Parselets;
+using Furesoft.PrattParser.Nodes;
+using Sample.Nodes;
+
 namespace Sample.Parselets;
 
 public class VariableBindingParselet : IPrefixParselet
