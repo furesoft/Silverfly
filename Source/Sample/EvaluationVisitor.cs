@@ -6,6 +6,8 @@ namespace Sample;
 
 public class EvaluationVisitor : IVisitor<double>
 {
+    Scope currentScope = Scope.Root;
+
     public double Visit(AstNode node)
     {
         if (node is BlockNode block)
@@ -29,6 +31,14 @@ public class EvaluationVisitor : IVisitor<double>
                 "/" => leftVisited / rightVisited,
                 _ => 0
             };
+        }
+        else if (node is VariableBindingNode binding)
+        {
+            currentScope.Define(binding.Name.Text, Visit(binding.Value))
+        }
+        else if (node is NameNode name)
+        {
+            return currentScope.Get(name.Name);
         }
 
         return 0;

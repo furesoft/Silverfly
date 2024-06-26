@@ -18,5 +18,7 @@ class ExpressionGrammar : Parser
 
         Register("(", new CallParselet(BindingPowers.Get("Call")));
         Register(PredefinedSymbols.Name, new NameParselet());
+
+        Register("let", new VariableBindingParselet());
     }
 }
