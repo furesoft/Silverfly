@@ -7,7 +7,7 @@ public class Scope
 
     public static Scope Root = new Scope();
 
-    public void NewSubScope()
+    public Scope NewSubScope()
     {
         return new Scope {
             Parent = this
@@ -26,6 +26,6 @@ public class Scope
             return Bindings[name];
         }
 
-        return scope.Parent?.Get(name);
+        return Parent?.Get(name);
     }
 }
