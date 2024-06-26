@@ -14,7 +14,7 @@ public class VariableBindingParselet : IPrefixParselet
 
         parser.Consume(PredefinedSymbols.Equals);
 
-        var value = parser.Parse();
+        var value = parser.Parse(0);
 
         return new VariableBindingNode(name, value);
     }
