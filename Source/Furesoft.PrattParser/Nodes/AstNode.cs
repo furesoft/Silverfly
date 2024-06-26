@@ -7,6 +7,7 @@ namespace Furesoft.PrattParser.Nodes;
 public abstract record AstNode
 {
     public SourceRange Range { get; set; }
+
     public AstNode? Parent { get; set; }
 
     public AstNode WithRange(Token token) => this with { Range = new SourceRange(token.Document, token.GetSourceSpanStart(), token.GetSourceSpanEnd()) };
