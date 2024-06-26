@@ -12,7 +12,7 @@ public class VariableBindingParselet : IPrefixParselet
         // let name = value
         var name = parser.Consume("let");
 
-        Consume(PredefinedSymbols.Equals);
+        parser.Consume(PredefinedSymbols.Equals);
 
         var value = parser.Parse();
 
