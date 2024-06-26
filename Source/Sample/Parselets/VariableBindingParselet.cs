@@ -16,6 +16,6 @@ public class VariableBindingParselet : IPrefixParselet
 
         var value = parser.Parse(0);
 
-        return new VariableBindingNode(name, value);
+        return new VariableBindingNode(name, value).WithRange(name, parser.Lookup(0));
     }
 }
