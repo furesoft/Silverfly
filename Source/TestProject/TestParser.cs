@@ -23,6 +23,8 @@ public class TestParser : Parser
         Prefix("not");
         Postfix("!");
 
+        Postfix(".");
+
         InfixRight("^", "Exponent");
 
         InfixLeft("->", "Product");
