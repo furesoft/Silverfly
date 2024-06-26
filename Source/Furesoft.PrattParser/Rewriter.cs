@@ -2,6 +2,7 @@ using System.Linq;
 using Furesoft.PrattParser.Nodes;
 using Furesoft.PrattParser.Nodes.Operators;
 using System.Collections.Immutable;
+using System;
 
 namespace Furesoft.PrattParser;
 
@@ -13,7 +14,8 @@ public abstract class Rewriter : IVisitor<AstNode>
         var left = binary.LeftExpr.Accept(this);
         var right = binary.RightExpr.Accept(this);
 
-        return binary with {
+        return binary with
+        {
             LeftExpr = left,
             RightExpr = right
         };
@@ -23,7 +25,8 @@ public abstract class Rewriter : IVisitor<AstNode>
     {
         var args = call.Arguments.Select(arg => arg.Accept(this)).ToImmutableList();
 
-        return call with {
+        return call with
+        {
             Arguments = args
         };
     }
@@ -44,22 +47,48 @@ public abstract class Rewriter : IVisitor<AstNode>
         {
             rewrittenNode = Rewrite(bin);
         }
+        else if (node is PrefixOperatorNode pre)
+        {
+            rewrittenNode = Rewrite(pre);
+        }
+        else if (node is PostfixOperatorNode post)
+        {
+            rewrittenNode = Rewrite(post);
+        }
         else if (node is BlockNode block)
         {
             rewrittenNode = Rewrite(block);
         }
 
-        return rewrittenNode with {
+        return rewrittenNode with
+        {
             Range = node.Range,
             Parent = node.Parent
         };
     }
 
-    private AstNode Rewrite(BlockNode block)
+    public virtual AstNode Rewrite(PostfixOperatorNode post)
+    {
+        return post with
+        {
+            Expr = Visit(post.Expr)
+        };
+    }
+
+    public virtual AstNode Rewrite(PrefixOperatorNode pre)
+    {
+        return pre with
+        {
+            Expr = Visit(pre.Expr)
+        };
+    }
+
+    public virtual AstNode Rewrite(BlockNode block)
     {
         var children = block.Children.Select(Visit).ToImmutableList();
 
-        return block with {
+        return block with
+        {
             Children = children
         };
     }

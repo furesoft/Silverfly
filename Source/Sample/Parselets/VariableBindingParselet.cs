@@ -10,7 +10,7 @@ public class VariableBindingParselet : IPrefixParselet
     public AstNode Parse(Parser parser, Token token)
     {
         // let name = value
-        var name = parser.Consume("let");
+        var name = parser.Consume(PredefinedSymbols.Name);
 
         parser.Consume(PredefinedSymbols.Equals);
 

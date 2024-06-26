@@ -21,5 +21,6 @@ class ExpressionGrammar : Parser
         Register(PredefinedSymbols.Name, new NameParselet());
 
         Register("let", new VariableBindingParselet());
+        Postfix("!");
     }
 }

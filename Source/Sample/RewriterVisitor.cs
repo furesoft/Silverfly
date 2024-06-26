@@ -10,7 +10,8 @@ public class RewriterVisitor : Rewriter
     {
         if (literal.Value is ulong value)
         {
-            return literal with {
+            return literal with
+            {
                 Value = (double)value
             };
         }
@@ -25,7 +26,7 @@ public class RewriterVisitor : Rewriter
         if (call.FunctionExpr is NameNode n && n.Name == "add")
         {
             // Start with the first argument
-            AstNode result = rewritten.Arguments[0];
+            var result = rewritten.Arguments[0];
 
             // Iterate over the rest of the arguments and create a BinaryOperatorNode for each addition
             for (int i = 1; i < rewritten.Arguments.Count; i++)
@@ -38,5 +39,4 @@ public class RewriterVisitor : Rewriter
 
         return rewritten;
     }
-
 }

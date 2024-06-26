@@ -17,7 +17,7 @@ public class EvaluationVisitor : IVisitor<double>
         }
         else if (node is LiteralNode literal)
         {
-            return (double)literal.Value;
+            return Convert.ToDouble(literal.Value);
         }
         else if (node is BinaryOperatorNode binNode)
         {

@@ -35,12 +35,12 @@ public class PrintVisitor : IVisitor<string>
         var properties = node.GetType().GetProperties();
         foreach (var property in properties)
         {
-            if (property.PropertyType != typeof(AstNode) && property.PropertyType != typeof(Token)) continue;
+            if (property.PropertyType != typeof(AstNode) || property.GetValue(node) == null) continue;
 
             builder.Append(' ');
             builder.Append(property.Name);
             builder.Append('=');
-            builder.Append(property.GetValue(node));
+            builder.Append(Visit((AstNode)property.GetValue(node)));
             builder.Append(',');
         }
 
