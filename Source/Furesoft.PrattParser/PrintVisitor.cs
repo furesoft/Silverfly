@@ -30,12 +30,12 @@ public class PrintVisitor : IVisitor<string>
         var builder = new StringBuilder();
 
         builder.Append('(');
-        builder.Append(node.GetType().Name); // get the class name
+        builder.Append(node.GetType().Name);
 
         var properties = node.GetType().GetProperties();
         foreach (var property in properties)
         {
-            if (property.GetValue(node) == null) continue;
+            if (property.PropertyType != typeof(AstNode) && property.PropertyType != typeof(Token)) continue;
 
             builder.Append(' ');
             builder.Append(property.Name);
