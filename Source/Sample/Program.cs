@@ -13,7 +13,6 @@ public class Program
 
             var parsed = Parser.Parse<ExpressionGrammar>(input);
             var rewritten = parsed.Tree.Accept(new RewriterVisitor());
-            var evaluated = rewritten.Accept(new EvaluationVisitor());
 
             Console.WriteLine("Old: ");
             Console.WriteLine(parsed.Tree.Accept(new PrintVisitor()));
@@ -21,6 +20,7 @@ public class Program
             Console.WriteLine("New: ");
             Console.WriteLine(rewritten.Accept(new PrintVisitor()));
 
+            var evaluated = rewritten.Accept(new EvaluationVisitor());
             Console.WriteLine("> " + evaluated);
         }
     }

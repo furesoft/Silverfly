@@ -2,6 +2,8 @@ using Furesoft.PrattParser.Text;
 
 namespace Furesoft.PrattParser.Nodes;
 
+#nullable enable
+
 public abstract record AstNode
 {
     public SourceRange Range { get; set; }

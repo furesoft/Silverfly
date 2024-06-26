@@ -24,7 +24,9 @@ public class EvaluationVisitor : IVisitor<double>
             return binNode.Operator.Name switch
             {
                 "+" => leftVisited + rightVisited,
+                "-" => leftVisited - rightVisited,
                 "*" => leftVisited * rightVisited,
+                "/" => leftVisited / rightVisited,
                 _ => 0
             };
         }

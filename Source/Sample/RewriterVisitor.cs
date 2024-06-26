@@ -10,7 +10,9 @@ public class RewriterVisitor : Rewriter
     {
         if (literal.Value is ulong value)
         {
-            return new LiteralNode((double)value);
+            return literal with {
+                Value = (double)value
+            };
         }
 
         return literal;

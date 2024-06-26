@@ -5,7 +5,6 @@ using System.Collections.Immutable;
 
 namespace Furesoft.PrattParser;
 
-//ToDo: rewrite with "with-syntax"
 public abstract class Rewriter : IVisitor<AstNode>
 {
     public virtual AstNode Rewrite(LiteralNode literal) => literal;
@@ -14,14 +13,19 @@ public abstract class Rewriter : IVisitor<AstNode>
         var left = binary.LeftExpr.Accept(this);
         var right = binary.RightExpr.Accept(this);
 
-        return new BinaryOperatorNode(left, binary.Operator, right);
+        return binary with {
+            LeftExpr = left,
+            RightExpr = right
+        };
     }
 
     public virtual AstNode Rewrite(CallNode call)
     {
         var args = call.Arguments.Select(arg => arg.Accept(this)).ToImmutableList();
 
-        return new CallNode(call.FunctionExpr, args);
+        return call with {
+            Arguments = args
+        };
     }
 
     public AstNode Visit(AstNode node)
@@ -54,7 +58,8 @@ public abstract class Rewriter : IVisitor<AstNode>
     {
         var children = block.Children.Select(Visit).ToImmutableList();
 
-        return new BlockNode(block.SeperatorSymbol, block.Terminator)
-            .WithChildren(children);
+        return block with {
+            Children = children
+        };
     }
 }
