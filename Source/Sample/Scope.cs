@@ -7,7 +7,7 @@ public class Scope
 
     public static Scope Root = new Scope();
 
-    public void NewSubScope()
+    public Scope NewSubScope()
     {
         return new Scope {
             Parent = this
