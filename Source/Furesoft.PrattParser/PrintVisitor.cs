@@ -35,6 +35,8 @@ public class PrintVisitor : IVisitor<string>
         var properties = node.GetType().GetProperties();
         foreach (var property in properties)
         {
+            if (property.GetValue(node) == null) continue;
+
             builder.Append(' ');
             builder.Append(property.Name);
             builder.Append('=');
