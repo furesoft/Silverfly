@@ -31,7 +31,7 @@ public class EvaluationVisitor : IVisitor<Value>
             var leftVisited = Visit(binNode.LeftExpr, scope);
             var rightVisited = Visit(binNode.RightExpr, scope);
 
-            if (leftVisited is Literal { Value: UnitValue } || rightVisited is Literal { Value: UnitValue })
+            if (leftVisited is LiteralNode { Value: UnitValue } || rightVisited is LiteralNode { Value: UnitValue })
             {
                 return new UnitValue();
             }
