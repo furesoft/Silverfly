@@ -58,6 +58,8 @@ public class EvaluationVisitor : IVisitor<Value>
 
                 return Visit(binding.Value, subscope);
             });
+
+            return UnitValue.Shared;
         }
         else if (node is NameNode name)
         {
@@ -71,7 +73,7 @@ public class EvaluationVisitor : IVisitor<Value>
         }
 
         System.Console.WriteLine("cannot handle: " + node);
-        return new UnitValue();
+        return UnitValue.Shared;
     }
 
     public Value Visit(AstNode node)
@@ -94,6 +96,6 @@ public class EvaluationVisitor : IVisitor<Value>
             return unit;
         }
 
-        return new UnitValue();
+        return UnitValue.Shared;
     }
 }
