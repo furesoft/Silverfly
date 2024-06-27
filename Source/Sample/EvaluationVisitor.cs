@@ -24,6 +24,8 @@ public class EvaluationVisitor : IVisitor<Value>
         }
         else if (node is GroupNode group)
         {
+            System.Console.WriteLine("g: " + group.Expr);
+            System.Console.WriteLine("ge: " + Visit(group.Expr));
             return Visit(group.Expr);
         }
         else if (node is BinaryOperatorNode binNode)
