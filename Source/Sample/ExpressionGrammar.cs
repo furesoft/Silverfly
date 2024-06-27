@@ -10,6 +10,7 @@ class ExpressionGrammar : Parser
     {
         lexer.IgnoreWhitespace();
         lexer.MatchNumber(allowHex: false, allowBin: false);
+        lexer.AddSymbol("()");
     }
 
     protected override void InitParselets()
@@ -22,5 +23,7 @@ class ExpressionGrammar : Parser
 
         Register("let", new VariableBindingParselet());
         Postfix("!");
+
+        Register("()", new UnitValueParselet());
     }
 }

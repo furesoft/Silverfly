@@ -11,7 +11,7 @@ public class EvaluationVisitor : IVisitor<Value>
     {
         if (node is BlockNode block)
         {
-            for (int i = 0; i < block.Children.Count - 1, i++)
+            for (int i = 0; i < block.Children.Count - 1; i++)
             {
                 Visit(block.Children[i], scope);
             }
@@ -24,11 +24,6 @@ public class EvaluationVisitor : IVisitor<Value>
         }
         else if (node is GroupNode group)
         {
-            if (group.Expr is null)
-            {
-                return new UnitValue();
-            }
-
             return Visit(group.Expr);
         }
         else if (node is BinaryOperatorNode binNode)
@@ -36,14 +31,19 @@ public class EvaluationVisitor : IVisitor<Value>
             var leftVisited = Visit(binNode.LeftExpr, scope);
             var rightVisited = Visit(binNode.RightExpr, scope);
 
-            return binNode.Operator.Name switch
+            var leftValue = ((NumberValue)leftVisited).Value;
+            var rightValue = ((NumberValue)rightVisited).Value;
+
+            var result = binNode.Operator.Name switch
             {
-                "+" => leftVisited + rightVisited,
-                "-" => leftVisited - rightVisited,
-                "*" => leftVisited * rightVisited,
-                "/" => leftVisited / rightVisited,
+                "+" => leftValue + rightValue,
+                "-" => leftValue - rightValue,
+                "*" => leftValue * rightValue,
+                "/" => leftValue / rightValue,
                 _ => 0
             };
+
+            return new NumberValue(result);
         }
         else if (node is VariableBindingNode binding)
         {
@@ -65,28 +65,32 @@ public class EvaluationVisitor : IVisitor<Value>
         }
         else if (node is CallNode call && call.FunctionExpr is NameNode func)
         {
-            var args = call.Arguments.Select(Visit).Cast<object>().ToArray();
+            var args = call.Arguments.Select(Visit).Cast<Value>().ToArray();
 
             return scope.Get(func.Name)(args);
         }
 
-        return 0;
+        return new UnitValue();
     }
 
-    public double Visit(AstNode node)
+    public Value Visit(AstNode node)
     {
         return Visit(node, Scope.Root);
     }
 
     private Value VisitLiteral(LiteralNode literal)
     {
-        if (literal.Value is ulong)
+        if (literal.Value is double d)
         {
-            return new NumberValue(Convert.ToDouble(literal.Value));
+            return new NumberValue(d);
         }
         else if (literal.Value is bool b)
         {
             return new BoolValue(b);
+        }
+        else if(literal.Value is UnitValue unit)
+        {
+            return unit;
         }
 
         return new UnitValue();

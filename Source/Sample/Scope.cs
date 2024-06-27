@@ -15,7 +15,7 @@ public class Scope
         };
     }
 
-    public void Define(string name, Func<object[], object> value)
+    public void Define(string name, Func<Value[], Value> value)
     {
         Bindings[name] = value;
     }
