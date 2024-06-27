@@ -20,7 +20,7 @@ public class EvaluationVisitor : IVisitor<Value>
         }
         else if (node is LiteralNode literal)
         {
-            return new NumberValue(Convert.ToDouble(literal.Value));
+            return VisitLiteral(literal);
         }
         else if (node is GroupNode group)
         {
@@ -76,5 +76,19 @@ public class EvaluationVisitor : IVisitor<Value>
     public double Visit(AstNode node)
     {
         return Visit(node, Scope.Root);
+    }
+
+    private Value VisitLiteral(LiteralNode literal)
+    {
+        if (literal.Value is ulong)
+        {
+            return new NumberValue(Convert.ToDouble(literal.Value));
+        }
+        else if (literal.Value is bool b)
+        {
+            return new BoolValue(b);
+        }
+
+        return new UnitValue();
     }
 }
