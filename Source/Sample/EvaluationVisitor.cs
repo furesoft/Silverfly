@@ -22,6 +22,15 @@ public class EvaluationVisitor : IVisitor<Value>
         {
             return new NumberValue(Convert.ToDouble(literal.Value));
         }
+        else if (node is GroupNode group)
+        {
+            if (group.Expr is null)
+            {
+                return new UnitValue();
+            }
+
+            return Visit(group.Expr);
+        }
         else if (node is BinaryOperatorNode binNode)
         {
             var leftVisited = Visit(binNode.LeftExpr, scope);
