@@ -20,6 +20,11 @@ public class Scope
         Bindings[name] = value;
     }
 
+    public void Define(string name, Func<Value, Value, Value> value)
+    {
+        Define(name, args => value(args[0], args[1]));
+    }
+
     public Func<Value[], Value>? Get(string name)
     {
         if (Bindings.TryGetValue(name, out var value))
