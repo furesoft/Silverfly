@@ -3,7 +3,7 @@ namespace Sample;
 public class Scope
 {
     public Scope? Parent { get; set; }
-    public Dictionary<string, Func<object[], object>> Bindings { get; set; } = [];
+    public Dictionary<string, Func<Value[], Value>> Bindings { get; set; } = [];
 
     public static readonly Scope Root = new();
 
@@ -20,7 +20,7 @@ public class Scope
         Bindings[name] = value;
     }
 
-    public Func<object[], object>? Get(string name)
+    public Func<Value[], Value>? Get(string name)
     {
         if (Bindings.TryGetValue(name, out var value))
         {
