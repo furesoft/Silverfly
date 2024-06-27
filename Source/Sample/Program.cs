@@ -10,7 +10,7 @@ public class Program
             var aV = (NumberValue)a;
             var bV = (NumberValue)b;
 
-            return aV.Value + bV.Value;
+            return new NumberValue(aV.Value + bV.Value);
         });
 
         while (true)
