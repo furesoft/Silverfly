@@ -24,8 +24,6 @@ public class EvaluationVisitor : IVisitor<Value>
         }
         else if (node is GroupNode group)
         {
-            System.Console.WriteLine("g: " + group.Expr);
-            System.Console.WriteLine("ge: " + Visit(group.Expr));
             return Visit(group.Expr);
         }
         else if (node is BinaryOperatorNode binNode)
@@ -35,7 +33,6 @@ public class EvaluationVisitor : IVisitor<Value>
 
             var leftValue = ((NumberValue)leftVisited).Value;
             var rightValue = ((NumberValue)rightVisited).Value;
-
 
             var result = binNode.Operator.Name switch
             {
@@ -73,6 +70,7 @@ public class EvaluationVisitor : IVisitor<Value>
             return scope.Get(func.Name)(args);
         }
 
+        System.Console.WriteLine("cannot handle: " + node);
         return new UnitValue();
     }
 
