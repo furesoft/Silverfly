@@ -6,6 +6,8 @@ public class Program
 {
     public static void Main(string[] args)
     {
+        Scope.Root.Define("+", (a, b) => a + b);
+
         while (true)
         {
             Console.Write("> ");
