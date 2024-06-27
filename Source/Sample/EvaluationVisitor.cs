@@ -31,13 +31,14 @@ public class EvaluationVisitor : IVisitor<Value>
             var leftVisited = Visit(binNode.LeftExpr, scope);
             var rightVisited = Visit(binNode.RightExpr, scope);
 
-            var leftValue = ((NumberValue)leftVisited).Value;
-            var rightValue = ((NumberValue)rightVisited).Value;
-
             if (leftValue is UnitValue || rightValue is UnitValue)
             {
                 return new UnitValue();
             }
+            
+            var leftValue = ((NumberValue)leftVisited).Value;
+            var rightValue = ((NumberValue)rightVisited).Value;
+
 
             var result = binNode.Operator.Name switch
             {
