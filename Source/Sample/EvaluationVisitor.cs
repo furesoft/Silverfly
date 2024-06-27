@@ -34,6 +34,11 @@ public class EvaluationVisitor : IVisitor<Value>
             var leftValue = ((NumberValue)leftVisited).Value;
             var rightValue = ((NumberValue)rightVisited).Value;
 
+            if (leftValue is UnitValue || rightValue is UnitValue)
+            {
+                return new UnitValue();
+            }
+
             var result = binNode.Operator.Name switch
             {
                 "+" => leftValue + rightValue,
