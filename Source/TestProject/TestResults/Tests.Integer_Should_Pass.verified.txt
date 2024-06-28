@@ -1,0 +1,29 @@
+﻿{
+  $type: TranslationUnit,
+  Tree: {
+    $type: BlockNode,
+    SeperatorSymbol: ;,
+    Terminator: #eof,
+    Children: {
+      $type: ImmutableList<AstNode>,
+      $values: [
+        {
+          $type: LiteralNode,
+          Value: 42,
+          Range: 1:1-1:2,
+          Parent: {
+            $type: BlockNode,
+            SeperatorSymbol: ;,
+            Terminator: #eof
+          }
+        }
+      ]
+    },
+    Range: 1:1-1:6
+  },
+  Document: {
+    Filename: syntethic.dsl,
+    Source: 42,
+    Messages: []
+  }
+}

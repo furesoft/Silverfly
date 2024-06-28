@@ -1,12 +1,11 @@
-using System.Collections.Generic;
+using System.Collections.Immutable;
 
 namespace Furesoft.PrattParser.Nodes;
 
 /// <summary>
 /// A function call like "a(b, c, d)".
 /// </summary>
-public class CallNode(AstNode functionExpr, List<AstNode> arguments) : AstNode
+public record CallNode(AstNode FunctionExpr, ImmutableList<AstNode> Arguments) : AstNode
 {
-    public AstNode FunctionExpr { get; } = functionExpr;
-    public List<AstNode> Arguments { get; } = arguments;
+
 }

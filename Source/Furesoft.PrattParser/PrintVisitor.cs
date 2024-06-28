@@ -19,11 +19,7 @@ public class PrintVisitor : IVisitor<string>
             BinaryOperatorNode op => Visit(op),
             PostfixOperatorNode postfix => Visit(postfix),
             PrefixOperatorNode prefix => Visit(prefix),
-            LiteralNode<bool> literal => Visit(literal),
-            LiteralNode<ulong> literal => Visit(literal),
-            LiteralNode<long> literal => Visit(literal),
-            LiteralNode<double> literal => Visit(literal),
-            LiteralNode<string> literal => Visit(literal),
+            LiteralNode literal => Visit(literal),
 
             _ => VisitOther(node)
         };
@@ -34,15 +30,23 @@ public class PrintVisitor : IVisitor<string>
         var builder = new StringBuilder();
 
         builder.Append('(');
-        builder.Append(node.GetType().Name); // get the class name
+        builder.Append(node.GetType().Name);
 
         var properties = node.GetType().GetProperties();
         foreach (var property in properties)
         {
+            if (property.PropertyType == typeof(Token))
+            {
+                builder.Append($" {property.Name}={(Token)property.GetValue(node)}");
+                continue;
+            }
+
+            if (property.PropertyType != typeof(AstNode) || property.GetValue(node) == null) continue;
+
             builder.Append(' ');
             builder.Append(property.Name);
             builder.Append('=');
-            builder.Append(property.GetValue(node));
+            builder.Append(Visit((AstNode)property.GetValue(node)));
             builder.Append(',');
         }
 
@@ -168,27 +172,7 @@ public class PrintVisitor : IVisitor<string>
         return builder.ToString();
     }
 
-    public string Visit(LiteralNode<bool> literalNode)
-    {
-        return literalNode.Value.ToString();
-    }
-
-    public string Visit(LiteralNode<double> literalNode)
-    {
-        return literalNode.Value.ToString(CultureInfo.InvariantCulture);
-    }
-
-    public string Visit(LiteralNode<string> literalNode)
-    {
-        return $"'{literalNode.Value}'";
-    }
-
-    public string Visit(LiteralNode<ulong> literalNode)
-    {
-        return literalNode.Value.ToString();
-    }
-
-    public string Visit(LiteralNode<long> literalNode)
+    public string Visit(LiteralNode literalNode)
     {
         return literalNode.Value.ToString();
     }

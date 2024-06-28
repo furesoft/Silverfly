@@ -1,38 +1,43 @@
 using System.Linq;
 using Furesoft.PrattParser.Nodes;
 using Furesoft.PrattParser.Nodes.Operators;
+using System.Collections.Immutable;
+using System;
 
 namespace Furesoft.PrattParser;
 
 public abstract class Rewriter : IVisitor<AstNode>
 {
-    public virtual AstNode Rewrite<T>(LiteralNode<T> literal) => literal;
+    public virtual AstNode Rewrite(LiteralNode literal) => literal;
     public virtual AstNode Rewrite(BinaryOperatorNode binary)
     {
         var left = binary.LeftExpr.Accept(this);
         var right = binary.RightExpr.Accept(this);
 
-        return new BinaryOperatorNode(left, binary.Operator, right);
+        return binary with
+        {
+            LeftExpr = left,
+            RightExpr = right
+        };
     }
 
     public virtual AstNode Rewrite(CallNode call)
     {
-        var args = call.Arguments.Select(arg => arg.Accept(this)).ToList();
+        var args = call.Arguments.Select(arg => arg.Accept(this)).ToImmutableList();
 
-        return new CallNode(call.FunctionExpr, args);
+        return call with
+        {
+            Arguments = args
+        };
     }
 
     public AstNode Visit(AstNode node)
     {
         var rewrittenNode = node;
 
-        if (node is LiteralNode<ulong> lLit)
+        if (node is LiteralNode lit)
         {
-            rewrittenNode = Rewrite(lLit);
-        }
-        else if (node is LiteralNode<double> dLit)
-        {
-            rewrittenNode = Rewrite(dLit);
+            rewrittenNode = Rewrite(lit);
         }
         else if (node is CallNode call)
         {
@@ -42,21 +47,49 @@ public abstract class Rewriter : IVisitor<AstNode>
         {
             rewrittenNode = Rewrite(bin);
         }
+        else if (node is PrefixOperatorNode pre)
+        {
+            rewrittenNode = Rewrite(pre);
+        }
+        else if (node is PostfixOperatorNode post)
+        {
+            rewrittenNode = Rewrite(post);
+        }
         else if (node is BlockNode block)
         {
             rewrittenNode = Rewrite(block);
         }
 
-        return rewrittenNode
-            .WithRange(node.Range)
-            .WithParent(node.Parent);
+        return rewrittenNode with
+        {
+            Range = node.Range,
+            Parent = node.Parent
+        };
     }
 
-    private AstNode Rewrite(BlockNode block)
+    public virtual AstNode Rewrite(PostfixOperatorNode post)
     {
-        var children = block.Children.Select(Visit).ToList();
+        return post with
+        {
+            Expr = Visit(post.Expr)
+        };
+    }
 
-        return new BlockNode(block.SeperatorSymbol, block.Terminator)
-            .WithChildren(children);
+    public virtual AstNode Rewrite(PrefixOperatorNode pre)
+    {
+        return pre with
+        {
+            Expr = Visit(pre.Expr)
+        };
+    }
+
+    public virtual AstNode Rewrite(BlockNode block)
+    {
+        var children = block.Children.Select(Visit).ToImmutableList();
+
+        return block with
+        {
+            Children = children
+        };
     }
 }

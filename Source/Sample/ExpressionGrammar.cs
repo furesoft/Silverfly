@@ -1,5 +1,6 @@
 using Furesoft.PrattParser;
 using Furesoft.PrattParser.Parselets;
+using Sample.Parselets;
 
 namespace Sample;
 
@@ -9,6 +10,7 @@ class ExpressionGrammar : Parser
     {
         lexer.IgnoreWhitespace();
         lexer.MatchNumber(allowHex: false, allowBin: false);
+        lexer.AddSymbol("()");
     }
 
     protected override void InitParselets()
@@ -18,5 +20,10 @@ class ExpressionGrammar : Parser
 
         Register("(", new CallParselet(BindingPowers.Get("Call")));
         Register(PredefinedSymbols.Name, new NameParselet());
+
+        Register("let", new VariableBindingParselet());
+        Postfix("!");
+
+        Register("()", new UnitValueParselet());
     }
 }

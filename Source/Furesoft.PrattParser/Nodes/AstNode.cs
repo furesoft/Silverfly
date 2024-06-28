@@ -2,11 +2,13 @@ using Furesoft.PrattParser.Text;
 
 namespace Furesoft.PrattParser.Nodes;
 
-//ToDo: convert AstNode to record
+#nullable enable
+
 public abstract record AstNode
 {
-    public SourceRange Range { get; init; }
-    public AstNode? Parent { get; init; }
+    public SourceRange Range { get; set; }
+
+    public AstNode? Parent { get; set; }
 
     public AstNode WithRange(Token token) => this with { Range = new SourceRange(token.Document, token.GetSourceSpanStart(), token.GetSourceSpanEnd()) };
     public AstNode WithRange(SourceRange range) => this with { Range = range };

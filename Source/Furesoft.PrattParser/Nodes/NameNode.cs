@@ -3,7 +3,6 @@ namespace Furesoft.PrattParser.Nodes;
 /// <summary>
 /// A simple variable name expression like "abc".
 /// </summary>
-public class NameNode(string name) : AstNode
+public record NameNode(string Name) : AstNode
 {
-    public string Name { get; } = name;
 }

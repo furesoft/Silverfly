@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using Furesoft.PrattParser.Nodes;
 using Furesoft.PrattParser.Parselets;
@@ -17,26 +18,6 @@ public partial class Parser
         InfixLeft("-", "Sum");
         InfixLeft("*", "Product");
         InfixLeft("/", "Product");
-    }
-
-    /// <summary>
-    /// Return true if a given symbol was found and consumed
-    /// </summary>
-    /// <param name="parser"></param>
-    /// <param name="optionalSymbol"></param>
-    /// <typeparam name="T"></typeparam>
-    /// <returns></returns>
-    public bool Optional(Parser parser, Symbol optionalSymbol)
-    {
-        if (!parser.IsMatch(optionalSymbol))
-        {
-            return false;
-        }
-
-        parser.Consume();
-
-        return true;
-
     }
 
     protected void AddLogicalOperators()
@@ -75,7 +56,7 @@ public partial class Parser
         Postfix("++");
     }
 
-    public List<AstNode> ParseSeperated(Symbol seperator, Symbol terminator, int bindingPower = 0)
+    public ImmutableList<AstNode> ParseSeperated(Symbol seperator, Symbol terminator, int bindingPower = 0)
     {
         var args = new List<AstNode>();
 
@@ -91,7 +72,21 @@ public partial class Parser
 
         Consume(terminator);
 
-        return args;
+        return args.ToImmutableList();
+    }
+
+    public ImmutableList<AstNode> ParseList(Symbol terminator, int bindingPower = 0)
+    {
+        var args = new List<AstNode>();
+
+        do
+        {
+            args.Add(Parse(bindingPower));
+        } while (!IsMatch(terminator));
+
+        Consume(terminator);
+
+        return args.ToImmutableList();
     }
 
     public List<AstNode> ParseSeperated(Symbol seperator, int bindingPower = 0, params Symbol[] terminators)
