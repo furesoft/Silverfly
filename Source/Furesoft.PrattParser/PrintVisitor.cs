@@ -199,6 +199,11 @@ public class PrintVisitor : IVisitor<string>
 
     public string Visit(LiteralNode literalNode)
     {
+        if (literalNode.Value is ImmutableList<AstNode> list)
+        {
+            return $"({string.Join(',', list.Select(Visit))})";
+        }
+
         return literalNode.Value.ToString();
     }
 }
