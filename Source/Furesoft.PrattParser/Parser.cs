@@ -131,7 +131,8 @@ public abstract partial class Parser
         {
             token.Document.Messages.Add(Message.Error("Could not parse prefix \"" + token.Text + "\".",
                 token.GetRange()));
-            return new InvalidNode(token);
+            
+            return new InvalidNode(token).WithRange(token);
         }
 
         var left = prefix.Parse(this, token);

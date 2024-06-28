@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Immutable;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 using Furesoft.PrattParser.Nodes;
 using Furesoft.PrattParser.Nodes.Operators;
@@ -20,11 +22,17 @@ public class PrintVisitor : IVisitor<string>
             PostfixOperatorNode postfix => Visit(postfix),
             PrefixOperatorNode prefix => Visit(prefix),
             LiteralNode literal => Visit(literal),
+            GroupNode group => Visit(group),
 
             _ => VisitOther(node)
         };
     }
 
+    private string Visit(GroupNode group)
+    {
+        return $"({Visit(group.Expr)})";
+    }
+    
     private string VisitOther(AstNode node)
     {
         var builder = new StringBuilder();
@@ -35,6 +43,21 @@ public class PrintVisitor : IVisitor<string>
         var properties = node.GetType().GetProperties();
         foreach (var property in properties)
         {
+            var value = property.GetValue(node);
+            
+            if (property.PropertyType == typeof(Token))
+            {
+                builder.Append($" {property.Name}={(Token)value}");
+                continue;
+            }
+            
+            if (property.PropertyType == typeof(ImmutableList<AstNode>))
+            {
+                var list = (ImmutableList<AstNode>)value;
+                builder.Append($" {property.Name}={string.Join(',', list.Select(Visit))}");
+                continue;
+            }
+
             if (property.PropertyType == typeof(Token))
             {
                 builder.Append($" {property.Name}={(Token)property.GetValue(node)}");
@@ -46,7 +69,9 @@ public class PrintVisitor : IVisitor<string>
             builder.Append(' ');
             builder.Append(property.Name);
             builder.Append('=');
-            builder.Append(Visit((AstNode)property.GetValue(node)));
+
+            builder.Append(Visit((AstNode)value));
+
             builder.Append(',');
         }
 

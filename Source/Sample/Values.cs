@@ -12,3 +12,5 @@ public record UnitValue() : Value
 }
 
 public record BoolValue(bool Value) : Value;
+
+public record LambdaValue(Func<Value[], Value> Value) : Value;

@@ -1,6 +1,7 @@
 using Furesoft.PrattParser;
 using Furesoft.PrattParser.Nodes;
 using Furesoft.PrattParser.Nodes.Operators;
+using Sample.Nodes;
 
 namespace Sample;
 
@@ -38,5 +39,18 @@ public class RewriterVisitor : Rewriter
         }
 
         return rewritten;
+    }
+
+    public override AstNode RewriteOther(AstNode node)
+    {
+        if (node is LambdaNode l)
+        {
+            return l with
+            {
+                Value = Visit(l.Value)
+            };
+        }
+
+        return node;
     }
 }
