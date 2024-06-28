@@ -25,5 +25,7 @@ class ExpressionGrammar : Parser
         Postfix("!");
 
         Register("()", new UnitValueParselet());
+        
+        Register("->", new LambdaParselet());
     }
 }

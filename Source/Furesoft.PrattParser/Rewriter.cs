@@ -10,6 +10,8 @@ public abstract class Rewriter : IVisitor<AstNode>
 {
     public virtual AstNode Rewrite(LiteralNode literal) => literal;
     
+    public virtual AstNode RewriteOther(AstNode node) => node;
+    
     public virtual AstNode Rewrite(GroupNode group) => Visit(group.Expr);
     public virtual AstNode Rewrite(BinaryOperatorNode binary)
     {
@@ -29,6 +31,7 @@ public abstract class Rewriter : IVisitor<AstNode>
 
         return call with
         {
+            FunctionExpr = Visit(call.FunctionExpr),
             Arguments = args
         };
     }
@@ -64,6 +67,10 @@ public abstract class Rewriter : IVisitor<AstNode>
         else if (node is GroupNode group)
         {
             rewrittenNode = Rewrite(group);
+        }
+        else
+        {
+            rewrittenNode = RewriteOther(node);
         }
 
         return rewrittenNode with
