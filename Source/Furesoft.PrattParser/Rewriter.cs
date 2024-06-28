@@ -13,6 +13,7 @@ public abstract class Rewriter : IVisitor<AstNode>
     public virtual AstNode RewriteOther(AstNode node) => node;
     
     public virtual AstNode Rewrite(GroupNode group) => Visit(group.Expr);
+
     public virtual AstNode Rewrite(BinaryOperatorNode binary)
     {
         var left = binary.LeftExpr.Accept(this);

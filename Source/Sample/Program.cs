@@ -6,6 +6,13 @@ public class Program
 {
     public static void Main(string[] args)
     {
+        Scope.Root.Define("+", (a, b) => {
+            var aV = (NumberValue)a;
+            var bV = (NumberValue)b;
+
+            return new NumberValue(aV.Value + bV.Value);
+        });
+
         while (true)
         {
             Console.Write("> ");

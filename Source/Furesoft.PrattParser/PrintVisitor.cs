@@ -58,12 +58,20 @@ public class PrintVisitor : IVisitor<string>
                 continue;
             }
 
-            if (property.PropertyType != typeof(AstNode) || value == null) continue;
+            if (property.PropertyType == typeof(Token))
+            {
+                builder.Append($" {property.Name}={(Token)property.GetValue(node)}");
+                continue;
+            }
+
+            if (property.PropertyType != typeof(AstNode) || property.GetValue(node) == null) continue;
 
             builder.Append(' ');
             builder.Append(property.Name);
             builder.Append('=');
+
             builder.Append(Visit((AstNode)value));
+
             builder.Append(',');
         }
 
