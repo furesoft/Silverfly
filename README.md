@@ -47,6 +47,7 @@ public class Program
 ```
 
 For more detailed instructions and advanced usage, please refer to the [Wiki](https://github.com/furesoft/Furesoft.PrattParser/wiki).
+A great example can be found [here](https://github.com/furesoft/Furesoft.PrattParser/tree/main/Source/Sample)
 
 ## Contributing
 We welcome contributions! Please see our contributing guidelines for more details on how to get involved.
