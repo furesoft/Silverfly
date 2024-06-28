@@ -9,6 +9,8 @@ namespace Furesoft.PrattParser;
 public abstract class Rewriter : IVisitor<AstNode>
 {
     public virtual AstNode Rewrite(LiteralNode literal) => literal;
+    
+    public virtual AstNode Rewrite(GroupNode group) => Visit(group.Expr);
     public virtual AstNode Rewrite(BinaryOperatorNode binary)
     {
         var left = binary.LeftExpr.Accept(this);
@@ -58,6 +60,10 @@ public abstract class Rewriter : IVisitor<AstNode>
         else if (node is BlockNode block)
         {
             rewrittenNode = Rewrite(block);
+        }
+        else if (node is GroupNode group)
+        {
+            rewrittenNode = Rewrite(group);
         }
 
         return rewrittenNode with

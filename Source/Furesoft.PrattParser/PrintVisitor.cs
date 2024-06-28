@@ -20,11 +20,17 @@ public class PrintVisitor : IVisitor<string>
             PostfixOperatorNode postfix => Visit(postfix),
             PrefixOperatorNode prefix => Visit(prefix),
             LiteralNode literal => Visit(literal),
+            GroupNode group => Visit(group),
 
             _ => VisitOther(node)
         };
     }
 
+    private string Visit(GroupNode group)
+    {
+        return $"({Visit(group.Expr)})";
+    }
+    
     private string VisitOther(AstNode node)
     {
         var builder = new StringBuilder();
