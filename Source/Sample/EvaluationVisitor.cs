@@ -103,9 +103,13 @@ public class EvaluationVisitor : IVisitor<Value>
         {
             return new BoolValue(b);
         }
-        else if(literal.Value is UnitValue unit)
+        else if (literal.Value is UnitValue unit)
         {
             return unit;
+        }
+        else if (literal.Value is ImmutableList<AstNode> v)
+        {
+            return new ListValue(v.Select(Visit).ToList());
         }
 
         return UnitValue.Shared;

@@ -89,7 +89,7 @@ public partial class Parser
         return args.ToImmutableList();
     }
 
-    public List<AstNode> ParseSeperated(Symbol seperator, int bindingPower = 0, params Symbol[] terminators)
+    public ImmutableList<AstNode> ParseSeperated(Symbol seperator, int bindingPower = 0, params Symbol[] terminators)
     {
         var args = new List<AstNode>();
 
@@ -105,6 +105,6 @@ public partial class Parser
 
         Match(terminators);
 
-        return args;
+        return args.ToImmutableList();
     }
 }

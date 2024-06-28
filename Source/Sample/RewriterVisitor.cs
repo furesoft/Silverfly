@@ -1,3 +1,4 @@
+using System.Collections.Immutable;
 using Furesoft.PrattParser;
 using Furesoft.PrattParser.Nodes;
 using Furesoft.PrattParser.Nodes.Operators;
@@ -14,6 +15,13 @@ public class RewriterVisitor : Rewriter
             return literal with
             {
                 Value = (double)value
+            };
+        }
+        else if (literal.Value is ImmutableList<AstNode> values)
+        {
+            return literal with
+            {
+                Value = values.Select(Visit).ToImmutableList()
             };
         }
 
