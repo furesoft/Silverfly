@@ -38,7 +38,7 @@ public class Program
             var input = Console.ReadLine();
 
             var parsed = Parser.Parse<ExpressionGrammar>(input);
-            var evaluated = rewritten.Accept(new EvaluationVisitor());
+            var evaluated = parsed.Tree.Accept(new EvaluationVisitor());
 
             Console.WriteLine("> " + evaluated);
         }
