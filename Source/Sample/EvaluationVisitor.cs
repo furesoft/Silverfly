@@ -6,7 +6,7 @@ using Sample.Nodes;
 
 namespace Sample;
 
-public class EvaluationVisitor : IVisitor<Value>
+public class EvaluationVisitor : NodeVisitor<Value>
 {
     public Value Visit(AstNode node, Scope scope)
     {
@@ -88,7 +88,7 @@ public class EvaluationVisitor : IVisitor<Value>
         return Visit(definition, subScope);
     }
 
-    public Value Visit(AstNode node)
+    public override Value Visit(AstNode node)
     {
         return Visit(node, Scope.Root);
     }

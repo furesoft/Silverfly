@@ -16,6 +16,6 @@ public abstract record AstNode
     public AstNode WithRange(Token start, Token end) => this with { Range = new SourceRange(start.Document, start.GetSourceSpanStart(), end.GetSourceSpanEnd()) };
     public AstNode WithParent(AstNode parent) => this with { Parent = parent };
 
-    public T Accept<T>(IVisitor<T> visitor) => visitor.Visit(this);
-    public void Accept(IVisitor visitor) => visitor.Visit(this);
+    public T Accept<T>(NodeVisitor<T> visitor) => visitor.Visit(this);
+    public void Accept(NodeVisitor visitor) => visitor.Visit(this);
 }

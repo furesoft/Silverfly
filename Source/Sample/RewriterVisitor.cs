@@ -8,7 +8,14 @@ namespace Sample;
 
 public class RewriterVisitor : Rewriter
 {
-    public override AstNode Rewrite(LiteralNode literal)
+    public RewriterVisitor()
+    {
+        For<LiteralNode>(Rewrite);
+        For<CallNode>(Rewrite);
+        For<LambdaNode>(Rewrite);
+        For<VariableBindingNode>(Rewrite);
+    }
+    private new AstNode Rewrite(LiteralNode literal)
     {
         if (literal.Value is ulong value)
         {
@@ -28,7 +35,7 @@ public class RewriterVisitor : Rewriter
         return literal;
     }
 
-    public override AstNode Rewrite(CallNode call)
+    private new AstNode Rewrite(CallNode call)
     {
         var rewritten = (CallNode)base.Rewrite(call);
 
@@ -49,23 +56,19 @@ public class RewriterVisitor : Rewriter
         return rewritten;
     }
 
-    public override AstNode RewriteOther(AstNode node)
+    private AstNode Rewrite(LambdaNode node)
     {
-        if (node is LambdaNode l)
+        return node with
         {
-            return l with
-            {
-                Value = Visit(l.Value)
-            };
-        }
-        else if (node is VariableBindingNode binding)
-        {
-            return binding with
-            {
-                Value = Visit(binding.Value)
-            };
-        }
+            Value = Visit(node.Value)
+        };
+    }
 
-        return node;
+    private AstNode Rewrite(VariableBindingNode node)
+    {
+        return node with
+        {
+            Value = Visit(node.Value)
+        };
     }
 }

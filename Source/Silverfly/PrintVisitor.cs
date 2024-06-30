@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Immutable;
-using System.Globalization;
+﻿using System.Collections.Immutable;
 using System.Linq;
 using System.Text;
 using Silverfly.Nodes;
@@ -8,24 +6,19 @@ using Silverfly.Nodes.Operators;
 
 namespace Silverfly;
 
-public class PrintVisitor : IVisitor<string>
+public class PrintVisitor : NodeVisitor<string>
 {
-    public virtual string Visit(AstNode node)
+    public PrintVisitor()
     {
-        return node switch
-        {
-            CallNode call => Visit(call),
-            TernaryOperatorNode cond => Visit(cond),
-            BlockNode block => Visit(block),
-            NameNode name => Visit(name),
-            BinaryOperatorNode op => Visit(op),
-            PostfixOperatorNode postfix => Visit(postfix),
-            PrefixOperatorNode prefix => Visit(prefix),
-            LiteralNode literal => Visit(literal),
-            GroupNode group => Visit(group),
-
-            _ => VisitOther(node)
-        };
+        For<GroupNode>(Visit);
+        For<BlockNode>(Visit);
+        For<TernaryOperatorNode>(VisitTernary);
+        For<CallNode>(Visit);
+        For<NameNode>(Visit);
+        For<BinaryOperatorNode>(Visit);
+        For<PrefixOperatorNode>(Visit);
+        For<PostfixOperatorNode>(Visit);
+        For<LiteralNode>(Visit);
     }
 
     private string Visit(GroupNode group)
@@ -33,7 +26,7 @@ public class PrintVisitor : IVisitor<string>
         return $"({Visit(group.Expr)})";
     }
 
-    private string VisitOther(AstNode node)
+    protected override string VisitUnknown(AstNode node)
     {
         var builder = new StringBuilder();
 
@@ -128,7 +121,7 @@ public class PrintVisitor : IVisitor<string>
         return builder.ToString();
     }
 
-    public string Visit(TernaryOperatorNode cond)
+    public string VisitTernary(TernaryOperatorNode cond)
     {
         var builder = new StringBuilder();
 

@@ -2,19 +2,28 @@ using System.Linq;
 using Silverfly.Nodes;
 using Silverfly.Nodes.Operators;
 using System.Collections.Immutable;
-using System;
 
 namespace Silverfly;
 
-public abstract class Rewriter : IVisitor<AstNode>
+public abstract class Rewriter : NodeVisitor<AstNode>
 {
-    public virtual AstNode Rewrite(LiteralNode literal) => literal;
+    public Rewriter()
+    {
+        For<LiteralNode>(Rewrite);
+        For<GroupNode>(Rewrite);
+        For<BinaryOperatorNode>(Rewrite);
+        For<CallNode>(Rewrite);
+        For<PrefixOperatorNode>(Rewrite);
+        For<PostfixOperatorNode>(Rewrite);
+        For<BinaryOperatorNode>(Rewrite);
+        For<BlockNode>(Rewrite);
+    }
 
-    public virtual AstNode RewriteOther(AstNode node) => node;
+    protected AstNode Rewrite(LiteralNode literal) => literal;
 
-    public virtual AstNode Rewrite(GroupNode group) => Visit(group.Expr);
+    protected AstNode Rewrite(GroupNode group) => Visit(group.Expr);
 
-    public virtual AstNode Rewrite(BinaryOperatorNode binary)
+    protected AstNode Rewrite(BinaryOperatorNode binary)
     {
         var left = binary.LeftExpr.Accept(this);
         var right = binary.RightExpr.Accept(this);
@@ -26,7 +35,7 @@ public abstract class Rewriter : IVisitor<AstNode>
         };
     }
 
-    public virtual AstNode Rewrite(CallNode call)
+    protected AstNode Rewrite(CallNode call)
     {
         var args = call.Arguments.Select(arg => arg.Accept(this)).ToImmutableList();
 
@@ -37,51 +46,16 @@ public abstract class Rewriter : IVisitor<AstNode>
         };
     }
 
-    public AstNode Visit(AstNode node)
+    protected override AstNode AfterVisit(AstNode node)
     {
-        var rewrittenNode = node;
-
-        if (node is LiteralNode lit)
-        {
-            rewrittenNode = Rewrite(lit);
-        }
-        else if (node is CallNode call)
-        {
-            rewrittenNode = Rewrite(call);
-        }
-        else if (node is BinaryOperatorNode bin)
-        {
-            rewrittenNode = Rewrite(bin);
-        }
-        else if (node is PrefixOperatorNode pre)
-        {
-            rewrittenNode = Rewrite(pre);
-        }
-        else if (node is PostfixOperatorNode post)
-        {
-            rewrittenNode = Rewrite(post);
-        }
-        else if (node is BlockNode block)
-        {
-            rewrittenNode = Rewrite(block);
-        }
-        else if (node is GroupNode group)
-        {
-            rewrittenNode = Rewrite(group);
-        }
-        else
-        {
-            rewrittenNode = RewriteOther(node);
-        }
-
-        return rewrittenNode with
+        return node with
         {
             Range = node.Range,
             Parent = node.Parent
         };
     }
 
-    public virtual AstNode Rewrite(PostfixOperatorNode post)
+    protected AstNode Rewrite(PostfixOperatorNode post)
     {
         return post with
         {
@@ -89,7 +63,7 @@ public abstract class Rewriter : IVisitor<AstNode>
         };
     }
 
-    public virtual AstNode Rewrite(PrefixOperatorNode pre)
+    protected AstNode Rewrite(PrefixOperatorNode pre)
     {
         return pre with
         {
@@ -97,7 +71,7 @@ public abstract class Rewriter : IVisitor<AstNode>
         };
     }
 
-    public virtual AstNode Rewrite(BlockNode block)
+    protected AstNode Rewrite(BlockNode block)
     {
         var children = block.Children.Select(Visit).ToImmutableList();
 
