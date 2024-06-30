@@ -27,6 +27,17 @@ public sealed partial class Lexer
     {
         _index = -1;
         Document = new() { Filename = filename, Source = source.AsMemory() };
+
+        // Register all of the Symbols that are explicit punctuators.
+        foreach (var type in PredefinedSymbols.Pool)
+        {
+            var punctuator = type.Punctuator();
+
+            if (punctuator != "\0")
+            {
+                _punctuators.Add(punctuator, type);
+            }
+        }
     }
 
     // sort punctuators longest -> smallest to make it possible to use symbols with more than one character
@@ -98,6 +109,9 @@ public sealed partial class Lexer
         {
             _index++;
 
+            // sort punctuators longest -> smallest to make it possible to use symbols with more than one character
+            OrderSymbols();
+
             return new Token(PredefinedSymbols.SOF, _line, _column).WithDocument(Document);
         }
 
@@ -117,14 +131,14 @@ public sealed partial class Lexer
                 return token;
             }
 
-            if (InvokePunctuators(out var next))
-            {
-                return next;
-            }
-
             if (_nameAdvancer.IsNameStart(c))
             {
                 return LexName().WithDocument(Document);
+            }
+
+            if (InvokePunctuators(out var next))
+            {
+                return next;
             }
 
             Document.Messages.Add(Message.Error($"Unknown Character '{c}'", SourceRange.From(Document, _line, _column, _line, _column)));

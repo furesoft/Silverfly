@@ -10,10 +10,13 @@
     <Description>A little framework to build parsers</Description>
     <PackageTags>parser, pratt</PackageTags>
     <TargetFrameworks>net8.0</TargetFrameworks>
+    <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Verify" Version="20.6.0"/>
+    <PackageReference Include="NUnit" Version="3.13.3" />
+    <PackageReference Include="Verify.NUnit" Version="20.6.0" />
   </ItemGroup>
 
   <ItemGroup>

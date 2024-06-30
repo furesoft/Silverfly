@@ -1,16 +1,19 @@
 using Argon;
 using Silverfly.Testing.Converter;
-using VerifyTests;
 using static VerifyTests.VerifierSettings;
 
 namespace Silverfly.Testing;
 
-public class SnapshotParserTestBase
+public class SnapshotParserTestBase<TParser>
+    where TParser : Parser, new()
 {
-    public static VerifySettings settings = new VerifySettings();
+    private static readonly VerifySettings _settings = new();
+    private static TestOptions _options;
 
-    public static void Init()
+    public static void Init(TestOptions options)
     {
+        _options = options;
+
         AddExtraSettings(_ =>
         {
             _.Converters.Add(new SymbolConverter());
@@ -21,6 +24,17 @@ public class SnapshotParserTestBase
             _.TypeNameHandling = TypeNameHandling.All;
         });
 
-        settings.UseDirectory("TestResults");
+        _settings.UseDirectory("TestResults");
+    }
+
+    public static Task Test(string source)
+    {
+        var parsed = Parser.Parse<TParser>(source,
+            useStatementsAtToplevel: _options.UseStatementsAtToplevel,
+            filename: _options.Filename);
+
+        var result = new TestResult(parsed.Tree.Accept(new PrintVisitor()), parsed.Document);
+
+        return Verify(result, _settings);
     }
 }

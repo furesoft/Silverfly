@@ -5,12 +5,12 @@ using Silverfly.Testing;
 namespace TestProject;
 
 [TestFixture]
-public class Tests : SnapshotParserTestBase
+public class Tests : SnapshotParserTestBase<TestParser>
 {
     [ModuleInitializer]
     public static void Initialize()
     {
-        Init();
+        Init(new TestOptions(true));
     }
 
     [Test]
@@ -227,12 +227,5 @@ public class Tests : SnapshotParserTestBase
     public Task Block_Should_Pass()
     {
         return Test("-42.5;13");
-    }
-
-    public static Task Test(string source)
-    {
-        var result = Parser.Parse<TestParser>(source, useStatementsAtToplevel: true);
-
-        return Verify(result, settings);
     }
 }
