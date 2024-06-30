@@ -1,11 +1,11 @@
-# Furesoft PrattParser Framework
+# Silverfly
 
 [![CodeFactor](https://www.codefactor.io/repository/github/furesoft/furesoft.prattparser/badge)](https://www.codefactor.io/repository/github/furesoft/furesoft.prattparser)
 [![Build and Publish NuGet Package](https://github.com/furesoft/Furesoft.PrattParser/actions/workflows/pack.yaml/badge.svg)](https://github.com/furesoft/Furesoft.PrattParser/actions/workflows/pack.yaml)
 
-# Furesoft PrattParser
+# Silverfly
 
-Furesoft PrattParser is a versatile parsing framework that provides extensive support for building custom parsers with ease. It supports Pratt parsing, a powerful method for parsing expressions and statements in a flexible manner.
+Silverfly is a versatile parsing framework that provides extensive support for building custom parsers with ease. It supports Pratt parsing, a powerful method for parsing expressions and statements in a flexible manner.
 
 ## Features
 
@@ -15,16 +15,16 @@ Furesoft PrattParser is a versatile parsing framework that provides extensive su
 
 ## Installation
 
-To install Furesoft PrattParser, you can use NuGet:
+To install Silverfly, you can use NuGet:
 
 ```bash
-dotnet add package Furesoft.PrattParser
+dotnet add package Silverfly
 ```
 
 ## Usage
 
 ```csharp
-﻿using Furesoft.PrattParser;
+﻿using Silverfly;
 
 namespace Sample;
 
@@ -46,8 +46,8 @@ public class Program
 }
 ```
 
-For more detailed instructions and advanced usage, please refer to the [Wiki](https://github.com/furesoft/Furesoft.PrattParser/wiki).
-A great example can be found [here](https://github.com/furesoft/Furesoft.PrattParser/tree/main/Source/Sample)
+For more detailed instructions and advanced usage, please refer to the [Wiki](https://github.com/furesoft/Silverfly/wiki).
+A great example can be found [here](https://github.com/furesoft/Silverfly/tree/main/Source/Sample)
 
 ## Contributing
 We welcome contributions! Please see our contributing guidelines for more details on how to get involved.
