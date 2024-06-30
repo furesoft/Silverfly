@@ -1,7 +1,10 @@
 # Silverfly
 
 [![CodeFactor](https://www.codefactor.io/repository/github/furesoft/silverfly/badge)](https://www.codefactor.io/repository/github/furesoft/silverfly)
-[![Build and Publish NuGet Package](https://github.com/furesoft/silverfly/actions/workflows/pack.yaml/badge.svg)](https://github.com/furesoft/silverfly/actions/workflows/pack.yaml)
+![NuGet Version](https://img.shields.io/nuget/v/silverfly)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+![Discord](https://img.shields.io/discord/455738571186241536)
+
 
 # Silverfly
 
