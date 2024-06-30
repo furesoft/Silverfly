@@ -92,7 +92,7 @@ public class StringMatcher(Symbol leftStr, Symbol rightStr, bool allowEscapeChar
                 return;
             }
 
-            codePoint = codePoint * 16 + Convert.ToInt32(char.ToString(lexer.Peek(0)), 16);
+            codePoint = (codePoint * 16) + Convert.ToInt32(char.ToString(lexer.Peek(0)), 16);
 
             lexer.Advance();
         }

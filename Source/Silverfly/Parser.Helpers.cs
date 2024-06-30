@@ -79,10 +79,10 @@ public partial class Parser
     {
         var args = new List<AstNode>();
 
-        do
+        while (!IsMatch(terminator))
         {
             args.Add(Parse(bindingPower));
-        } while (!IsMatch(terminator));
+        }
 
         Consume(terminator);
 

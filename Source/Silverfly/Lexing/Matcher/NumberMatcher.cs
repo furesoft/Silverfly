@@ -55,7 +55,6 @@ public class NumberMatcher(bool allowHex, bool allowBin, Symbol floatingPointSym
         AdvanceNumber(lexer, ref index, IsValidHexChar, 2);
     }
 
-    private bool IsValidBinChar(char c) => c is '1' or '0';
 
     private void AdvanceFloatingPointNumber(Lexer lexer, ref int index)
     {
@@ -84,8 +83,9 @@ public class NumberMatcher(bool allowHex, bool allowBin, Symbol floatingPointSym
         do
         {
             lexer.Advance();
-        } while (index < lexer.Document.Source.Length && charPredicate(lexer.Peek(0)) || lexer.IsMatch(seperatorSymbol.Name));
+        } while ((index < lexer.Document.Source.Length && charPredicate(lexer.Peek(0))) || lexer.IsMatch(seperatorSymbol.Name));
     }
 
-    private bool IsValidHexChar(char c) => char.IsDigit(c) || c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z';
+    private bool IsValidBinChar(char c) => c is '1' or '0';
+    private bool IsValidHexChar(char c) => char.IsDigit(c) || (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
 }

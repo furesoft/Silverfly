@@ -58,6 +58,13 @@ public class RewriterVisitor : Rewriter
                 Value = Visit(l.Value)
             };
         }
+        else if (node is VariableBindingNode binding)
+        {
+            return binding with
+            {
+                Value = Visit(binding.Value)
+            };
+        }
 
         return node;
     }

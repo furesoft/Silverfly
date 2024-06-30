@@ -10,7 +10,6 @@ class ExpressionGrammar : Parser
     {
         lexer.IgnoreWhitespace();
         lexer.MatchNumber(allowHex: false, allowBin: false);
-        lexer.AddSymbol("()");
         lexer.UseNameAdvancer(new SampleNameAdvancer());
     }
 

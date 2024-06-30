@@ -82,7 +82,7 @@ public class EvaluationVisitor : IVisitor<Value>
         for (int i = 0; i < parameters.Count; i++)
         {
             var index = i;
-            subScope.Define(parameters[index].Name, _ => args[index]);
+            subScope.Define(parameters[index].Name, (Value[] _) => args[index]);
         }
 
         return Visit(definition, subScope);
