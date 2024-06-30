@@ -6,5 +6,4 @@ namespace Sample.Nodes;
 
 public record VariableBindingNode(Token Name, ImmutableList<NameNode> Parameters, AstNode Value) : StatementNode
 {
-
 }

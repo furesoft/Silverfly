@@ -222,7 +222,6 @@ public sealed partial class Lexer
         return new(PredefinedSymbols.Name, nameSlice, _line, oldColumn);
     }
 
-
     public bool IsNotAtEnd() => _index < Document.Source.Length;
 
     public void Advance(int distance = 1)

@@ -328,7 +328,7 @@ public class SymbolPool : IEnumerable<Symbol>
             }
         }
 
-        throw new ArgumentException("Invalid Symbol ID " + id, "id");
+        throw new ArgumentException($"Invalid Symbol ID {id}", nameof(id));
     }
 
     #region IEnumerable<Symbol> Members
@@ -381,7 +381,6 @@ public class SymbolPool<SymbolE> : SymbolPool, IEnumerable<SymbolE>
     {
         _factory = factory;
     }
-
 
     public SymbolPool(SymbolFactory factory, int firstID) : base(firstID)
     {

@@ -7,5 +7,4 @@ namespace Silverfly.Nodes;
 /// </summary>
 public record CallNode(AstNode FunctionExpr, ImmutableList<AstNode> Arguments) : AstNode
 {
-
 }

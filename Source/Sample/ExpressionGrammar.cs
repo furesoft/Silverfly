@@ -28,7 +28,6 @@ class ExpressionGrammar : Parser
         Register("()", new UnitValueParselet());
         Register("[", new ListValueParselet());
 
-
         Register("->", new LambdaParselet());
 
         Block(PredefinedSymbols.SOF, PredefinedSymbols.EOF,

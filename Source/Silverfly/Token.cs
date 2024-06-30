@@ -24,7 +24,6 @@ public struct Token(Symbol type, ReadOnlyMemory<char> text, int line, int column
     public Token(Symbol type, int line, int column)
     : this(type, type.Name.AsMemory(), line, column)
     {
-
     }
 
     public override readonly string ToString() => Text.ToString();

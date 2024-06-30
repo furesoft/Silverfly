@@ -4,7 +4,6 @@ namespace Silverfly.Lexing.Matcher;
 
 public class NumberMatcher(bool allowHex, bool allowBin, Symbol floatingPointSymbol, Symbol seperatorSymbol = null) : IMatcher
 {
-
     public bool Match(Lexer lexer, char c)
     {
         var isnegative = c == '-' && char.IsDigit(lexer.Peek(1));

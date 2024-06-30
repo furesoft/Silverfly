@@ -84,7 +84,6 @@ public abstract partial class Parser
         return expression;
     }
 
-
     public static TranslationUnit Parse<TParser>(string source, string filename = "syntethic.dsl", bool useStatementsAtToplevel = false)
         where TParser : Parser, new()
     {
@@ -116,7 +115,7 @@ public abstract partial class Parser
     {
         foreach (var prefix in dict)
         {
-            if (!lexer.IsPunctuator(prefix.Key.Name) && !prefix.Key.Name.StartsWith("#"))
+            if (!lexer.IsPunctuator(prefix.Key.Name) && !prefix.Key.Name.StartsWith('#'))
             {
                 lexer.AddSymbol(prefix.Key.Name);
             }
@@ -300,7 +299,6 @@ public abstract partial class Parser
     {
         Register(token, new PostfixOperatorParselet(BindingPowers.Get(bindingPowerName)));
     }
-
 
     /// <summary>
     ///     Registers a prefix unary operator parselet for the given token and binding power.

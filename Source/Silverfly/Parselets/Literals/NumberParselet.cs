@@ -20,7 +20,7 @@ public class NumberParselet : IPrefixParselet
             return new LiteralNode(Convert.ToUInt32(token.Text[2..].ToString(), 2));
         }
 
-        if (!text.StartsWith("-") && !text.Contains("."))
+        if (!text.StartsWith('-') && !text.Contains('.'))
         {
             return new LiteralNode(ulong.Parse(token.Text.Span)).WithRange(token);
         }
