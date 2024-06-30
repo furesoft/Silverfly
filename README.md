@@ -1,7 +1,7 @@
 # Silverfly
 
-[![CodeFactor](https://www.codefactor.io/repository/github/furesoft/furesoft.prattparser/badge)](https://www.codefactor.io/repository/github/furesoft/furesoft.prattparser)
-[![Build and Publish NuGet Package](https://github.com/furesoft/Furesoft.PrattParser/actions/workflows/pack.yaml/badge.svg)](https://github.com/furesoft/Furesoft.PrattParser/actions/workflows/pack.yaml)
+[![CodeFactor](https://www.codefactor.io/repository/github/furesoft/silverfly/badge)](https://www.codefactor.io/repository/github/furesoft/silverfly)
+[![Build and Publish NuGet Package](https://github.com/furesoft/silverfly/actions/workflows/pack.yaml/badge.svg)](https://github.com/furesoft/silverfly/actions/workflows/pack.yaml)
 
 # Silverfly
 
