@@ -4,6 +4,8 @@
 ![NuGet Version](https://img.shields.io/nuget/v/silverfly)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 ![Discord](https://img.shields.io/discord/455738571186241536)
+![Libraries.io SourceRank](https://img.shields.io/librariesio/sourcerank/nuget/silverfly)
+
 
 
 # Silverfly
