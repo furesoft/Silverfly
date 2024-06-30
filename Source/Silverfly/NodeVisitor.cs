@@ -16,7 +16,7 @@ public abstract class NodeVisitor<TReturn> : NodeVisitorBase
         return AfterVisit((TReturn)InvokeVisitor(node));
     }
 
-    protected void For<TNode>(Func<TNode, TReturn> visitor)
+    public void For<TNode>(Func<TNode, TReturn> visitor)
         where TNode : AstNode
     {
         Visitors[typeof(TNode)] = visitor;
@@ -58,7 +58,7 @@ public abstract class NodeVisitor : NodeVisitorBase
 
     }
 
-    protected void For<TNode>(Action<TNode> visitor)
+    public void For<TNode>(Action<TNode> visitor)
         where TNode : AstNode
     {
         Visitors[typeof(TNode)] = visitor;

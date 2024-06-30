@@ -19,11 +19,17 @@ public class PrintVisitor : NodeVisitor<string>
         For<PrefixOperatorNode>(Visit);
         For<PostfixOperatorNode>(Visit);
         For<LiteralNode>(Visit);
+        For<InvalidNode>(Visit);
     }
 
     private string Visit(GroupNode group)
     {
         return $"({Visit(group.Expr)})";
+    }
+
+    protected string Visit(InvalidNode invalid)
+    {
+        return $"#Invalid({invalid.Token})";
     }
 
     protected override string VisitUnknown(AstNode node)

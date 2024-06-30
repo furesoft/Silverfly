@@ -109,9 +109,6 @@ public sealed partial class Lexer
         {
             _index++;
 
-            // sort punctuators longest -> smallest to make it possible to use symbols with more than one character
-            OrderSymbols();
-
             return new Token(PredefinedSymbols.SOF, _line, _column).WithDocument(Document);
         }
 
