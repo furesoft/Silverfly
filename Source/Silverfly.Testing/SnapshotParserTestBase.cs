@@ -33,7 +33,11 @@ public class SnapshotParserTestBase<TParser>
             useStatementsAtToplevel: _options.UseStatementsAtToplevel,
             filename: _options.Filename);
 
-        var result = new TestResult(parsed.Tree.Accept(new PrintVisitor()), parsed.Document);
+        object result = parsed.Tree;
+        if (_options.OutputMode == OutputMode.Small)
+        {
+            result = new TestResult(parsed.Tree.Accept(new PrintVisitor()), parsed.Document);
+        }
 
         return Verify(result, _settings);
     }

@@ -1,9 +1,0 @@
-﻿{
-  $type: TestResult,
-  Tree: ((a) (b ? c : d), (e + f)); ,
-  Document: {
-    Filename: syntethic.dsl,
-    Source: a(b ? c : d, e + f),
-    Messages: []
-  }
-}

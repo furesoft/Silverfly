@@ -17,7 +17,11 @@ public class BlockParselet(Symbol terminator, Symbol seperator = null, bool wrap
         while (!parser.Match(Terminator))
         {
             var node = parser.ParseStatement(wrapExpressions);
-            children.Add(node with { Parent = block });
+
+            if (node is not InvalidNode)
+            {
+                children.Add(node with { Parent = block });
+            }
 
             if (Seperator != null && parser.IsMatch(Seperator))
             {

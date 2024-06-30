@@ -67,12 +67,17 @@ public partial class Parser
 
         do
         {
-            args.Add(Parse(bindingPower));
+            var node = Parse(bindingPower);
+
+            if (node is not InvalidNode)
+            {
+                args.Add(node);
+            }
         } while (Match(seperator));
 
         Consume(terminator);
 
-        return args.ToImmutableList();
+        return [.. args];
     }
 
     public ImmutableList<AstNode> ParseList(Symbol terminator, int bindingPower = 0)
@@ -81,12 +86,17 @@ public partial class Parser
 
         while (!IsMatch(terminator))
         {
-            args.Add(Parse(bindingPower));
+            var node = Parse(bindingPower);
+
+            if (node is not InvalidNode)
+            {
+                args.Add(node);
+            }
         }
 
         Consume(terminator);
 
-        return args.ToImmutableList();
+        return [.. args];
     }
 
     public ImmutableList<AstNode> ParseSeperated(Symbol seperator, int bindingPower = 0, params Symbol[] terminators)
@@ -100,11 +110,16 @@ public partial class Parser
 
         do
         {
-            args.Add(Parse(bindingPower));
+            var node = Parse(bindingPower);
+
+            if (node is not InvalidNode)
+            {
+                args.Add(node);
+            }
         } while (Match(seperator));
 
         Match(terminators);
 
-        return args.ToImmutableList();
+        return [.. args];
     }
 }

@@ -1,5 +1,11 @@
 namespace Silverfly.Testing;
 
-public record TestOptions(bool UseStatementsAtToplevel, string Filename = "syntetic.dsl")
+public enum OutputMode
+{
+    Small,
+    Full
+}
+
+public record TestOptions(bool UseStatementsAtToplevel, string Filename = "test.src", OutputMode OutputMode = OutputMode.Small)
 {
 }
