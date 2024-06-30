@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Silverfly.Nodes;
 
 namespace Silverfly;
@@ -50,12 +50,10 @@ public abstract class NodeVisitor : NodeVisitorBase
 
     protected virtual void VisitUnknown(AstNode node)
     {
-
     }
 
     protected virtual void AfterVisit(AstNode node)
     {
-
     }
 
     protected void For<TNode>(Action<TNode> visitor)
