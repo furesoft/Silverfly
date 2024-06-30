@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace Silverfly.Lexing.Matcher;
 
@@ -54,7 +54,6 @@ public class NumberMatcher(bool allowHex, bool allowBin, Symbol floatingPointSym
     {
         AdvanceNumber(lexer, ref index, IsValidHexChar, 2);
     }
-
 
     private void AdvanceFloatingPointNumber(Lexer lexer, ref int index)
     {
