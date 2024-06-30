@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Version>1.0.60</Version>
+    <LangVersion>preview</LangVersion>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Title>Silverfly.Testing</Title>
+    <Copyright>furesoft</Copyright>
+    <RepositoryUrl>https://github.com/furesoft/Silverfly</RepositoryUrl>
+    <Description>A little framework to build parsers</Description>
+    <PackageTags>parser, pratt</PackageTags>
+    <TargetFrameworks>net8.0</TargetFrameworks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Verify" Version="20.6.0"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Silverfly\Silverfly.csproj"/>
+  </ItemGroup>
+
+</Project>

@@ -13,8 +13,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Furesoft.PrattParser.Testing\Furesoft.PrattParser.Testing.csproj" />
-    <ProjectReference Include="..\Furesoft.PrattParser\Furesoft.PrattParser.csproj" />
+    <ProjectReference Include="..\Silverfly.Testing\Silverfly.Testing.csproj" />
+    <ProjectReference Include="..\Silverfly\Silverfly.csproj" />
   </ItemGroup>
 
 </Project>

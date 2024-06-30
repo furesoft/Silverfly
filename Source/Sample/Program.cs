@@ -1,4 +1,4 @@
-﻿using Furesoft.PrattParser;
+﻿using Silverfly;
 
 namespace Sample;
 
@@ -6,6 +6,11 @@ public class Program
 {
     public static void Main(string[] args)
     {
+        Scope.Root.DefineOperator("+", (x, y) => x + y);
+        Scope.Root.DefineOperator("-", (x, y) => x - y);
+        Scope.Root.DefineOperator("*", (x, y) => x * y);
+        Scope.Root.DefineOperator("/", (x, y) => x / y);
+
         while (true)
         {
             Console.Write("> ");

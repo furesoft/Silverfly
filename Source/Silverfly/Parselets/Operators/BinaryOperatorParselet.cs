@@ -1,0 +1,30 @@
+using Silverfly.Nodes;
+using Silverfly.Nodes.Operators;
+
+namespace Silverfly.Parselets.Operators;
+
+/// <summary>
+/// Generic infix parselet for a binary arithmetic operator. The only
+/// difference when parsing, "+", "-", "*", "/", and "^" is binding power
+/// and associativity, so we can use a single parselet class for all of those.
+/// </summary>
+public class BinaryOperatorParselet(int bindingPower, bool isRightAssociative) : IInfixParselet
+{
+    public AstNode Parse(Parser parser, AstNode left, Token token)
+    {
+        // To handle right-associative operators like "^", we allow a slightly
+        // lower binding power when parsing the right-hand side. This will let a
+        // parselet with the same binding power appear on the right, which will then
+        // take *this* parselet's result as its left-hand argument.
+        var rightExpr = parser.Parse(bindingPower - (isRightAssociative ? 1 : 0));
+
+        var node = new BinaryOperatorNode(left, token.Type, rightExpr).WithRange(left.Range.Document, left.Range.Start, rightExpr.Range.End);
+
+        left.WithParent(node);
+        rightExpr.WithParent(node);
+
+        return node;
+    }
+
+    public int GetBindingPower() => bindingPower;
+}

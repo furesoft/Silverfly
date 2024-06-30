@@ -1,7 +1,7 @@
 using System.Collections.Immutable;
-using Furesoft.PrattParser;
-using Furesoft.PrattParser.Nodes;
-using Furesoft.PrattParser.Nodes.Operators;
+using Silverfly;
+using Silverfly.Nodes;
+using Silverfly.Nodes.Operators;
 using Sample.Nodes;
 
 namespace Sample;

@@ -1,5 +1,5 @@
-using Furesoft.PrattParser;
-using Furesoft.PrattParser.Parselets;
+using Silverfly;
+using Silverfly.Parselets;
 using Sample.Parselets;
 
 namespace Sample;
@@ -11,6 +11,7 @@ class ExpressionGrammar : Parser
         lexer.IgnoreWhitespace();
         lexer.MatchNumber(allowHex: false, allowBin: false);
         lexer.AddSymbol("()");
+        lexer.UseNameAdvancer(new SampleNameAdvancer());
     }
 
     protected override void InitParselets()
