@@ -29,6 +29,8 @@ class ExpressionGrammar : Parser
 
         Register("->", new LambdaParselet());
 
+        Register("if", new IfParselet());
+
         Block(PredefinedSymbols.SOF, PredefinedSymbols.EOF,
             seperator: PredefinedSymbols.Semicolon);
     }
