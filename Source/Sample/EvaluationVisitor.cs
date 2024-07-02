@@ -70,6 +70,21 @@ public class EvaluationVisitor : NodeVisitor<Value>
 
                     break;
                 }
+            case IfNode ifnode:
+                var evaluatedCondition = Visit(ifnode.Condition);
+
+                if (evaluatedCondition is LiteralNode l && l.Value is bool b)
+                {
+                    if (b)
+                    {
+                       return Visit(ifNode.TruePart);
+                    }
+                    else
+                    {
+                       return Visit(ifNode.FalsePart)
+                    }
+                }
+                break;
         }
 
         Console.WriteLine("cannot handle: " + node);
