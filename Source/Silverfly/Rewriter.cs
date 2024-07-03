@@ -10,6 +10,7 @@ public abstract class Rewriter : NodeVisitor<AstNode>
     public Rewriter()
     {
         For<LiteralNode>(Rewrite);
+        For<NameNode>(Rewrite);
         For<GroupNode>(Rewrite);
         For<BinaryOperatorNode>(Rewrite);
         For<CallNode>(Rewrite);
@@ -20,6 +21,7 @@ public abstract class Rewriter : NodeVisitor<AstNode>
     }
 
     protected AstNode Rewrite(LiteralNode literal) => literal;
+    protected AstNode Rewrite(NameNode literal) => literal;
 
     protected AstNode Rewrite(GroupNode group) => Visit(group.Expr);
 
