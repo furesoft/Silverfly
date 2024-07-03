@@ -3,7 +3,7 @@ namespace Sample;
 public class Scope
 {
     public Scope? Parent { get; set; }
-    public Dictionary<string, Func<Value[], Value>> Bindings { get; set; } = [];
+    public Dictionary<string, Value> Bindings { get; set; } = [];
 
     public static readonly Scope Root = new();
 
@@ -17,12 +17,12 @@ public class Scope
 
     public void Define(string name, Func<Value[], Value> value)
     {
-        Bindings[name] = value;
+        Bindings[name] = new LambdaValue(value);
     }
 
-    public void Define(string name, Func<Value, Value, Value> value)
+    public void Define(string name, Value value)
     {
-        Define(name, args => value(args[0], args[1]));
+        Bindings[name] = value;
     }
 
     public void Define(string name, Func<Value, Value> value)
@@ -30,7 +30,7 @@ public class Scope
         Define(name, args => value(args[0]));
     }
 
-    public Func<Value[], Value>? Get(string name)
+    public Value? Get(string name)
     {
         if (Bindings.TryGetValue(name, out var value))
         {

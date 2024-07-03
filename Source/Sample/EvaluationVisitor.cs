@@ -45,18 +45,26 @@ public class EvaluationVisitor : NodeVisitor<Value>
                     return new NumberValue(result);
                 }
             case VariableBindingNode binding:
-                scope.Define(binding.Name.Text.ToString(), args => CallFunction(binding.Parameters, args, binding.Value));
+                if (binding.Parameters.Count == 0)
+                {
+                    scope.Define(binding.Name.Text.ToString(), Visit(binding.Value));
+                }
+                else
+                {
+                    scope.Define(binding.Name.Text.ToString(), args => CallFunction(binding.Parameters, args, binding.Value));
+                }
 
                 return UnitValue.Shared;
             case LambdaNode lambda:
                 return new LambdaValue(args => CallFunction(lambda.Parameters, args, lambda.Value));
             case NameNode name:
-                return scope.Get(name.Name)!([]);
+                return scope.Get(name.Name)!;
             case CallNode { FunctionExpr: NameNode func } call:
                 {
-                    var args = call.Arguments.Select(Visit).ToArray();
+                    var args = call.Arguments.Select(arg => Visit(arg, scope)).ToArray();
+                    var f = (LambdaValue)scope.Get(func.Name);
 
-                    return scope.Get(func.Name)!(args);
+                    return f!.Value!(args);
                 }
             case CallNode { FunctionExpr: LambdaNode funcGroup } gcall:
                 {
@@ -93,7 +101,7 @@ public class EvaluationVisitor : NodeVisitor<Value>
         for (int i = 0; i < parameters.Count; i++)
         {
             var index = i;
-            subScope.Define(parameters[index].Name, (Value[] _) => args[index]);
+            subScope.Define(parameters[index].Name, args[index]);
         }
 
         return Visit(definition, subScope);
