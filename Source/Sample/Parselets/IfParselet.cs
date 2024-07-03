@@ -1,3 +1,8 @@
+using Sample.Nodes;
+using Silverfly;
+using Silverfly.Nodes;
+using Silverfly.Parselets;
+
 namespace Sample.Parselets;
 
 public class IfParselet : IPrefixParselet
@@ -13,6 +18,6 @@ public class IfParselet : IPrefixParselet
 
         var falsePart = parser.ParseExpression();
 
-        return new IfNode(truePart, falsePart);
+        return new IfNode(condition, truePart, falsePart);
     }
 }
