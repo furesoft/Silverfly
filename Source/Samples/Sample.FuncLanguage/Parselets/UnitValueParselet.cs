@@ -2,7 +2,7 @@ using Silverfly;
 using Silverfly.Parselets;
 using Silverfly.Nodes;
 
-namespace Sample.Parselets;
+namespace Sample.FuncLanguage.Parselets;
 
 public class UnitValueParselet : IPrefixParselet
 {

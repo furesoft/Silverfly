@@ -2,9 +2,9 @@ using System.Collections.Immutable;
 using Silverfly;
 using Silverfly.Nodes;
 using Silverfly.Nodes.Operators;
-using Sample.Nodes;
+using Sample.FuncLanguage.Nodes;
 
-namespace Sample;
+namespace Sample.FuncLanguage;
 
 public class RewriterVisitor : Rewriter
 {

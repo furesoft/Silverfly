@@ -1,9 +1,9 @@
-using Sample.Nodes;
 using Silverfly;
 using Silverfly.Nodes;
 using Silverfly.Parselets;
+using Sample.FuncLanguage.Nodes;
 
-namespace Sample.Parselets;
+namespace Sample.FuncLanguage.Parselets;
 
 public class IfParselet : IPrefixParselet
 {

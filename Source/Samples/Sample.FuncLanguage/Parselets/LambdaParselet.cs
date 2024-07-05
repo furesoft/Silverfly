@@ -2,9 +2,9 @@
 using Silverfly;
 using Silverfly.Nodes;
 using Silverfly.Parselets;
-using Sample.Nodes;
+using Sample.FuncLanguage.Nodes;
 
-namespace Sample.Parselets;
+namespace Sample.FuncLanguage.Parselets;
 
 public class LambdaParselet : IInfixParselet
 {

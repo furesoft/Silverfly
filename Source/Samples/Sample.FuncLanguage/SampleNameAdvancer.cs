@@ -1,7 +1,7 @@
 using Silverfly;
 using Silverfly.Lexing;
 
-namespace Sample;
+namespace Sample.FuncLanguage;
 
 public class SampleNameAdvancer : INameAdvancer
 {

@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProject", "TestProject\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silverfly.Testing", "Silverfly.Testing\Silverfly.Testing.csproj", "{40571B55-2B69-4462-ADDF-79378651BB9F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample", "Sample\Sample.csproj", "{48BC421F-8E9A-467D-922F-601EA7B09B06}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample.FuncLanguage", "Samples\Sample.FuncLanguage\Sample.FuncLanguage.csproj", "{48BC421F-8E9A-467D-922F-601EA7B09B06}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

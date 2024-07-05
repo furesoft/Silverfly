@@ -1,4 +1,4 @@
-namespace Sample;
+namespace Sample.FuncLanguage;
 
 public abstract record Value()
 {

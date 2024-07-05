@@ -1,18 +1,18 @@
 using Silverfly;
 using Silverfly.Parselets;
 using Silverfly.Nodes;
-using Sample.Nodes;
+using Sample.FuncLanguage.Nodes;
 using System.Collections.Immutable;
 
-namespace Sample.Parselets;
+namespace Sample.FuncLanguage.Parselets;
 
 public class VariableBindingParselet : IPrefixParselet
 {
     public AstNode Parse(Parser parser, Token token)
     {
-        // let name = value
+        // let name parameter* = value
         var name = parser.Consume(PredefinedSymbols.Name);
-        var parameters = parser.ParseList("=");
+        var parameters = parser.ParseList(bindingPower: 0, "=");
 
         parser.Consume(PredefinedSymbols.Equals);
 
