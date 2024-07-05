@@ -75,16 +75,16 @@ public partial class Parser
             }
         } while (Match(seperator));
 
-        Consume(terminator);
+        Match(terminator);
 
         return [.. args];
     }
 
-    public ImmutableList<AstNode> ParseList(Symbol terminator, int bindingPower = 0)
+    public ImmutableList<AstNode> ParseList(int bindingPower = 0, params Symbol[] terminators)
     {
         var args = new List<AstNode>();
 
-        while (!IsMatch(terminator))
+        while (!IsMatch(terminators))
         {
             var node = Parse(bindingPower);
 
@@ -94,7 +94,7 @@ public partial class Parser
             }
         }
 
-        Consume(terminator);
+        Match(terminators);
 
         return [.. args];
     }
