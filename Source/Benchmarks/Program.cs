@@ -6,6 +6,7 @@ public class Program
 {
     public static void Main(string[] args)
     {
-        var summary = BenchmarkRunner.Run<LexerBenchmarks>();
+        BenchmarkRunner.Run<ParserBenchmarks>();
+        BenchmarkRunner.Run<LexerBenchmarks>();
     }
 }

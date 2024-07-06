@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Silverfly\Silverfly.csproj" />
+    <ProjectReference Include="..\TestProject\TestProject.csproj" />
   </ItemGroup>
 
 </Project>
