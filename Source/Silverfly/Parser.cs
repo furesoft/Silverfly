@@ -21,17 +21,17 @@ public abstract partial class Parser
 
     public void Register(Symbol token, IPrefixParselet parselet)
     {
-        _prefixParselets.Add(token, parselet);
+        _prefixParselets[token] = parselet;
     }
 
     public void Register(Symbol token, IInfixParselet parselet)
     {
-        _infixParselets.Add(token, parselet);
+        _infixParselets[token] = parselet;
     }
 
     public void Register(Symbol token, IStatementParselet parselet)
     {
-        _statementParselets.Add(token, parselet);
+        _statementParselets[token] = parselet;
     }
 
     public void Register(IInfixParselet parselet, params Symbol[] tokens)
