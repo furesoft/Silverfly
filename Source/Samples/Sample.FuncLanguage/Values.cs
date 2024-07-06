@@ -1,3 +1,6 @@
+using Sample.FuncLanguage.Nodes;
+using Silverfly.Nodes;
+
 namespace Sample.FuncLanguage;
 
 public abstract record Value()
@@ -37,14 +40,48 @@ public record ListValue(List<Value> Value) : Value
     }
 }
 
-public record LambdaValue(Func<Value[], Value> Value) : Value
+public record LambdaValue(Func<Value[], Value> Value, LambdaNode Definition) : Value
 {
     public override bool IsTruthy() => true;
     public override string ToString()
     {
-        var paramCount = Value.Method.GetParameters().Length;
+        var paramCount = 0;
+        if (Definition is null)
+        {
+            paramCount = Value.Method.GetParameters().Length;
+        }
+        else
+        {
+            paramCount = Definition.Parameters.Count;
+        }
+
         var paramList = string.Join(',', Enumerable.Repeat("Value", paramCount));
 
         return $"({paramList}) -> Value";
     }
+}
+
+public record TupleValue(List<Value> Values) : Value, IObject
+{
+    public Value Get(Value key)
+    {
+        if (key is NumberValue v)
+        {
+            return Values[(int)v.Value];
+        }
+
+        return UnitValue.Shared;
+    }
+
+    public override bool IsTruthy() => true;
+
+    public void Set(Value key, Value value)
+    {
+        if (key is NumberValue v)
+        {
+            Values[(int)v.Value] = value;
+        }
+    }
+
+    public override string ToString() => "(" + string.Join(',', Values) + ")";
 }

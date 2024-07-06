@@ -16,6 +16,10 @@ public class LambdaParselet : IInfixParselet
         {
             p.Add(n);
         }
+        else if (parameters is TupleNode t)
+        {
+            p.AddRange(t.Values.Cast<NameNode>());
+        }
 
         var value = parser.ParseExpression();
 

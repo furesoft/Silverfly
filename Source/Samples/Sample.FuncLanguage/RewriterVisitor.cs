@@ -14,7 +14,17 @@ public class RewriterVisitor : Rewriter
         For<CallNode>(Rewrite);
         For<LambdaNode>(Rewrite);
         For<VariableBindingNode>(Rewrite);
+        For<TupleNode>(Rewrite);
     }
+
+    private AstNode Rewrite(TupleNode node)
+    {
+        return node with
+        {
+            Values = node.Values.Select(Visit).ToImmutableList()
+        };
+    }
+
     private new AstNode Rewrite(LiteralNode literal)
     {
         if (literal.Value is ulong value)

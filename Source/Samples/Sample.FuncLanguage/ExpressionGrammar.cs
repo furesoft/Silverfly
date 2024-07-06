@@ -19,10 +19,13 @@ class ExpressionGrammar : Parser
         AddArithmeticOperators();
 
         Register("(", new CallParselet(BindingPowers.Get("Call")));
+        Register("(", new TupleOrGroupParselet());
+
         Register(PredefinedSymbols.Name, new NameParselet());
 
         Register("let", new VariableBindingParselet());
         Postfix("!");
+        InfixLeft(".", "Call");
 
         Register("()", new UnitValueParselet());
         Register("[", new ListValueParselet());

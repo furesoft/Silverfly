@@ -17,7 +17,7 @@ public class Scope
 
     public void Define(string name, Func<Value[], Value> value)
     {
-        Bindings[name] = new LambdaValue(value);
+        Bindings[name] = new LambdaValue(value, null);
     }
 
     public void Define(string name, Value value)

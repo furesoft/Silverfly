@@ -19,12 +19,21 @@ public class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
         For<LambdaNode>(Visit);
         For<NameNode>(Visit);
         For<CallNode>(Visit);
+        For<TupleNode>(Visit);
     }
 
     Value Visit(BinaryOperatorNode binNode, Scope scope)
     {
         var leftVisited = Visit(binNode.LeftExpr, scope);
         var rightVisited = Visit(binNode.RightExpr, scope);
+
+        if (binNode.Operator == (Symbol)".")
+        {
+            if (leftVisited is IObject o)
+            {
+                return o.Get(rightVisited);
+            }
+        }
 
         var leftValue = ((NumberValue)leftVisited).Value;
         var rightValue = ((NumberValue)rightVisited).Value;
@@ -83,7 +92,7 @@ public class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
 
     Value Visit(LambdaNode lambda, Scope scope)
     {
-        return new LambdaValue(args => CallFunction(lambda.Parameters, args, lambda.Value));
+        return new LambdaValue(args => CallFunction(lambda.Parameters, args, lambda.Value), lambda);
     }
 
     Value Visit(NameNode name, Scope scope)
@@ -161,5 +170,10 @@ public class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
         }
 
         return UnitValue.Shared;
+    }
+
+    Value Visit(TupleNode tuple, Scope scope)
+    {
+        return new TupleValue(tuple.Values.Select(_ => Visit(_, scope)).ToList());
     }
 }

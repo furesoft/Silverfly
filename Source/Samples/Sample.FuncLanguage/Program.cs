@@ -20,10 +20,10 @@ public class Program
             var rewritten = parsed.Tree.Accept(new RewriterVisitor());
 
             Console.WriteLine("Old: ");
-            Console.WriteLine(parsed.Tree.Accept(new PrintVisitor()));
+            //Console.WriteLine(parsed.Tree.Accept(new PrintVisitor()));
 
             Console.WriteLine("New: ");
-            Console.WriteLine(rewritten.Accept(new PrintVisitor()));
+            //Console.WriteLine(rewritten.Accept(new PrintVisitor()));
 
             var evaluated = rewritten.Accept(new EvaluationVisitor(), Scope.Root);
             Console.WriteLine("> " + evaluated);
