@@ -65,7 +65,7 @@ public record TupleValue(List<Value> Values) : Value, IObject
 {
     public Value Get(Value key)
     {
-        if (key is NumberValue v)
+        if (key is NumberValue v && v.Value < Values.Count)
         {
             return Values[(int)v.Value];
         }
