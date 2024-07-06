@@ -7,7 +7,7 @@ namespace Silverfly.Testing;
 public class SnapshotParserTestBase<TParser>
     where TParser : Parser, new()
 {
-    private static readonly VerifySettings _settings = new();
+    public static readonly VerifySettings Settings = new();
     private static TestOptions _options;
 
     public static void Init(TestOptions options)
@@ -24,14 +24,16 @@ public class SnapshotParserTestBase<TParser>
             _.TypeNameHandling = TypeNameHandling.All;
         });
 
-        _settings.UseDirectory("TestResults");
+        Settings.UseDirectory("TestResults");
     }
+
+    public static TranslationUnit Parse(string src) => Parser.Parse<TParser>(src,
+            useStatementsAtToplevel: _options.UseStatementsAtToplevel,
+            filename: _options.Filename);
 
     public static Task Test(string source)
     {
-        var parsed = Parser.Parse<TParser>(source,
-            useStatementsAtToplevel: _options.UseStatementsAtToplevel,
-            filename: _options.Filename);
+        var parsed = Parse(source);
 
         object result = parsed.Tree;
         if (_options.OutputMode == OutputMode.Small)
@@ -39,6 +41,6 @@ public class SnapshotParserTestBase<TParser>
             result = new TestResult(parsed.Tree.Accept(new PrintVisitor()), parsed.Document);
         }
 
-        return Verify(result, _settings);
+        return Verify(result, Settings);
     }
 }
