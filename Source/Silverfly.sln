@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silverfly.Testing", "Silver
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample.FuncLanguage", "Samples\Sample.FuncLanguage\Sample.FuncLanguage.csproj", "{48BC421F-8E9A-467D-922F-601EA7B09B06}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Benchmarks", "Benchmarks\Benchmarks.csproj", "{8219DB33-8E85-4DF0-BBBA-428AC349DA79}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{48BC421F-8E9A-467D-922F-601EA7B09B06}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{48BC421F-8E9A-467D-922F-601EA7B09B06}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{48BC421F-8E9A-467D-922F-601EA7B09B06}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8219DB33-8E85-4DF0-BBBA-428AC349DA79}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8219DB33-8E85-4DF0-BBBA-428AC349DA79}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8219DB33-8E85-4DF0-BBBA-428AC349DA79}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8219DB33-8E85-4DF0-BBBA-428AC349DA79}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
