@@ -13,5 +13,10 @@ public abstract class NodeVisitorBase
         return Visitors[node.GetType()].DynamicInvoke(node);
     }
 
+    protected object InvokeVisitor(AstNode node, object tag)
+    {
+        return Visitors[node.GetType()]?.DynamicInvoke(node, tag);
+    }
+
     protected bool HasVisitor(AstNode node) => Visitors.ContainsKey(node.GetType());
 }

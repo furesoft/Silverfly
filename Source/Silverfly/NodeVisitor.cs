@@ -3,7 +3,6 @@ using Silverfly.Nodes;
 
 namespace Silverfly;
 
-//ToDo: Extend Visitor To Visit All Kind Of Node Types With Own Method
 public abstract class NodeVisitor<TReturn> : NodeVisitorBase
 {
     public virtual TReturn Visit(AstNode node)

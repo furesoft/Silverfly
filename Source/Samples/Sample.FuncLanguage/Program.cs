@@ -25,7 +25,7 @@ public class Program
             Console.WriteLine("New: ");
             Console.WriteLine(rewritten.Accept(new PrintVisitor()));
 
-            var evaluated = rewritten.Accept(new EvaluationVisitor());
+            var evaluated = rewritten.Accept(new EvaluationVisitor(), Scope.Root);
             Console.WriteLine("> " + evaluated);
         }
     }

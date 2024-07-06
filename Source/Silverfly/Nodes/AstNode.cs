@@ -18,4 +18,7 @@ public abstract record AstNode
 
     public T Accept<T>(NodeVisitor<T> visitor) => visitor.Visit(this);
     public void Accept(NodeVisitor visitor) => visitor.Visit(this);
+
+    public TReturn Accept<TReturn, TTag>(TaggedNodeVisitor<TReturn, TTag> visitor, TTag tag) => visitor.Visit(this, tag);
+    public void Accept<TTag>(TaggedNodeVisitor<TTag> visitor, TTag tag) => visitor.Visit(this, tag);
 }
