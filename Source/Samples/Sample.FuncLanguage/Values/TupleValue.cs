@@ -1,6 +1,6 @@
 using Silverfly.Nodes;
 
-namespace Sample.FuncLanguage;
+namespace Sample.FuncLanguage.Values;
 
 public record TupleValue(List<Value> Values) : Value, IObject
 {

@@ -1,4 +1,4 @@
-namespace Sample.FuncLanguage;
+namespace Sample.FuncLanguage.Values;
 
 public record UnitValue() : Value
 {

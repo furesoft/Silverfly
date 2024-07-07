@@ -13,6 +13,7 @@ public class TestParser : Parser
         Register("(", new CallParselet(BindingPowers.Get("Call").Id));
 
         Ternary("?", ":", "Conditional");
+        InfixLeft(".", "Call");
 
         AddArithmeticOperators();
         AddBitOperators();

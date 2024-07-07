@@ -5,3 +5,8 @@ print(call('+, x, 2))
 
 let d = y -> 1 + y
 print(call(d, 2))
+
+print(String.length("hello"))
+print("hello".length)
+print("hello".0)
+print("hello".(1+1))

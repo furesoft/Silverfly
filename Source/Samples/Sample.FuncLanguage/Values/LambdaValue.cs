@@ -1,6 +1,6 @@
 using Sample.FuncLanguage.Nodes;
 
-namespace Sample.FuncLanguage;
+namespace Sample.FuncLanguage.Values;
 
 public record LambdaValue(Func<Value[], Value> Value, LambdaNode Definition) : Value
 {

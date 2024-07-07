@@ -11,6 +11,8 @@ class ExpressionGrammar : Parser
         lexer.IgnoreWhitespace();
         lexer.MatchNumber(allowHex: false, allowBin: false);
         lexer.UseNameAdvancer(new SampleNameAdvancer());
+        lexer.MatchString("'", "'");
+        lexer.MatchString("\"", "\"");
     }
 
     protected override void InitParselets()

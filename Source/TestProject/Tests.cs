@@ -74,6 +74,12 @@ public class Tests : SnapshotParserTestBase<TestParser>
     }
 
     [Test]
+    public Task FunctionCalls_Dot_Should_Pass()
+    {
+        return Test("a.b(c)");
+    }
+
+    [Test]
     public Task FunctionCall_Complex_Should_Pass()
     {
         return Test("a(b ? c : d, e + f)");

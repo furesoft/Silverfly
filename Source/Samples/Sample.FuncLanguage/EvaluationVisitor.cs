@@ -3,6 +3,8 @@ using Silverfly;
 using Silverfly.Nodes;
 using Silverfly.Nodes.Operators;
 using Sample.FuncLanguage.Nodes;
+using System.Collections.Specialized;
+using Sample.FuncLanguage.Values;
 
 namespace Sample.FuncLanguage;
 
@@ -97,7 +99,7 @@ public class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
 
     Value Visit(NameNode name, Scope scope)
     {
-        return scope.Get(name.Name)!;
+        return scope.Get(name.Name)! ?? new NameValue(name.Name);
     }
 
     Value Visit(CallNode call, Scope scope)
@@ -107,8 +109,21 @@ public class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
             NameNode func => VisitNamedFunction(func, call, scope),
             LambdaNode funcGroup => VisitLambdaFunction(funcGroup, call, scope),
             CallNode c => Visit(c, scope),
-            _ => UnitValue.Shared
+            _ => VisitOtherFunction(call, scope)
         };
+    }
+
+    Value VisitOtherFunction(CallNode call, Scope scope)
+    {
+        var args = call.Arguments.Select(_ => Visit(_, scope)).ToArray();
+        var func = Visit(call.FunctionExpr, scope);
+
+        if (func is LambdaValue l)
+        {
+            return (Value)l.Value.DynamicInvoke(new[] { args });
+        }
+
+        return UnitValue.Shared;
     }
 
     private Value VisitLambdaFunction(LambdaNode funcGroup, CallNode call, Scope scope)
@@ -160,6 +175,10 @@ public class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
         else if (literal.Value is bool b)
         {
             return new BoolValue(b);
+        }
+        else if (literal.Value is string s)
+        {
+            return new StringValue(s);
         }
         else if (literal.Value is UnitValue unit)
         {
