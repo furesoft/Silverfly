@@ -1,11 +1,8 @@
 namespace Silverfly.Testing;
 
-public enum OutputMode
-{
-    Small,
-    Full
-}
-
+/// <summary>
+/// Represents options for a test scenario.
+/// </summary>
 public record TestOptions(bool UseStatementsAtToplevel, string Filename = "test.src", OutputMode OutputMode = OutputMode.Small)
 {
 }

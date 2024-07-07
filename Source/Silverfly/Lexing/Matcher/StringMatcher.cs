@@ -4,16 +4,39 @@ using System;
 using System.Text;
 using Silverfly.Text;
 
+/// <summary>
+/// Represents a matcher that identifies and parses string tokens.
+/// </summary>
+/// <param name="leftStr">The symbol representing the start of a string.</param>
+/// <param name="rightStr">The symbol representing the end of a string.</param>
+/// <param name="allowEscapeChars">Indicates whether escape characters are allowed within the string.</param>
+/// <param name="allowUnicodeChars">Indicates whether Unicode escape sequences are allowed within the string.</param>
 public class StringMatcher(Symbol leftStr, Symbol rightStr, bool allowEscapeChars = true, bool allowUnicodeChars = true) : IMatcher
 {
-    private readonly Symbol _leftStr = leftStr;
-    private readonly Symbol _rightStr = rightStr;
 
+    /// <summary>
+    /// Determines whether the current lexer position matches the start of a string.
+    /// </summary>
+    /// <param name="lexer">The lexer processing the input.</param>
+    /// <param name="c">The current character being processed.</param>
+    /// <returns>
+    /// <c>true</c> if the current lexer position matches the start of a string; otherwise, <c>false</c>.
+    /// </returns>
     public bool Match(Lexer lexer, char c)
     {
-        return _leftStr != null && _rightStr != null && lexer.IsMatch(_leftStr);
+        return leftStr != null && rightStr != null && lexer.IsMatch(leftStr);
     }
 
+    /// <summary>
+    /// Builds a token for the matched string input.
+    /// </summary>
+    /// <param name="lexer">The lexer processing the input.</param>
+    /// <param name="index">The current index in the lexer's input source.</param>
+    /// <param name="column">The current column in the lexer's input source.</param>
+    /// <param name="line">The current line in the lexer's input source.</param>
+    /// <returns>
+    /// A <see cref="Token"/> representing the matched string input.
+    /// </returns>
     public Token Build(Lexer lexer, ref int index, ref int column, ref int line)
     {
         var oldColumn = column;
@@ -21,7 +44,7 @@ public class StringMatcher(Symbol leftStr, Symbol rightStr, bool allowEscapeChar
         lexer.Advance();
 
         var builder = new StringBuilder();
-        while (!lexer.IsMatch(_rightStr.Name))
+        while (!lexer.IsMatch(rightStr.Name))
         {
             if (lexer.IsMatch("\\") && allowEscapeChars)
             {
@@ -48,6 +71,11 @@ public class StringMatcher(Symbol leftStr, Symbol rightStr, bool allowEscapeChar
         return new Token(PredefinedSymbols.String, builder.ToString().AsMemory(), line, oldColumn);
     }
 
+    /// <summary>
+    /// Parses an escape character within a string and appends it to the string builder.
+    /// </summary>
+    /// <param name="lexer">The lexer processing the input.</param>
+    /// <param name="builder">The string builder to append the escape character to.</param>
     private static void ParseEscapeChar(Lexer lexer, StringBuilder builder)
     {
         switch (lexer.Peek(0))
@@ -76,6 +104,13 @@ public class StringMatcher(Symbol leftStr, Symbol rightStr, bool allowEscapeChar
         lexer.Advance();
     }
 
+    /// <summary>
+    /// Parses a Unicode escape sequence within a string and appends it to the string builder.
+    /// </summary>
+    /// <param name="lexer">The lexer processing the input.</param>
+    /// <param name="builder">The string builder to append the Unicode character to.</param>
+    /// <param name="line">The current line in the lexer's input source.</param>
+    /// <param name="column">The current column in the lexer's input source.</param>
     private static void ParseUnicodeEscape(Lexer lexer, StringBuilder builder, int line, int column)
     {
         var oldLine = line;

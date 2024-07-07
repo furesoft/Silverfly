@@ -4,6 +4,10 @@ using static VerifyTests.VerifierSettings;
 
 namespace Silverfly.Testing;
 
+/// <summary>
+/// Base class for snapshot parser tests using a specific parser type <typeparamref name="TParser"/>.
+/// </summary>
+/// <typeparam name="TParser">The type of the parser being tested.</typeparam>
 public class SnapshotParserTestBase<TParser>
     where TParser : Parser, new()
 {

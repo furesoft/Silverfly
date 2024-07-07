@@ -3,6 +3,10 @@ using Silverfly.Nodes;
 
 namespace Silverfly;
 
+/// <summary>
+/// Represents a base class for visiting and processing abstract syntax tree (AST) nodes.
+/// </summary>
+/// <typeparam name="TReturn">The type of the return value when visiting an AST node.</typeparam>
 public abstract class NodeVisitor<TReturn> : NodeVisitorBase
 {
     public virtual TReturn Visit(AstNode node)

@@ -3,6 +3,11 @@ using Silverfly.Nodes;
 
 namespace Silverfly;
 
+/// <summary>
+/// Represents a base class for a visitor that processes nodes with a specific tag and returns a result.
+/// </summary>
+/// <typeparam name="TReturn">The type of the result returned by the visitor.</typeparam>
+/// <typeparam name="TTag">The type of the tag associated with nodes visited by the visitor.</typeparam>
 public abstract class TaggedNodeVisitor<TReturn, TTag> : NodeVisitorBase
 {
     public virtual TReturn Visit(AstNode node, TTag tag)

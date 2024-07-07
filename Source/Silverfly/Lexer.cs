@@ -7,7 +7,9 @@ using Silverfly.Text;
 
 namespace Silverfly;
 
-//ToDo: Add Ability to use a word combination as single keyword e.g. "12 unless if true"
+/// <summary>
+/// Represents a lexer that tokenizes source code into meaningful tokens.
+/// </summary>
 public sealed partial class Lexer
 {
     private Dictionary<string, Symbol> _punctuators = [];

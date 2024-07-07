@@ -5,6 +5,9 @@ using System.Collections.Immutable;
 
 namespace Silverfly;
 
+/// <summary>
+/// Represents a base class for rewriting operations on abstract syntax tree (AST) nodes.
+/// </summary>
 public abstract class Rewriter : NodeVisitor<AstNode>
 {
     public Rewriter()
