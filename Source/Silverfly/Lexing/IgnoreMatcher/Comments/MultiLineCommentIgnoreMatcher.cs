@@ -1,4 +1,4 @@
-﻿namespace Silverfly.Lexing.IgnoreMatcher.Comments;
+namespace Silverfly.Lexing.IgnoreMatcher.Comments;
 
 /// <summary>
 /// Matcher for ignoring multi-line comments in the lexer.
@@ -10,7 +10,6 @@
 /// <param name="end">The symbol representing the end of the multi-line comment.</param>
 public class MultiLineCommentIgnoreMatcher(Symbol start, Symbol end) : IIgnoreMatcher
 {
-
     /// <summary>
     /// Determines if the current character should be ignored based on the start of the multi-line comment.
     /// </summary>

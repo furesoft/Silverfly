@@ -1,4 +1,4 @@
-﻿namespace Silverfly.Text;
+namespace Silverfly.Text;
 
 /// <summary>Represents a part of the source file</summary>
 /// <summary>
@@ -11,7 +11,6 @@
 /// <param name="column">The column number.</param>
 public readonly struct SourceSpan(int line, int column)
 {
-
     /// <summary>
     /// Gets the line number.
     /// </summary>

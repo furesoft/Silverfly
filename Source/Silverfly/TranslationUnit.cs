@@ -13,7 +13,6 @@ namespace Silverfly;
 /// <param name="document">The source document associated with the translation unit.</param>
 public class TranslationUnit(AstNode tree, SourceDocument document)
 {
-
     /// <summary>
     /// Gets the abstract syntax tree (AST) of the translation unit.
     /// </summary>

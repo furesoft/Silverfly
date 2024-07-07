@@ -1,4 +1,4 @@
-﻿namespace Silverfly.Lexing.Matcher;
+namespace Silverfly.Lexing.Matcher;
 
 using System;
 using System.Text;
@@ -13,7 +13,6 @@ using Silverfly.Text;
 /// <param name="allowUnicodeChars">Indicates whether Unicode escape sequences are allowed within the string.</param>
 public class StringMatcher(Symbol leftStr, Symbol rightStr, bool allowEscapeChars = true, bool allowUnicodeChars = true) : IMatcher
 {
-
     /// <summary>
     /// Determines whether the current lexer position matches the start of a string.
     /// </summary>
