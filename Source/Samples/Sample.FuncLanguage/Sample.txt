@@ -1,0 +1,7 @@
+let call f x y = f(x, y)
+
+let x = 2
+print(call('+, x, 2))
+
+let d = y -> 1 + y
+print(call(d, 2))

@@ -106,6 +106,7 @@ public class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
         {
             NameNode func => VisitNamedFunction(func, call, scope),
             LambdaNode funcGroup => VisitLambdaFunction(funcGroup, call, scope),
+            CallNode c => Visit(c, scope),
             _ => UnitValue.Shared
         };
     }

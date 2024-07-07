@@ -11,6 +11,13 @@ public class Program
         Scope.Root.DefineOperator("*", (x, y) => x * y);
         Scope.Root.DefineOperator("/", (x, y) => x / y);
 
+        Scope.Root.Define("print", (Value x) =>
+        {
+            Console.WriteLine(x);
+
+            return UnitValue.Shared;
+        });
+
         while (true)
         {
             Console.Write("> ");
@@ -19,14 +26,14 @@ public class Program
             var parsed = Parser.Parse<ExpressionGrammar>(input);
             var rewritten = parsed.Tree.Accept(new RewriterVisitor());
 
-            Console.WriteLine("Old: ");
+            //Console.WriteLine("Old: ");
             //Console.WriteLine(parsed.Tree.Accept(new PrintVisitor()));
 
-            Console.WriteLine("New: ");
+            //Console.WriteLine("New: ");
             //Console.WriteLine(rewritten.Accept(new PrintVisitor()));
 
             var evaluated = rewritten.Accept(new EvaluationVisitor(), Scope.Root);
-            Console.WriteLine("> " + evaluated);
+            //Console.WriteLine("> " + evaluated);
         }
     }
 }
