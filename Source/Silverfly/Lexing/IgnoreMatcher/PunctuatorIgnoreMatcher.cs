@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Silverfly.Lexing.IgnoreMatcher;
+﻿namespace Silverfly.Lexing.IgnoreMatcher;
 
 /// <summary>
 /// Represents a matcher that ignores specific punctuator symbols in the lexer input.

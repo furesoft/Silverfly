@@ -1,7 +1,26 @@
 namespace Sample.FuncLanguage.Values;
 
-public record StringValue(string Value) : Value, IObject
+public record StringValue : Value
 {
+    public readonly string Value;
+
+    public StringValue(string value)
+    {
+        Value = value;
+
+        Members.Define("length", new NumberValue(value.Length));
+    }
+
+    protected override Value GetByIndex(int index)
+    {
+        if (index >= 0 && index < Value.Length)
+        {
+            return new StringValue(Value[index].ToString());
+        }
+
+        return UnitValue.Shared;
+    }
+
     public Value Get(Value key)
     {
         if (key is NameValue name)
@@ -13,10 +32,7 @@ public record StringValue(string Value) : Value, IObject
         }
         else if (key is NumberValue index)
         {
-            if (index.Value >= 0 && index.Value < Value.Length)
-            {
-                return new StringValue(Value[(int)index.Value].ToString());
-            }
+            
         }
 
         return UnitValue.Shared;

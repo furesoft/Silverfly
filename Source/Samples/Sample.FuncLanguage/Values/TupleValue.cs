@@ -1,28 +1,18 @@
-using Silverfly.Nodes;
-
 namespace Sample.FuncLanguage.Values;
 
-public record TupleValue(List<Value> Values) : Value, IObject
+public record TupleValue(List<Value> Values) : Value
 {
-    public Value Get(Value key)
+    protected override Value GetByIndex(int index)
     {
-        if (key is NumberValue v && v.Value < Values.Count)
+        if (index > 0 && index < Values.Count)
         {
-            return Values[(int)v.Value];
+            return Values[index];
         }
 
-        return UnitValue.Shared;
+        return base.GetByIndex(index);
     }
 
     public override bool IsTruthy() => true;
-
-    public void Set(Value key, Value value)
-    {
-        if (key is NumberValue v)
-        {
-            Values[(int)v.Value] = value;
-        }
-    }
 
     public override string ToString() => "(" + string.Join(',', Values) + ")";
 }

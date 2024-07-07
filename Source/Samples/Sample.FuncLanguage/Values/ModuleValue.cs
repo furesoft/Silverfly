@@ -1,20 +1,11 @@
-using Silverfly.Nodes;
-
 namespace Sample.FuncLanguage.Values;
 
-public record ModuleValue(Scope Scope) : Value, IObject
+public record ModuleValue : Value
 {
-    public Value Get(Value key)
+    public ModuleValue(Scope scope)
     {
-        if (key is not NameValue name) return UnitValue.Shared;
-
-        return Scope.Get(name.Name);
+        Members = scope;
     }
 
     public override bool IsTruthy() => true;
-
-    public void Set(Value key, Value value)
-    {
-        throw new NotImplementedException();
-    }
 }

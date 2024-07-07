@@ -3,7 +3,6 @@ using Silverfly;
 using Silverfly.Nodes;
 using Silverfly.Nodes.Operators;
 using Sample.FuncLanguage.Nodes;
-using System.Collections.Specialized;
 using Sample.FuncLanguage.Values;
 
 namespace Sample.FuncLanguage;
@@ -31,10 +30,7 @@ public class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
 
         if (binNode.Operator == (Symbol)".")
         {
-            if (leftVisited is IObject o)
-            {
-                return o.Get(rightVisited);
-            }
+            return leftVisited.Get(rightVisited);
         }
 
         var leftValue = ((NumberValue)leftVisited).Value;
