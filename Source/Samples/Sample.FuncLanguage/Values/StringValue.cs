@@ -32,7 +32,6 @@ public record StringValue : Value
         }
         else if (key is NumberValue index)
         {
-            
         }
 
         return UnitValue.Shared;
