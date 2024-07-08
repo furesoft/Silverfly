@@ -8,25 +8,20 @@ public record StringValue : Value
     {
         Value = value;
 
-        Members.Define("length", new NumberValue(value.Length));
+        Members.Define("length", value.Length);
     }
 
     protected override Value GetByIndex(int index)
     {
         if (index >= 0 && index < Value.Length)
         {
-            return new StringValue(Value[index].ToString());
+            return Value[index];
         }
 
         return UnitValue.Shared;
     }
 
     public override bool IsTruthy() => string.IsNullOrEmpty(Value);
-
-    public void Set(Value key, Value value)
-    {
-        throw new NotImplementedException();
-    }
 
     public override string ToString() => $"'{Value}'";
 }

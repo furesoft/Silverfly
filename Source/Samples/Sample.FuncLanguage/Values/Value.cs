@@ -22,8 +22,14 @@ public abstract record Value()
 
     public abstract bool IsTruthy();
 
-    public void Set(Value key, Value value)
+    public virtual void Set(Value key, Value value)
     {
         throw new NotImplementedException();
     }
+
+    public static implicit operator Value(string str) => new StringValue(str);
+    public static implicit operator Value(char c) => new StringValue(c.ToString());
+    public static implicit operator Value(int c) => new NumberValue(c);
+    public static implicit operator Value(double c) => new NumberValue(c);
+    public static implicit operator Value(bool c) => new BoolValue(c);
 }

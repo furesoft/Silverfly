@@ -17,7 +17,7 @@ public class Program
         {
             if (str is StringValue s)
             {
-                return new NumberValue(s.Value.Length);
+                return s.Value.Length;
             }
 
             return UnitValue.Shared;

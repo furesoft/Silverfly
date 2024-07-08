@@ -32,13 +32,13 @@ public class Scope
         Define(name, args => value(args[0]));
     }
 
-    public Value? Get(string name)
+    public Value Get(string name)
     {
         if (Bindings.TryGetValue(name, out var value))
         {
             return value;
         }
 
-        return Parent?.Get(name);
+        return Parent?.Get(name) ?? UnitValue.Shared;
     }
 }
