@@ -17,6 +17,8 @@ public class RewriterVisitor : Rewriter
         For<TupleNode>(Rewrite);
     }
 
+    protected override AstNode VisitUnknown(AstNode node) => node;
+
     private AstNode Rewrite(TupleNode node)
     {
         return node with

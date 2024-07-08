@@ -21,6 +21,20 @@ public class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
         For<NameNode>(Visit);
         For<CallNode>(Visit);
         For<TupleNode>(Visit);
+        For<ImportNode>(Visit);
+    }
+
+    Value Visit(ImportNode node, Scope scope)
+    {
+        var file = new FileInfo($"{node.Path}.f");
+
+        var content = File.ReadAllText(file.FullName);
+        var parsed = Parser.Parse<ExpressionGrammar>(content, file.FullName);
+        var rewritten = parsed.Tree.Accept(new RewriterVisitor());
+
+        rewritten.Accept(new EvaluationVisitor(), scope);
+
+        return UnitValue.Shared;
     }
 
     Value Visit(BinaryOperatorNode binNode, Scope scope)

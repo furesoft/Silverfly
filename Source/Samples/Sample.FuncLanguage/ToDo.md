@@ -1,2 +1,2 @@
-[-] implement lambda functions as values
-    lambdas with more than one parameter has to be implemented
+[ ] implement module definition
+[ ] implement to scope to import clr classes/functions

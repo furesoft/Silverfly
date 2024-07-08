@@ -11,4 +11,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Include="std.f" CopyToOutputDirectory="PreserveNewest"/>
+  </ItemGroup>
+
 </Project>
