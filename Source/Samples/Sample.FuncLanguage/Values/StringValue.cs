@@ -21,23 +21,6 @@ public record StringValue : Value
         return UnitValue.Shared;
     }
 
-    public Value Get(Value key)
-    {
-        if (key is NameValue name)
-        {
-            if (name.Name == "length")
-            {
-                return new NumberValue(Value.Length);
-            }
-        }
-        else if (key is NumberValue index)
-        {
-            
-        }
-
-        return UnitValue.Shared;
-    }
-
     public override bool IsTruthy() => string.IsNullOrEmpty(Value);
 
     public void Set(Value key, Value value)
