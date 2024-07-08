@@ -4,10 +4,12 @@ using Silverfly.Nodes;
 using Silverfly.Nodes.Operators;
 using Sample.FuncLanguage.Nodes;
 using Sample.FuncLanguage.Values;
+using Silverfly.Generator;
 
 namespace Sample.FuncLanguage;
 
-public class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
+[Visitor]
+public partial class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
 {
     public EvaluationVisitor()
     {

@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample.FuncLanguage", "Samp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Benchmarks", "Benchmarks\Benchmarks.csproj", "{8219DB33-8E85-4DF0-BBBA-428AC349DA79}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silverfly.Generator", "Silverfly.Generator\Silverfly.Generator.csproj", "{D00A5E37-FB89-4543-B058-9E0F04A7692F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{8219DB33-8E85-4DF0-BBBA-428AC349DA79}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8219DB33-8E85-4DF0-BBBA-428AC349DA79}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8219DB33-8E85-4DF0-BBBA-428AC349DA79}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D00A5E37-FB89-4543-B058-9E0F04A7692F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D00A5E37-FB89-4543-B058-9E0F04A7692F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D00A5E37-FB89-4543-B058-9E0F04A7692F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D00A5E37-FB89-4543-B058-9E0F04A7692F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

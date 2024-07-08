@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <None Include="std.f" CopyToOutputDirectory="PreserveNewest"/>
+    <ProjectReference Include="../../Silverfly.Generator/Silverfly.Generator.csproj" OutputItemType="Analyzer" />
   </ItemGroup>
 
 </Project>
