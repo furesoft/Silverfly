@@ -142,7 +142,8 @@ public abstract partial class Parser
 
             if (!_infixParselets.TryGetValue(token.Type, out var infix))
             {
-                token.Document.Messages.Add(Message.Error("Could not parse \"" + token.Text + "\"."));
+                token.Document.Messages.Add(
+                    Message.Error("Could not parse \"" + token.Text + "\".", token.GetRange()));
             }
 
             left = infix.Parse(this, left, token);
@@ -240,7 +241,9 @@ public abstract partial class Parser
 
         if (!token.Type.Equals(expected))
         {
-            token.Document.Messages.Add(Message.Error($"Expected token {expected} and found {token.Type}({token})"));
+            token.Document.Messages.Add(
+                Message.Error($"Expected token {expected} and found {token.Type}({token})", token.GetRange()));
+
             return Token.Invalid('\0', token.Line, token.Column);
         }
 

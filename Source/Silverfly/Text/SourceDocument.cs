@@ -25,7 +25,7 @@ public class SourceDocument
 
     public void PrintMessages()
     {
-        foreach (var message in Document.Messages)
+        foreach (var message in Messages)
         {
             MessageFormatter.PrintError(CompilerError.FromMessage(message));
         }

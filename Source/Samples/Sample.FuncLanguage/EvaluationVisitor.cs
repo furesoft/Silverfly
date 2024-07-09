@@ -5,6 +5,7 @@ using Silverfly.Nodes.Operators;
 using Sample.FuncLanguage.Nodes;
 using Sample.FuncLanguage.Values;
 using Silverfly.Generator;
+using Silverfly.Text;
 
 namespace Sample.FuncLanguage;
 
@@ -161,7 +162,10 @@ public partial class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
 
     protected override Value VisitUnknown(AstNode node, Scope tag)
     {
-        Console.WriteLine("cannot handle: " + node);
+        if (node is InvalidNode invalid)
+        {
+            node.Range.Document.Messages.Add(Message.Error("Cannot evaluate " + invalid.Token.Text, invalid.Range));
+        }
 
         return UnitValue.Shared;
     }
