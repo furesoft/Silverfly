@@ -22,4 +22,12 @@ public class SourceDocument
     /// Gets the list of messages associated with the source document.
     /// </summary>
     public List<Message> Messages { get; } = [];
+
+    public void PrintMessages()
+    {
+        foreach (var message in Messages)
+        {
+            MessageFormatter.PrintError(CompilerError.FromMessage(message));
+        }
+    }
 }

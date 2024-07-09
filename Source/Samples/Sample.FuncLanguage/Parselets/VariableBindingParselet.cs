@@ -14,8 +14,6 @@ public class VariableBindingParselet : IPrefixParselet
         var name = parser.Consume(PredefinedSymbols.Name);
         var parameters = parser.ParseList(bindingPower: 0, "=");
 
-        parser.Consume(PredefinedSymbols.Equals);
-
         var value = parser.Parse(0);
 
         return new VariableBindingNode(name, parameters.Cast<NameNode>().ToImmutableList(), value).WithRange(name, parser.LookAhead(0));

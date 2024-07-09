@@ -12,8 +12,15 @@ public class CallParselet(int bindingPower) : IInfixParselet
         // Parse the comma-separated arguments until we hit ')'.
         var args = parser.ParseSeperated(PredefinedSymbols.Comma, PredefinedSymbols.RightParen);
 
-        return new CallNode(left, args)
-            .WithRange(left.Range.Document, left.Range.Start, token.GetSourceSpanEnd());
+        var call = new CallNode(left, args)
+            .WithRange(left.Range.Document, left.Range.Start, parser.LookAhead(0).GetSourceSpanEnd());
+
+        left = left.WithParent(call);
+
+        return (CallNode)call with
+        {
+            FunctionExpr = left
+        };
     }
 
     public int GetBindingPower() => bindingPower;
