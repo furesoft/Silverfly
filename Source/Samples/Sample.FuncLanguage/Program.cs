@@ -46,7 +46,7 @@ public class Program
             //Console.WriteLine(rewritten.Accept(new PrintVisitor()));
             var evaluated = rewritten.Accept(new EvaluationVisitor(), Scope.Root);
 
-            parsed.PrintMessages();
+            parsed.Document.PrintMessages();
 
             //Console.WriteLine("> " + evaluated);
         }

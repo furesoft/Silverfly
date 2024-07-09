@@ -22,12 +22,4 @@ public class TranslationUnit(AstNode tree, SourceDocument document)
     /// Gets the source document associated with the translation unit.
     /// </summary>
     public SourceDocument Document { get; } = document;
-
-    public void PrintMessages()
-    {
-        foreach (var message in Document.Messages)
-        {
-            MessageFormatter.PrintError(CompilerError.FromMessage(message));
-        }
-    }
 }
