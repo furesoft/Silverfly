@@ -73,9 +73,9 @@ public readonly struct SourceRange(SourceDocument document, SourceSpan start, So
         var endLine = End.Line - 1;
 
         if (startLine < 0 || endLine >= CountLines(source))
-            throw new ArgumentOutOfRangeException("Range is out of document lines.");
+            throw new IndexOutOfRangeException("Range is out of document lines.");
 
-        var startIdx = GetLineStartIndex(source, startLine) + Start.Column;
+        var startIdx = GetLineStartIndex(source, startLine) + Start.Column - 1;
         var endIdx = GetLineStartIndex(source, endLine) + End.Column;
 
         return new string(source[startIdx..endIdx]);
@@ -104,7 +104,7 @@ public readonly struct SourceRange(SourceDocument document, SourceSpan start, So
                 currentLine++;
         }
 
-        throw new ArgumentOutOfRangeException("Line number out of range.");
+        throw new ArgumentOutOfRangeException(nameof(line), " line out of range.");
     }
 
     /// <summary>
