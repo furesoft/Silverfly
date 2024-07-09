@@ -76,7 +76,7 @@ public readonly struct SourceRange(SourceDocument document, SourceSpan start, So
             throw new IndexOutOfRangeException("Range is out of document lines.");
 
         var startIdx = GetLineStartIndex(source, startLine) + Start.Column - 1;
-        var endIdx = GetLineStartIndex(source, endLine) + End.Column;
+        var endIdx = GetLineStartIndex(source, endLine) + End.Column - 1;
 
         return new string(source[startIdx..endIdx]);
     }
