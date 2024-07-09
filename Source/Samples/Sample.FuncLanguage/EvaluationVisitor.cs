@@ -132,7 +132,7 @@ public partial class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
 
         if (func is LambdaValue l)
         {
-            return (Value)l.Value.DynamicInvoke(new[] { args });
+            return (Value)l.Value.DynamicInvoke([args]);
         }
 
         return UnitValue.Shared;
