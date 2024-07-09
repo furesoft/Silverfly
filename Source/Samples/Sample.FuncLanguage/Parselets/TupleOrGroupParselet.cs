@@ -11,8 +11,6 @@ public class TupleOrGroupParselet : IPrefixParselet
     {
         var values = parser.ParseSeperated(",", ")");
 
-        parser.Consume(")");
-
         if (values.Count == 1)
         {
             return new GroupNode("(", ")", values[0]);
