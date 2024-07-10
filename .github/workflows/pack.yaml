@@ -16,6 +16,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4.1.7
 
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.x'
+          
       - uses: actions/cache@v4
         name: Setup Cache
         id: cache-setup
@@ -26,11 +31,6 @@ jobs:
           key: ${{ runner.os }}-${{ github.ref_name }}
           restore-keys: |
             ${{ runner.os }}-${{ github.ref_name }}
-
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: '8.x'
 
       - name: Install dependencies
         run: dotnet restore Source/Silverfly/Silverfly.csproj
@@ -44,6 +44,7 @@ jobs:
           RELEASE_VERSION=$(echo ${{ env.RELEASE_VERSION }})
           sed -i "s/<Version>.*<\/Version>/<Version>${RELEASE_VERSION}<\/Version>/" Source/Silverfly/Silverfly.csproj
           sed -i "s/<Version>.*<\/Version>/<Version>${RELEASE_VERSION}<\/Version>/" Source/Silverfly.Testing/Silverfly.Testing.csproj
+          cat Source/Silverfly/Silverfly.csproj
 
       - name: Commit changes
         uses: EndBug/add-and-commit@v9
