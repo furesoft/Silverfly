@@ -49,7 +49,7 @@ jobs:
           git add Source/Silverfly/Silverfly.csproj
           git add Source/Silverfly.Testing/Silverfly.Testing.csproj
           git commit -m "Update version to ${{ env.RELEASE_VERSION }}"
-          git push
+          git push HEAD:main
         
       - name: Build and package
         run: |
