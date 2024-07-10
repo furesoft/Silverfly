@@ -13,6 +13,8 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Checkout code
+        uses: actions/checkout@v4.1.7
+      - name: Switch To main branch
         run: |
           git checkout -b main --track origin/main
 
