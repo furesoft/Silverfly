@@ -14,9 +14,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4.1.7
-      - name: Switch To main branch
-        run: |
-          git switch main
 
       - uses: actions/cache@v4
         name: Setup Cache
@@ -27,7 +24,7 @@ jobs:
             ~/.dotnet
           key: ${{ runner.os }}-${{ github.ref_name }}
           restore-keys: |
-            ${{ runner.os }}-
+            ${{ runner.os }}-${{ github.ref_name }}
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
@@ -53,6 +50,7 @@ jobs:
           author_name: github-actions[bot]
           author_email: github-actions[bot]@users.noreply.github.com
           message: "Update version to ${{ env.RELEASE_VERSION }}"
+          new_branch: update-version
           add: '["Source/Silverfly/Silverfly.csproj", "Source/Silverfly.Testing/Silverfly.Testing.csproj"]'
 
       - name: Create Pull Request
