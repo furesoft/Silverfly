@@ -16,6 +16,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4.1.7
 
+      - name: Set default branch.
+        run: git remote set-head origin --auto
+
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
