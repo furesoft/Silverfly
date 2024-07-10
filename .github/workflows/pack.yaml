@@ -46,11 +46,20 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git switch main
+          git checkout -b update-version  # Erstellt und wechselt zu einem neuen Branch
           git add Source/Silverfly/Silverfly.csproj
           git add Source/Silverfly.Testing/Silverfly.Testing.csproj
           git commit -m "Update version to ${{ env.RELEASE_VERSION }}"
-          git push HEAD:main
+          git push
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: update-version
+          base: main
+          title: "Update version to ${{ env.RELEASE_VERSION }}"
+          body: "This PR updates the .csproj files to version ${{ env.RELEASE_VERSION }}."
         
       - name: Build and package
         run: |
