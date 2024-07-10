@@ -8,6 +8,7 @@ jobs:
   build-and-publish:
     runs-on: ubuntu-latest
     permissions:
+      contents: write
       packages: write
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
