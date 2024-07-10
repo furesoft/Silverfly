@@ -46,6 +46,7 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git switch main
           git add Source/Silverfly/Silverfly.csproj
           git add Source/Silverfly.Testing/Silverfly.Testing.csproj
           git commit -m "Update version to ${{ env.RELEASE_VERSION }}"
