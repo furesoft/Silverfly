@@ -9,6 +9,8 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       packages: write
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -46,7 +48,7 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY
+          git remote set-url origin https://furesoft:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY
           git checkout -b update-version  # Erstellt und wechselt zu einem neuen Branch
           git add Source/Silverfly/Silverfly.csproj
           git add Source/Silverfly.Testing/Silverfly.Testing.csproj
