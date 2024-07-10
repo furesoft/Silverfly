@@ -13,6 +13,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - uses: actions/cache@v4
+        name: Setup Cache
+        id: cache-setup
+        with:
+          path: |
+            ~/.nuget/packages
+            ~/.dotnet
+          key: ${{ runner.os }}-${{ github.ref_name }}
+          restore-keys: |
+            ${{ runner.os }}-
+
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
@@ -21,6 +32,25 @@ jobs:
       - name: Install dependencies
         run: dotnet restore Source/Silverfly/Silverfly.csproj
 
+      - name: Get release version
+        id: get_release
+        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+
+      - name: Update .csproj file
+        run: |
+          RELEASE_VERSION=$(echo ${{ env.RELEASE_VERSION }})
+          sed -i "s/<Version>.*<\/Version>/<Version>${RELEASE_VERSION}<\/Version>/" Source/Silverfly/Silverfly.csproj
+          sed -i "s/<Version>.*<\/Version>/<Version>${RELEASE_VERSION}<\/Version>/" Source/Silverfly.Testing/Silverfly.Testing.csproj
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add Source/Silverfly/Silverfly.csproj
+          git add Source/Silverfly.Testing/Silverfly.Testing.csproj
+          git commit -m "Update version to ${{ env.RELEASE_VERSION }}"
+          git push
+        
       - name: Build and package
         run: |
           dotnet build -c Release Source/Silverfly/Silverfly.csproj
