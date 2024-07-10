@@ -53,6 +53,23 @@ jobs:
           sed -i "s/<Version>.*<\/Version>/<Version>${RELEASE_VERSION}<\/Version>/" Source/Silverfly/Silverfly.csproj
           sed -i "s/<Version>.*<\/Version>/<Version>${RELEASE_VERSION}<\/Version>/" Source/Silverfly.Testing/Silverfly.Testing.csproj
           cat Source/Silverfly/Silverfly.csproj
+        
+      - name: Build and package
+        run: |
+          dotnet build -c Release Source/Silverfly/Silverfly.csproj
+          dotnet pack -c Release -o ./nuget Source/Silverfly/Silverfly.csproj
+          dotnet build -c Release Source/Silverfly.Testing/Silverfly.Testing.csproj
+          dotnet pack -c Release -o ./nuget Source/Silverfly.Testing/Silverfly.Testing.csproj
+
+      - name: Publish to NuGet
+        uses: actions/upload-artifact@v4
+        with:
+          name: nuget-package
+          path: ./nuget/*.nupkg
+
+      - name: Publish package To Nuget
+        run: |
+          dotnet nuget push ./nuget/*.nupkg --api-key "${{ secrets.NUGET_APIKEY }}" --source https://api.nuget.org/v3/index.json --skip-duplicate
 
       - name: Commit changes
         uses: EndBug/add-and-commit@v9
@@ -71,20 +88,3 @@ jobs:
           base: main
           title: "Update version to ${{ env.RELEASE_VERSION }}"
           body: "This PR updates the .csproj files to version ${{ env.RELEASE_VERSION }}."
-        
-      - name: Build and package
-        run: |
-          dotnet build -c Release Source/Silverfly/Silverfly.csproj
-          dotnet pack -c Release -o ./nuget Source/Silverfly/Silverfly.csproj
-          dotnet build -c Release Source/Silverfly.Testing/Silverfly.Testing.csproj
-          dotnet pack -c Release -o ./nuget Source/Silverfly.Testing/Silverfly.Testing.csproj
-
-      - name: Publish to NuGet
-        uses: actions/upload-artifact@v4
-        with:
-          name: nuget-package
-          path: ./nuget/*.nupkg
-
-      - name: Publish package To Nuget
-        run: |
-          dotnet nuget push ./nuget/*.nupkg --api-key "${{ secrets.NUGET_APIKEY }}" --source https://api.nuget.org/v3/index.json --skip-duplicate
