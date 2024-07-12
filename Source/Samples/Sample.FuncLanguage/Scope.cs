@@ -17,6 +17,20 @@ public class Scope
         };
     }
 
+    public bool TryGet(string name, out Value value)
+    {
+        return Bindings.TryGetValue(name, out value!);
+    }
+
+    public bool TryGet<T>(string name, out T value)
+        where T : Value
+    {
+        var result = Bindings.TryGetValue(name, out var tmp);
+
+        value = (T)tmp!;
+        return result;
+    }
+
     public void Define(string name, Func<Value[], Value> value)
     {
         Bindings[name] = new LambdaValue(value, null);

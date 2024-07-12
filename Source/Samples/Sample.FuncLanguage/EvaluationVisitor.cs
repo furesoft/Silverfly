@@ -47,9 +47,14 @@ public class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
             return leftVisited.Get(rightVisited);
         }
 
-        if (leftVisited.Members.Bindings.ContainsKey($"'{binNode.Operator.Name}"))
+        LambdaValue func;
+        if (scope.TryGet($"'{binNode.Operator.Name}", out func))
         {
-            return leftVisited.Members.Get<LambdaValue>($"'{binNode.Operator.Name}").Invoke(leftVisited, rightVisited);
+            return func.Invoke(leftVisited, rightVisited);
+        }
+        else if (leftVisited.Members.TryGet($"'{binNode.Operator.Name}", out func))
+        {
+            return func.Invoke(leftVisited, rightVisited);
         }
 
         return UnitValue.Shared;

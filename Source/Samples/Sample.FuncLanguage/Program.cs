@@ -7,11 +7,6 @@ public class Program
 {
     public static void Main(string[] args)
     {
-        Scope.Root.DefineOperator("+", (x, y) => x + y);
-        Scope.Root.DefineOperator("-", (x, y) => x - y);
-        Scope.Root.DefineOperator("*", (x, y) => x * y);
-        Scope.Root.DefineOperator("/", (x, y) => x / y);
-
         var stringFunctions = new Scope();
         stringFunctions.Define("length", (Value str) =>
         {

@@ -11,7 +11,6 @@ class ExpressionGrammar : Parser
         lexer.IgnoreWhitespace();
         lexer.MatchNumber(allowHex: false, allowBin: false);
         lexer.UseNameAdvancer(new SampleNameAdvancer());
-        lexer.MatchString("'", "'");
         lexer.MatchString("\"", "\"");
     }
 
@@ -20,7 +19,7 @@ class ExpressionGrammar : Parser
         AddCommonLiterals();
         AddArithmeticOperators();
 
-        Register("(", new CallParselet(PrecedenceLevels.Get("Call")));
+        Register("(", new CallParselet(PrecedenceLevels.GetPrecedence("Call")));
         Register("(", new TupleOrGroupParselet());
 
         Register(PredefinedSymbols.Name, new NameParselet());

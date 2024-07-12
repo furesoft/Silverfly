@@ -21,12 +21,11 @@ public class NumberMatcher(bool allowHex, bool allowBin, Symbol floatingPointSym
     /// </returns>
     public bool Match(Lexer lexer, char c)
     {
-        var isnegative = c == '-' && char.IsDigit(lexer.Peek(1));
         var isDigit = char.IsDigit(lexer.Peek(0));
         var isHexDigit = lexer.IsMatch("0x");
         var isBinaryDigit = lexer.IsMatch("0b");
 
-        return (isHexDigit && allowHex) || (isBinaryDigit && allowBin) || isnegative || isDigit;
+        return (isHexDigit && allowHex) || (isBinaryDigit && allowBin) || isDigit;
     }
 
     /// <summary>
