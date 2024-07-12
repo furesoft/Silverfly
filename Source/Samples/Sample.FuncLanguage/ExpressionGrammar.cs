@@ -20,7 +20,7 @@ class ExpressionGrammar : Parser
         AddCommonLiterals();
         AddArithmeticOperators();
 
-        Register("(", new CallParselet(BindingPowers.Get("Call")));
+        Register("(", new CallParselet(PrecedenceLevels.Get("Call")));
         Register("(", new TupleOrGroupParselet());
 
         Register(PredefinedSymbols.Name, new NameParselet());
