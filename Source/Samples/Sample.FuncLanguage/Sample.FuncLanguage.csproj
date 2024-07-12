@@ -12,7 +12,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="std.f" CopyToOutputDirectory="PreserveNewest"/>
+    <None Include="*.f" CopyToOutputDirectory="PreserveNewest"/>
   </ItemGroup>
 
 </Project>
