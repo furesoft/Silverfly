@@ -10,7 +10,7 @@ public class TestParser : Parser
     {
         Register(PredefinedSymbols.Name, new NameParselet());
 
-        Register("(", new CallParselet(BindingPowers.Get("Call").Id));
+        Register("(", new CallParselet(PrecedenceLevels.GetPrecedence("Call")));
 
         Ternary("?", ":", "Conditional");
         InfixLeft(".", "Call");

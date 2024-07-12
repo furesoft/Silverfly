@@ -8,19 +8,55 @@ jobs:
   build-and-publish:
     runs-on: ubuntu-latest
     permissions:
+      contents: write
       packages: write
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.1.7
+        with:
+          fetch-depth: 0
+          ref: main
+
+      - name: Set default branch.
+        run: |
+          git fetch origin
+          git remote set-head origin --auto
+
+      - name: Prepare repository
+        run: git checkout main
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '8.x'
+          
+      - uses: actions/cache@v4
+        name: Setup Cache
+        id: cache-setup
+        with:
+          path: |
+            ~/.nuget/packages
+            ~/.dotnet
+          key: ${{ runner.os }}-${{ github.ref_name }}
+          restore-keys: |
+            ${{ runner.os }}-${{ github.ref_name }}
 
       - name: Install dependencies
         run: dotnet restore Source/Silverfly/Silverfly.csproj
 
+      - name: Get release version
+        id: get_release
+        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+
+      - name: Update .csproj file
+        run: |
+          RELEASE_VERSION=$(echo ${{ env.RELEASE_VERSION }})
+          sed -i "s/<Version>.*<\/Version>/<Version>${RELEASE_VERSION}<\/Version>/" Source/Silverfly/Silverfly.csproj
+          sed -i "s/<Version>.*<\/Version>/<Version>${RELEASE_VERSION}<\/Version>/" Source/Silverfly.Testing/Silverfly.Testing.csproj
+          cat Source/Silverfly/Silverfly.csproj
+        
       - name: Build and package
         run: |
           dotnet build -c Release Source/Silverfly/Silverfly.csproj
@@ -37,3 +73,22 @@ jobs:
       - name: Publish package To Nuget
         run: |
           dotnet nuget push ./nuget/*.nupkg --api-key "${{ secrets.NUGET_APIKEY }}" --source https://api.nuget.org/v3/index.json --skip-duplicate
+
+      - name: Commit changes
+        uses: EndBug/add-and-commit@v9
+        with:
+          author_name: github-actions[bot]
+          author_email: github-actions[bot]@users.noreply.github.com
+          message: "Update version to ${{ env.RELEASE_VERSION }}"
+          push: true
+          new_branch: update-version
+          add: '["Source/Silverfly/Silverfly.csproj", "Source/Silverfly.Testing/Silverfly.Testing.csproj"]'
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: update-version
+          base: main
+          title: "Update version to ${{ env.RELEASE_VERSION }}"
+          body: "This PR updates the .csproj files to version ${{ env.RELEASE_VERSION }}."

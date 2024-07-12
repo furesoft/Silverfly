@@ -15,7 +15,7 @@ public abstract partial class Parser
     private readonly List<Token> _read = [];
     private Lexer _lexer;
 
-    public SymbolPool BindingPowers { get; internal set; }
+    public PrecedenceLevels PrecedenceLevels = new DefaultPrecedenceLevels();
 
     public SourceDocument Document => _lexer.Document;
 
@@ -91,11 +91,6 @@ public abstract partial class Parser
 
         var parser = new TParser { _lexer = lexer };
 
-        var bindingPowerBuilder = new BindingPowerBuilder();
-
-        parser.InitBindingPower(bindingPowerBuilder); // Have to be initialized before parselets to allow named reference
-        parser.BindingPowers = bindingPowerBuilder.BuildPool();
-
         parser.InitParselets();
 
         AddLexerSymbols(lexer, parser._prefixParselets);
@@ -163,19 +158,6 @@ public abstract partial class Parser
 
     protected abstract void InitLexer(Lexer lexer);
     protected abstract void InitParselets();
-
-    protected virtual void InitBindingPower(BindingPowerBuilder precedence)
-    {
-        precedence
-            .StrongerThan("Exponent", "Product")
-            .StrongerThan("Product", "Sum")
-            .StrongerThan("Sum", "Conditional")
-            .StrongerThan("Conditional", "Assignment")
-            .StrongerThan("Prefix", "Exponent")
-            .StrongerThan("Postfix", "Call")
-            .StrongerThan("Prefix", "Postfix")
-            .StrongerThan("Prefix", "Sum");
-    }
 
     public bool Match(Symbol expected)
     {
@@ -297,7 +279,7 @@ public abstract partial class Parser
     /// </summary>
     protected void Postfix(Symbol token, string bindingPowerName = "Postfix")
     {
-        Register(token, new PostfixOperatorParselet(BindingPowers.Get(bindingPowerName)));
+        Register(token, new PostfixOperatorParselet(PrecedenceLevels.GetPrecedence(bindingPowerName)));
     }
 
     /// <summary>
@@ -305,7 +287,7 @@ public abstract partial class Parser
     /// </summary>
     protected void Prefix(Symbol token, string bindingPowerName = "Prefix")
     {
-        Register(token, new PrefixOperatorParselet(BindingPowers.Get(bindingPowerName)));
+        Register(token, new PrefixOperatorParselet(PrecedenceLevels.GetPrecedence(bindingPowerName)));
     }
 
     /// <summary>
@@ -313,7 +295,7 @@ public abstract partial class Parser
     /// </summary>
     protected void InfixLeft(Symbol token, string bindingPowerName)
     {
-        Register(token, new BinaryOperatorParselet(BindingPowers.Get(bindingPowerName), false));
+        Register(token, new BinaryOperatorParselet(PrecedenceLevels.GetPrecedence(bindingPowerName), false));
     }
 
     /// <summary>
@@ -321,7 +303,7 @@ public abstract partial class Parser
     /// </summary>
     protected void InfixRight(Symbol token, string bindingPowerName)
     {
-        Register(token, new BinaryOperatorParselet(BindingPowers.Get(bindingPowerName), true));
+        Register(token, new BinaryOperatorParselet(PrecedenceLevels.GetPrecedence(bindingPowerName), true));
     }
 
     /// <summary>
@@ -332,6 +314,6 @@ public abstract partial class Parser
     /// <param name="bindingPower"></param>
     protected void Ternary(Symbol firstSymbol, Symbol secondSymbol, string bindingPowerName)
     {
-        Register(firstSymbol, new TernaryOperatorParselet(secondSymbol, BindingPowers.Get(bindingPowerName)));
+        Register(firstSymbol, new TernaryOperatorParselet(secondSymbol, PrecedenceLevels.GetPrecedence(bindingPowerName)));
     }
 }
