@@ -21,4 +21,9 @@ public record LambdaValue(Func<Value[], Value> Value, LambdaNode Definition) : V
 
         return $"({paramList}) -> Value";
     }
+
+    internal Value Invoke(params Value[] args)
+    {
+        return (Value)Value.DynamicInvoke([args]);
+    }
 }

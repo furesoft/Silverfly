@@ -32,6 +32,11 @@ public class Scope
         Define(name, args => value(args[0]));
     }
 
+    public void Define(string name, Func<Value, Value, Value> value)
+    {
+        Define(name, args => value(args[0], args[1]));
+    }
+
     public Value Get(string name)
     {
         if (Bindings.TryGetValue(name, out var value))
@@ -40,5 +45,11 @@ public class Scope
         }
 
         return Parent?.Get(name) ?? UnitValue.Shared;
+    }
+
+    public T Get<T>(string name)
+        where T : Value
+    {
+        return (T)Get(name);
     }
 }

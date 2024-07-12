@@ -47,19 +47,12 @@ public class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
             return leftVisited.Get(rightVisited);
         }
 
-        var leftValue = ((NumberValue)leftVisited).Value;
-        var rightValue = ((NumberValue)rightVisited).Value;
-
-        var result = binNode.Operator.Name switch
+        if (leftVisited.Members.Bindings.ContainsKey($"'{binNode.Operator.Name}"))
         {
-            "+" => leftValue + rightValue,
-            "-" => leftValue - rightValue,
-            "*" => leftValue * rightValue,
-            "/" => leftValue / rightValue,
-            _ => 0
-        };
+            return leftVisited.Members.Get<LambdaValue>($"'{binNode.Operator.Name}").Invoke(leftVisited, rightVisited);
+        }
 
-        return new NumberValue(result);
+        return UnitValue.Shared;
     }
 
     Value Visit(GroupNode group, Scope scope) => Visit(group.Expr, scope);

@@ -29,6 +29,8 @@ class ExpressionGrammar : Parser
         Postfix("!");
         InfixLeft(".", "Call");
 
+        InfixLeft("::", "Call");
+
         Register("()", new UnitValueParselet());
         Register("[", new ListValueParselet());
 
