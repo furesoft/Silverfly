@@ -11,15 +11,16 @@ public class ImportParselet : IPrefixParselet
     {
         var arg = parser.ParseExpression();
 
+        AstNode node = new InvalidNode(token);
         if (arg is LiteralNode { Value: string path })
         {
-            return new ImportNode(path);
+            node = new ImportNode(path);
         }
         else if (arg is NameNode name)
         {
-            return new ImportNode(name.Name);
+            node = new ImportNode(name.Name);
         }
 
-        return new InvalidNode(token);
+        return node.WithRange(token, parser.LookAhead(0));
     }
 }

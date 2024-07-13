@@ -11,11 +11,12 @@ public class ModuleParselet : IPrefixParselet
     {
         var arg = parser.ParseExpression();
 
+        AstNode node = new InvalidNode(token);
         if (arg is NameNode name)
         {
-            return new ModuleNode(name.Name);
+            node = new ModuleNode(name.Name);
         }
 
-        return new InvalidNode(token);
+        return node.WithRange(token, parser.LookAhead(0));
     }
 }
