@@ -55,14 +55,14 @@ jobs:
           RELEASE_VERSION=$(echo ${{ env.RELEASE_VERSION }})
           sed -i "s/<Version>.*<\/Version>/<Version>${RELEASE_VERSION}<\/Version>/" Source/Silverfly/Silverfly.csproj
           sed -i "s/<Version>.*<\/Version>/<Version>${RELEASE_VERSION}<\/Version>/" Source/Silverfly.Testing/Silverfly.Testing.csproj
+          sed -i "s/<Version>.*<\/Version>/<Version>${RELEASE_VERSION}<\/Version>/" Source/Samples/Sample.FuncLanguage/Sample.FuncLanguage.csproj
           cat Source/Silverfly/Silverfly.csproj
         
       - name: Build and package
         run: |
           dotnet build -c Release Source/Silverfly/Silverfly.csproj
-          dotnet pack -c Release -o ./nuget Source/Silverfly/Silverfly.csproj
           dotnet build -c Release Source/Silverfly.Testing/Silverfly.Testing.csproj
-          dotnet pack -c Release -o ./nuget Source/Silverfly.Testing/Silverfly.Testing.csproj
+          dotnet build -c Release -o ./nuget Source/Samples/Sample.FuncLanguage/Sample.FuncLanguage.csproj
 
       - name: Publish to NuGet
         uses: actions/upload-artifact@v4
@@ -82,7 +82,7 @@ jobs:
           message: "Update version to ${{ env.RELEASE_VERSION }}"
           push: true
           new_branch: update-version
-          add: '["Source/Silverfly/Silverfly.csproj", "Source/Silverfly.Testing/Silverfly.Testing.csproj"]'
+          add: '["Source/Silverfly/Silverfly.csproj", "Source/Silverfly.Testing/Silverfly.Testing.csproj", "Source/Samples/Sample.FuncLanguage.csproj"]'
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v5

@@ -1,8 +1,7 @@
-using Silverfly;
 using Silverfly.Parselets;
-using Sample.FuncLanguage.Parselets;
+using Silverfly.Sample.Func.Parselets;
 
-namespace Sample.FuncLanguage;
+namespace Silverfly.Sample.Func;
 
 class ExpressionGrammar : Parser
 {

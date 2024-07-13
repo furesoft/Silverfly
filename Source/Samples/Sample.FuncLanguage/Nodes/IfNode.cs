@@ -1,5 +1,5 @@
 using Silverfly.Nodes;
 
-namespace Sample.FuncLanguage.Nodes;
+namespace Silverfly.Sample.Func.Nodes;
 
 public record IfNode(AstNode Condition, AstNode TruePart, AstNode FalsePart) : AstNode;

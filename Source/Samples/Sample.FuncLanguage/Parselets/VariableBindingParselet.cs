@@ -1,10 +1,9 @@
-using Silverfly;
 using Silverfly.Parselets;
 using Silverfly.Nodes;
-using Sample.FuncLanguage.Nodes;
 using System.Collections.Immutable;
+using Silverfly.Sample.Func.Nodes;
 
-namespace Sample.FuncLanguage.Parselets;
+namespace Silverfly.Sample.Func.Parselets;
 
 public class VariableBindingParselet : IPrefixParselet
 {

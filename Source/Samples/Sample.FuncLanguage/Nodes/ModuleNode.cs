@@ -1,5 +1,5 @@
 using Silverfly.Nodes;
 
-namespace Sample.FuncLanguage.Nodes;
+namespace Silverfly.Sample.Func.Nodes;
 
 public record ModuleNode(string Name) : AstNode;

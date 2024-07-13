@@ -1,8 +1,7 @@
-using Silverfly;
 using Silverfly.Parselets;
 using Silverfly.Nodes;
 
-namespace Sample.FuncLanguage.Parselets;
+namespace Silverfly.Sample.Func.Parselets;
 
 public class ListValueParselet : IPrefixParselet
 {

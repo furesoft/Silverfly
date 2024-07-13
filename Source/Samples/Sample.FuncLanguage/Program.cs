@@ -1,7 +1,6 @@
-﻿using Sample.FuncLanguage.Values;
-using Silverfly;
+﻿using Silverfly.Sample.Func.Values;
 
-namespace Sample.FuncLanguage;
+namespace Silverfly.Sample.Func;
 
 public class Program
 {
@@ -22,11 +21,6 @@ public class Program
             var parsed = Parser.Parse<ExpressionGrammar>(input);
             var rewritten = parsed.Tree.Accept(new RewriterVisitor());
 
-            //Console.WriteLine("Old: ");
-            //Console.WriteLine(parsed.Tree.Accept(new PrintVisitor()));
-
-            //Console.WriteLine("New: ");
-            //Console.WriteLine(rewritten.Accept(new PrintVisitor()));
             var evaluated = rewritten.Accept(new EvaluationVisitor(), Scope.Root);
 
             parsed.Document.PrintMessages();

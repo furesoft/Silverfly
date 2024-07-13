@@ -1,10 +1,9 @@
 ﻿using System.Collections.Immutable;
-using Silverfly;
 using Silverfly.Nodes;
 using Silverfly.Parselets;
-using Sample.FuncLanguage.Nodes;
+using Silverfly.Sample.Func.Nodes;
 
-namespace Sample.FuncLanguage.Parselets;
+namespace Silverfly.Sample.Func.Parselets;
 
 public class LambdaParselet : IInfixParselet
 {

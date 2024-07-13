@@ -1,6 +1,8 @@
-using Sample.FuncLanguage.Values;
+using Silverfly.Sample.Func.Values;
 
-namespace Sample.FuncLanguage;
+namespace Silverfly.Sample.Func;
+
+#nullable enable
 
 public class Scope
 {

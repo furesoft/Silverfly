@@ -1,5 +1,4 @@
-
-namespace Sample.FuncLanguage.Values;
+namespace Silverfly.Sample.Func.Values;
 
 public record StringValue : Value
 {

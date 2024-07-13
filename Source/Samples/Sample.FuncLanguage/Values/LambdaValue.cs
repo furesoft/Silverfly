@@ -1,6 +1,6 @@
-using Sample.FuncLanguage.Nodes;
+using Silverfly.Sample.Func.Nodes;
 
-namespace Sample.FuncLanguage.Values;
+namespace Silverfly.Sample.Func.Values;
 
 public record LambdaValue(Func<Value[], Value> Value, LambdaNode Definition) : Value
 {

@@ -1,12 +1,11 @@
 using System.Collections.Immutable;
-using Silverfly;
 using Silverfly.Nodes;
 using Silverfly.Nodes.Operators;
-using Sample.FuncLanguage.Nodes;
-using Sample.FuncLanguage.Values;
 using Silverfly.Text;
+using Silverfly.Sample.Func.Values;
+using Silverfly.Sample.Func.Nodes;
 
-namespace Sample.FuncLanguage;
+namespace Silverfly.Sample.Func;
 
 public partial class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
 {

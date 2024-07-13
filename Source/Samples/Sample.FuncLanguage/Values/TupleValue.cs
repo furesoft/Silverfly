@@ -1,4 +1,4 @@
-namespace Sample.FuncLanguage.Values;
+namespace Silverfly.Sample.Func.Values;
 
 public record TupleValue(List<Value> Values) : Value
 {
