@@ -88,4 +88,14 @@ public abstract record AstNode
     /// <param name="visitor">The tagged visitor to accept.</param>
     /// <param name="tag">The tag to provide to the visitor.</param>
     public void Accept<TTag>(TaggedNodeVisitor<TTag> visitor, TTag tag) => visitor.Visit(this, tag);
+
+    public void AddMessage(MessageSeverity severity, string message)
+    {
+        Range.Document.Messages.Add(new Message(severity, message, Range));
+    }
+
+    public void AddMessage(MessageSeverity severity, string message, Token token)
+    {
+        Range.Document.Messages.Add(new Message(severity, message, token.GetRange()));
+    }
 }

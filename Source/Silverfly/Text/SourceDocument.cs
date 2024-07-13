@@ -24,6 +24,14 @@ public class SourceDocument
     /// </summary>
     public List<Message> Messages { get; } = [];
 
+    public void PrintMessages()
+    {
+        foreach (var message in Messages)
+        {
+            MessageFormatter.PrintError(CompilerError.FromMessage(message));
+        }
+    }
+  
     public void AddMessage(MessageSeverity severity, string message, AstNode node)
     {
         Messages.Add(new Message(severity, message, node.Range));

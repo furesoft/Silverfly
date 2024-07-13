@@ -84,7 +84,8 @@ public abstract partial class Parser
         return expression;
     }
 
-    public static TranslationUnit Parse<TParser>(string source, string filename = "syntethic.dsl", bool useStatementsAtToplevel = false)
+    public static TranslationUnit Parse<TParser>(string source, string filename = "syntethic.dsl",
+        bool useStatementsAtToplevel = false, bool enforceEndOfFile = true)
         where TParser : Parser, new()
     {
         var lexer = new Lexer(source, filename);
@@ -101,9 +102,16 @@ public abstract partial class Parser
 
         lexer.OrderSymbols();
 
-        return new(useStatementsAtToplevel
-                    ? parser.ParseStatement()
-                    : parser.ParseExpression(), lexer.Document);
+        var node = useStatementsAtToplevel
+                            ? parser.ParseStatement()
+                            : parser.ParseExpression();
+
+        if (enforceEndOfFile)
+        {
+            parser.Match(PredefinedSymbols.EOF);
+        }
+
+        return new(node, lexer.Document);
     }
 
     private static void AddLexerSymbols<TParselet>(Lexer lexer, Dictionary<Symbol, TParselet> dict)
@@ -137,7 +145,8 @@ public abstract partial class Parser
 
             if (!_infixParselets.TryGetValue(token.Type, out var infix))
             {
-                token.Document.Messages.Add(Message.Error("Could not parse \"" + token.Text + "\"."));
+                token.Document.Messages.Add(
+                    Message.Error("Could not parse \"" + token.Text + "\".", token.GetRange()));
             }
 
             left = infix.Parse(this, left, token);
@@ -222,7 +231,9 @@ public abstract partial class Parser
 
         if (!token.Type.Equals(expected))
         {
-            token.Document.Messages.Add(Message.Error($"Expected token {expected} and found {token.Type}({token})"));
+            token.Document.Messages.Add(
+                Message.Error($"Expected token {expected} and found {token.Type}({token})", token.GetRange()));
+
             return Token.Invalid('\0', token.Line, token.Column);
         }
 

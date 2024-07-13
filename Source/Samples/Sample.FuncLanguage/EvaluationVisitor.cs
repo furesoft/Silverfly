@@ -8,7 +8,7 @@ using Silverfly.Text;
 
 namespace Sample.FuncLanguage;
 
-public class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
+public partial class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
 {
     public EvaluationVisitor()
     {
@@ -152,7 +152,7 @@ public class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
 
         if (func is LambdaValue l)
         {
-            return (Value)l.Value.DynamicInvoke(new[] { args });
+            return (Value)l.Value.DynamicInvoke([args]);
         }
 
         return UnitValue.Shared;
@@ -174,14 +174,24 @@ public class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
     private Value VisitNamedFunction(NameNode func, CallNode call, Scope scope)
     {
         var args = call.Arguments.Select(arg => Visit(arg, scope)).ToArray();
-        var f = (LambdaValue?)scope.Get(func.Name);
+        var f = scope.Get(func.Name);
 
-        return f!.Value!(args);
+        if (f is LambdaValue lambda)
+        {
+            return lambda.Value(args);
+        }
+
+        func.Parent.AddMessage(MessageSeverity.Error, $"Function '{func.Name}' not found");
+
+        return UnitValue.Shared;
     }
 
     protected override Value VisitUnknown(AstNode node, Scope tag)
     {
-        Console.WriteLine("cannot handle: " + node);
+        if (node is InvalidNode invalid)
+        {
+            node.Range.Document.Messages.Add(Message.Error("Cannot evaluate " + invalid.Token.Text, invalid.Range));
+        }
 
         return UnitValue.Shared;
     }

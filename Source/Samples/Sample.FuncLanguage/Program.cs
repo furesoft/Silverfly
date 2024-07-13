@@ -27,8 +27,10 @@ public class Program
 
             //Console.WriteLine("New: ");
             //Console.WriteLine(rewritten.Accept(new PrintVisitor()));
-
             var evaluated = rewritten.Accept(new EvaluationVisitor(), Scope.Root);
+
+            parsed.Document.PrintMessages();
+
             //Console.WriteLine("> " + evaluated);
         }
     }

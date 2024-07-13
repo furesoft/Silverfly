@@ -43,15 +43,6 @@ public sealed class Message(MessageSeverity severity, string text, SourceRange r
         return new Message(MessageSeverity.Error, message, range);
     }
 
-    /// <summary>
-    /// Constructs an error message with the specified severity and text, using an empty source range.
-    /// </summary>
-    /// <param name="message">The error message text.</param>
-    /// <returns>A new <see cref="Message"/> instance representing an error.</returns>
-    public static Message Error(string message)
-    {
-        return new Message(MessageSeverity.Error, message, SourceRange.Empty);
-    }
 
     /// <summary>
     /// Constructs an information message with the specified severity, text, and range.

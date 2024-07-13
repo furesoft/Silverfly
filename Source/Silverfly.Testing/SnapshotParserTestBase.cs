@@ -35,7 +35,7 @@ public class SnapshotParserTestBase<TParser>
 
     public static TranslationUnit Parse(string src) => Parser.Parse<TParser>(src,
             useStatementsAtToplevel: _options.UseStatementsAtToplevel,
-            filename: _options.Filename);
+            filename: _options.Filename, enforceEndOfFile: _options.EnforceEndOfFile);
 
     public static Task Test(string source)
     {
