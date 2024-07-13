@@ -1,3 +1,5 @@
+import std // import all members of std.f to the current scope
+
 let call f x y = f(x, y) // define function that can call functions
 
 let x = 2 // define a variable
@@ -12,3 +14,12 @@ print(String.length("hello")) // call a static function in a module
 print("hello".length) // get an attribute from a value
 print("hello".0) // get the first char
 print("hello".(1+1)) // get the third char
+
+let on_enter call = print("Entering " + call)
+let on_exit call value = print("Exiting " + call + " with " + value)
+
+@enter(on_enter)
+@exit(on_exit)
+let f x = print(x);
+
+f("hello")

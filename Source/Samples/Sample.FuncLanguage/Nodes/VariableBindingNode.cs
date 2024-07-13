@@ -4,6 +4,6 @@ using Silverfly.Nodes;
 
 namespace Sample.FuncLanguage.Nodes;
 
-public record VariableBindingNode(Token Name, ImmutableList<NameNode> Parameters, AstNode Value) : StatementNode
+public record VariableBindingNode(Token Name, ImmutableList<NameNode> Parameters, AstNode Value) : AnnotatedNode
 {
 }

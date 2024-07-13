@@ -118,6 +118,23 @@ public partial class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
         return Visit(block.Children.Last(), scope); // the last expression is the return value
     }
 
+    //@enter(on_enter)
+    //@leave(on_leave)
+    private void CallAnnotationRef(string annotationName, AnnotatedNode node, Scope scope, params Value[] args)
+    {
+        foreach (var annotation in node.Annotations)
+        {
+            if (annotation.FunctionExpr is NameNode n && n.Name == annotationName)
+            {
+                var funcRef = annotation.Arguments[0];
+                var evaluatedFuncRef = (LambdaValue)Visit(funcRef, scope);
+                evaluatedFuncRef.Value.Invoke(args);
+
+                return;
+            }
+        }
+    }
+
     Value Visit(VariableBindingNode binding, Scope scope)
     {
         if (binding.Parameters.Count == 0)
@@ -126,7 +143,14 @@ public partial class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
         }
         else
         {
-            scope.Define(binding.Name.Text.ToString(), args => CallFunction(binding.Parameters, args, binding.Value));
+            scope.Define(binding.Name.Text.ToString(), args =>
+            {
+                CallAnnotationRef("enter", binding, scope, new StringValue(binding.Name.Text.ToString()));
+                var res = CallFunction(binding.Parameters, args, binding.Value);
+                CallAnnotationRef("exit", binding, scope, new StringValue(binding.Name.Text.ToString()), res);
+
+                return res;
+            });
         }
 
         return UnitValue.Shared;

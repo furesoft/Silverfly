@@ -27,7 +27,7 @@ public class SampleNameAdvancer : INameAdvancer
                 return;
             }
 
-            if (!char.IsLetterOrDigit(lexer.Peek(0)))
+            if (!char.IsLetterOrDigit(lexer.Peek(0)) && lexer.Peek(0) != '_')
             {
                 break;
             }
