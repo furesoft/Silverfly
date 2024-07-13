@@ -1,3 +1,3 @@
 module String
 
-let length x = x.length
+@export let length x = x.length

@@ -2,7 +2,7 @@
 
 namespace Silverfly.Sample.Func;
 
-public class Program
+public static class Repl
 {
     public static void Main(string[] args)
     {

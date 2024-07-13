@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <Version>1.0.64</Version>
+    <OutputType>Exe</OutputType>
     <LangVersion>preview</LangVersion>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Title>Silverfly.Sample.Func</Title>
