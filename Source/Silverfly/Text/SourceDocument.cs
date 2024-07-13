@@ -31,9 +31,4 @@ public class SourceDocument
             MessageFormatter.PrintError(CompilerError.FromMessage(message));
         }
     }
-  
-    public void AddMessage(MessageSeverity severity, string message, AstNode node)
-    {
-        Messages.Add(new Message(severity, message, node.Range));
-    }
 }

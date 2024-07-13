@@ -16,6 +16,7 @@ public partial class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
         For<BlockNode>(Visit);
         For<GroupNode>(Visit);
         For<BinaryOperatorNode>(Visit);
+        For<PrefixOperatorNode>(Visit);
         For<VariableBindingNode>(Visit);
         For<IfNode>(Visit);
         For<LambdaNode>(Visit);
@@ -61,7 +62,7 @@ public partial class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
 
         if (leftVisited is NameValue n)
         {
-            binNode.Range.Document.AddMessage(MessageSeverity.Error, $"Value '{n.Name}' not found", binNode.LeftExpr);
+            binNode.LeftExpr.AddMessage(MessageSeverity.Error, $"Value '{n.Name}' not found");
             return UnitValue.Shared;
         }
 
@@ -79,6 +80,27 @@ public partial class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
         {
             return func.Invoke(leftVisited, rightVisited);
         }
+
+        binNode.AddMessage(MessageSeverity.Error, $"Operator '{binNode.Operator}' is not defined");
+
+        return UnitValue.Shared;
+    }
+
+    Value Visit(PrefixOperatorNode prefix, Scope scope)
+    {
+        var exprVisited = Visit(prefix.Expr, scope);
+
+        LambdaValue func;
+        if (scope.TryGet($"'{prefix.Operator.Name}", out func))
+        {
+            return func.Invoke(exprVisited);
+        }
+        else if (exprVisited.Members.TryGet($"'{prefix.Operator.Name}", out func))
+        {
+            return func.Invoke(exprVisited);
+        }
+
+        prefix.AddMessage(MessageSeverity.Error, $"Operator '{prefix.Operator}' is not defined");
 
         return UnitValue.Shared;
     }
