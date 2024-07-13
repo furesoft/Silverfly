@@ -58,7 +58,7 @@ public class Scope
             return value;
         }
 
-        return Parent?.Get(name) ?? UnitValue.Shared;
+        return Parent?.Get(name)!;
     }
 
     public T Get<T>(string name)

@@ -4,6 +4,7 @@ using Silverfly.Nodes;
 using Silverfly.Nodes.Operators;
 using Sample.FuncLanguage.Nodes;
 using Sample.FuncLanguage.Values;
+using Silverfly.Text;
 
 namespace Sample.FuncLanguage;
 
@@ -22,6 +23,7 @@ public class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
         For<CallNode>(Visit);
         For<TupleNode>(Visit);
         For<ImportNode>(Visit);
+        For<ModuleNode>(Visit);
     }
 
     Value Visit(ImportNode node, Scope scope)
@@ -29,8 +31,23 @@ public class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
         var file = new FileInfo($"{node.Path}.f");
 
         var content = File.ReadAllText(file.FullName);
-        var parsed = Parser.Parse<ExpressionGrammar>(content, file.FullName);
+        var parsed = Parser.Parse<ExpressionGrammar>(content, file.FullName, useStatementsAtToplevel: true);
         var rewritten = parsed.Tree.Accept(new RewriterVisitor());
+
+        if (rewritten is BlockNode block)
+        {
+            var module = block.Children.FirstOrDefault(_ => _ is ModuleNode);
+
+            if (module != null)
+            {
+                var moduleNode = (ModuleNode)module;
+                var moduleScope = scope.NewSubScope();
+                rewritten.Accept(new EvaluationVisitor(), moduleScope);
+                scope.Define(moduleNode.Name, new ModuleValue(moduleScope));
+
+                return UnitValue.Shared;
+            }
+        }
 
         rewritten.Accept(new EvaluationVisitor(), scope);
 
@@ -41,6 +58,12 @@ public class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
     {
         var leftVisited = Visit(binNode.LeftExpr, scope);
         var rightVisited = Visit(binNode.RightExpr, scope);
+
+        if (leftVisited is NameValue n)
+        {
+            binNode.Range.Document.AddMessage(MessageSeverity.Error, $"Value '{n.Name}' not found", binNode.LeftExpr);
+            return UnitValue.Shared;
+        }
 
         if (binNode.Operator == (Symbol)".")
         {
@@ -61,6 +84,7 @@ public class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
     }
 
     Value Visit(GroupNode group, Scope scope) => Visit(group.Expr, scope);
+    Value Visit(ModuleNode module, Scope scope) => UnitValue.Shared;
 
     Value Visit(BlockNode block, Scope scope)
     {

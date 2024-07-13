@@ -7,18 +7,6 @@ public class Program
 {
     public static void Main(string[] args)
     {
-        var stringFunctions = new Scope();
-        stringFunctions.Define("length", (Value str) =>
-        {
-            if (str is StringValue s)
-            {
-                return s.Value.Length;
-            }
-
-            return UnitValue.Shared;
-        });
-
-        Scope.Root.Define("String", new ModuleValue(stringFunctions));
         Scope.Root.Define("print", (Value x) =>
         {
             Console.WriteLine(x);

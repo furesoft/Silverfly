@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Silverfly.Nodes;
 
 namespace Silverfly.Text;
 
@@ -22,4 +23,9 @@ public class SourceDocument
     /// Gets the list of messages associated with the source document.
     /// </summary>
     public List<Message> Messages { get; } = [];
+
+    public void AddMessage(MessageSeverity severity, string message, AstNode node)
+    {
+        Messages.Add(new Message(severity, message, node.Range));
+    }
 }
