@@ -1,3 +1,4 @@
+
 namespace Sample.FuncLanguage.Values;
 
 public record StringValue : Value
@@ -9,7 +10,11 @@ public record StringValue : Value
         Value = value;
 
         Members.Define("length", value.Length);
+
+        Members.Define("'+", Concat);
     }
+
+    private Value Concat(Value left, Value right) => $"{left}{right}";
 
     protected override Value GetByIndex(int index)
     {
@@ -23,5 +28,5 @@ public record StringValue : Value
 
     public override bool IsTruthy() => string.IsNullOrEmpty(Value);
 
-    public override string ToString() => $"'{Value}'";
+    public override string ToString() => Value.ToString();
 }

@@ -1,12 +1,14 @@
-let call f x y = f(x, y)
+let call f x y = f(x, y) // define function that can call functions
 
-let x = 2
-print(call('+, x, 2))
+let x = 2 // define a variable
+print(call('+, x, 2)) // call the + operator
 
-let d = y -> 1 + y
+let d = y -> 1 + y // define a function
 print(call(d, 2))
 
-print(String.length("hello"))
-print("hello".length)
-print("hello".0)
-print("hello".(1+1))
+print(((x, y) -> x + y)(1, 2)) // call anonymous function directly
+
+print(String.length("hello")) // call a static function in a module
+print("hello".length) // get an attribute from a value
+print("hello".0) // get the first char
+print("hello".(1+1)) // get the third char
