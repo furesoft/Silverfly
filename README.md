@@ -6,10 +6,6 @@
 ![Discord](https://img.shields.io/discord/455738571186241536)
 ![Libraries.io SourceRank](https://img.shields.io/librariesio/sourcerank/nuget/silverfly)
 
-
-
-# Silverfly
-
 Silverfly is a versatile parsing framework that provides extensive support for building custom parsers with ease. It supports Pratt parsing, a powerful method for parsing expressions and statements in a flexible manner.
 
 ## Features
