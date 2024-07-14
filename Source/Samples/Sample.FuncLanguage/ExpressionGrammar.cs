@@ -25,7 +25,8 @@ class ExpressionGrammar : Parser
 
         Register("let", new VariableBindingParselet());
         Postfix("!");
-        InfixLeft(".", "Call");
+        InfixLeft(".", DefaultPrecedenceLevels.Call);
+        InfixLeft("=", DefaultPrecedenceLevels.Assignment);
 
         Register("[", new ListValueParselet());
 

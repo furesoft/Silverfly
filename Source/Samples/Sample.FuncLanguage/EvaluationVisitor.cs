@@ -59,6 +59,12 @@ public partial class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
         var leftVisited = Visit(binNode.LeftExpr, scope);
         var rightVisited = Visit(binNode.RightExpr, scope);
 
+        if (binNode.Operator == (Symbol)"=")
+        {
+            //ToDo: implement assignment
+            return null;
+        }
+
         if (leftVisited is NameValue n)
         {
             binNode.LeftExpr.AddMessage(MessageSeverity.Error, $"Value '{n.Name}' not found");

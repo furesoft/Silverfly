@@ -32,4 +32,22 @@ public abstract record Value()
     public static implicit operator Value(int c) => new NumberValue(c);
     public static implicit operator Value(double c) => new NumberValue(c);
     public static implicit operator Value(bool c) => new BoolValue(c);
+
+    public object Unmarshal()
+    {
+        if (this is StringValue s)
+        {
+            return s.Value;
+        }
+        else if (this is NumberValue n)
+        {
+            return n.Value;
+        }
+        else if (this is BoolValue b)
+        {
+            return b.Value;
+        }
+
+        return null;
+    }
 }
