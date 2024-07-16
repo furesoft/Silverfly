@@ -10,3 +10,5 @@
     if (val is number) then 4
     else if (val is bool) then 5
     else ()
+
+[ ] implement function to call clr methods on Values
