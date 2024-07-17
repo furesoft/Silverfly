@@ -2,6 +2,7 @@
 
 [![CodeFactor](https://www.codefactor.io/repository/github/furesoft/silverfly/badge)](https://www.codefactor.io/repository/github/furesoft/silverfly)
 ![NuGet Version](https://img.shields.io/nuget/v/silverfly)
+![NuGet Downloads](https://img.shields.io/nuget/dt/Silverfly)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 ![Discord](https://img.shields.io/discord/455738571186241536)
 ![Libraries.io SourceRank](https://img.shields.io/librariesio/sourcerank/nuget/silverfly)
