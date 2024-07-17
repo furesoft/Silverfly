@@ -1,5 +1,6 @@
 [ ] implement unpacking operator
     myoption? => myoption.unpack() 
+[ ] implement range and range on strings to substring
 
 [ ] implement enum
 [ ] implement to scope to import clr classes/functions
