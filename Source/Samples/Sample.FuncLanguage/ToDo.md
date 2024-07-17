@@ -1,5 +1,7 @@
 [ ] implement unpacking operator
     myoption? => myoption.unpack() 
+
+[ ] implement enum
 [ ] implement to scope to import clr classes/functions
 [ ] implement functions to determine if value is of specific value type or implement operator
     isNumber(val) -> bool
