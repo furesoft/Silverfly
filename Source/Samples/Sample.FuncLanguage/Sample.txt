@@ -15,11 +15,13 @@ print("hello".length) // get an attribute from a value
 print("hello".0) // get the first char
 print("hello".(1+1)) // get the third char
 
+// define functions to be decoarted to another function
 let on_enter call = print("Entering " + call)
 let on_exit call value = print("Exiting " + call + " with " + value)
 
+// use the functions from above as decorators for f
 @enter(on_enter)
 @exit(on_exit)
 let f x = print(x);
 
-f("hello")
+f("hello") // before calling f 'on_enter' will be called and after calling f 'on_exit' will be called.
