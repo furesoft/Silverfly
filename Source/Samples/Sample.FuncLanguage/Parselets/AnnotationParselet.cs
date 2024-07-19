@@ -23,6 +23,10 @@ public class AnnotationParselet : IPrefixParselet
         {
             a.Annotations = a.Annotations.Add((CallNode)call);
         }
+        else
+        {
+            expr.AddMessage("Annotation cannot be used for " + expr.GetType());
+        }
 
         return expr;
     }
