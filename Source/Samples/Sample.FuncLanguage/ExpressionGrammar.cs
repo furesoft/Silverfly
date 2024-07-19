@@ -38,6 +38,6 @@ class ExpressionGrammar : Parser
         Register("@", new AnnotationParselet());
 
         Block(PredefinedSymbols.SOF, PredefinedSymbols.EOF,
-            seperator: PredefinedSymbols.Semicolon);
+            seperator: PredefinedSymbols.EOL);
     }
 }
