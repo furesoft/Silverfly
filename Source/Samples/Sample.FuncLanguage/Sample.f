@@ -4,7 +4,7 @@ let outer = Box.make(())
 let doWithBox b = Box.set(3, b)
 
 doWithBox(outer)
-print(outer)
+print(outer) // calls Box.to_string(outer)
 
 let call f x y = f(x, y) // define function that can call functions
 
