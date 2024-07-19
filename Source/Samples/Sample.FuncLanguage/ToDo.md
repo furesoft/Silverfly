@@ -1,5 +1,7 @@
 [ ] implement unpacking operator
     myoption? => myoption.unpack() 
+[ ] implement custom data types
+type Box(ref)
 [ ] implement range and range on strings to substring
 [ ] implement errors for annotations that are not a name or call
 
