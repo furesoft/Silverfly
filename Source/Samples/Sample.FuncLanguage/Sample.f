@@ -6,6 +6,11 @@ enum Color = R | G | B
 print(Color.R)
 
 let reflectedColor = reflect(Color) // get all metadata about object (typeid, members)
+print(reflectedColor.name) //returns type name
+print(reflectedColor.members) // returns list of members
+print(reflectedColor.members.0.name) // returns name of member 0 -> R
+print(reflectedColor.members.0.value) // returns value of member 0 -> 0
+
 
 let outer = Box.make(())
 let doWithBox b = Box.set(3, b)
