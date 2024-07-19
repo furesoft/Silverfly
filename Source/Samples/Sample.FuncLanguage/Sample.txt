@@ -15,7 +15,7 @@ print("hello".length) // get an attribute from a value
 print("hello".0) // get the first char
 print("hello".(1+1)) // get the third char
 
-// define functions to be decoarted to another function
+// define functions to be decorated to another function
 let on_enter call = print("Entering " + call)
 let on_exit call value = print("Exiting " + call + " with " + value)
 
