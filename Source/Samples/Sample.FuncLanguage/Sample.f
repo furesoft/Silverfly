@@ -1,5 +1,11 @@
 import std // import all members of std.f to the current scope
 
+let outer = Box.make(())
+let doWithBox b = Box.set(3, b)
+
+doWithBox(outer)
+print(outer)
+
 let call f x y = f(x, y) // define function that can call functions
 
 let x = 2 // define a variable
