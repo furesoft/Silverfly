@@ -8,7 +8,14 @@ public static class Repl
     {
         Scope.Root.Define("print", (Value x) =>
         {
-            Console.WriteLine(x);
+            if (x.Members.TryGet<LambdaValue>("to_string", out var func))
+            {
+                Console.WriteLine(func.Invoke());
+            }
+            else
+            {
+                Console.WriteLine(x);
+            }
 
             return UnitValue.Shared;
         });

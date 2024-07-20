@@ -42,6 +42,11 @@ public partial class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
         }
 
         memberScope.Define("__name___", node.Name);
+        memberScope.Define("to_string", (Value[] args) =>
+        {
+            return $"enum {node.Name} = {string.Join("|", node.Members.Where(_ => _ is NameNode).Select(_ => ((NameNode)_).Name))}";
+        });
+
         scope.Define(node.Name, new ModuleValue(memberScope));
 
         return UnitValue.Shared;

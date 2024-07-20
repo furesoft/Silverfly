@@ -8,9 +8,4 @@ public record ModuleValue : Value
     }
 
     public override bool IsTruthy() => true;
-
-    public override string ToString()
-    {
-        return $"Module with {Members.Bindings.Count} bindings";
-    }
 }
