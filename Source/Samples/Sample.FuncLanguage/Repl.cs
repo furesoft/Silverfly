@@ -8,25 +8,13 @@ public static class Repl
     {
         Scope.Root.Define("print", (Value x) =>
         {
-            if (x.Members.TryGet<LambdaValue>("to_string", out var func))
-            {
-                Console.WriteLine(func.Invoke());
-            }
-            else
-            {
-                Console.WriteLine(x);
-            }
+            Console.WriteLine(x);
 
             return UnitValue.Shared;
         });
 
-        /*
-        let reflectedColor = reflect(Color) // get all metadata about object (name, members)
-        print(reflectedColor.name) //returns type name
-        print(reflectedColor.members) // returns list of members
-        print(reflectedColor.members.0.name) // returns name of member 0 -> R
-        print(reflectedColor.members.0.value) // returns value of member 0 -> 0
-        */
+        OptionValue.AddToScope();
+
         Scope.Root.Define("reflect", (Value x) =>
         {
             var scope = new Scope();

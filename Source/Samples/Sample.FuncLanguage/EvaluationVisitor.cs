@@ -50,10 +50,10 @@ public partial class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
         {
             if (name is StringValue sv)
             {
-                return memberScope.Get(sv.Value) ?? UnitValue.Shared;
+                return memberScope.Get(sv.Value) ?? OptionValue.None;
             }
 
-            return UnitValue.Shared;
+            return OptionValue.None;
         });
 
         scope.Define(node.Name, new ModuleValue(memberScope));

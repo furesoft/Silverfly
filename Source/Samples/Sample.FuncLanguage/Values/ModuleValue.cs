@@ -8,4 +8,14 @@ public record ModuleValue : Value
     }
 
     public override bool IsTruthy() => true;
+
+    public override string ToString()
+    {
+        if (Members.TryGet<LambdaValue>("to_string", out var func))
+        {
+            return func.Invoke().ToString();
+        }
+
+        return $"Module with {Members.Bindings.Count} Bindings";
+    }
 }

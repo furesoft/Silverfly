@@ -54,3 +54,7 @@ let mul2 x = x * 2
 let add1mul2 x = add1 + mul2 //combine add1 and mul2 as new function
 
 print(add1mul2(2)) //prints 6
+
+print(Option.some(2))
+
+print((1,2).2) // prints none because there is no third element

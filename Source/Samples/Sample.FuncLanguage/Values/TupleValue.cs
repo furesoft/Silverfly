@@ -9,7 +9,7 @@ public record TupleValue(List<Value> Values) : Value
             return Values[index];
         }
 
-        return base.GetByIndex(index);
+        return OptionValue.None;
     }
 
     public override bool IsTruthy() => true;

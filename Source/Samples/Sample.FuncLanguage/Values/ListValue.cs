@@ -21,7 +21,7 @@ public record ListValue : Value
             return value[index];
         }
 
-        return UnitValue.Shared;
+        return OptionValue.None;
     }
 
     public override string ToString()

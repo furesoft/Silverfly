@@ -22,7 +22,7 @@ public record StringValue : Value
             return Value[index];
         }
 
-        return UnitValue.Shared;
+        return OptionValue.None;
     }
 
     public override bool IsTruthy() => string.IsNullOrEmpty(Value);
