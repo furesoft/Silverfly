@@ -30,7 +30,7 @@ public partial class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
 
     Value Visit(EnumNode node, Scope scope)
     {
-        Scope memberScope = new Scope();
+        var memberScope = new Scope();
 
         for (var i = 0; i < node.Members.Count; i++)
         {
@@ -41,6 +41,7 @@ public partial class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
             }
         }
 
+        memberScope.Define("__name___", node.Name);
         scope.Define(node.Name, new ModuleValue(memberScope));
 
         return UnitValue.Shared;

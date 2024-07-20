@@ -1,14 +1,24 @@
+
 namespace Silverfly.Sample.Func.Values;
 
-public record ListValue(List<Value> Value) : Value
+public record ListValue : Value
 {
+    public List<Value> value { get; }
+
+    public ListValue(List<Value> Value)
+    {
+        this.value = Value;
+
+        Members.Define("length", value.Count);
+    }
+
     public override bool IsTruthy() => true;
 
     protected override Value GetByIndex(int index)
     {
-        if (index >= 0 && index < Value.Count)
+        if (index >= 0 && index < value.Count)
         {
-            return Value[index];
+            return value[index];
         }
 
         return UnitValue.Shared;
@@ -16,6 +26,6 @@ public record ListValue(List<Value> Value) : Value
 
     public override string ToString()
     {
-        return $"[{string.Join(',', Value)}]";
+        return $"[{string.Join(',', value)}]";
     }
 }

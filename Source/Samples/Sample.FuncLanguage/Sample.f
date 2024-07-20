@@ -2,8 +2,7 @@ import std // import all members of std.f to the current scope
 
 /* not yet implemented
 
-
-let reflectedColor = reflect(Color) // get all metadata about object (typeid, members)
+let reflectedColor = reflect(Color) // get all metadata about object (name, members)
 print(reflectedColor.name) //returns type name
 print(reflectedColor.members) // returns list of members
 print(reflectedColor.members.0.name) // returns name of member 0 -> R
