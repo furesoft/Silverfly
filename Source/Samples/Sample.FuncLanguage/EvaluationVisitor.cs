@@ -4,6 +4,7 @@ using Silverfly.Nodes.Operators;
 using Silverfly.Text;
 using Silverfly.Sample.Func.Values;
 using Silverfly.Sample.Func.Nodes;
+using Sivlerfly.Sample.FuncLanguage.Nodes;
 
 namespace Silverfly.Sample.Func;
 
@@ -24,6 +25,25 @@ public partial class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
         For<TupleNode>(Visit);
         For<ImportNode>(Visit);
         For<ModuleNode>(Visit);
+        For<EnumNode>(Visit);
+    }
+
+    Value Visit(EnumNode node, Scope scope)
+    {
+        Scope memberScope = new Scope();
+
+        for (var i = 0; i < node.Members.Count; i++)
+        {
+            var member = node.Members[i];
+            if (member is NameNode name)
+            {
+                memberScope.Define(name.Name, i);
+            }
+        }
+
+        scope.Define(node.Name, new ModuleValue(memberScope));
+
+        return UnitValue.Shared;
     }
 
     Value Visit(ImportNode node, Scope scope)

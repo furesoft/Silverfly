@@ -1,9 +1,7 @@
 import std // import all members of std.f to the current scope
 
 /* not yet implemented
-enum Color = R | G | B
 
-print(Color.R)
 
 let reflectedColor = reflect(Color) // get all metadata about object (typeid, members)
 print(reflectedColor.name) //returns type name
@@ -18,6 +16,10 @@ let doWithBox b = Box.set(3, b)
 doWithBox(outer)
 print(outer) // calls Box.to_string(outer)
 */
+
+enum Color = R | G | B
+
+print(Color.R)
 
 let call f x y = f(x, y) // define function that can call functions
 

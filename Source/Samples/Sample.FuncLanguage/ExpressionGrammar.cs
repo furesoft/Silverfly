@@ -24,6 +24,7 @@ class ExpressionGrammar : Parser
         Register(PredefinedSymbols.Name, new NameParselet());
 
         Register("let", new VariableBindingParselet());
+        Register("enum", new EnumParselet());
         Postfix("!");
         InfixLeft(".", DefaultPrecedenceLevels.Call);
         InfixLeft("=", DefaultPrecedenceLevels.Assignment);

@@ -1,6 +1,7 @@
 using Silverfly.Nodes;
 using Silverfly.Parselets;
 using Silverfly.Sample.Func.Nodes;
+using Silverfly.Text;
 
 namespace Silverfly.Sample.Func.Parselets;
 
@@ -25,7 +26,7 @@ public class AnnotationParselet : IPrefixParselet
         }
         else
         {
-            expr.AddMessage("Annotation cannot be used for " + expr.GetType());
+            expr.AddMessage(MessageSeverity.Error, "Annotation cannot be used for " + expr.GetType());
         }
 
         return expr;
