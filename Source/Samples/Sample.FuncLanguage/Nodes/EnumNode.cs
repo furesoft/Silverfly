@@ -5,5 +5,4 @@ namespace Sivlerfly.Sample.FuncLanguage.Nodes;
 
 public record EnumNode(string Name, ImmutableList<AstNode> Members) : AstNode
 {
-
 }
