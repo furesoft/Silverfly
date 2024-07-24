@@ -12,7 +12,6 @@ namespace Sample.FuncLanguage;
 [Visitor]
 public partial class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
 {
-
     Value Visit(ImportNode node, Scope scope)
     {
         var file = new FileInfo($"{node.Path}.f");
