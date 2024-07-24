@@ -1,4 +1,5 @@
 using System.Collections.Immutable;
+using Silverfly.Generator;
 using Silverfly.Nodes;
 using Silverfly.Nodes.Operators;
 using Silverfly.Text;
@@ -8,26 +9,9 @@ using Sivlerfly.Sample.FuncLanguage.Nodes;
 
 namespace Silverfly.Sample.Func;
 
+[Visitor]
 public partial class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
 {
-    public EvaluationVisitor()
-    {
-        For<LiteralNode>(Visit);
-        For<BlockNode>(Visit);
-        For<GroupNode>(Visit);
-        For<BinaryOperatorNode>(Visit);
-        For<PrefixOperatorNode>(Visit);
-        For<VariableBindingNode>(Visit);
-        For<IfNode>(Visit);
-        For<LambdaNode>(Visit);
-        For<NameNode>(Visit);
-        For<CallNode>(Visit);
-        For<TupleNode>(Visit);
-        For<ImportNode>(Visit);
-        For<ModuleNode>(Visit);
-        For<EnumNode>(Visit);
-    }
-
     Value Visit(EnumNode node, Scope scope)
     {
         var memberScope = new Scope();
@@ -160,6 +144,7 @@ public partial class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
 
     //@enter(on_enter)
     //@leave(on_leave)
+    [VisitorIgnore]
     private void CallAnnotationRef(string annotationName, AnnotatedNode node, Scope scope, params Value[] args)
     {
         foreach (var annotation in node.Annotations)
@@ -231,6 +216,7 @@ public partial class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
         };
     }
 
+    [VisitorIgnore]
     Value VisitOtherFunction(CallNode call, Scope scope)
     {
         var args = call.Arguments.Select(_ => Visit(_, scope)).ToArray();
@@ -244,6 +230,7 @@ public partial class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
         return UnitValue.Shared;
     }
 
+    [VisitorIgnore]
     private Value VisitLambdaFunction(LambdaNode funcGroup, CallNode call, Scope scope)
     {
         var args = call.Arguments.Select(_ => Visit(_, scope)).ToArray();
@@ -257,6 +244,7 @@ public partial class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
         return UnitValue.Shared;
     }
 
+    [VisitorIgnore]
     private Value VisitNamedFunction(NameNode func, CallNode call, Scope scope)
     {
         var args = call.Arguments.Select(arg => Visit(arg, scope)).ToArray();
@@ -272,6 +260,7 @@ public partial class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
         return UnitValue.Shared;
     }
 
+    [VisitorIgnore]
     protected override Value VisitUnknown(AstNode node, Scope tag)
     {
         if (node is InvalidNode invalid)
@@ -282,6 +271,7 @@ public partial class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
         return UnitValue.Shared;
     }
 
+    [VisitorIgnore]
     private Value CallFunction(ImmutableList<NameNode> parameters, Value[] args, AstNode definition)
     {
         var subScope = Scope.Root.NewSubScope();

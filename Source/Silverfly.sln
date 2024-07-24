@@ -15,6 +15,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Benchmarks", "Benchmarks\Be
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silverfly.Generator", "Silverfly.Generator\Silverfly.Generator.csproj", "{D00A5E37-FB89-4543-B058-9E0F04A7692F}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{DBC8A4C9-DBD3-4397-9EDC-CE9363947718}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample.JSON", "Samples\Sample.JSON\Sample.JSON.csproj", "{AF32C673-CC70-4012-89D9-0249EC74ACB6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,11 +49,19 @@ Global
 		{D00A5E37-FB89-4543-B058-9E0F04A7692F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D00A5E37-FB89-4543-B058-9E0F04A7692F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D00A5E37-FB89-4543-B058-9E0F04A7692F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF32C673-CC70-4012-89D9-0249EC74ACB6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF32C673-CC70-4012-89D9-0249EC74ACB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF32C673-CC70-4012-89D9-0249EC74ACB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF32C673-CC70-4012-89D9-0249EC74ACB6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5E262464-278C-4E35-A4A2-E879599F46D0}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{48BC421F-8E9A-467D-922F-601EA7B09B06} = {DBC8A4C9-DBD3-4397-9EDC-CE9363947718}
+		{AF32C673-CC70-4012-89D9-0249EC74ACB6} = {DBC8A4C9-DBD3-4397-9EDC-CE9363947718}
 	EndGlobalSection
 EndGlobal
