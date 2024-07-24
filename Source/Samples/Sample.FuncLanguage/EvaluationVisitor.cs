@@ -4,26 +4,14 @@ using Silverfly.Nodes;
 using Silverfly.Nodes.Operators;
 using Sample.FuncLanguage.Nodes;
 using Sample.FuncLanguage.Values;
+using Silverfly.Generator;
 using Silverfly.Text;
 
 namespace Sample.FuncLanguage;
 
+[Visitor]
 public partial class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
 {
-    public EvaluationVisitor()
-    {
-        For<LiteralNode>(Visit);
-        For<BlockNode>(Visit);
-        For<GroupNode>(Visit);
-        For<BinaryOperatorNode>(Visit);
-        For<VariableBindingNode>(Visit);
-        For<IfNode>(Visit);
-        For<LambdaNode>(Visit);
-        For<NameNode>(Visit);
-        For<CallNode>(Visit);
-        For<TupleNode>(Visit);
-        For<ImportNode>(Visit);
-    }
 
     Value Visit(ImportNode node, Scope scope)
     {
@@ -37,6 +25,7 @@ public partial class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
 
         return UnitValue.Shared;
     }
+
 
     Value Visit(BinaryOperatorNode binNode, Scope scope)
     {
@@ -62,9 +51,9 @@ public partial class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
 
         return new NumberValue(result);
     }
-
+    
     Value Visit(GroupNode group, Scope scope) => Visit(group.Expr, scope);
-
+    
     Value Visit(BlockNode block, Scope scope)
     {
         for (int i = 0; i < block.Children.Count - 1; i++)
@@ -74,7 +63,7 @@ public partial class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
 
         return Visit(block.Children.Last(), scope); // the last expression is the return value
     }
-
+    
     Value Visit(VariableBindingNode binding, Scope scope)
     {
         if (binding.Parameters.Count == 0)
@@ -88,7 +77,7 @@ public partial class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
 
         return UnitValue.Shared;
     }
-
+    
     Value Visit(IfNode ifNode, Scope scope)
     {
         var evaluatedCondition = Visit(ifNode.Condition, scope);
@@ -102,17 +91,17 @@ public partial class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
             return Visit(ifNode.FalsePart, scope.NewSubScope());
         }
     }
-
+    
     Value Visit(LambdaNode lambda, Scope scope)
     {
         return new LambdaValue(args => CallFunction(lambda.Parameters, args, lambda.Value), lambda);
     }
-
+    
     Value Visit(NameNode name, Scope scope)
     {
         return scope.Get(name.Name)! ?? new NameValue(name.Name);
     }
-
+    
     Value Visit(CallNode call, Scope scope)
     {
         return call.FunctionExpr switch
@@ -124,6 +113,7 @@ public partial class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
         };
     }
 
+    [VisitorIgnore]
     Value VisitOtherFunction(CallNode call, Scope scope)
     {
         var args = call.Arguments.Select(_ => Visit(_, scope)).ToArray();
@@ -137,6 +127,7 @@ public partial class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
         return UnitValue.Shared;
     }
 
+    [VisitorIgnore]
     private Value VisitLambdaFunction(LambdaNode funcGroup, CallNode call, Scope scope)
     {
         var args = call.Arguments.Select(_ => Visit(_, scope)).ToArray();
@@ -150,6 +141,7 @@ public partial class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
         return UnitValue.Shared;
     }
 
+    [VisitorIgnore]
     private Value VisitNamedFunction(NameNode func, CallNode call, Scope scope)
     {
         var args = call.Arguments.Select(arg => Visit(arg, scope)).ToArray();
@@ -164,7 +156,8 @@ public partial class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
 
         return UnitValue.Shared;
     }
-
+    
+    [VisitorIgnore]
     protected override Value VisitUnknown(AstNode node, Scope tag)
     {
         if (node is InvalidNode invalid)
@@ -174,7 +167,8 @@ public partial class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
 
         return UnitValue.Shared;
     }
-
+    
+    [VisitorIgnore]
     private Value CallFunction(ImmutableList<NameNode> parameters, Value[] args, AstNode definition)
     {
         var subScope = Scope.Root.NewSubScope();
@@ -186,7 +180,7 @@ public partial class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
 
         return Visit(definition, subScope);
     }
-
+    
     private Value Visit(LiteralNode literal, Scope scope)
     {
         if (literal.Value is double d)
@@ -212,7 +206,7 @@ public partial class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
 
         return UnitValue.Shared;
     }
-
+    
     Value Visit(TupleNode tuple, Scope scope)
     {
         return new TupleValue(tuple.Values.Select(_ => Visit(_, scope)).ToList());
