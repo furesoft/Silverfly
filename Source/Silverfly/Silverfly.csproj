@@ -9,7 +9,7 @@
     <RepositoryUrl>https://github.com/furesoft/Silverfly</RepositoryUrl>
     <Description>A little framework to build parsers</Description>
     <PackageTags>parser, pratt</PackageTags>
-    <TargetFrameworks>net8.0</TargetFrameworks>
+    <TargetFramework>net8.0</TargetFramework>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
