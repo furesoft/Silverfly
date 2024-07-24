@@ -60,9 +60,9 @@ jobs:
         
       - name: Build and package
         run: |
-          dotnet build -c Release Source/Silverfly/Silverfly.csproj
-          dotnet build -c Release Source/Silverfly.Testing/Silverfly.Testing.csproj
-          dotnet build -c Release Source/Silverfly.Generator/Silverfly.Generator.csproj
+          dotnet build -c Release -o ./nuget Source/Silverfly/Silverfly.csproj
+          dotnet build -c Release -o ./nuget Source/Silverfly.Testing/Silverfly.Testing.csproj
+          dotnet build -c Release -o ./nuget Source/Silverfly.Generator/Silverfly.Generator.csproj
           dotnet build -c Release -o ./nuget Source/Samples/Sample.FuncLanguage/Sample.FuncLanguage.csproj
 
       - name: Publish to NuGet
