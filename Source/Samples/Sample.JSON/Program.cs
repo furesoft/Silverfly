@@ -2,9 +2,9 @@
 using System.Threading.Tasks;
 using Silverfly;
 
-namespace Sample.Xml;
+namespace Sample.JSON;
 
-public class Program
+public static class Program
 {
     public static void Main(string[] args)
     {
@@ -13,7 +13,7 @@ public class Program
             Console.Write("> ");
             var input = Console.ReadLine();
 
-            var parsed = Parser.Parse<XmlGrammar>(input);
+            var parsed = Parser.Parse<JsonGrammar>(input, useStatementsAtToplevel: true);
             
             Console.WriteLine(parsed.Tree.Accept(new PrintVisitor()));
         }
