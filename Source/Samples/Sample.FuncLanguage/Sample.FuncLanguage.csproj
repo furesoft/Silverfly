@@ -6,6 +6,7 @@
     <LangVersion>preview</LangVersion>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Title>Silverfly.Sample.Func</Title>
+    <AssemblyName>Silverfly.Sample.Func</AssemblyName>
     <RootNamespace>Silverfly.Sample.Func</RootNamespace>
     <Copyright>furesoft</Copyright>
     <RepositoryUrl>https://github.com/furesoft/Silverfly</RepositoryUrl>
