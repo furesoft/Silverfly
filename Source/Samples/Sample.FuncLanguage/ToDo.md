@@ -17,6 +17,3 @@ type Box(ref)
     else ()
 
 [ ] implement function to call clr methods on Values
-
-[ ] implement tuple unpacking
-let x,y = (1,2)

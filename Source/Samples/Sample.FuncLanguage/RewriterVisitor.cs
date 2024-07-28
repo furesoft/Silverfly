@@ -14,9 +14,18 @@ public class RewriterVisitor : Rewriter
         For<LambdaNode>(Rewrite);
         For<VariableBindingNode>(Rewrite);
         For<TupleNode>(Rewrite);
+        For<TupleBindingNode>(Rewrite);
     }
 
     protected override AstNode VisitUnknown(AstNode node) => node;
+
+    private AstNode Rewrite(TupleBindingNode node)
+    {
+        return node with
+        {
+            Value = Visit(node.Value)
+        };
+    }
 
     private AstNode Rewrite(TupleNode node)
     {

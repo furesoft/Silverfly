@@ -12,6 +12,21 @@ namespace Silverfly.Sample.Func;
 [Visitor]
 public partial class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
 {
+    Value Visit(TupleBindingNode node, Scope scope)
+    {
+        var value = Visit(node.Value, scope);
+
+        for (int i = 0; i < node.Names.Count; i++)
+        {
+            var name = node.Names[i].Name;
+            var desctucutredValue = value.Get(new NumberValue(i));
+
+            scope.Define(name, desctucutredValue);
+        }
+
+        return UnitValue.Shared;
+    }
+
     Value Visit(EnumNode node, Scope scope)
     {
         var memberScope = new Scope();

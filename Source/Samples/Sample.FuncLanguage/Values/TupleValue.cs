@@ -4,7 +4,7 @@ public record TupleValue(List<Value> Values) : Value
 {
     protected override Value GetByIndex(int index)
     {
-        if (index > 0 && index < Values.Count)
+        if (index >= 0 && index < Values.Count)
         {
             return Values[index];
         }

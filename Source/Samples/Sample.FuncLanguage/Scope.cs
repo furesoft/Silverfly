@@ -68,4 +68,9 @@ public class Scope
     {
         return (T)Get(name);
     }
+
+    public string NewIdentifier()
+    {
+        return $"__tmp__{Guid.NewGuid():N}";
+    }
 }
