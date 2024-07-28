@@ -28,6 +28,7 @@ class ExpressionGrammar : Parser
         Postfix("!");
         InfixLeft(".", DefaultPrecedenceLevels.Call);
         InfixLeft("=", DefaultPrecedenceLevels.Assignment);
+        InfixLeft("..", "Exponent");
 
         Register("[", new ListValueParselet());
 

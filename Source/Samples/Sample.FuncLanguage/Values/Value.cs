@@ -5,6 +5,7 @@ public abstract record Value()
     public Scope Members = new();
 
     protected virtual Value GetByIndex(int index) => UnitValue.Shared;
+    protected virtual Value GetByRange(RangeValue range) => UnitValue.Shared;
 
     public Value Get(Value key)
     {
@@ -15,6 +16,10 @@ public abstract record Value()
         else if (key is NumberValue index)
         {
             return GetByIndex((int)index.Value);
+        }
+        else if (key is RangeValue range)
+        {
+            return GetByRange(range);
         }
 
         return UnitValue.Shared;

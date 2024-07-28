@@ -3,29 +3,34 @@ namespace Silverfly.Sample.Func.Values;
 
 public record ListValue : Value
 {
-    public List<Value> value { get; }
+    public List<Value> Value { get; }
 
     public ListValue(List<Value> Value)
     {
-        this.value = Value;
+        this.Value = Value;
 
-        Members.Define("length", value.Count);
+        Members.Define("length", this.Value.Count);
     }
 
     public override bool IsTruthy() => true;
 
     protected override Value GetByIndex(int index)
     {
-        if (index >= 0 && index < value.Count)
+        if (index >= 0 && index < Value.Count)
         {
-            return value[index];
+            return Value[index];
         }
 
         return OptionValue.None;
     }
 
+    protected override Value GetByRange(RangeValue range)
+    {
+        return new ListValue([.. Value.Skip(range.Start).Take(range.End - range.Start)]);
+    }
+
     public override string ToString()
     {
-        return $"[{string.Join(',', value)}]";
+        return $"[{string.Join(',', Value)}]";
     }
 }

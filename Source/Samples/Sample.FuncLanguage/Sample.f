@@ -1,5 +1,10 @@
 import std // import all members of std.f to the current scope
 
+/*does not work
+let k = "hello world"
+print(k.1..5)
+*/
+
 /* not yet implemented
 
 let outer = Box.make(())

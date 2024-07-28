@@ -25,6 +25,8 @@ public record StringValue : Value
         return OptionValue.None;
     }
 
+    protected override Value GetByRange(RangeValue range) => Value.Substring(range.Start, range.End - range.Start);
+
     public override bool IsTruthy() => string.IsNullOrEmpty(Value);
 
     public override string ToString() => Value.ToString();

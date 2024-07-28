@@ -99,6 +99,11 @@ public partial class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
             return null;
         }
 
+        if (binNode.Operator == (Symbol)"..")
+        {
+            return RangeValue.Create(leftVisited, rightVisited);
+        }
+
         if (leftVisited is NameValue n)
         {
             binNode.LeftExpr.AddMessage(MessageSeverity.Error, $"Value '{n.Name}' not found");
