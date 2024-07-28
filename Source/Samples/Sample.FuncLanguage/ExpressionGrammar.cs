@@ -15,6 +15,8 @@ class ExpressionGrammar : Parser
 
     protected override void InitParselets()
     {
+        this.PrecedenceLevels.AddPrecedence("Range");
+
         AddCommonLiterals();
         AddArithmeticOperators();
 
@@ -28,7 +30,7 @@ class ExpressionGrammar : Parser
         Postfix("!");
         InfixLeft(".", DefaultPrecedenceLevels.Call);
         InfixLeft("=", DefaultPrecedenceLevels.Assignment);
-        InfixLeft("..", "Exponent");
+        InfixLeft("..", "Range");
 
         Register("[", new ListValueParselet());
 

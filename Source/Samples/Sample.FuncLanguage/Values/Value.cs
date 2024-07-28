@@ -13,11 +13,13 @@ public abstract record Value()
         {
             return Members.Get(name.Name);
         }
-        else if (key is NumberValue index)
+
+        if (key is NumberValue index)
         {
             return GetByIndex((int)index.Value);
         }
-        else if (key is RangeValue range)
+
+        if (key is RangeValue range)
         {
             return GetByRange(range);
         }

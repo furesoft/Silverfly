@@ -2,9 +2,7 @@
     myoption? => myoption.unpack() 
 [ ] implement custom data types
 type Box(ref)
-[-] fix range on strings to substring
-  - maybe op precedence
-  - add better syntax for indexing objects by range
+[ ] add better syntax for indexing objects by range
         current: obj.1..15
 
 [ ] implement comparison with string on Symbol to avoid duplicative explciit casting like: if(mysymbol == (Symbol)"+")
