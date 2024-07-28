@@ -100,6 +100,7 @@ internal class {VisitorIgnoreAttributeName} : System.Attribute
             var methodBody = string.Join('\n', classSymbol.GetMembers()
                 .OfType<IMethodSymbol>()
                 .Where(m => m.Name != ".ctor" && m.Name != ".cctor")
+                .Where(m => !m.IsAbstract || !m.IsVirtual)
                 .Where(m => IsVisitorMethod(context, m, classSymbol, classDeclarationSyntax))
                 .Select(p =>
                     $"        For<{p.Parameters.First().Type.ToDisplayString()}>({p.Name});"));
@@ -133,10 +134,6 @@ public partial class {className}
         if (baseType == null) {
             return false; // Not inheriting from NodeVisitorBase
         }
-
-        // Check if the method has the correct signature: Name(AstNode, T)
-        if (method.Parameters.Length != 2)
-            return false;
         
         foreach (var attribute in method.GetAttributes())
         {

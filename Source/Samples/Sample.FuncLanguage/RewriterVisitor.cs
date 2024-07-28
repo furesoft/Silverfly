@@ -1,22 +1,14 @@
 using System.Collections.Immutable;
+using Silverfly.Generator;
 using Silverfly.Nodes;
 using Silverfly.Nodes.Operators;
 using Silverfly.Sample.Func.Nodes;
 
 namespace Silverfly.Sample.Func;
 
-public class RewriterVisitor : Rewriter
+[Visitor]
+public partial class RewriterVisitor : Rewriter
 {
-    public RewriterVisitor()
-    {
-        For<LiteralNode>(Rewrite);
-        For<CallNode>(Rewrite);
-        For<LambdaNode>(Rewrite);
-        For<VariableBindingNode>(Rewrite);
-        For<TupleNode>(Rewrite);
-        For<TupleBindingNode>(Rewrite);
-    }
-
     protected override AstNode VisitUnknown(AstNode node) => node;
 
     private AstNode Rewrite(TupleBindingNode node)
