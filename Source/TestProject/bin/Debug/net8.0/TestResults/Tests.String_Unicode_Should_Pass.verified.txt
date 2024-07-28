@@ -1,0 +1,9 @@
+﻿{
+  $type: TestResult,
+  ParsedTree: helö1lo; ,
+  Document: {
+    Filename: test.src,
+    Source: 'hel\u00F61lo',
+    Messages: []
+  }
+}
