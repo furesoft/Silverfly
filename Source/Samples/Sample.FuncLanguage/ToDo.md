@@ -3,8 +3,6 @@
 [ ] implement custom data types
 type Box(ref)
 
-[ ] implement comparison with string on Symbol to avoid duplicative explciit casting like: if(mysymbol == (Symbol)"+")
-
 [ ] implement to scope to import clr classes/functions
 [ ] implement functions to determine if value is of specific value type or implement operator
     isNumber(val) -> bool

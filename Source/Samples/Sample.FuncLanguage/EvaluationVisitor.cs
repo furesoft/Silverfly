@@ -93,13 +93,13 @@ public partial class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
         var leftVisited = Visit(binNode.LeftExpr, scope);
         var rightVisited = Visit(binNode.RightExpr, scope);
 
-        if (binNode.Operator == (Symbol)"=")
+        if (binNode.Operator == "=")
         {
             //ToDo: implement assignment
             return null;
         }
 
-        if (binNode.Operator == (Symbol)"..")
+        if (binNode.Operator == "..")
         {
             return RangeValue.Create(leftVisited, rightVisited);
         }
@@ -110,7 +110,7 @@ public partial class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
             return UnitValue.Shared;
         }
 
-        if (binNode.Operator == (Symbol)".")
+        if (binNode.Operator == ".")
         {
             return leftVisited.Get(rightVisited);
         }

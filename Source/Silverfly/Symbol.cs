@@ -95,6 +95,16 @@ public class Symbol
         return symbol.Id;
     }
 
+    public static bool operator ==(Symbol first, string second)
+    {
+        return first == (Symbol)second;
+    }
+
+    public static bool operator !=(Symbol first, string second)
+    {
+        return first != (Symbol)second;
+    }
+
     public override int GetHashCode() { return (5432 + Id) ^ (Pool.PoolId << 16); }
     public override bool Equals(object b) { return ReferenceEquals(this, b); }
 
