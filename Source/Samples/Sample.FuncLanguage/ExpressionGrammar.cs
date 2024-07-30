@@ -31,6 +31,7 @@ class ExpressionGrammar : Parser
         InfixLeft(".", DefaultPrecedenceLevels.Call);
         InfixLeft("=", DefaultPrecedenceLevels.Assignment);
         InfixLeft("..", "Range");
+        Register("[", new IndexParselet(PrecedenceLevels.GetPrecedence("Range")));
 
         Register("[", new ListValueParselet());
 
