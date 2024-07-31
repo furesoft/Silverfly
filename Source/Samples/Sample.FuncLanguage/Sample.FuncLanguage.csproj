@@ -22,4 +22,8 @@
     <ProjectReference Include="..\..\Silverfly\Silverfly.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="PrettyPrompt" Version="4.1.1" />
+  </ItemGroup>
+
 </Project>

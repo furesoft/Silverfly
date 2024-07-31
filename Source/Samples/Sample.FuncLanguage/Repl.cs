@@ -1,4 +1,5 @@
-﻿using Silverfly.Nodes;
+﻿using PrettyPrompt;
+using PrettyPrompt.Highlighting;
 using Silverfly.Sample.Func.Values;
 using Silverfly.Text;
 
@@ -6,7 +7,7 @@ namespace Silverfly.Sample.Func;
 
 public static class Repl
 {
-    public static void Main(string[] args)
+    public static async Task Main(string[] args)
     {
         Scope.Root.Define("print", (Value x) =>
         {
@@ -38,29 +39,41 @@ public static class Repl
             return new ModuleValue(scope);
         });
 
+        await using var prompt = new Prompt(
+            persistentHistoryFilepath: "./history-file",
+            callbacks: new FuncPromptCallbacks(),
+            configuration: new PromptConfiguration(
+                prompt: new FormattedString("> "),
+                completionItemDescriptionPaneBackground: AnsiColor.Rgb(30, 30, 30),
+                selectedCompletionItemBackground: AnsiColor.Rgb(30, 30, 30),
+                selectedTextBackground: AnsiColor.Rgb(20, 61, 102)));
+
         while (true)
         {
-            Console.Write("> ");
-            var input = Console.ReadLine();
-
-            var parsed = Parser.Parse<ExpressionGrammar>(input, "repl.f");
-            var rewritten = parsed.Tree.Accept(new RewriterVisitor());
-
-            //Console.WriteLine(rewritten.Accept(new PrintVisitor()));
-
-            if (!parsed.Document.Messages.Any())
+            var response = await prompt.ReadLineAsync();
+            if (response.IsSuccess) // false if user cancels, i.e. ctrl-c
             {
-                var evaluated = rewritten.Accept(new EvaluationVisitor(), Scope.Root);
+                if (response.Text == "exit") break;
 
-                if (evaluated is NameValue n)
+                var parsed = Parser.Parse<ExpressionGrammar>(response.Text, "repl.f");
+                var rewritten = parsed.Tree.Accept(new RewriterVisitor());
+
+                //Console.WriteLine(rewritten.Accept(new PrintVisitor()));
+
+                if (!parsed.Document.Messages.Any())
                 {
-                    rewritten.AddMessage(MessageSeverity.Error, $"Symbol '{n.Name}' not defined");
+                    var evaluated = rewritten.Accept(new EvaluationVisitor(), Scope.Root);
+
+                    if (evaluated is NameValue n)
+                    {
+                        rewritten.AddMessage(MessageSeverity.Error, $"Symbol '{n.Name}' not defined");
+                    }
                 }
+
+                parsed.Document.PrintMessages();
+
+                //Console.WriteLine("> " + evaluated);
             }
-
-            parsed.Document.PrintMessages();
-
-            //Console.WriteLine("> " + evaluated);
         }
     }
 }
