@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Silverfly.Nodes;
+using Silverfly.Text.Formatting;
 
 namespace Silverfly.Text;
 
@@ -30,6 +31,8 @@ public class SourceDocument
         {
             MessageFormatter.PrintError(CompilerError.FromMessage(message));
         }
+
+        Console.ResetColor();
     }
 
     public void AddMessage(MessageSeverity messageSeverity, string message, SourceRange range)

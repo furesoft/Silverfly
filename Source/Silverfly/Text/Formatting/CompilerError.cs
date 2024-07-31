@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Silverfly.Text;
+namespace Silverfly.Text.Formatting;
 
 internal class CompilerError(Message message)
 {
