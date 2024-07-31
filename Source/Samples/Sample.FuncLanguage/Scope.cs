@@ -4,12 +4,13 @@ namespace Silverfly.Sample.Func;
 
 #nullable enable
 
-public class Scope
+public class Scope(bool isRoot = false)
 {
     public Scope? Parent { get; set; }
+    public bool IsRoot { get; set; } = isRoot;
     public Dictionary<string, Value> Bindings { get; set; } = [];
 
-    public static readonly Scope Root = new();
+    public static readonly Scope Root = new(true);
 
     public Scope NewSubScope()
     {
