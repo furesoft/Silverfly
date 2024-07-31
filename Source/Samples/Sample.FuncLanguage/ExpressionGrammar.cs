@@ -1,3 +1,4 @@
+using Silverfly.Lexing.IgnoreMatcher.Comments;
 using Silverfly.Parselets;
 using Silverfly.Sample.Func.Parselets;
 
@@ -11,6 +12,9 @@ class ExpressionGrammar : Parser
         lexer.MatchNumber(allowHex: false, allowBin: false);
         lexer.UseNameAdvancer(new SampleNameAdvancer());
         lexer.MatchString("\"", "\"");
+
+        lexer.Ignore(new SingleLineCommentIgnoreMatcher("//"));
+        lexer.Ignore(new MultiLineCommentIgnoreMatcher("/*", "*/"));
     }
 
     protected override void InitParselets()

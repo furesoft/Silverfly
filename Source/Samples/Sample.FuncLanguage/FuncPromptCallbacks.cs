@@ -19,24 +19,29 @@ internal class FuncPromptCallbacks : PromptCallbacks
     }
     */
 
-    private readonly string[] _keywords = ["let", "if", "then", "else"];
+    private readonly string[] _keywords = ["let", "if", "then", "else", "import"];
 
     protected override Task<IReadOnlyList<CompletionItem>> GetCompletionItemsAsync(string text, int caret, TextSpan spanToBeReplaced, CancellationToken cancellationToken)
     {
-        // demo completion algorithm callback
-        // populate completions and documentation for autocompletion window
         var typedWord = text.AsSpan(spanToBeReplaced.Start, spanToBeReplaced.Length).ToString();
+        var namesInScope = Scope.Root.Bindings.Keys;
 
         return Task.FromResult<IReadOnlyList<CompletionItem>>(
-            _keywords
-                .Select(kw =>
+            _keywords.Concat(namesInScope).Concat(["std"])
+                .Where(_ => _.StartsWith(typedWord, StringComparison.InvariantCultureIgnoreCase))
+                .Select(_ =>
                 {
-                    var displayText = new FormattedString(kw, new FormatSpan(0, kw.Length, AnsiColor.Blue));
+                    var displayText = new FormattedString(_,
+                        new FormatSpan(0, _.Length, AnsiColor.Blue));
 
                     return new CompletionItem(
-                        replacementText: kw,
+                        replacementText: _,
                         displayText: displayText,
-                        commitCharacterRules: [..new[] { new CharacterSetModificationRule(CharacterSetModificationKind.Add, [..new[] { ' ' }]) }]
+                        commitCharacterRules: [..new[]
+                        {
+                            new CharacterSetModificationRule(CharacterSetModificationKind.Add,
+                                [..new[] { ' ' }])
+                        }]
                     );
                 })
                 .ToArray()
