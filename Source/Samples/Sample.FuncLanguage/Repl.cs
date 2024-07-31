@@ -46,7 +46,7 @@ public static class Repl
             var parsed = Parser.Parse<ExpressionGrammar>(input, "repl.f");
             var rewritten = parsed.Tree.Accept(new RewriterVisitor());
 
-            Console.WriteLine(rewritten.Accept(new PrintVisitor()));
+            //Console.WriteLine(rewritten.Accept(new PrintVisitor()));
 
             var evaluated = rewritten.Accept(new EvaluationVisitor(), Scope.Root);
 

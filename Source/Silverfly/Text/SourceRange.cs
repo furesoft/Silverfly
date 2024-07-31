@@ -90,7 +90,7 @@ public readonly struct SourceRange(SourceDocument document, SourceSpan start, So
         if (startLine < 0 || endLine >= CountLines(source))
             throw new IndexOutOfRangeException("Range is out of document lines.");
 
-        var startIdx = GetLineStartIndex(source, startLine) + Start.Column - 1;
+        var startIdx = GetLineStartIndex(source, startLine);
         var endIdx = GetLineEndIndex(source, endLine) + 1;
 
         return new string(source[startIdx..endIdx]);

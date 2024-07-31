@@ -40,6 +40,7 @@ public class StringMatcher(Symbol leftStr, Symbol rightStr, bool allowEscapeChar
     {
         var oldColumn = column;
 
+        var startSpan = new SourceSpan(line, column);
         lexer.Advance();
 
         var builder = new StringBuilder();
@@ -65,7 +66,16 @@ public class StringMatcher(Symbol leftStr, Symbol rightStr, bool allowEscapeChar
             }
         }
 
-       // lexer.Expect(rightStr);
+        if (!lexer.IsMatch(rightStr))
+        {
+            var endSpan = new SourceSpan(line, column);
+            lexer.Advance();
+
+            lexer.Document.AddMessage(MessageSeverity.Error,
+                "String is not closed", new SourceRange(lexer.Document, startSpan, endSpan));
+            return Token.Invalid('\0', line, column);
+        }
+
         lexer.Advance();
         return new Token(PredefinedSymbols.String, builder.ToString().AsMemory(), line, oldColumn);
     }

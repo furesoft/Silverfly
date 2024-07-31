@@ -45,7 +45,15 @@ public class Scope
 
     public void Define(string name, Func<Value, Value> value)
     {
-        Define(name, args => value(args[0]));
+        Define(name, args =>
+        {
+            if (args.Length != 1)
+            {
+                return UnitValue.Shared;
+            }
+
+            return value(args[0]);
+        });
     }
 
     public void Define(string name, Func<Value, Value, Value> value)

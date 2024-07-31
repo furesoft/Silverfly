@@ -129,6 +129,11 @@ public abstract partial class Parser
     {
         var token = Consume();
 
+        if (token.Type == "#invalid")
+        {
+            return new InvalidNode(token).WithRange(token);
+        }
+
         if (!_prefixParselets.TryGetValue(token.Type, out var prefix))
         {
             token.Document.Messages.Add(Message.Error("Could not parse prefix \"" + token.Text + "\".",
