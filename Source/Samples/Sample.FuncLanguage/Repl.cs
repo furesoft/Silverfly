@@ -48,11 +48,14 @@ public static class Repl
 
             //Console.WriteLine(rewritten.Accept(new PrintVisitor()));
 
-            var evaluated = rewritten.Accept(new EvaluationVisitor(), Scope.Root);
-
-            if (evaluated is NameValue n)
+            if (!parsed.Document.Messages.Any())
             {
-                rewritten.AddMessage(MessageSeverity.Error, $"Symbol '{n.Name}' not defined");
+                var evaluated = rewritten.Accept(new EvaluationVisitor(), Scope.Root);
+
+                if (evaluated is NameValue n)
+                {
+                    rewritten.AddMessage(MessageSeverity.Error, $"Symbol '{n.Name}' not defined");
+                }
             }
 
             parsed.Document.PrintMessages();

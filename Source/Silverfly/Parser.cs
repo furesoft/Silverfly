@@ -129,7 +129,7 @@ public abstract partial class Parser
     {
         var token = Consume();
 
-        if (token.Type == "#invalid")
+        if (token.Type == "#invalid" || token.Type == PredefinedSymbols.EOF)
         {
             return new InvalidNode(token).WithRange(token);
         }

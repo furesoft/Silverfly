@@ -2,6 +2,7 @@
 using System.Collections.Immutable;
 using Silverfly.Nodes;
 using Silverfly.Parselets.Literals;
+using Silverfly.Text;
 
 namespace Silverfly;
 
@@ -56,6 +57,7 @@ public partial class Parser
 
     public ImmutableList<AstNode> ParseSeperated(Symbol seperator, Symbol terminator, int bindingPower = 0)
     {
+        var token = LookAhead(0);
         var args = new List<AstNode>();
 
         if (Match(terminator))
@@ -73,7 +75,12 @@ public partial class Parser
             }
         } while (Match(seperator));
 
-        Match(terminator);
+        if (!IsMatch(terminator))
+        {
+            Document.AddMessage(MessageSeverity.Error, "Is not terminated", token.GetRange());
+        }
+
+        Consume();
 
         return [.. args];
     }
