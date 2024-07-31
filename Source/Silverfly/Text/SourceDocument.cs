@@ -31,4 +31,9 @@ public class SourceDocument
             MessageFormatter.PrintError(CompilerError.FromMessage(message));
         }
     }
+
+    public void AddMessage(MessageSeverity messageSeverity, string message, SourceRange range)
+    {
+        Messages.Add(new Message(messageSeverity, message, range));
+    }
 }

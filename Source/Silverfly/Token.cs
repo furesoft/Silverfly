@@ -43,7 +43,7 @@ public struct Token(Symbol type, ReadOnlyMemory<char> text, int line, int column
     public SourceDocument Document { get; set; }
 
     public Token(Symbol type, int line, int column)
-    : this(type, type.Name.AsMemory(), line, column)
+    : this(type, "".AsMemory(), line, column)
     {
     }
 

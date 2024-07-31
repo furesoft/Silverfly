@@ -34,6 +34,15 @@ public abstract record AstNode
     public AstNode WithRange(SourceRange range) => this with { Range = range };
 
     /// <summary>
+    /// Sets the source range of the AST node.
+    /// </summary>
+    /// <returns>A new instance of the AST node with the updated range.</returns>
+    public AstNode WithRange(AstNode node, Token token)
+    {
+        return WithRange(node.Range.Document, node.Range.Start, token.GetSourceSpanEnd());
+    }
+
+    /// <summary>
     /// Sets the source range of the AST node using the provided document and span.
     /// </summary>
     /// <param name="document">The source document.</param>

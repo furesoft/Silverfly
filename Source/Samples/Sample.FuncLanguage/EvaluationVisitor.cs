@@ -19,9 +19,9 @@ public partial class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
         for (int i = 0; i < node.Names.Count; i++)
         {
             var name = node.Names[i].Name;
-            var desctucutredValue = value.Get(new NumberValue(i));
+            var destructedValue = value.Get(new NumberValue(i));
 
-            scope.Define(name, desctucutredValue);
+            scope.Define(name, destructedValue);
         }
 
         return UnitValue.Shared;
@@ -77,6 +77,8 @@ public partial class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
                 var moduleNode = (ModuleNode)module;
                 var moduleScope = scope.NewSubScope();
                 rewritten.Accept(new EvaluationVisitor(), moduleScope);
+                node.Range.Document.Messages.AddRange(rewritten.Range.Document.Messages);
+
                 scope.Define(moduleNode.Name, new ModuleValue(moduleScope));
 
                 return UnitValue.Shared;
@@ -84,6 +86,7 @@ public partial class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
         }
 
         rewritten.Accept(new EvaluationVisitor(), scope);
+        node.Range.Document.Messages.AddRange(rewritten.Range.Document.Messages);
 
         return UnitValue.Shared;
     }
@@ -275,7 +278,7 @@ public partial class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
             return lambda.Value(args);
         }
 
-        func.Parent.AddMessage(MessageSeverity.Error, $"Function '{func.Name}' not found");
+        func.AddMessage(MessageSeverity.Error, $"Function '{func.Name}' not found");
 
         return UnitValue.Shared;
     }

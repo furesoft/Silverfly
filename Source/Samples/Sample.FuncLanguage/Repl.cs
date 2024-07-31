@@ -1,4 +1,6 @@
-﻿using Silverfly.Sample.Func.Values;
+﻿using Silverfly.Nodes;
+using Silverfly.Sample.Func.Values;
+using Silverfly.Text;
 
 namespace Silverfly.Sample.Func;
 
@@ -41,12 +43,17 @@ public static class Repl
             Console.Write("> ");
             var input = Console.ReadLine();
 
-            var parsed = Parser.Parse<ExpressionGrammar>(input);
+            var parsed = Parser.Parse<ExpressionGrammar>(input, "repl.f");
             var rewritten = parsed.Tree.Accept(new RewriterVisitor());
 
             Console.WriteLine(rewritten.Accept(new PrintVisitor()));
 
             var evaluated = rewritten.Accept(new EvaluationVisitor(), Scope.Root);
+
+            if (evaluated is NameValue n)
+            {
+                rewritten.AddMessage(MessageSeverity.Error, $"Symbol '{n.Name}' not defined");
+            }
 
             parsed.Document.PrintMessages();
 

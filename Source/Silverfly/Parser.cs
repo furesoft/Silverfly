@@ -175,7 +175,7 @@ public abstract partial class Parser
             return false;
         }
 
-        Consume();
+        Consume(expected);
 
         return true;
     }

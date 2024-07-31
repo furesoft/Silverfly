@@ -43,7 +43,7 @@ public class StringMatcher(Symbol leftStr, Symbol rightStr, bool allowEscapeChar
         lexer.Advance();
 
         var builder = new StringBuilder();
-        while (!lexer.IsMatch(rightStr.Name))
+        while (lexer.IsNotAtEnd() && !lexer.IsMatch(rightStr.Name))
         {
             if (lexer.IsMatch("\\") && allowEscapeChars)
             {
@@ -65,8 +65,8 @@ public class StringMatcher(Symbol leftStr, Symbol rightStr, bool allowEscapeChar
             }
         }
 
+       // lexer.Expect(rightStr);
         lexer.Advance();
-
         return new Token(PredefinedSymbols.String, builder.ToString().AsMemory(), line, oldColumn);
     }
 

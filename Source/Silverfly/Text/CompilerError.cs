@@ -12,7 +12,7 @@ internal class CompilerError(Message message)
     {
         var error = new CompilerError(message);
         error.HighlightLines.Add(message.Range.Start.Line);
-        error.SourceLines.Add(message.Range.GetText());
+        error.SourceLines.Add(message.Range.GetLineText());
 
         return error;
     }

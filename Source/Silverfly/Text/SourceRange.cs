@@ -76,7 +76,22 @@ public readonly struct SourceRange(SourceDocument document, SourceSpan start, So
             throw new IndexOutOfRangeException("Range is out of document lines.");
 
         var startIdx = GetLineStartIndex(source, startLine) + Start.Column - 1;
-        var endIdx = GetLineStartIndex(source, endLine) + End.Column - 1;
+        var endIdx = GetLineStartIndex(source, endLine) + End.Column;
+
+        return new string(source[startIdx..endIdx]);
+    }
+
+    public string GetLineText()
+    {
+        var source = Document.Source.Span;
+        var startLine = Start.Line - 1;
+        var endLine = End.Line - 1;
+
+        if (startLine < 0 || endLine >= CountLines(source))
+            throw new IndexOutOfRangeException("Range is out of document lines.");
+
+        var startIdx = GetLineStartIndex(source, startLine) + Start.Column - 1;
+        var endIdx = GetLineEndIndex(source, endLine) + 1;
 
         return new string(source[startIdx..endIdx]);
     }
@@ -105,6 +120,32 @@ public readonly struct SourceRange(SourceDocument document, SourceSpan start, So
         }
 
         throw new ArgumentOutOfRangeException(nameof(line), " line out of range.");
+    }
+
+    private int GetLineEndIndex(ReadOnlySpan<char> source, int line)
+    {
+        var currentLine = 0;
+
+        for (var i = 0; i < source.Length; i++)
+        {
+            if (source[i] == '\n')
+            {
+                if (currentLine == line)
+                {
+                    return i; // End of line is the character before the newline
+                }
+                currentLine++;
+            }
+        }
+
+        // If we reached the end of the source without finding the line, it's out of range
+        if (currentLine != line)
+        {
+            throw new ArgumentOutOfRangeException(nameof(line), "line out of range.");
+        }
+
+        // If we're at the last line and there's no newline at the end, return the last index
+        return source.Length - 1;
     }
 
     /// <summary>
