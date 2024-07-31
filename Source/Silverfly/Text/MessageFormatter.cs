@@ -1,4 +1,5 @@
 using System;
+using System.Text.RegularExpressions;
 
 namespace Silverfly.Text;
 
@@ -53,6 +54,7 @@ internal static class MessageFormatter
         string[] keywords = ["using", "class", "static", "void", "Console", "WriteLine"];
         var keywordColor = ConsoleColor.Blue;
         var stringColor = ConsoleColor.Green;
+        var numberColor = ConsoleColor.Magenta;
 
         var lines = code.Split([Environment.NewLine], StringSplitOptions.None);
 
@@ -95,9 +97,19 @@ internal static class MessageFormatter
                     }
                     else
                     {
-                        Console.ResetColor();
-                        Console.Write(line[currentIndex]);
-                        currentIndex++;
+                        var match = Regex.Match(line.Substring(currentIndex), @"^(0x[0-9A-Fa-f]+|0b[01]+|\d+)");
+                        if (match.Success)
+                        {
+                            Console.ForegroundColor = numberColor;
+                            Console.Write(match.Value);
+                            currentIndex += match.Value.Length;
+                        }
+                        else
+                        {
+                            Console.ResetColor();
+                            Console.Write(line[currentIndex]);
+                            currentIndex++;
+                        }
                     }
                 }
             }
