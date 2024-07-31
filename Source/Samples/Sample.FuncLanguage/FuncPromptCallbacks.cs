@@ -1,9 +1,10 @@
-﻿using System.Collections.Immutable;
-using PrettyPrompt;
+﻿using PrettyPrompt;
 using PrettyPrompt.Completion;
 using PrettyPrompt.Consoles;
 using PrettyPrompt.Documents;
 using PrettyPrompt.Highlighting;
+using Silverfly.Nodes;
+using Silverfly.Nodes.Operators;
 
 namespace Silverfly.Sample.Func;
 
@@ -24,10 +25,26 @@ internal class FuncPromptCallbacks : PromptCallbacks
     protected override Task<IReadOnlyList<CompletionItem>> GetCompletionItemsAsync(string text, int caret, TextSpan spanToBeReplaced, CancellationToken cancellationToken)
     {
         var typedWord = text.AsSpan(spanToBeReplaced.Start, spanToBeReplaced.Length).ToString();
-        var namesInScope = Scope.Root.Bindings.Keys;
+        var tree = Parser.Parse<ExpressionGrammar>(text);
+        IEnumerable<string> items = Scope.Root.Bindings.Keys;
+
+        var scope = Scope.Root;
+
+        if (tree.Tree is BinaryOperatorNode b && b.Operator == ".")
+        {
+            if (b.LeftExpr is NameNode n)
+            {
+                scope = scope.Get(n.Name).Members;
+                items = scope.Bindings.Keys.Where(_ => !_.StartsWith("'"));
+            }
+        }
+        else
+        {
+            items = _keywords.Concat(Scope.Root.Bindings.Keys);
+        }
 
         return Task.FromResult<IReadOnlyList<CompletionItem>>(
-            _keywords.Concat(namesInScope).Concat(["std"])
+            items
                 .Where(_ => _.StartsWith(typedWord, StringComparison.InvariantCultureIgnoreCase))
                 .Select(_ =>
                 {
