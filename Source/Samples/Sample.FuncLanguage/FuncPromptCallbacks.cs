@@ -27,7 +27,7 @@ internal class FuncPromptCallbacks : PromptCallbacks
     protected override Task<IReadOnlyList<CompletionItem>> GetCompletionItemsAsync(string text, int caret, TextSpan spanToBeReplaced, CancellationToken cancellationToken)
     {
         var typedWord = text.AsSpan(spanToBeReplaced.Start, spanToBeReplaced.Length).ToString();
-        var tree = Parser.Parse<ExpressionGrammar>(text);
+        var tree = new ExpressionGrammar().Parse(text);
         IEnumerable<string> items = Scope.Root.Bindings.Keys;
 
         var scope = GetScope(tree.Tree, Scope.Root);

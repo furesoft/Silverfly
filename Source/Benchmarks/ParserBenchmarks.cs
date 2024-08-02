@@ -12,6 +12,6 @@ public class ParserBenchmarks
     [Benchmark]
     public TranslationUnit ParseNumber()
     {
-        return Parser.Parse<TestParser>("3.14");
+        return new TestParser().Parse("3.14");
     }
 }

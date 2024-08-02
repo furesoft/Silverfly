@@ -55,7 +55,7 @@ public static class Repl
             {
                 if (response.Text == "exit") break;
 
-                var parsed = Parser.Parse<ExpressionGrammar>(response.Text, "repl.f");
+                var parsed = new ExpressionGrammar().Parse(response.Text, "repl.f");
                 var rewritten = parsed.Tree.Accept(new RewriterVisitor());
 
                 //Console.WriteLine(rewritten.Accept(new PrintVisitor()));

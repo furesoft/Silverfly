@@ -9,7 +9,7 @@ public class Tests : SnapshotParserTestBase<TestParser>
     [ModuleInitializer]
     public static void Initialize()
     {
-        Init(new TestOptions(true));
+        Init(new TestOptions());
     }
 
     [Test]

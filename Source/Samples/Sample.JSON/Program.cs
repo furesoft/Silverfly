@@ -11,7 +11,7 @@ public static class Program
             Console.Write("> ");
             var input = Console.ReadLine();
 
-            var parsed = Parser.Parse<JsonGrammar>(input, useStatementsAtToplevel: true);
+            var parsed = new JsonGrammar().Parse(input);
             
             Console.WriteLine(parsed.Tree.Accept(new PrintVisitor()));
         }

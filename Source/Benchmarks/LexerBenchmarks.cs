@@ -11,7 +11,7 @@ public class LexerBenchmarks
     [Benchmark]
     public Token Number()
     {
-        var lexer = new Lexer("42");
+        var lexer = new Lexer("42".AsMemory());
 
         lexer.Next();
 

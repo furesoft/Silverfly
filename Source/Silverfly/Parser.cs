@@ -15,6 +15,7 @@ public abstract partial class Parser
     private readonly List<Token> _read = [];
     private readonly Dictionary<Symbol, IStatementParselet> _statementParselets = [];
     private Lexer _lexer;
+    protected ParserOptions Options;
 
     public PrecedenceLevels PrecedenceLevels = new DefaultPrecedenceLevels();
 
@@ -86,41 +87,39 @@ public abstract partial class Parser
         return expression;
     }
 
-    public static TranslationUnit Parse<TParser>(string source, string filename = "syntethic.dsl",
-        bool useStatementsAtToplevel = false, bool enforceEndOfFile = true)
-        where TParser : Parser, new()
+    public TranslationUnit Parse(string source, string filename = "syntethic.dsl")
     {
-        return Parse<TParser>(source.AsMemory(), filename, useStatementsAtToplevel, enforceEndOfFile);
+        return Parse(source.AsMemory(), filename);
     }
 
-    public static TranslationUnit Parse<TParser>(ReadOnlyMemory<char> source, string filename = "syntethic.dsl",
-        bool useStatementsAtToplevel = false, bool enforceEndOfFile = true)
-        where TParser : Parser, new()
+    //todo: class parserdefinition where are parselets live
+    // class parserinstance has own lexer that has access to the parserdefinition
+    // static method create that returns new parser instance: ExpressionGrammar.Create()
+
+    public TranslationUnit Parse(ReadOnlyMemory<char> source, string filename = "syntethic.dsl")
     {
-        var lexer = new Lexer(source, filename);
+        _lexer = new Lexer(source, filename);
 
-        var parser = new TParser { _lexer = lexer };
+        InitParselets();
 
-        parser.InitParselets();
+        AddLexerSymbols(_lexer, _prefixParselets);
+        AddLexerSymbols(_lexer, _infixParselets);
+        AddLexerSymbols(_lexer, _statementParselets);
 
-        AddLexerSymbols(lexer, parser._prefixParselets);
-        AddLexerSymbols(lexer, parser._infixParselets);
-        AddLexerSymbols(lexer, parser._statementParselets);
+        InitLexer(_lexer);
 
-        parser.InitLexer(lexer);
+        _lexer.OrderSymbols();
 
-        lexer.OrderSymbols();
+        var node = Options.UseStatementsAtToplevel
+            ? ParseStatement()
+            : ParseExpression();
 
-        var node = useStatementsAtToplevel
-            ? parser.ParseStatement()
-            : parser.ParseExpression();
-
-        if (enforceEndOfFile)
+        if (Options.EnforceEndOfFile)
         {
-            parser.Match(PredefinedSymbols.EOF);
+            Match(PredefinedSymbols.EOF);
         }
 
-        return new TranslationUnit(node, lexer.Document);
+        return new TranslationUnit(node, _lexer.Document);
     }
 
     private static void AddLexerSymbols<TParselet>(Lexer lexer, Dictionary<Symbol, TParselet> dict)
@@ -163,7 +162,7 @@ public abstract partial class Parser
                     Message.Error("Could not parse \"" + token.Text + "\".", token.GetRange()));
             }
 
-            left = infix.Parse(this, left, token);
+            left = infix!.Parse(this, left, token);
         }
 
         return left;
