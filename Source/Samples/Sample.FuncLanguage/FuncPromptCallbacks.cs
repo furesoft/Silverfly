@@ -4,6 +4,9 @@ using PrettyPrompt.Completion;
 using PrettyPrompt.Consoles;
 using PrettyPrompt.Documents;
 using PrettyPrompt.Highlighting;
+using Silverfly.Nodes;
+using Silverfly.Nodes.Operators;
+using Silverfly.Sample.Func.Values;
 
 namespace Silverfly.Sample.Func;
 
@@ -19,15 +22,32 @@ internal class FuncPromptCallbacks : PromptCallbacks
     }
     */
 
-    private readonly string[] _keywords = ["let", "if", "then", "else", "import"];
+    private readonly string[] _keywords = ["let", "if", "then", "else", "import", "enum"];
 
     protected override Task<IReadOnlyList<CompletionItem>> GetCompletionItemsAsync(string text, int caret, TextSpan spanToBeReplaced, CancellationToken cancellationToken)
     {
         var typedWord = text.AsSpan(spanToBeReplaced.Start, spanToBeReplaced.Length).ToString();
-        var namesInScope = Scope.Root.Bindings.Keys;
+        var tree = Parser.Parse<ExpressionGrammar>(text);
+        IEnumerable<string> items = Scope.Root.Bindings.Keys;
+
+        var scope = GetScope(tree.Tree, Scope.Root);
+
+        if (scope is null)
+        {
+            return Task.FromResult((IReadOnlyList<CompletionItem>)Array.Empty<CompletionItem>());
+        }
+
+        if (scope.IsRoot)
+        {
+            items = _keywords.Concat(Scope.Root.Bindings.Keys);
+        }
+        else
+        {
+            items = scope.Bindings.Keys;//.Where(_ => !_.StartsWith("'") && !_.StartsWith("__"));
+        }
 
         return Task.FromResult<IReadOnlyList<CompletionItem>>(
-            _keywords.Concat(namesInScope).Concat(["std"])
+            items
                 .Where(_ => _.StartsWith(typedWord, StringComparison.InvariantCultureIgnoreCase))
                 .Select(_ =>
                 {
@@ -46,6 +66,33 @@ internal class FuncPromptCallbacks : PromptCallbacks
                 })
                 .ToArray()
         );
+    }
+
+    private Scope GetScope(AstNode node, Scope scope)
+    {
+        if (node is BinaryOperatorNode b && b.Operator == ".")
+        {
+            if (b.LeftExpr is NameNode nameNode && b.RightExpr is InvalidNode)
+            {
+                return scope.Get(nameNode.Name).Members;
+            }
+            else if (b.LeftExpr is NameNode n1 && b.RightExpr is NameNode n2)
+            {
+                var s = scope.Get(n1.Name);
+                if (s is LambdaValue)
+                {
+                    return null;
+                }
+
+                return s.Get(n2.Name).Members;
+            }
+            else if (b.LeftExpr is BinaryOperatorNode ib && ib.Operator == ".")
+            {
+                return GetScope(b.LeftExpr, scope);
+            }
+        }
+
+        return scope;
     }
 
     protected override async Task<IReadOnlyCollection<FormatSpan>> HighlightCallbackAsync(string text, CancellationToken cancellationToken)

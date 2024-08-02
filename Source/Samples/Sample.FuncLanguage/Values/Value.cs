@@ -14,6 +14,11 @@ public abstract record Value()
             return Members.Get(name.Name);
         }
 
+        if (key is StringValue s)
+        {
+            return Members.Get(s.Value);
+        }
+
         if (key is NumberValue index)
         {
             return GetByIndex((int)index.Value);
