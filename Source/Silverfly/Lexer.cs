@@ -25,10 +25,10 @@ public sealed partial class Lexer
     /// Creates a new <see cref="Lexer"/> to tokenize the given string.
     /// </summary>
     /// <param name="source">String to tokenize</param>
-    public Lexer(string source, string filename = "tmp.synthetic")
+    public Lexer(ReadOnlyMemory<char> source, string filename = "tmp.synthetic")
     {
         _index = -1;
-        Document = new() { Filename = filename, Source = source.AsMemory() };
+        Document = new() { Filename = filename, Source = source };
 
         // Register all of the Symbols that are explicit punctuators.
         foreach (var type in PredefinedSymbols.Pool)

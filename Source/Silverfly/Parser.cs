@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Silverfly.Nodes;
 using Silverfly.Parselets;
@@ -11,8 +12,8 @@ public abstract partial class Parser
 {
     private readonly Dictionary<Symbol, IInfixParselet> _infixParselets = [];
     private readonly Dictionary<Symbol, IPrefixParselet> _prefixParselets = [];
-    private readonly Dictionary<Symbol, IStatementParselet> _statementParselets = [];
     private readonly List<Token> _read = [];
+    private readonly Dictionary<Symbol, IStatementParselet> _statementParselets = [];
     private Lexer _lexer;
 
     public PrecedenceLevels PrecedenceLevels = new DefaultPrecedenceLevels();
@@ -55,7 +56,8 @@ public abstract partial class Parser
         Register(leftToken, new GroupParselet(leftToken, rightToken, tag));
     }
 
-    public void Block(Symbol start, Symbol terminator, Symbol seperator = null, bool wrapExpressions = false, Symbol tag = null)
+    public void Block(Symbol start, Symbol terminator, Symbol seperator = null, bool wrapExpressions = false,
+        Symbol tag = null)
     {
         Register(start, new BlockParselet(terminator, seperator, wrapExpressions, tag));
     }
@@ -88,6 +90,13 @@ public abstract partial class Parser
         bool useStatementsAtToplevel = false, bool enforceEndOfFile = true)
         where TParser : Parser, new()
     {
+        return Parse<TParser>(source.AsMemory(), filename, useStatementsAtToplevel, enforceEndOfFile);
+    }
+
+    public static TranslationUnit Parse<TParser>(ReadOnlyMemory<char> source, string filename = "syntethic.dsl",
+        bool useStatementsAtToplevel = false, bool enforceEndOfFile = true)
+        where TParser : Parser, new()
+    {
         var lexer = new Lexer(source, filename);
 
         var parser = new TParser { _lexer = lexer };
@@ -103,15 +112,15 @@ public abstract partial class Parser
         lexer.OrderSymbols();
 
         var node = useStatementsAtToplevel
-                            ? parser.ParseStatement()
-                            : parser.ParseExpression();
+            ? parser.ParseStatement()
+            : parser.ParseExpression();
 
         if (enforceEndOfFile)
         {
             parser.Match(PredefinedSymbols.EOF);
         }
 
-        return new(node, lexer.Document);
+        return new TranslationUnit(node, lexer.Document);
     }
 
     private static void AddLexerSymbols<TParselet>(Lexer lexer, Dictionary<Symbol, TParselet> dict)
@@ -227,7 +236,7 @@ public abstract partial class Parser
         return result;
     }
 
-    /// <summary>If the <paramref name="expected"/> is matched consume it
+    /// <summary>If the <paramref name="expected" /> is matched consume it
     public Token Consume(Symbol expected)
     {
         var token = LookAhead(0);
@@ -245,7 +254,7 @@ public abstract partial class Parser
         return Consume();
     }
 
-    /// <summary>Returns the next <see cref="Token"/>
+    /// <summary>Returns the next <see cref="Token" />
     public Token Consume()
     {
         // Make sure we've read the token.
@@ -255,7 +264,7 @@ public abstract partial class Parser
         return token;
     }
 
-    /// <summary>Consumes as many tokens as given in <paramref name="count"/></summary>
+    /// <summary>Consumes as many tokens as given in <paramref name="count" /></summary>
     public Token[] ConsumeMany(uint count)
     {
         var result = new List<Token>();
@@ -330,6 +339,7 @@ public abstract partial class Parser
     /// <param name="bindingPower"></param>
     protected void Ternary(Symbol firstSymbol, Symbol secondSymbol, string bindingPowerName)
     {
-        Register(firstSymbol, new TernaryOperatorParselet(secondSymbol, PrecedenceLevels.GetPrecedence(bindingPowerName)));
+        Register(firstSymbol,
+            new TernaryOperatorParselet(secondSymbol, PrecedenceLevels.GetPrecedence(bindingPowerName)));
     }
 }
