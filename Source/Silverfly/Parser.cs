@@ -64,6 +64,11 @@ public abstract partial class Parser
         Register(start, new BlockParselet(terminator, seperator, wrapExpressions, tag));
     }
 
+    /// <summary>
+    /// Parses a statement and optionally wraps expressions in an AST node.
+    /// </summary>
+    /// <param name="wrapExpressions">Indicates whether to wrap expressions in an AST node. Default is false.</param>
+    /// <returns>The parsed abstract syntax tree (AST) node representing the statement.</returns>
     public AstNode ParseStatement(bool wrapExpressions = false)
     {
         var token = LookAhead(0);
@@ -88,20 +93,28 @@ public abstract partial class Parser
         return expression;
     }
 
+    /// <summary>
+    /// Parses a source code string and returns the corresponding translation unit.
+    /// </summary>
+    /// <param name="source">The source code to parse as a string.</param>
+    /// <param name="filename">The name of the file from which the source code was read. Default is "synthetic.dsl".</param>
+    /// <returns>The parsed translation unit representing the source code.</returns>
     public TranslationUnit Parse(string source, string filename = "syntethic.dsl")
     {
         return Parse(source.AsMemory(), filename);
     }
-
-    //todo: class parserdefinition where are parselets live
-    // class parserinstance has own lexer that has access to the parserdefinition
-    // static method create that returns new parser instance: ExpressionGrammar.Create()
 
     public Parser()
     {
         InitLexer(_lexerConfig);
     }
 
+    /// <summary>
+    /// Parses a source code and returns the corresponding translation unit.
+    /// </summary>
+    /// <param name="source">The source code to parse as a <see cref="ReadOnlyMemory{char}"/>.</param>
+    /// <param name="filename">The name of the file from which the source code was read. Default is "synthetic.dsl".</param>
+    /// <returns>The parsed translation unit representing the source code.</returns>
     public TranslationUnit Parse(ReadOnlyMemory<char> source, string filename = "syntethic.dsl")
     {
         _lexer = new Lexer(source, _lexerConfig, filename);
@@ -137,6 +150,11 @@ public abstract partial class Parser
         }
     }
 
+    /// <summary>
+    /// Parses an expression based on the given precedence level.
+    /// </summary>
+    /// <param name="precedence">The precedence level used for parsing the expression.</param>
+    /// <returns>The parsed abstract syntax tree (AST) node representing the expression.</returns>
     public AstNode Parse(int precedence)
     {
         var token = Consume();
@@ -172,6 +190,10 @@ public abstract partial class Parser
         return left;
     }
 
+    /// <summary>
+    /// Parses an expression
+    /// </summary>
+    /// <returns>The parsed abstract syntax tree (AST) node.</returns>
     public AstNode ParseExpression()
     {
         if (IsMatch(PredefinedSymbols.SOF))
@@ -185,6 +207,11 @@ public abstract partial class Parser
     protected abstract void InitLexer(LexerConfig lexer);
     protected abstract void InitParselets();
 
+    /// <summary>
+    /// Checks if the current symbol matches the expected symbol and consumes it if it does.
+    /// </summary>
+    /// <param name="expected">The expected symbol to match.</param>
+    /// <returns>True if the expected symbol matches and is consumed; otherwise, false.</returns>
     public bool Match(Symbol expected)
     {
         if (!IsMatch(expected))
@@ -197,6 +224,11 @@ public abstract partial class Parser
         return true;
     }
 
+    /// <summary>
+    /// Checks if any of the expected symbols match the current symbol.
+    /// </summary>
+    /// <param name="expected">An array of expected symbols to match.</param>
+    /// <returns>True if any of the expected symbols match; otherwise, false.</returns>
     public bool Match(Symbol[] expected)
     {
         foreach (var symbol in expected)
@@ -210,6 +242,12 @@ public abstract partial class Parser
         return false;
     }
 
+    /// <summary>
+    /// Checks if the symbol at a specified distance matches the expected symbol.
+    /// </summary>
+    /// <param name="expected">The expected symbol to match.</param>
+    /// <param name="distance">The distance ahead to look for the symbol (default is 0).</param>
+    /// <returns>True if the symbol at the specified distance matches the expected symbol; otherwise, false.</returns>
     public bool IsMatch(Symbol expected, uint distance = 0)
     {
         EnsureSymbolIsRegistered(expected);
@@ -227,7 +265,11 @@ public abstract partial class Parser
         }
     }
 
-    /// <summary>Checks if a sequence of symbols match
+    /// <summary>
+    /// Checks if a sequence of symbols matches the expected symbols.
+    /// </summary>
+    /// <param name="expected">An array of expected symbols to match.</param>
+    /// <returns>True if the sequence of symbols matches; otherwise, false.</returns>
     public bool IsMatch(params Symbol[] expected)
     {
         var result = true;
@@ -239,7 +281,11 @@ public abstract partial class Parser
         return result;
     }
 
-    /// <summary>If the <paramref name="expected" /> is matched consume it
+    /// <summary>
+    /// If the <paramref name="expected"/> symbol is matched, consume the token.
+    /// </summary>
+    /// <param name="expected">The expected symbol to match.</param>
+    /// <returns>The consumed token if the expected symbol is matched; otherwise, an invalid token.</returns>
     public Token Consume(Symbol expected)
     {
         var token = LookAhead(0);
@@ -257,7 +303,10 @@ public abstract partial class Parser
         return Consume();
     }
 
-    /// <summary>Returns the next <see cref="Token" />
+    /// <summary>
+    /// Returns the next <see cref="Token"/> and removes it from the read list.
+    /// </summary>
+    /// <returns>The next <see cref="Token"/>.</returns>
     public Token Consume()
     {
         // Make sure we've read the token.
@@ -267,7 +316,11 @@ public abstract partial class Parser
         return token;
     }
 
-    /// <summary>Consumes as many tokens as given in <paramref name="count" /></summary>
+    /// <summary>
+    /// Consumes as many tokens as given in <paramref name="count" />.
+    /// </summary>
+    /// <param name="count">The number of tokens to consume.</param>
+    /// <returns>An array of consumed tokens.</returns>
     public Token[] ConsumeMany(uint count)
     {
         var result = new List<Token>();
@@ -279,7 +332,11 @@ public abstract partial class Parser
         return [.. result];
     }
 
-    /// <summary>Get the next token(s) and add it to a cache to reuse it later</summary>
+    /// <summary>
+    /// Get the next token(s) and add it to a cache to reuse it later.
+    /// </summary>
+    /// <param name="distance">The number of tokens to look ahead.</param>
+    /// <returns>The token at the specified distance.</returns>
     public Token LookAhead(uint distance)
     {
         // Read in as many as needed.
