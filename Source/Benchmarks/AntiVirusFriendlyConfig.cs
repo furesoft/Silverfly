@@ -8,7 +8,8 @@ public class AntiVirusFriendlyConfig : ManualConfig
 {
     public AntiVirusFriendlyConfig()
     {
-        AddJob(Job.MediumRun
-            .WithToolchain(InProcessNoEmitToolchain.Instance));
+        AddJob(Job.ShortRun
+            .WithToolchain(InProcessNoEmitToolchain.Instance))
+            .WithOptions(ConfigOptions.JoinSummary);
     }
 }
