@@ -1,4 +1,6 @@
-﻿namespace Silverfly.Lexing.Matcher;
+﻿using Silverfly.Text;
+
+namespace Silverfly.Lexing.Matcher;
 
 /// <summary>
 /// Represents a matcher that identifies boolean literals ("true" or "false") in the lexer input.
@@ -26,10 +28,11 @@ public class BooleanMatcher(bool ignoreCasing = false) : IMatcher
     /// <param name="index">The current index in the lexer's input source.</param>
     /// <param name="column">The current column in the lexer's input source.</param>
     /// <param name="line">The current line in the lexer's input source.</param>
+    /// <param name="document"></param>
     /// <returns>
     /// A <see cref="Token"/> representing the matched boolean literal.
     /// </returns>
-    public Token Build(Lexer lexer, ref int index, ref int column, ref int line)
+    public Token Build(Lexer lexer, ref int index, ref int column, ref int line, SourceDocument document)
     {
         var oldColumn = column;
         var oldIndex = index;
@@ -43,6 +46,6 @@ public class BooleanMatcher(bool ignoreCasing = false) : IMatcher
             lexer.Advance("false".Length);
         }
 
-        return new(PredefinedSymbols.Boolean, lexer.Document.Source[oldIndex..index], line, oldColumn);
+        return new(PredefinedSymbols.Boolean, lexer.Document.Source[oldIndex..index], line, oldColumn, document);
     }
 }

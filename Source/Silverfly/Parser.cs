@@ -297,7 +297,7 @@ public abstract partial class Parser
             token.Document.Messages.Add(
                 Message.Error($"Expected token {expected} and found {token.Type}({token})", token.GetRange()));
 
-            return Token.Invalid('\0', token.Line, token.Column);
+            return Token.Invalid('\0', token.Line, token.Column, Document);
         }
 
         return Consume();

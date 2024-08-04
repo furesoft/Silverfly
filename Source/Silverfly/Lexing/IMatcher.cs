@@ -1,4 +1,6 @@
-﻿namespace Silverfly.Lexing;
+﻿using Silverfly.Text;
+
+namespace Silverfly.Lexing;
 
 /// <summary>
 /// Defines methods for matching and building tokens based on lexer input.
@@ -22,6 +24,7 @@ public interface IMatcher
     /// <param name="index">The current index in the input source.</param>
     /// <param name="column">The current column in the input source.</param>
     /// <param name="line">The current line in the input source.</param>
+    /// <param name="document"></param>
     /// <returns>The constructed token.</returns>
-    Token Build(Lexer lexer, ref int index, ref int column, ref int line);
+    Token Build(Lexer lexer, ref int index, ref int column, ref int line, SourceDocument document);
 }

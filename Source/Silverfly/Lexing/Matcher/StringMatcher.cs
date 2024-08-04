@@ -33,10 +33,11 @@ public class StringMatcher(Symbol leftStr, Symbol rightStr, bool allowEscapeChar
     /// <param name="index">The current index in the lexer's input source.</param>
     /// <param name="column">The current column in the lexer's input source.</param>
     /// <param name="line">The current line in the lexer's input source.</param>
+    /// <param name="document"></param>
     /// <returns>
     /// A <see cref="Token"/> representing the matched string input.
     /// </returns>
-    public Token Build(Lexer lexer, ref int index, ref int column, ref int line)
+    public Token Build(Lexer lexer, ref int index, ref int column, ref int line, SourceDocument document)
     {
         var oldColumn = column;
 
@@ -73,11 +74,11 @@ public class StringMatcher(Symbol leftStr, Symbol rightStr, bool allowEscapeChar
 
             lexer.Document.AddMessage(MessageSeverity.Error,
                 "String is not closed", new SourceRange(lexer.Document, startSpan, endSpan));
-            return Token.Invalid('\0', line, column);
+            return Token.Invalid('\0', line, column, document);
         }
 
         lexer.Advance();
-        return new Token(PredefinedSymbols.String, builder.ToString().AsMemory(), line, oldColumn);
+        return new Token(PredefinedSymbols.String, builder.ToString().AsMemory(), line, oldColumn, document);
     }
 
     /// <summary>

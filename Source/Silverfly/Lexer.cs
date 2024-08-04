@@ -67,7 +67,7 @@ public sealed partial class Lexer
         {
             _index++;
 
-            return new Token(PredefinedSymbols.SOF, _line, _column).WithDocument(Document);
+            return new Token(PredefinedSymbols.SOF, _line, _column, Document);
         }
 
         while (IsNotAtEnd())
@@ -88,7 +88,7 @@ public sealed partial class Lexer
 
             if (Config.NameAdvancer.IsNameStart(c))
             {
-                return LexName().WithDocument(Document);
+                return LexName(Document);
             }
 
             if (InvokePunctuators(out var next))
@@ -98,10 +98,10 @@ public sealed partial class Lexer
 
             Document.Messages.Add(Message.Error($"Unknown Character '{c}'", SourceRange.From(Document, _line, _column, _line, _column)));
 
-            return Token.Invalid(c, _line, _column).WithDocument(Document);
+            return Token.Invalid(c, _line, _column, Document);
         }
 
-        return new Token(PredefinedSymbols.EOF, _line, _column).WithDocument(Document);
+        return new Token(PredefinedSymbols.EOF, _line, _column, Document);
     }
 
     private void RecognizeLine(char c)
@@ -124,7 +124,7 @@ public sealed partial class Lexer
                 continue;
             }
 
-            token = LexSymbol(punctuator.Key).WithDocument(Document);
+            token = LexSymbol(punctuator.Key, Document);
             return true;
         }
 
@@ -138,7 +138,7 @@ public sealed partial class Lexer
         {
             if (part.Match(this, c))
             {
-                token = part.Build(this, ref _index, ref _column, ref _line).WithDocument(Document);
+                token = part.Build(this, ref _index, ref _column, ref _line, Document);
                 return true;
             }
         }
@@ -162,17 +162,17 @@ public sealed partial class Lexer
         return false;
     }
 
-    private Token LexSymbol(string punctuatorKey)
+    private Token LexSymbol(string punctuatorKey, SourceDocument document)
     {
         var oldColumn = _column;
 
         _column += punctuatorKey.Length;
         _index += punctuatorKey.Length;
 
-        return new(punctuatorKey, _line, oldColumn);
+        return new(punctuatorKey, _line, oldColumn, document);
     }
 
-    private Token LexName()
+    private Token LexName(SourceDocument document)
     {
         var oldColumn = _column;
 
@@ -185,10 +185,10 @@ public sealed partial class Lexer
 
         if (Config.Punctuators.ContainsKey(name))
         {
-            return new(name, nameSlice, _line, oldColumn);
+            return new(name, nameSlice, _line, oldColumn, document);
         }
 
-        return new(PredefinedSymbols.Name, nameSlice, _line, oldColumn);
+        return new(PredefinedSymbols.Name, nameSlice, _line, oldColumn, document);
     }
 
     public bool IsNotAtEnd() => _index < Document.Source.Length;
