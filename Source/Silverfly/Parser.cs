@@ -15,7 +15,7 @@ public abstract partial class Parser
     private readonly List<Token> _read = [];
     private readonly Dictionary<Symbol, IStatementParselet> _statementParselets = [];
     private Lexer _lexer;
-    protected ParserOptions Options;
+    protected ParserOptions Options = new ParserOptions(true, true);
 
     public PrecedenceLevels PrecedenceLevels = new DefaultPrecedenceLevels();
 
