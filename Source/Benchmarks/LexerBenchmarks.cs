@@ -1,19 +1,19 @@
 using BenchmarkDotNet.Attributes;
-using BenchmarkDotNet.Jobs;
 using Silverfly;
 
 namespace Benchmarks;
 
-[SimpleJob(RuntimeMoniker.Net80, baseline: true)]
 [ShortRunJob]
 [MemoryDiagnoser]
 [Config(typeof(AntiVirusFriendlyConfig))]
 public class LexerBenchmarks
 {
+    private LexerConfig config = new();
+
     [Benchmark]
     public Token Number()
     {
-        var lexer = new Lexer("42".AsMemory());
+        var lexer = new Lexer("42".AsMemory(), config);
 
         return lexer.Next();
     }
@@ -21,7 +21,7 @@ public class LexerBenchmarks
     [Benchmark]
     public Token Symbol()
     {
-        var lexer = new Lexer("+".AsMemory());
+        var lexer = new Lexer("+".AsMemory(), config);
 
         return lexer.Next();
     }
@@ -29,7 +29,7 @@ public class LexerBenchmarks
     [Benchmark]
     public Token NumberWithWhitespace()
     {
-        var lexer = new Lexer(" 42".AsMemory());
+        var lexer = new Lexer(" 42".AsMemory(), config);
 
         return lexer.Next();
     }

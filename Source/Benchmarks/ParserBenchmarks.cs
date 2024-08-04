@@ -1,11 +1,9 @@
 using BenchmarkDotNet.Attributes;
-using BenchmarkDotNet.Jobs;
 using Silverfly;
 using TestProject;
 
 namespace Benchmarks;
 
-[SimpleJob(RuntimeMoniker.Net80)]
 [ShortRunJob]
 [MemoryDiagnoser]
 [Config(typeof(AntiVirusFriendlyConfig))]

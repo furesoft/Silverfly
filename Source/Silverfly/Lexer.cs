@@ -12,12 +12,9 @@ namespace Silverfly;
 /// </summary>
 public sealed partial class Lexer
 {
-    private Dictionary<string, Symbol> _punctuators = [];
-    private readonly List<IMatcher> _parts = [];
-    private readonly List<IIgnoreMatcher> _ignoreMatcher = [];
+    public LexerConfig Config;
     private int _index;
     private int _line = 1, _column = 1;
-    private INameAdvancer _nameAdvancer = new DefaultNameAdvancer();
 
     public SourceDocument Document { get; }
 
@@ -25,52 +22,11 @@ public sealed partial class Lexer
     /// Creates a new <see cref="Lexer"/> to tokenize the given string.
     /// </summary>
     /// <param name="source">String to tokenize</param>
-    public Lexer(ReadOnlyMemory<char> source, string filename = "tmp.synthetic")
+    public Lexer(ReadOnlyMemory<char> source, LexerConfig config, string filename = "tmp.synthetic")
     {
         _index = -1;
         Document = new() { Filename = filename, Source = source };
-
-        // Register all of the Symbols that are explicit punctuators.
-        foreach (var type in PredefinedSymbols.Pool)
-        {
-            var punctuator = type.Punctuator();
-
-            if (punctuator != "\0")
-            {
-                _punctuators.Add(punctuator, type);
-            }
-        }
-    }
-
-    // sort punctuators longest -> smallest to make it possible to use symbols with more than one character
-    internal void OrderSymbols()
-    {
-        _punctuators = new(_punctuators.OrderByDescending(_ => _.Key.Length));
-    }
-
-    public void AddSymbol(string symbol)
-    {
-        if (_punctuators.ContainsKey(symbol))
-        {
-            return;
-        }
-
-        _punctuators.Add(symbol, PredefinedSymbols.Pool.Get(symbol));
-    }
-
-    public void AddMatcher(IMatcher matcher)
-    {
-        _parts.Add(matcher);
-    }
-
-    public void UseNameAdvancer(INameAdvancer advancer)
-    {
-        _nameAdvancer = advancer;
-    }
-
-    public void Ignore(IIgnoreMatcher matcher)
-    {
-        _ignoreMatcher.Add(matcher);
+        this.Config = config;
     }
 
     public char Peek(int distance)
@@ -130,7 +86,7 @@ public sealed partial class Lexer
                 return token;
             }
 
-            if (_nameAdvancer.IsNameStart(c))
+            if (Config.NameAdvancer.IsNameStart(c))
             {
                 return LexName().WithDocument(Document);
             }
@@ -161,7 +117,7 @@ public sealed partial class Lexer
 
     private bool InvokePunctuators(out Token token)
     {
-        foreach (var punctuator in _punctuators)
+        foreach (var punctuator in Config.Punctuators)
         {
             if (!IsMatch(punctuator.Key))
             {
@@ -178,7 +134,7 @@ public sealed partial class Lexer
 
     private bool InvokeParts(char c, out Token token)
     {
-        foreach (var part in _parts)
+        foreach (var part in Config.Parts)
         {
             if (part.Match(this, c))
             {
@@ -193,7 +149,7 @@ public sealed partial class Lexer
 
     private bool AdvanceIgnoreMatcher(char c)
     {
-        foreach (var ignoreMatcher in _ignoreMatcher)
+        foreach (var ignoreMatcher in Config.IgnoreMatchers)
         {
             if (ignoreMatcher.Match(this, c))
             {
@@ -222,12 +178,12 @@ public sealed partial class Lexer
 
         var start = _index;
 
-        _nameAdvancer.AdvanceName(this);
+        Config.NameAdvancer.AdvanceName(this);
 
         var nameSlice = Document.Source[start.._index];
         var name = nameSlice.ToString();
 
-        if (_punctuators.ContainsKey(name))
+        if (Config.Punctuators.ContainsKey(name))
         {
             return new(name, nameSlice, _line, oldColumn);
         }
@@ -245,6 +201,6 @@ public sealed partial class Lexer
 
     public bool IsPunctuator(string tokenName)
     {
-        return _punctuators.ContainsKey(tokenName);
+        return Config.Punctuators.ContainsKey(tokenName);
     }
 }

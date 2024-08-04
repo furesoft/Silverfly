@@ -5,7 +5,7 @@ namespace Sample.JSON;
 
 public class JsonGrammar : Parser
 {
-    protected override void InitLexer(Lexer lexer)
+    protected override void InitLexer(LexerConfig lexer)
     {
         lexer.IgnoreWhitespace();
         lexer.MatchBoolean();

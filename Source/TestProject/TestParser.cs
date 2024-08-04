@@ -32,7 +32,7 @@ public class TestParser : Parser
             seperator: PredefinedSymbols.Semicolon);
     }
 
-    protected override void InitLexer(Lexer lexer)
+    protected override void InitLexer(LexerConfig lexer)
     {
         lexer.IgnoreWhitespace();
         lexer.Ignore("\r", "\r\n");

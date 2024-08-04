@@ -15,7 +15,8 @@ public abstract partial class Parser
     private readonly List<Token> _read = [];
     private readonly Dictionary<Symbol, IStatementParselet> _statementParselets = [];
     private Lexer _lexer;
-    protected ParserOptions Options = new ParserOptions(true, true);
+    private LexerConfig _lexerConfig = new();
+    protected ParserOptions Options = new(true, true);
 
     public PrecedenceLevels PrecedenceLevels = new DefaultPrecedenceLevels();
 
@@ -96,9 +97,14 @@ public abstract partial class Parser
     // class parserinstance has own lexer that has access to the parserdefinition
     // static method create that returns new parser instance: ExpressionGrammar.Create()
 
+    public Parser()
+    {
+        InitLexer(_lexerConfig);
+    }
+
     public TranslationUnit Parse(ReadOnlyMemory<char> source, string filename = "syntethic.dsl")
     {
-        _lexer = new Lexer(source, filename);
+        _lexer = new Lexer(source, _lexerConfig, filename);
 
         InitParselets();
 
@@ -106,9 +112,7 @@ public abstract partial class Parser
         AddLexerSymbols(_lexer, _infixParselets);
         AddLexerSymbols(_lexer, _statementParselets);
 
-        InitLexer(_lexer);
-
-        _lexer.OrderSymbols();
+        _lexer.Config.OrderSymbols();
 
         var node = Options.UseStatementsAtToplevel
             ? ParseStatement()
@@ -122,13 +126,13 @@ public abstract partial class Parser
         return new TranslationUnit(node, _lexer.Document);
     }
 
-    private static void AddLexerSymbols<TParselet>(Lexer lexer, Dictionary<Symbol, TParselet> dict)
+    private void AddLexerSymbols<TParselet>(Lexer lexer, Dictionary<Symbol, TParselet> dict)
     {
         foreach (var prefix in dict)
         {
             if (!lexer.IsPunctuator(prefix.Key.Name) && !prefix.Key.Name.StartsWith('#'))
             {
-                lexer.AddSymbol(prefix.Key.Name);
+                _lexerConfig.AddSymbol(prefix.Key.Name);
             }
         }
     }
@@ -178,7 +182,7 @@ public abstract partial class Parser
         return Parse(0);
     }
 
-    protected abstract void InitLexer(Lexer lexer);
+    protected abstract void InitLexer(LexerConfig lexer);
     protected abstract void InitParselets();
 
     public bool Match(Symbol expected)
@@ -219,7 +223,7 @@ public abstract partial class Parser
     {
         if (!_lexer.IsPunctuator(expected.Name))
         {
-            _lexer.AddSymbol(expected.Name);
+            _lexerConfig.AddSymbol(expected.Name);
         }
     }
 

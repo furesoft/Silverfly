@@ -6,7 +6,7 @@ namespace Silverfly.Sample.Func;
 
 class ExpressionGrammar : Parser
 {
-    protected override void InitLexer(Lexer lexer)
+    protected override void InitLexer(LexerConfig lexer)
     {
         lexer.IgnoreWhitespace();
         lexer.MatchNumber(allowHex: false, allowBin: false);
