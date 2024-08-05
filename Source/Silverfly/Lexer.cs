@@ -16,17 +16,26 @@ public sealed partial class Lexer
     private int _index;
     private int _line = 1, _column = 1;
 
-    public SourceDocument Document { get; }
+    public SourceDocument Document { get; private set; }
 
     /// <summary>
     /// Creates a new <see cref="Lexer"/> to tokenize the given string.
     /// </summary>
     /// <param name="source">String to tokenize</param>
-    public Lexer(ReadOnlyMemory<char> source, LexerConfig config, string filename = "tmp.synthetic")
+    public Lexer(LexerConfig config)
+    {
+        this.Config = config;
+    }
+
+    public void SetSource(ReadOnlyMemory<char> source, string filename = "tmp.synthetic")
     {
         _index = -1;
         Document = new() { Filename = filename, Source = source };
-        this.Config = config;
+    }
+    
+    public void SetSource(string source, string filename = "tmp.synthetic")
+    {
+        SetSource(source.AsMemory(), filename);
     }
 
     public char Peek(int distance)

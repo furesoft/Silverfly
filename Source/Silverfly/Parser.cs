@@ -10,59 +10,14 @@ namespace Silverfly;
 //Todo: Add Synchronisation Mechanism For Better Error Reporting
 public abstract partial class Parser
 {
-    private readonly Dictionary<Symbol, IInfixParselet> _infixParselets = [];
-    private readonly Dictionary<Symbol, IPrefixParselet> _prefixParselets = [];
-    private readonly List<Token> _read = [];
-    private readonly Dictionary<Symbol, IStatementParselet> _statementParselets = [];
+    
     private Lexer _lexer;
     private LexerConfig _lexerConfig = new();
+    private ParserDefinition _parserDefinition = new();
     protected ParserOptions Options = new(true, true);
-
-    public PrecedenceLevels PrecedenceLevels = new DefaultPrecedenceLevels();
+    private readonly List<Token> _read = [];
 
     public SourceDocument Document => _lexer.Document;
-
-    public void Register(Symbol token, IPrefixParselet parselet)
-    {
-        _prefixParselets[token] = parselet;
-    }
-
-    public void Register(Symbol token, IInfixParselet parselet)
-    {
-        _infixParselets[token] = parselet;
-    }
-
-    public void Register(Symbol token, IStatementParselet parselet)
-    {
-        _statementParselets[token] = parselet;
-    }
-
-    public void Register(IInfixParselet parselet, params Symbol[] tokens)
-    {
-        foreach (var token in tokens)
-        {
-            Register(token, parselet);
-        }
-    }
-
-    public void Register(IPrefixParselet parselet, params Symbol[] tokens)
-    {
-        foreach (var token in tokens)
-        {
-            Register(token, parselet);
-        }
-    }
-
-    public void Group(Symbol leftToken, Symbol rightToken, Symbol tag = null)
-    {
-        Register(leftToken, new GroupParselet(leftToken, rightToken, tag));
-    }
-
-    public void Block(Symbol start, Symbol terminator, Symbol seperator = null, bool wrapExpressions = false,
-        Symbol tag = null)
-    {
-        Register(start, new BlockParselet(terminator, seperator, wrapExpressions, tag));
-    }
 
     /// <summary>
     /// Parses a statement and optionally wraps expressions in an AST node.
@@ -73,7 +28,7 @@ public abstract partial class Parser
     {
         var token = LookAhead(0);
 
-        if (_statementParselets.TryGetValue(token.Type, out var parselet))
+        if (_parserDefinition._statementParselets.TryGetValue(token.Type, out var parselet))
         {
             Consume();
 
@@ -107,6 +62,16 @@ public abstract partial class Parser
     public Parser()
     {
         InitLexer(_lexerConfig);
+
+        _lexer = new Lexer(_lexerConfig);
+        
+        InitParselets(_parserDefinition);
+
+        AddLexerSymbols(_lexer, _parserDefinition._prefixParselets);
+        AddLexerSymbols(_lexer, _parserDefinition._infixParselets);
+        AddLexerSymbols(_lexer, _parserDefinition._statementParselets);
+
+        _lexer.Config.OrderSymbols();
     }
 
     /// <summary>
@@ -117,15 +82,7 @@ public abstract partial class Parser
     /// <returns>The parsed translation unit representing the source code.</returns>
     public TranslationUnit Parse(ReadOnlyMemory<char> source, string filename = "syntethic.dsl")
     {
-        _lexer = new Lexer(source, _lexerConfig, filename);
-
-        InitParselets();
-
-        AddLexerSymbols(_lexer, _prefixParselets);
-        AddLexerSymbols(_lexer, _infixParselets);
-        AddLexerSymbols(_lexer, _statementParselets);
-
-        _lexer.Config.OrderSymbols();
+        _lexer.SetSource(source, filename);
 
         var node = Options.UseStatementsAtToplevel
             ? ParseStatement()
@@ -164,7 +121,7 @@ public abstract partial class Parser
             return new InvalidNode(token).WithRange(token);
         }
 
-        if (!_prefixParselets.TryGetValue(token.Type, out var prefix))
+        if (!_parserDefinition._prefixParselets.TryGetValue(token.Type, out var prefix))
         {
             token.Document.Messages.Add(Message.Error("Could not parse prefix \"" + token.Text + "\".",
                 token.GetRange()));
@@ -178,7 +135,7 @@ public abstract partial class Parser
         {
             token = Consume();
 
-            if (!_infixParselets.TryGetValue(token.Type, out var infix))
+            if (!_parserDefinition._infixParselets.TryGetValue(token.Type, out var infix))
             {
                 token.Document.Messages.Add(
                     Message.Error("Could not parse \"" + token.Text + "\".", token.GetRange()));
@@ -205,7 +162,7 @@ public abstract partial class Parser
     }
 
     protected abstract void InitLexer(LexerConfig lexer);
-    protected abstract void InitParselets();
+    protected abstract void InitParselets(ParserDefinition parserDefinition);
 
     /// <summary>
     /// Checks if the current symbol matches the expected symbol and consumes it if it does.
@@ -351,55 +308,11 @@ public abstract partial class Parser
 
     private int GetBindingPower()
     {
-        if (_infixParselets.TryGetValue(LookAhead(0).Type, out var parselet))
+        if (_parserDefinition._infixParselets.TryGetValue(LookAhead(0).Type, out var parselet))
         {
             return parselet.GetBindingPower();
         }
 
         return 0;
-    }
-
-    /// <summary>
-    ///     Registers a postfix unary operator parselet for the given token and binding power.
-    /// </summary>
-    protected void Postfix(Symbol token, string bindingPowerName = "Postfix")
-    {
-        Register(token, new PostfixOperatorParselet(PrecedenceLevels.GetPrecedence(bindingPowerName)));
-    }
-
-    /// <summary>
-    ///     Registers a prefix unary operator parselet for the given token and binding power.
-    /// </summary>
-    protected void Prefix(Symbol token, string bindingPowerName = "Prefix")
-    {
-        Register(token, new PrefixOperatorParselet(PrecedenceLevels.GetPrecedence(bindingPowerName)));
-    }
-
-    /// <summary>
-    ///     Registers a left-associative binary operator parselet for the given token and binding power.
-    /// </summary>
-    protected void InfixLeft(Symbol token, string bindingPowerName)
-    {
-        Register(token, new BinaryOperatorParselet(PrecedenceLevels.GetPrecedence(bindingPowerName), false));
-    }
-
-    /// <summary>
-    ///     Registers a right-associative binary operator parselet for the given token and binding power.
-    /// </summary>
-    protected void InfixRight(Symbol token, string bindingPowerName)
-    {
-        Register(token, new BinaryOperatorParselet(PrecedenceLevels.GetPrecedence(bindingPowerName), true));
-    }
-
-    /// <summary>
-    ///     Register a ternary operator like the :? operator
-    /// </summary>
-    /// <param name="firstSymbol"></param>
-    /// <param name="secondSymbol"></param>
-    /// <param name="bindingPower"></param>
-    protected void Ternary(Symbol firstSymbol, Symbol secondSymbol, string bindingPowerName)
-    {
-        Register(firstSymbol,
-            new TernaryOperatorParselet(secondSymbol, PrecedenceLevels.GetPrecedence(bindingPowerName)));
     }
 }

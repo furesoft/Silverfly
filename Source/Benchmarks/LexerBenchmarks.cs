@@ -8,29 +8,29 @@ namespace Benchmarks;
 [Config(typeof(AntiVirusFriendlyConfig))]
 public class LexerBenchmarks
 {
-    private LexerConfig config = new();
+    private readonly Lexer _lexer = new(new());
 
     [Benchmark]
     public Token Number()
     {
-        var lexer = new Lexer("42".AsMemory(), config);
+        _lexer.SetSource("42");
 
-        return lexer.Next();
+        return _lexer.Next();
     }
 
     [Benchmark]
     public Token Symbol()
     {
-        var lexer = new Lexer("+".AsMemory(), config);
+        _lexer.SetSource("+");
 
-        return lexer.Next();
+        return _lexer.Next();
     }
 
     [Benchmark]
     public Token NumberWithWhitespace()
     {
-        var lexer = new Lexer(" 42".AsMemory(), config);
+        _lexer.SetSource(" 42");
 
-        return lexer.Next();
+        return _lexer.Next();
     }
 }

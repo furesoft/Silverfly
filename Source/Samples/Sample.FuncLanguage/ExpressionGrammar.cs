@@ -17,36 +17,36 @@ class ExpressionGrammar : Parser
         lexer.Ignore(new MultiLineCommentIgnoreMatcher("/*", "*/"));
     }
 
-    protected override void InitParselets()
+    protected override void InitParselets(ParserDefinition parserDefinition)
     {
-        this.PrecedenceLevels.AddPrecedence("Range");
+        parserDefinition.PrecedenceLevels.AddPrecedence("Range");
 
-        AddCommonLiterals();
-        AddArithmeticOperators();
+        parserDefinition.AddCommonLiterals();
+        parserDefinition.AddArithmeticOperators();
 
-        Register("(", new CallParselet(PrecedenceLevels.GetPrecedence("Call")));
-        Register("(", new TupleOrGroupParselet());
+        parserDefinition.Register("(", new CallParselet(parserDefinition.PrecedenceLevels.GetPrecedence("Call")));
+        parserDefinition.Register("(", new TupleOrGroupParselet());
 
-        Register(PredefinedSymbols.Name, new NameParselet());
+        parserDefinition.Register(PredefinedSymbols.Name, new NameParselet());
 
-        Register("let", new VariableBindingParselet());
-        Register("enum", new EnumParselet());
-        Postfix("!");
-        InfixLeft(".", DefaultPrecedenceLevels.Call);
-        InfixLeft("=", DefaultPrecedenceLevels.Assignment);
-        InfixLeft("..", "Range");
-        Register("[", new IndexParselet(PrecedenceLevels.GetPrecedence("Range")));
+        parserDefinition.Register("let", new VariableBindingParselet());
+        parserDefinition.Register("enum", new EnumParselet());
+        parserDefinition.Postfix("!");
+        parserDefinition.InfixLeft(".", DefaultPrecedenceLevels.Call);
+        parserDefinition.InfixLeft("=", DefaultPrecedenceLevels.Assignment);
+        parserDefinition.InfixLeft("..", "Range");
+        parserDefinition.Register("[", new IndexParselet(parserDefinition.PrecedenceLevels.GetPrecedence("Range")));
 
-        Register("[", new ListValueParselet());
+        parserDefinition.Register("[", new ListValueParselet());
 
-        Register("->", new LambdaParselet());
+        parserDefinition.Register("->", new LambdaParselet());
 
-        Register("if", new IfParselet());
-        Register("import", new ImportParselet());
-        Register("module", new ModuleParselet());
-        Register("@", new AnnotationParselet());
+        parserDefinition.Register("if", new IfParselet());
+        parserDefinition.Register("import", new ImportParselet());
+        parserDefinition.Register("module", new ModuleParselet());
+        parserDefinition.Register("@", new AnnotationParselet());
 
-        Block(PredefinedSymbols.SOF, PredefinedSymbols.EOF,
-            seperator: PredefinedSymbols.EOL);
+        parserDefinition.Block(PredefinedSymbols.SOF, PredefinedSymbols.EOF,
+            separator: PredefinedSymbols.EOL);
     }
 }
