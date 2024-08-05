@@ -13,7 +13,7 @@ public class JsonGrammar : Parser
         lexer.MatchString("\"", "\"");
     }
 
-    protected override void InitParselets(ParserDefinition parserDefinition)
+    protected override void InitParser(ParserDefinition parserDefinition)
     {
         parserDefinition.AddCommonLiterals();
 

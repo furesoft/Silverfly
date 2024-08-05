@@ -1,7 +1,10 @@
 ﻿using PrettyPrompt;
+using PrettyPrompt.Consoles;
 using PrettyPrompt.Highlighting;
 using Silverfly.Sample.Func.Values;
 using Silverfly.Text;
+using static System.ConsoleKey;
+using static System.ConsoleModifiers;
 
 namespace Silverfly.Sample.Func;
 
@@ -44,6 +47,12 @@ public static class Repl
             callbacks: new FuncPromptCallbacks(),
             configuration: new PromptConfiguration(
                 prompt: new FormattedString("> "),
+                keyBindings: new KeyBindings(
+                    commitCompletion: new[] { new KeyPressPattern(Tab) },
+                    submitPrompt: new[] { new KeyPressPattern(Enter) },
+                    newLine: new[] { new KeyPressPattern(Shift, Enter) },
+                    triggerOverloadList: new(new KeyPressPattern('('))
+                ),
                 completionItemDescriptionPaneBackground: AnsiColor.Rgb(30, 30, 30),
                 selectedCompletionItemBackground: AnsiColor.Rgb(30, 30, 30),
                 selectedTextBackground: AnsiColor.Rgb(20, 61, 102)));

@@ -17,7 +17,7 @@ class ExpressionGrammar : Parser
         lexer.Ignore(new MultiLineCommentIgnoreMatcher("/*", "*/"));
     }
 
-    protected override void InitParselets(ParserDefinition parserDefinition)
+    protected override void InitParser(ParserDefinition parserDefinition)
     {
         parserDefinition.PrecedenceLevels.AddPrecedence("Range");
 

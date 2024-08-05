@@ -14,7 +14,7 @@ public abstract partial class Parser
     private Lexer _lexer;
     private LexerConfig _lexerConfig = new();
     private ParserDefinition _parserDefinition = new();
-    protected ParserOptions Options = new(true, true);
+    public ParserOptions Options = new(true, true);
     private readonly List<Token> _read = [];
 
     public SourceDocument Document => _lexer.Document;
@@ -65,7 +65,7 @@ public abstract partial class Parser
 
         _lexer = new Lexer(_lexerConfig);
         
-        InitParselets(_parserDefinition);
+        InitParser(_parserDefinition);
 
         AddLexerSymbols(_lexer, _parserDefinition._prefixParselets);
         AddLexerSymbols(_lexer, _parserDefinition._infixParselets);
@@ -162,7 +162,7 @@ public abstract partial class Parser
     }
 
     protected abstract void InitLexer(LexerConfig lexer);
-    protected abstract void InitParselets(ParserDefinition parserDefinition);
+    protected abstract void InitParser(ParserDefinition parserDefinition);
 
     /// <summary>
     /// Checks if the current symbol matches the expected symbol and consumes it if it does.

@@ -22,13 +22,26 @@ internal class FuncPromptCallbacks : PromptCallbacks
     }
     */
 
+    protected override async Task<(IReadOnlyList<OverloadItem>, int ArgumentIndex)> GetOverloadsAsync(string text, int caret, CancellationToken cancellationToken)
+    {
+        if (text == "print(")
+        {
+            var item = new OverloadItem("print(value)", "prints any value to the console", "returns unit", [new OverloadItem.Parameter("src", "The value to print")]);
+
+            return ([item], 0);
+        }
+
+        return (Array.Empty<OverloadItem>(), 0);
+    }
+
     private readonly string[] _keywords = ["let", "if", "then", "else", "import", "enum"];
+    internal static readonly char[] characters = [' '];
 
     protected override Task<IReadOnlyList<CompletionItem>> GetCompletionItemsAsync(string text, int caret, TextSpan spanToBeReplaced, CancellationToken cancellationToken)
     {
         var typedWord = text.AsSpan(spanToBeReplaced.Start, spanToBeReplaced.Length).ToString();
         var tree = new ExpressionGrammar().Parse(text);
-        IEnumerable<string> items = Scope.Root.Bindings.Keys;
+        var items = Scope.Root.Bindings.ToList();
 
         var scope = GetScope(tree.Tree, Scope.Root);
 
@@ -37,30 +50,37 @@ internal class FuncPromptCallbacks : PromptCallbacks
             return Task.FromResult((IReadOnlyList<CompletionItem>)Array.Empty<CompletionItem>());
         }
 
-        if (scope.IsRoot)
+        if (!scope.IsRoot)
         {
-            items = _keywords.Concat(Scope.Root.Bindings.Keys);
+            items = scope.Bindings.ToList();//.Where(_ => !_.StartsWith("'") && !_.StartsWith("__"));
         }
         else
         {
-            items = scope.Bindings.Keys;//.Where(_ => !_.StartsWith("'") && !_.StartsWith("__"));
+            items = _keywords.Select(_ => new KeyValuePair<string, Value>(_, _)).ToList();
         }
 
         return Task.FromResult<IReadOnlyList<CompletionItem>>(
             items
-                .Where(_ => _.StartsWith(typedWord, StringComparison.InvariantCultureIgnoreCase))
-                .Select(_ =>
+                .Where(_ => _.Key.StartsWith(typedWord, StringComparison.InvariantCultureIgnoreCase))
+                .Select(item =>
                 {
-                    var displayText = new FormattedString(_,
-                        new FormatSpan(0, _.Length, AnsiColor.Blue));
+                    var displayText = new FormattedString(item.Key,
+                        new FormatSpan(0, item.Key.Length, AnsiColor.Blue));
+
+                    var replacement = item.Key;
+
+                    if (item.Value is LambdaValue)
+                    {
+                        replacement += "(";
+                    }
 
                     return new CompletionItem(
-                        replacementText: _,
+                        replacementText: replacement,
                         displayText: displayText,
                         commitCharacterRules: [..new[]
                         {
                             new CharacterSetModificationRule(CharacterSetModificationKind.Add,
-                                [..new[] { ' ' }])
+                                [.. characters])
                         }]
                     );
                 })
@@ -70,6 +90,11 @@ internal class FuncPromptCallbacks : PromptCallbacks
 
     private Scope GetScope(AstNode node, Scope scope)
     {
+        if (node is BlockNode block)
+        {
+            return GetScope(block.Children.First(), scope);
+        }
+        
         if (node is BinaryOperatorNode b && b.Operator == ".")
         {
             if (b.LeftExpr is NameNode nameNode && b.RightExpr is InvalidNode)

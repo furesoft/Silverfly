@@ -6,7 +6,7 @@ namespace TestProject;
 
 public class TestParser : Parser
 {
-    protected override void InitParselets(ParserDefinition parserDefinition)
+    protected override void InitParser(ParserDefinition parserDefinition)
     {
         parserDefinition.Register(PredefinedSymbols.Name, new NameParselet());
 
