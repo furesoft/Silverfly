@@ -1,61 +1,20 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
 using Silverfly.Nodes;
-using Silverfly.Parselets.Literals;
 using Silverfly.Text;
 
 namespace Silverfly;
 
 public partial class Parser
 {
-    protected void AddArithmeticOperators()
-    {
-        Prefix("+");
-        Prefix("-");
-        Group("(", ")");
-        InfixLeft("+", "Sum");
-        InfixLeft("-", "Sum");
-        InfixLeft("*", "Product");
-        InfixLeft("/", "Product");
-    }
-
-    protected void AddLogicalOperators()
-    {
-        Prefix("!");
-        InfixLeft("&&", "Product");
-        InfixLeft("||", "Sum");
-    }
-
-    protected void AddBitOperators()
-    {
-        Prefix("~", "Prefix");
-        InfixLeft("&", "Product");
-        InfixLeft("|", "Sum");
-        InfixLeft("<<", "Product");
-        InfixLeft(">>", "Product");
-    }
-
-    protected void AddCommonLiterals()
-    {
-        Register(PredefinedSymbols.Number, new NumberParselet());
-        Register(PredefinedSymbols.Boolean, new BooleanLiteralParselet());
-        Register(PredefinedSymbols.String, new StringLiteralParselet());
-    }
-
-    protected void AddCommonAssignmentOperators()
-    {
-        InfixLeft("=", "Assignment");
-        InfixLeft("+=", "Assignment");
-        InfixLeft("-=", "Assignment");
-        InfixLeft("*=", "Assignment");
-        InfixLeft("/=", "Assignment");
-        Prefix("++");
-        Prefix("--");
-        Postfix("--");
-        Postfix("++");
-    }
-
-    public ImmutableList<AstNode> ParseSeperated(Symbol seperator, Symbol terminator, int bindingPower = 0)
+    /// <summary>
+    /// Parses a list of AST nodes separated by a given separator and terminated by a terminator symbol.
+    /// </summary>
+    /// <param name="separator">The symbol used to separate the nodes.</param>
+    /// <param name="terminator">The symbol used to terminate the list.</param>
+    /// <param name="bindingPower">The binding power for parsing. Default is 0.</param>
+    /// <returns>An immutable list of AST nodes.</returns>
+    public ImmutableList<AstNode> ParseSeperated(Symbol separator, Symbol terminator, int bindingPower = 0)
     {
         var token = LookAhead(0);
         var args = new List<AstNode>();
@@ -73,7 +32,7 @@ public partial class Parser
             {
                 args.Add(node);
             }
-        } while (Match(seperator) && _lexer.IsNotAtEnd());
+        } while (Match(separator) && _lexer.IsNotAtEnd());
 
         if (!IsMatch(terminator))
         {
@@ -85,6 +44,12 @@ public partial class Parser
         return [.. args];
     }
 
+    /// <summary>
+    /// Parses a list of AST nodes terminated by any of the specified terminators.
+    /// </summary>
+    /// <param name="bindingPower">The binding power for parsing. Default is 0.</param>
+    /// <param name="terminators">The symbols used to terminate the list.</param>
+    /// <returns>An immutable list of AST nodes.</returns>
     public ImmutableList<AstNode> ParseList(int bindingPower = 0, params Symbol[] terminators)
     {
         var args = new List<AstNode>();
@@ -104,7 +69,14 @@ public partial class Parser
         return [.. args];
     }
 
-    public ImmutableList<AstNode> ParseSeperated(Symbol seperator, int bindingPower = 0, params Symbol[] terminators)
+    /// <summary>
+    /// Parses a list of AST nodes separated by a given separator and terminated by any of the specified terminators.
+    /// </summary>
+    /// <param name="separator">The symbol used to separate the nodes.</param>
+    /// <param name="bindingPower">The binding power for parsing. Default is 0.</param>
+    /// <param name="terminators">The symbols used to terminate the list.</param>
+    /// <returns>An immutable list of AST nodes.</returns>
+    public ImmutableList<AstNode> ParseSeperated(Symbol separator, int bindingPower = 0, params Symbol[] terminators)
     {
         var args = new List<AstNode>();
 
@@ -121,7 +93,7 @@ public partial class Parser
             {
                 args.Add(node);
             }
-        } while (Match(seperator) && _lexer.IsNotAtEnd());
+        } while (Match(separator) && _lexer.IsNotAtEnd());
 
         Match(terminators);
 

@@ -1,5 +1,3 @@
-using System.Reflection;
-using System.Runtime.CompilerServices;
 using Argon;
 using Silverfly.Testing.Converter;
 using static VerifyTests.VerifierSettings;
@@ -33,9 +31,7 @@ public class SnapshotParserTestBase<TParser>
         Settings.UseDirectory("TestResults");
     }
 
-    public static TranslationUnit Parse(string src) => Parser.Parse<TParser>(src,
-            useStatementsAtToplevel: _options.UseStatementsAtToplevel,
-            filename: _options.Filename, enforceEndOfFile: _options.EnforceEndOfFile);
+    public static TranslationUnit Parse(string src) => new TParser().Parse(src, _options.Filename);
 
     public static Task Test(string source)
     {

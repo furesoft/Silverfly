@@ -1,0 +1,14 @@
+| Type             | Method               | Toolchain                | Mean         | Error         | StdDev     | Gen0   | Allocated |
+|----------------- |--------------------- |------------------------- |-------------:|--------------:|-----------:|-------:|----------:|
+| LexerBenchmarks  | Number               | Default                  |     29.12 ns |     28.716 ns |   1.574 ns | 0.0255 |      80 B |
+| ParserBenchmarks | ParseNumber          | Default                  |  6,782.41 ns |  3,540.156 ns | 194.048 ns | 0.6256 |    1976 B |
+| LexerBenchmarks  | Symbol               | Default                  |     24.43 ns |      2.795 ns |   0.153 ns | 0.0255 |      80 B |
+| ParserBenchmarks | ParseAddition        | Default                  | 13,903.46 ns |  3,208.172 ns | 175.851 ns | 0.9918 |    3120 B |
+| LexerBenchmarks  | NumberWithWhitespace | Default                  |     26.62 ns |      6.501 ns |   0.356 ns | 0.0255 |      80 B |
+| ParserBenchmarks | ParseCall            | Default                  | 13,548.74 ns | 16,465.807 ns | 902.546 ns | 0.9918 |    3120 B |
+| LexerBenchmarks  | Number               | InProcessNoEmitToolchain |     51.36 ns |     57.784 ns |   3.167 ns | 0.0255 |      80 B |
+| ParserBenchmarks | ParseNumber          | InProcessNoEmitToolchain |  7,326.85 ns |  5,815.001 ns | 318.740 ns | 0.6256 |    1976 B |
+| LexerBenchmarks  | Symbol               | InProcessNoEmitToolchain |     48.40 ns |     14.310 ns |   0.784 ns | 0.0255 |      80 B |
+| ParserBenchmarks | ParseAddition        | InProcessNoEmitToolchain | 15,173.27 ns |  4,116.691 ns | 225.650 ns | 0.9766 |    3120 B |
+| LexerBenchmarks  | NumberWithWhitespace | InProcessNoEmitToolchain |     48.64 ns |     39.949 ns |   2.190 ns | 0.0254 |      80 B |
+| ParserBenchmarks | ParseCall            | InProcessNoEmitToolchain | 15,351.45 ns |  6,604.946 ns | 362.039 ns | 0.9766 |    3120 B |

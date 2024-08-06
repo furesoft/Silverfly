@@ -65,7 +65,7 @@ public partial class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
         var file = new FileInfo($"{node.Path}.f");
 
         var content = File.ReadAllText(file.FullName);
-        var parsed = Parser.Parse<ExpressionGrammar>(content, file.FullName, useStatementsAtToplevel: true);
+        var parsed = new ExpressionGrammar().Parse(content, file.FullName);
         var rewritten = parsed.Tree.Accept(new RewriterVisitor());
 
         if (rewritten is BlockNode block)

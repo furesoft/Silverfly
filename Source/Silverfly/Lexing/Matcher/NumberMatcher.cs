@@ -35,6 +35,7 @@ public class NumberMatcher(bool allowHex, bool allowBin, Symbol floatingPointSym
     /// <param name="index">The current index in the lexer's input source.</param>
     /// <param name="column">The current column in the lexer's input source.</param>
     /// <param name="line">The current line in the lexer's input source.</param>
+    /// <param name="document"></param>
     /// <returns>
     /// A <see cref="Token"/> representing the matched number literal.
     /// </returns>
@@ -49,7 +50,7 @@ public class NumberMatcher(bool allowHex, bool allowBin, Symbol floatingPointSym
         var textWithoutSeperator = lexer.Document.Source[oldIndex..index].ToString()
             .Replace(seperatorSymbol.Name, "");
 
-        return new Token(PredefinedSymbols.Number, textWithoutSeperator.AsMemory(), line, oldColumn);
+        return new Token(PredefinedSymbols.Number, textWithoutSeperator.AsMemory(), line, oldColumn, lexer.Document);
     }
 
     /// <summary>
@@ -133,7 +134,8 @@ public class NumberMatcher(bool allowHex, bool allowBin, Symbol floatingPointSym
         do
         {
             lexer.Advance();
-        } while ((index < lexer.Document.Source.Length && charPredicate(lexer.Peek(0))) || lexer.IsMatch(seperatorSymbol.Name));
+        } while ((index < lexer.Document.Source.Length && charPredicate(lexer.Peek(0))) ||
+                 lexer.IsMatch(seperatorSymbol.Name));
     }
 
     /// <summary>
@@ -148,5 +150,5 @@ public class NumberMatcher(bool allowHex, bool allowBin, Symbol floatingPointSym
     /// </summary>
     /// <param name="c">The character to check.</param>
     /// <returns><c>true</c> if the character is a valid hexadecimal digit; otherwise, <c>false</c>.</returns>
-    private bool IsValidHexChar(char c) => char.IsDigit(c) || (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
+    private bool IsValidHexChar(char c) => char.IsDigit(c) || c is >= 'a' and <= 'z' || c is >= 'A' and <= 'Z';
 }

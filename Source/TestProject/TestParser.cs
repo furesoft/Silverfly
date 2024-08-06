@@ -6,33 +6,33 @@ namespace TestProject;
 
 public class TestParser : Parser
 {
-    protected override void InitParselets()
+    protected override void InitParser(ParserDefinition parserDefinition)
     {
-        Register(PredefinedSymbols.Name, new NameParselet());
+        parserDefinition.Register(PredefinedSymbols.Name, new NameParselet());
 
-        Register("(", new CallParselet(PrecedenceLevels.GetPrecedence("Call")));
+        parserDefinition.Register("(", new CallParselet(parserDefinition.PrecedenceLevels.GetPrecedence("Call")));
 
-        Ternary("?", ":", "Conditional");
-        InfixLeft(".", "Call");
+        parserDefinition.Ternary("?", ":", "Conditional");
+        parserDefinition.InfixLeft(".", "Call");
 
-        AddArithmeticOperators();
-        AddBitOperators();
-        AddLogicalOperators();
-        AddCommonLiterals();
-        AddCommonAssignmentOperators();
+        parserDefinition.AddArithmeticOperators();
+        parserDefinition.AddBitOperators();
+        parserDefinition.AddLogicalOperators();
+        parserDefinition.AddCommonLiterals();
+        parserDefinition.AddCommonAssignmentOperators();
 
-        Prefix("not");
-        Postfix("!");
+        parserDefinition.Prefix("not");
+        parserDefinition.Postfix("!");
 
-        InfixRight("^", "Exponent");
+        parserDefinition.InfixRight("^", "Exponent");
 
-        InfixLeft("->", "Product");
+        parserDefinition.InfixLeft("->", "Product");
 
-        Block(PredefinedSymbols.SOF, PredefinedSymbols.EOF,
-            seperator: PredefinedSymbols.Semicolon);
+        parserDefinition.Block(PredefinedSymbols.SOF, PredefinedSymbols.EOF,
+            separator: PredefinedSymbols.Semicolon);
     }
 
-    protected override void InitLexer(Lexer lexer)
+    protected override void InitLexer(LexerConfig lexer)
     {
         lexer.IgnoreWhitespace();
         lexer.Ignore("\r", "\r\n");

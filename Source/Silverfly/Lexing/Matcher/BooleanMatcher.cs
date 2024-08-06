@@ -43,6 +43,6 @@ public class BooleanMatcher(bool ignoreCasing = false) : IMatcher
             lexer.Advance("false".Length);
         }
 
-        return new(PredefinedSymbols.Boolean, lexer.Document.Source[oldIndex..index], line, oldColumn);
+        return new(PredefinedSymbols.Boolean, lexer.Document.Source[oldIndex..index], line, oldColumn, lexer.Document);
     }
 }

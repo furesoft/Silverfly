@@ -17,6 +17,7 @@ public class PredicateMatcher(Symbol symbol, Predicate<char> predicate) : IMatch
     /// <param name="index">The current index in the lexer's input source.</param>
     /// <param name="column">The current column in the lexer's input source.</param>
     /// <param name="line">The current line in the lexer's input source.</param>
+    /// <param name="document"></param>
     /// <returns>
     /// A <see cref="Token"/> representing the matched input.
     /// </returns>
@@ -27,7 +28,7 @@ public class PredicateMatcher(Symbol symbol, Predicate<char> predicate) : IMatch
 
         lexer.Advance();
 
-        return new(symbol, lexer.Document.Source[oldIndex..index], line, oldColumn);
+        return new(symbol, lexer.Document.Source[oldIndex..index], line, oldColumn, lexer.Document);
     }
 
     /// <summary>

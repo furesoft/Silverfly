@@ -6,7 +6,6 @@ public class Program
 {
     public static void Main(string[] args)
     {
-        BenchmarkRunner.Run<ParserBenchmarks>();
-        BenchmarkRunner.Run<LexerBenchmarks>();
+        BenchmarkRunner.Run(typeof(Program).Assembly, args: args);
     }
 }

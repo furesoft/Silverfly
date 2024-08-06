@@ -33,6 +33,7 @@ public class StringMatcher(Symbol leftStr, Symbol rightStr, bool allowEscapeChar
     /// <param name="index">The current index in the lexer's input source.</param>
     /// <param name="column">The current column in the lexer's input source.</param>
     /// <param name="line">The current line in the lexer's input source.</param>
+    /// <param name="document"></param>
     /// <returns>
     /// A <see cref="Token"/> representing the matched string input.
     /// </returns>
@@ -43,7 +44,9 @@ public class StringMatcher(Symbol leftStr, Symbol rightStr, bool allowEscapeChar
         var startSpan = new SourceSpan(line, column);
         lexer.Advance();
 
+        //StringBuilder is mandatory to build an escaped string
         var builder = new StringBuilder();
+
         while (lexer.IsNotAtEnd() && !lexer.IsMatch(rightStr.Name))
         {
             if (lexer.IsMatch("\\") && allowEscapeChars)
@@ -73,11 +76,13 @@ public class StringMatcher(Symbol leftStr, Symbol rightStr, bool allowEscapeChar
 
             lexer.Document.AddMessage(MessageSeverity.Error,
                 "String is not closed", new SourceRange(lexer.Document, startSpan, endSpan));
-            return Token.Invalid('\0', line, column);
+
+            return Token.Invalid('\0', line, column, lexer.Document);
         }
 
         lexer.Advance();
-        return new Token(PredefinedSymbols.String, builder.ToString().AsMemory(), line, oldColumn);
+
+        return new Token(PredefinedSymbols.String, builder.ToString().AsMemory(), line, oldColumn, lexer.Document);
     }
 
     /// <summary>
