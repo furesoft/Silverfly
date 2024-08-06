@@ -37,14 +37,16 @@ public class StringMatcher(Symbol leftStr, Symbol rightStr, bool allowEscapeChar
     /// <returns>
     /// A <see cref="Token"/> representing the matched string input.
     /// </returns>
-    public Token Build(Lexer lexer, ref int index, ref int column, ref int line, SourceDocument document)
+    public Token Build(Lexer lexer, ref int index, ref int column, ref int line)
     {
         var oldColumn = column;
 
         var startSpan = new SourceSpan(line, column);
         lexer.Advance();
 
+        //StringBuilder is mandatory to build an escaped string
         var builder = new StringBuilder();
+
         while (lexer.IsNotAtEnd() && !lexer.IsMatch(rightStr.Name))
         {
             if (lexer.IsMatch("\\") && allowEscapeChars)
@@ -74,11 +76,13 @@ public class StringMatcher(Symbol leftStr, Symbol rightStr, bool allowEscapeChar
 
             lexer.Document.AddMessage(MessageSeverity.Error,
                 "String is not closed", new SourceRange(lexer.Document, startSpan, endSpan));
-            return Token.Invalid('\0', line, column, document);
+
+            return Token.Invalid('\0', line, column, lexer.Document);
         }
 
         lexer.Advance();
-        return new Token(PredefinedSymbols.String, builder.ToString().AsMemory(), line, oldColumn, document);
+
+        return new Token(PredefinedSymbols.String, builder.ToString().AsMemory(), line, oldColumn, lexer.Document);
     }
 
     /// <summary>

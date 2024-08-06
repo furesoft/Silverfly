@@ -1,9 +1,5 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text.RegularExpressions;
-using Silverfly.Lexing;
-using Silverfly.Lexing.NameAdvancers;
 using Silverfly.Text;
 
 namespace Silverfly;
@@ -157,7 +153,7 @@ public sealed partial class Lexer
         {
             if (part.Match(this, c))
             {
-                token = part.Build(this, ref _index, ref _column, ref _line, Document);
+                token = part.Build(this, ref _index, ref _column, ref _line);
                 return true;
             }
         }

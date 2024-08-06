@@ -1,4 +1,3 @@
-using System.Collections.Immutable;
 using PrettyPrompt;
 using PrettyPrompt.Completion;
 using PrettyPrompt.Consoles;

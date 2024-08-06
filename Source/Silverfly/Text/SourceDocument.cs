@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Silverfly.Nodes;
 using Silverfly.Text.Formatting;
 
 namespace Silverfly.Text;
@@ -38,5 +37,10 @@ public class SourceDocument
     public void AddMessage(MessageSeverity messageSeverity, string message, SourceRange range)
     {
         Messages.Add(new Message(messageSeverity, message, range));
+    }
+
+    public void AddMessage(MessageSeverity messageSeverity, string message, int startLine, int startColumn, int endLine, int endColumn)
+    {
+        Messages.Add(new Message(messageSeverity, message, SourceRange.From(this, startLine, startColumn, endLine, endColumn)));
     }
 }

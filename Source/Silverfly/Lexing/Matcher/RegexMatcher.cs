@@ -10,22 +10,22 @@ public class RegexMatcher(Symbol type, Regex regex): IMatcher
         return lexer.IsMatch(regex);
     }
 
-    public Token Build(Lexer lexer, ref int index, ref int column, ref int line, SourceDocument document)
+    public Token Build(Lexer lexer, ref int index, ref int column, ref int line)
     {
         var oldColumn = column;
         var oldIndex = index;
         var oldLine = line;
 
-        var matches = regex.EnumerateMatches(document.Source.Span, index);
+        var matches = regex.EnumerateMatches(lexer.Document.Source.Span, index);
 
         matches.MoveNext();
         if (matches.Current.Length == 0)
         {
-            document.AddMessage(MessageSeverity.Error, "Cannot match regex pattern", SourceRange.From(document, oldLine, oldColumn, line, column));
+            lexer.Document.AddMessage(MessageSeverity.Error, "Cannot match regex pattern", oldLine, oldColumn, line, column);
         }
         
         lexer.Advance(matches.Current.Length);
 
-        return new(type, lexer.Document.Source[oldIndex..index], line, oldColumn, document);
+        return new(type, lexer.Document.Source[oldIndex..index], line, oldColumn, lexer.Document);
     }
 }

@@ -1,5 +1,4 @@
 using System;
-using Silverfly.Text;
 
 namespace Silverfly.Lexing.Matcher;
 
@@ -43,7 +42,7 @@ public class EnumMatcher<T>(string symbol) : IMatcher
     /// <returns>
     /// A <see cref="Token"/> representing the matched enum value.
     /// </returns>
-    public Token Build(Lexer lexer, ref int index, ref int column, ref int line, SourceDocument document)
+    public Token Build(Lexer lexer, ref int index, ref int column, ref int line)
     {
         var oldColumn = column;
         var oldIndex = index;
@@ -57,6 +56,6 @@ public class EnumMatcher<T>(string symbol) : IMatcher
             }
         }
 
-        return new(symbol, lexer.Document.Source[oldIndex..index], line, oldColumn, document);
+        return new(symbol, lexer.Document.Source[oldIndex..index], line, oldColumn, lexer.Document);
     }
 }

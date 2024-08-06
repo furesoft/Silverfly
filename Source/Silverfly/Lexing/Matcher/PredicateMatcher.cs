@@ -1,6 +1,5 @@
 
 using System;
-using Silverfly.Text;
 
 namespace Silverfly.Lexing.Matcher;
 
@@ -22,14 +21,14 @@ public class PredicateMatcher(Symbol symbol, Predicate<char> predicate) : IMatch
     /// <returns>
     /// A <see cref="Token"/> representing the matched input.
     /// </returns>
-    public Token Build(Lexer lexer, ref int index, ref int column, ref int line, SourceDocument document)
+    public Token Build(Lexer lexer, ref int index, ref int column, ref int line)
     {
         var oldColumn = column;
         var oldIndex = index;
 
         lexer.Advance();
 
-        return new(symbol, lexer.Document.Source[oldIndex..index], line, oldColumn, document);
+        return new(symbol, lexer.Document.Source[oldIndex..index], line, oldColumn, lexer.Document);
     }
 
     /// <summary>

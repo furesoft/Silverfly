@@ -1,5 +1,4 @@
 using System;
-using Silverfly.Text;
 
 namespace Silverfly.Lexing.Matcher;
 
@@ -40,7 +39,7 @@ public class NumberMatcher(bool allowHex, bool allowBin, Symbol floatingPointSym
     /// <returns>
     /// A <see cref="Token"/> representing the matched number literal.
     /// </returns>
-    public Token Build(Lexer lexer, ref int index, ref int column, ref int line, SourceDocument document)
+    public Token Build(Lexer lexer, ref int index, ref int column, ref int line)
     {
         var oldColumn = column;
         var oldIndex = index;
@@ -51,7 +50,7 @@ public class NumberMatcher(bool allowHex, bool allowBin, Symbol floatingPointSym
         var textWithoutSeperator = lexer.Document.Source[oldIndex..index].ToString()
             .Replace(seperatorSymbol.Name, "");
 
-        return new Token(PredefinedSymbols.Number, textWithoutSeperator.AsMemory(), line, oldColumn, document);
+        return new Token(PredefinedSymbols.Number, textWithoutSeperator.AsMemory(), line, oldColumn, lexer.Document);
     }
 
     /// <summary>
@@ -135,7 +134,8 @@ public class NumberMatcher(bool allowHex, bool allowBin, Symbol floatingPointSym
         do
         {
             lexer.Advance();
-        } while ((index < lexer.Document.Source.Length && charPredicate(lexer.Peek(0))) || lexer.IsMatch(seperatorSymbol.Name));
+        } while ((index < lexer.Document.Source.Length && charPredicate(lexer.Peek(0))) ||
+                 lexer.IsMatch(seperatorSymbol.Name));
     }
 
     /// <summary>
@@ -150,5 +150,5 @@ public class NumberMatcher(bool allowHex, bool allowBin, Symbol floatingPointSym
     /// </summary>
     /// <param name="c">The character to check.</param>
     /// <returns><c>true</c> if the character is a valid hexadecimal digit; otherwise, <c>false</c>.</returns>
-    private bool IsValidHexChar(char c) => char.IsDigit(c) || (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
+    private bool IsValidHexChar(char c) => char.IsDigit(c) || c is >= 'a' and <= 'z' || c is >= 'A' and <= 'Z';
 }

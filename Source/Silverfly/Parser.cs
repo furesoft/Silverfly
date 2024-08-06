@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Silverfly.Nodes;
-using Silverfly.Parselets;
-using Silverfly.Parselets.Operators;
 using Silverfly.Text;
 
 namespace Silverfly;
@@ -266,11 +264,7 @@ public abstract partial class Parser
     /// <returns>The next <see cref="Token"/>.</returns>
     public Token Consume()
     {
-        // Make sure we've read the token.
-        var token = LookAhead(0);
-        _read.Remove(token);
-
-        return token;
+        return _lexer.Next();
     }
 
     /// <summary>
