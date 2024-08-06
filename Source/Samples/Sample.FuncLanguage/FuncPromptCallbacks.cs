@@ -23,12 +23,14 @@ internal class FuncPromptCallbacks : PromptCallbacks
 
     protected override async Task<(IReadOnlyList<OverloadItem>, int ArgumentIndex)> GetOverloadsAsync(string text, int caret, CancellationToken cancellationToken)
     {
+        /*
         if (text == "print(")
         {
             var item = new OverloadItem("print(value)", "prints any value to the console", "returns unit", [new OverloadItem.Parameter("src", "The value to print")]);
 
             return ([item], 0);
         }
+        */
 
         return (Array.Empty<OverloadItem>(), 0);
     }
@@ -49,7 +51,7 @@ internal class FuncPromptCallbacks : PromptCallbacks
             return Task.FromResult((IReadOnlyList<CompletionItem>)Array.Empty<CompletionItem>());
         }
 
-        if (!scope.IsRoot)
+        if (scope.IsRoot)
         {
             items = scope.Bindings.ToList();//.Where(_ => !_.StartsWith("'") && !_.StartsWith("__"));
         }

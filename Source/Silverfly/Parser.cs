@@ -263,7 +263,11 @@ public abstract partial class Parser
     /// <returns>The next <see cref="Token"/>.</returns>
     public Token Consume()
     {
-        return _lexer.Next();
+        var token = LookAhead(0);
+
+        _read.RemoveAt(0);
+
+        return token;
     }
 
     /// <summary>
