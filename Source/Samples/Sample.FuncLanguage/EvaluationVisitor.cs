@@ -256,10 +256,10 @@ public partial class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
             foreach (var anotationNode in an.Annotations)
             {
                 var annotation = new Annotation
-                {
-                    Name = ((NameNode)anotationNode.FunctionExpr).Name,
-                    Args = anotationNode.Arguments.Select(n => Visit(n, scope)).ToList()
-                };
+                (
+                    ((NameNode)anotationNode.FunctionExpr).Name,
+                    anotationNode.Arguments.Select(n => Visit(n, scope)).ToList()
+                );
 
                 value.Annotations.Add(annotation);
             }

@@ -2,8 +2,6 @@
 
 namespace Silverfly.Sample.Func;
 
-public class Annotation
+public record Annotation(string Name, List<Value> Args)
 {
-    public string Name { get; set; }
-    public List<Value> Args { get; set; }
 }

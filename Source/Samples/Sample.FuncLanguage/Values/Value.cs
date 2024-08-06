@@ -71,12 +71,13 @@ public abstract record Value()
             double d => new NumberValue(d),
             bool b => new BoolValue(b),
             List<Value> lv => new ListValue(lv),
-            List<object> lo => new ListValue(lo.Select(v => Marshal(v)).ToList()),
+            List<object> lo => new ListValue(lo.Select(Marshal).ToList()),
             null => UnitValue.Shared,
             _ => null
         };
     }
 
+    //Todo: implement method marshalling
     public static Value From(object o)
     {
         var marshalled = Marshal(o);

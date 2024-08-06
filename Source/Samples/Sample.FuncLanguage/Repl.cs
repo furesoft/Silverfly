@@ -40,6 +40,8 @@ public static class Repl
             scope.Define("members", new ListValue(members));
             scope.Define("annotations", Value.From(x.Annotations));
 
+            //todo: add 'hasAnnotation" function to scope
+
             return new ModuleValue(scope);
         });
 
