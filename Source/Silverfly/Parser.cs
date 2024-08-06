@@ -8,7 +8,6 @@ namespace Silverfly;
 //Todo: Add Synchronisation Mechanism For Better Error Reporting
 public abstract partial class Parser
 {
-    
     private Lexer _lexer;
     private LexerConfig _lexerConfig = new();
     private ParserDefinition _parserDefinition = new();
