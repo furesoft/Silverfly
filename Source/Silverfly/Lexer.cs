@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Silverfly.Lexing;
 using Silverfly.Lexing.NameAdvancers;
 using Silverfly.Text;
@@ -15,6 +16,8 @@ public sealed partial class Lexer
     public LexerConfig Config;
     private int _index;
     private int _line = 1, _column = 1;
+
+    public int CurrentIndex => _index;
 
     public SourceDocument Document { get; private set; }
 
@@ -68,6 +71,13 @@ public sealed partial class Lexer
         var comparisonType = ignoreCase ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal;
 
         return nameSpan.CompareTo(documentSliceSpan, comparisonType) == 0;
+    }
+    
+    public bool IsMatch(Regex regex)
+    {
+        var documentSlice = Document.Source.Slice(_index, Document.Source.Length - _index);
+            
+        return regex.IsMatch(documentSlice.Span);
     }
 
     public Token Next()

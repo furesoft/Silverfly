@@ -15,6 +15,10 @@ class ExpressionGrammar : Parser
 
         lexer.Ignore(new SingleLineCommentIgnoreMatcher("//"));
         lexer.Ignore(new MultiLineCommentIgnoreMatcher("/*", "*/"));
+        
+        lexer.MatchPattern("#test", "%.*%");
+        
+        lexer.IgnorePattern(@"\?");
     }
 
     protected override void InitParser(ParserDefinition parserDefinition)

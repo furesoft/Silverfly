@@ -92,6 +92,11 @@ internal class FuncPromptCallbacks : PromptCallbacks
     {
         if (node is BlockNode block)
         {
+            if (block.Children.Count == 0)
+            {
+                return scope;
+            }
+            
             return GetScope(block.Children.First(), scope);
         }
         

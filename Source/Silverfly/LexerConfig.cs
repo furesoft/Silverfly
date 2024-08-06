@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Silverfly.Lexing;
 using Silverfly.Lexing.IgnoreMatcher;
 using Silverfly.Lexing.Matcher;
@@ -84,6 +85,34 @@ public class LexerConfig
         AddMatcher(new NumberMatcher(allowHex, allowBin, floatingPointSymbol ?? PredefinedSymbols.Dot,
             separatorSymbol ?? PredefinedSymbols.Underscore));
     }
+    
+    /// <summary>
+    /// Adds a new regular expression matcher for a specified symbol type.
+    /// </summary>
+    /// <param name="type">The symbol type to match against.</param>
+    /// <param name="regex">The regular expression to use for matching.</param>
+    /// <remarks>
+    /// This method creates a new instance of <see cref="RegexMatcher"/> with the given symbol type
+    /// and regular expression, and adds it to the matchers collection.
+    /// </remarks>
+    public void MatchPattern(Symbol type, Regex regex)
+    {
+        AddMatcher(new RegexMatcher(type, regex));
+    }
+    
+    /// <summary>
+    /// Adds a new regular expression matcher for a specified symbol type.
+    /// </summary>
+    /// <param name="type">The symbol type to match against.</param>
+    /// <param name="pattern">The regular expression pattern to use for matching.</param>
+    /// <remarks>
+    /// This method creates a new instance of <see cref="RegexMatcher"/> with the given symbol type
+    /// and regular expression pattern, and adds it to the matchers collection.
+    /// </remarks>
+    public void MatchPattern(Symbol type, string pattern)
+    {
+        MatchPattern(type, new Regex(pattern));
+    }
 
     /// <summary>
     /// Adds symbols to the lexer for tokenization.
@@ -113,6 +142,32 @@ public class LexerConfig
     public void Ignore(char c)
     {
         Ignore(new PunctuatorIgnoreMatcher(c.ToString()));
+    }
+
+    /// <summary>
+    /// Ignores a pattern by creating a regular expression matcher to exclude it.
+    /// </summary>
+    /// <param name="pattern">The regular expression pattern to be ignored.</param>
+    /// <remarks>
+    /// This method converts the provided pattern into a <see cref="Regex"/> object and 
+    /// calls the <see cref="IgnorePattern(Regex)"/> method to handle the exclusion.
+    /// </remarks>
+    public void IgnorePattern(string pattern)
+    {
+        IgnorePattern(new Regex(pattern));
+    }
+
+    /// <summary>
+    /// Ignores a pattern by creating a regular expression matcher to exclude it.
+    /// </summary>
+    /// <param name="regex">The regular expression to be ignored.</param>
+    /// <remarks>
+    /// This method creates a new instance of <see cref="RegexIgnoreMatcher"/> with the given 
+    /// regular expression and adds it to the ignore list.
+    /// </remarks>
+    public void IgnorePattern(Regex regex)
+    {
+        Ignore(new RegexIgnoreMatcher(regex));
     }
 
     /// <summary>
