@@ -38,6 +38,7 @@ public static class Repl
             }
 
             scope.Define("members", new ListValue(members));
+            scope.Define("annotations", Value.From(x.Annotations));
 
             return new ModuleValue(scope);
         });

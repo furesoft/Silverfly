@@ -17,7 +17,7 @@ public abstract class TaggedNodeVisitor<TReturn, TTag> : NodeVisitorBase
             return VisitUnknown(node, tag);
         }
 
-        return AfterVisit((TReturn)InvokeVisitor(node, tag));
+        return AfterVisit(node, (TReturn)InvokeVisitor(node, tag));
     }
 
     public void For<TNode>(Func<TNode, TTag, TReturn> visitor)
@@ -27,7 +27,7 @@ public abstract class TaggedNodeVisitor<TReturn, TTag> : NodeVisitorBase
     }
 
     protected virtual TReturn VisitUnknown(AstNode node, TTag tag) => default;
-    protected virtual TReturn AfterVisit(TReturn node) => node;
+    protected virtual TReturn AfterVisit(AstNode node, TReturn value) => value;
 }
 
 public abstract class TaggedNodeVisitor<TTag> : NodeVisitorBase

@@ -141,6 +141,11 @@ public partial class {className}
                 return false;
         }
 
+        if (method.IsAbstract || method.IsOverride)
+        {
+            return false;
+        }
+
         return true;
     }
 

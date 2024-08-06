@@ -187,18 +187,27 @@ public partial class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
     {
         if (binding.Parameters.Count == 0)
         {
-            scope.Define(binding.Name.Text.ToString(), Visit(binding.Value, scope));
+            var definition = Visit(binding.Value, scope);
+            AddAnnotations(binding, definition, scope);
+
+            scope.Define(binding.Name.Text.ToString(), definition);
         }
         else
         {
-            scope.Define(binding.Name.Text.ToString(), args =>
+            Func<Value[],Value> func = args =>
             {
                 CallAnnotationRef("enter", binding, scope, new StringValue(binding.Name.Text.ToString()));
                 var res = CallFunction(binding.Parameters, args, binding.Value);
+
                 CallAnnotationRef("exit", binding, scope, new StringValue(binding.Name.Text.ToString()), res);
 
                 return res;
-            });
+            };
+
+            var value = new LambdaValue(func, null, true);
+            AddAnnotations(binding, value, scope);
+
+            scope.Define(binding.Name.Text.ToString(), value);
         }
 
         return UnitValue.Shared;
@@ -237,6 +246,24 @@ public partial class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
             CallNode c => Visit(c, scope),
             _ => VisitOtherFunction(call, scope)
         };
+    }
+
+    [VisitorIgnore]
+    void AddAnnotations(AstNode node, Value value, Scope scope)
+    {
+        if (node is AnnotatedNode an)
+        {
+            foreach (var anotationNode in an.Annotations)
+            {
+                var annotation = new Annotation
+                {
+                    Name = ((NameNode)anotationNode.FunctionExpr).Name,
+                    Args = anotationNode.Arguments.Select(n => Visit(n, scope)).ToList()
+                };
+
+                value.Annotations.Add(annotation);
+            }
+        }
     }
 
     [VisitorIgnore]
