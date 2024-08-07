@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Silverfly.Text.Formatting.Themes;
 
@@ -9,7 +10,7 @@ namespace Silverfly.Text.Formatting;
 /// <summary>
 /// Provides methods to format and display compiler messages with syntax highlighting and theming.
 /// </summary>
-public static class MessageFormatter
+public partial class MessageFormatter(Parser parser)
 {
     internal static FormatterTheme Theme = new DefaultFormatterTheme();
 
@@ -22,21 +23,21 @@ public static class MessageFormatter
         Theme = theme;
     }
 
-    static void Write(string src, ConsoleColor color)
+    void Write(string src, ConsoleColor color)
     {
         Console.ForegroundColor = color;
         Console.Write(src);
         Theme.Reset();
     }
 
-    static void WriteLine(string src, ConsoleColor color)
+    void WriteLine(string src, ConsoleColor color)
     {
         Console.ForegroundColor = color;
         Console.WriteLine(src);
         Theme.Reset();
     }
 
-    internal static void PrintError(CompilerError error)
+    internal void PrintError(CompilerError error)
     {
         Console.BackgroundColor = Theme.Background;
 
@@ -64,7 +65,7 @@ public static class MessageFormatter
         Console.WriteLine("    ");
     }
 
-    private static void WriteUnderline(CompilerError error)
+    private void WriteUnderline(CompilerError error)
     {
         if (!error.HighlightLines.Contains(error.Message.Range.Start.Line))
         {
@@ -79,7 +80,7 @@ public static class MessageFormatter
         WriteLine($"    |{underline}^", Theme.Underline);
     }
 
-    private static void WriteMessage(CompilerError error)
+    private void WriteMessage(CompilerError error)
     {
         var severityColor = GetColorForSeverity(error.Message.Severity);
         Write("    | ", Theme.Border);
@@ -88,7 +89,7 @@ public static class MessageFormatter
         WriteLine($": {error.Message.Text}", Theme.Foreground);
     }
 
-    private static ConsoleColor GetColorForSeverity(MessageSeverity severity)
+    private ConsoleColor GetColorForSeverity(MessageSeverity severity)
     {
         return severity switch
         {
@@ -101,15 +102,18 @@ public static class MessageFormatter
     }
 
     //Todo: add loading keywords from grammar
-    private static void WriteHighlightedSource(string line)
+    private void WriteHighlightedSource(string line)
     {
         string[] keywords = ["using", "class", "static", "void", "Console", "WriteLine"];
 
         var currentIndex = 0;
+        var openBrackets = new Stack<ConsoleColor>();
+
         while (currentIndex < line.Length)
         {
             var isKeyword = false;
 
+            // Highlight keywords
             foreach (var keyword in keywords)
             {
                 if (!line[currentIndex..].StartsWith(keyword) ||
@@ -118,9 +122,8 @@ public static class MessageFormatter
                 {
                     continue;
                 }
-
-                Console.ForegroundColor = Theme.Keyword;
-                Console.Write(keyword);
+                
+                Write(keyword, Theme.Keyword);
 
                 currentIndex += keyword.Length;
                 isKeyword = true;
@@ -132,6 +135,7 @@ public static class MessageFormatter
                 continue;
             }
 
+            // Highlight string literals
             if (line[currentIndex] == '"')
             {
                 var closingQuoteIndex = line.IndexOf('"', currentIndex + 1);
@@ -145,9 +149,11 @@ public static class MessageFormatter
 
                 currentIndex = closingQuoteIndex + 1;
             }
+            // Highlight numbers
             else
             {
-                var match = Regex.Match(line[currentIndex..], @"^(0x[0-9A-Fa-f]+|0b[01]+|\d+)");
+                var match = NumberRegex().Match(line[currentIndex..]);
+                
                 if (match.Success)
                 {
                     Console.ForegroundColor = Theme.Number;
@@ -155,10 +161,38 @@ public static class MessageFormatter
 
                     currentIndex += match.Value.Length;
                 }
+                // Highlight parentheses and braces
+                else if (IsOpenBracket(line, currentIndex))
+                {
+                    var color = GetNextBracketColor();
+                    openBrackets.Push(color);
+
+                    Console.ForegroundColor = color;
+                    Console.Write(line[currentIndex]);
+                    currentIndex++;
+                }
+                else if (IsClosingBracket(line, currentIndex))
+                {
+                    if (openBrackets.Count > 0)
+                    {
+                        var openingBracket = openBrackets.Pop();
+
+                        // Highlight matching pairs
+                        Console.ForegroundColor = openingBracket;
+                        Console.Write(line[currentIndex]);
+                    }
+                    else
+                    {
+                        // No matching opening bracket, just print it normally
+                        Console.Write(line[currentIndex]);
+                    }
+
+                    currentIndex++;
+                }
                 else
                 {
+                    // Default color
                     Theme.Reset();
-
                     Console.Write(line[currentIndex]);
                     currentIndex++;
                 }
@@ -166,7 +200,25 @@ public static class MessageFormatter
         }
 
         Console.WriteLine();
-
         Theme.Reset();
     }
+
+    private bool IsClosingBracket(string line, int currentIndex)
+    {
+        return line[currentIndex] == ')' || line[currentIndex] == '}' || line[currentIndex] == '>' || line[currentIndex] == '[';
+    }
+
+    private bool IsOpenBracket(string line, int currentIndex)
+    {
+        return line[currentIndex] == '(' || line[currentIndex] == '{' || line[currentIndex] == '<' || line[currentIndex] == ']';
+    }
+
+    private int _currentBracketColorIndex = 0;
+    private ConsoleColor GetNextBracketColor()
+    {
+        return Theme.BracketColors[_currentBracketColorIndex++ % Theme.BracketColors.Length];
+    }
+
+    [GeneratedRegex(@"^(0x[0-9A-Fa-f]+|0b[01]+|\d+)")]
+    private static partial Regex NumberRegex();
 }

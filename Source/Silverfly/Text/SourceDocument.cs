@@ -25,19 +25,6 @@ public class SourceDocument
     public List<Message> Messages { get; } = [];
 
     /// <summary>
-    /// Prints all messages stored in the message list using the <see cref="MessageFormatter"/>.
-    /// </summary>
-    public void PrintMessages()
-    {
-        foreach (var message in Messages)
-        {
-            MessageFormatter.PrintError(CompilerError.FromMessage(message));
-        }
-
-        Console.ResetColor();
-    }
-
-    /// <summary>
     /// Adds a new message to the message list with the specified severity, text, and source range.
     /// </summary>
     /// <param name="messageSeverity">The severity of the message.</param>

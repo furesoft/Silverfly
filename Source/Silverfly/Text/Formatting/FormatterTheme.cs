@@ -19,6 +19,15 @@ public abstract class FormatterTheme
     public ConsoleColor Number { get; protected init; }
     public ConsoleColor Keyword { get; protected init; }
     public ConsoleColor String { get; protected init; }
+    
+    public ConsoleColor[] BracketColors { get; protected init; } =
+    [
+        ConsoleColor.Cyan,
+        ConsoleColor.Magenta,
+        ConsoleColor.Yellow,
+        ConsoleColor.DarkCyan,
+        ConsoleColor.Red
+    ];
 
     public void Reset()
     {

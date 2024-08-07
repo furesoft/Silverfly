@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Silverfly.Nodes;
 using Silverfly.Text;
+using Silverfly.Text.Formatting;
 
 namespace Silverfly;
 
@@ -13,6 +14,7 @@ public abstract partial class Parser
     private ParserDefinition _parserDefinition = new();
     public ParserOptions Options = new(true, true);
     private readonly List<Token> _read = [];
+    public MessageFormatter Formatter;
 
     /// <summary>
     /// Gets the <see cref="SourceDocument"/> associated with the lexer.
@@ -59,7 +61,7 @@ public abstract partial class Parser
     /// <param name="source">The source code to parse as a string.</param>
     /// <param name="filename">The name of the file from which the source code was read. Default is "synthetic.dsl".</param>
     /// <returns>The parsed translation unit representing the source code.</returns>
-    public TranslationUnit Parse(string source, string filename = "syntethic.dsl")
+    public TranslationUnit Parse(string source, string filename = "synthetic.dsl")
     {
         return Parse(source.AsMemory(), filename);
     }
@@ -77,6 +79,8 @@ public abstract partial class Parser
         AddLexerSymbols(_lexer, _parserDefinition._statementParselets);
 
         _lexer.Config.OrderSymbols();
+
+        Formatter = new(this);
     }
 
     /// <summary>
@@ -85,7 +89,7 @@ public abstract partial class Parser
     /// <param name="source">The source code to parse as a <see cref="ReadOnlyMemory{char}"/>.</param>
     /// <param name="filename">The name of the file from which the source code was read. Default is "synthetic.dsl".</param>
     /// <returns>The parsed translation unit representing the source code.</returns>
-    public TranslationUnit Parse(ReadOnlyMemory<char> source, string filename = "syntethic.dsl")
+    public TranslationUnit Parse(ReadOnlyMemory<char> source, string filename = "synthetic.dsl")
     {
         _lexer.SetSource(source, filename);
 
@@ -326,6 +330,19 @@ public abstract partial class Parser
 
         // Get the queued token.
         return _read[(int)distance];
+    }
+    
+    /// <summary>
+    /// Prints all messages stored in the message list using the <see cref="MessageFormatter"/>.
+    /// </summary>
+    public void PrintMessages()
+    {
+        foreach (var message in Document.Messages)
+        {
+            Formatter.PrintError(CompilerError.FromMessage(message));
+        }
+
+        Console.ResetColor();
     }
 
     private int GetBindingPower()

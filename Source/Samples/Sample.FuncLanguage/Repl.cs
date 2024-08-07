@@ -1,5 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-using PrettyPrompt;
+﻿using PrettyPrompt;
 using PrettyPrompt.Consoles;
 using PrettyPrompt.Highlighting;
 using Silverfly.Sample.Func.Values;
@@ -66,32 +65,34 @@ public static class Repl
                 selectedCompletionItemBackground: AnsiColor.Rgb(30, 30, 30),
                 selectedTextBackground: AnsiColor.Rgb(20, 61, 102)));
 
+        var parser = new ExpressionGrammar();
         while (true)
         {
             var response = await prompt.ReadLineAsync();
-            if (response.IsSuccess) // false if user cancels, i.e. ctrl-c
+
+            if (!response.IsSuccess) // false if user cancels, i.e. ctrl-c
             {
-                if (response.Text == "exit") break;
-
-                var parsed = new ExpressionGrammar().Parse(response.Text, "repl.f");
-                var rewritten = parsed.Tree.Accept(new RewriterVisitor());
-
-                //Console.WriteLine(rewritten.Accept(new PrintVisitor()));
-
-                if (!parsed.Document.Messages.Any())
-                {
-                    var evaluated = rewritten.Accept(new EvaluationVisitor(), Scope.Root);
-
-                    if (evaluated is NameValue n)
-                    {
-                        rewritten.AddMessage(MessageSeverity.Error, $"Symbol '{n.Name}' not defined");
-                    }
-                }
-
-                parsed.Document.PrintMessages();
-
-                //Console.WriteLine("> " + evaluated);
+                continue;
             }
+
+            if (response.Text == "exit") break;
+                
+            var parsed = parser.Parse(response.Text, "repl.f");
+            var rewritten = parsed.Tree.Accept(new RewriterVisitor());
+
+            //Console.WriteLine(rewritten.Accept(new PrintVisitor()));
+
+            if (parsed.Document.Messages.Count == 0)
+            {
+                var evaluated = rewritten.Accept(new EvaluationVisitor(), Scope.Root);
+
+                if (evaluated is NameValue n)
+                {
+                    rewritten.AddMessage(MessageSeverity.Error, $"Symbol '{n.Name}' not defined");
+                }
+            }
+
+            parser.PrintMessages();
         }
     }
 }
