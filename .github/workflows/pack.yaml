@@ -85,7 +85,7 @@ jobs:
           message: "Update version to ${{ env.RELEASE_VERSION }}"
           push: true
           new_branch: update-version
-          add: '["Source/Silverfly/Silverfly.csproj", "Source/Silverfly.Testing/Silverfly.Testing.csproj", "Source/Silverfly.Generator/Silverfly.Generator.csproj", "Source/Silverfly.Repl/Silverfly.Repl.csproj", "Source/Samples/Sample.FuncLanguage.csproj"]'
+          add: '["Source/Silverfly/Silverfly.csproj", "Source/Silverfly.Testing/Silverfly.Testing.csproj", "Source/Silverfly.Generator/Silverfly.Generator.csproj", "Source/Silverfly.Repl/Silverfly.Repl.csproj", "Source/Samples/Sample.FuncLanguage/Sample.FuncLanguage.csproj"]'
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v5
