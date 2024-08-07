@@ -14,6 +14,14 @@ public abstract partial class Parser
     public ParserOptions Options = new(true, true);
     private readonly List<Token> _read = [];
 
+    /// <summary>
+    /// Gets the <see cref="SourceDocument"/> associated with the lexer.
+    /// </summary>
+    /// <value>The <see cref="SourceDocument"/> that the lexer is currently working with.</value>
+    /// <remarks>
+    /// This property provides access to the <see cref="SourceDocument"/> instance associated with the lexer.
+    /// It allows retrieval of the document's contents and messages.
+    /// </remarks>
     public SourceDocument Document => _lexer.Document;
 
     /// <summary>
@@ -97,7 +105,7 @@ public abstract partial class Parser
     {
         foreach (var prefix in dict)
         {
-            if (!lexer.IsPunctuator(prefix.Key.Name) && !prefix.Key.Name.StartsWith('#'))
+            if (!lexer.IsPunctuator(prefix.Key.Name) && !lexer.IsSpecialToken(prefix.Key.Name))
             {
                 _lexerConfig.AddSymbol(prefix.Key.Name);
             }
@@ -158,7 +166,24 @@ public abstract partial class Parser
         return Parse(0);
     }
 
+    /// <summary>
+    /// Initializes the lexer with the specified configuration.
+    /// </summary>
+    /// <param name="lexer">The configuration settings for initializing the lexer.</param>
+    /// <remarks>
+    /// This abstract method must be implemented in derived classes to provide custom initialization logic for the lexer.
+    /// The <paramref name="lexer"/> parameter contains the configuration settings that define how the lexer should be set up.
+    /// </remarks>
     protected abstract void InitLexer(LexerConfig lexer);
+    
+    /// <summary>
+    /// Initializes the parser with the specified parser definition.
+    /// </summary>
+    /// <param name="parserDefinition">The definition settings for initializing the parser.</param>
+    /// <remarks>
+    /// This abstract method must be implemented in derived classes to provide custom initialization logic for the parser.
+    /// The <paramref name="parserDefinition"/> parameter contains the settings and rules that define how the parser should be configured.
+    /// </remarks>
     protected abstract void InitParser(ParserDefinition parserDefinition);
 
     /// <summary>

@@ -81,7 +81,7 @@ public readonly struct SourceRange(SourceDocument document, SourceSpan start, So
         return new string(source[startIdx..endIdx]);
     }
 
-    public string GetLineText()
+    internal string GetLineText()
     {
         var source = Document.Source.Span;
         var startLine = Start.Line - 1;

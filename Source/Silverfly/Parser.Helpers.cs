@@ -36,7 +36,7 @@ public partial class Parser
 
         if (!IsMatch(terminator))
         {
-            Document.AddMessage(MessageSeverity.Error, "Is not terminated", token.GetRange());
+            Document.AddMessage(MessageSeverity.Error, $"{terminator} is missing", token.GetRange());
         }
 
         Consume();

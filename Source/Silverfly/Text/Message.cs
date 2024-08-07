@@ -74,6 +74,6 @@ public sealed class Message(MessageSeverity severity, string text, SourceRange r
     {
         if (Document == null) return Text;
 
-        return $"{Document.Filename}:{Range.Start.Line}:{Range.Start.Column} {Text}";
+        return $"{Document.Filename}:{Range.Start.Line}:{Range.Start.Column} {Severity}: {Text}";
     }
 }

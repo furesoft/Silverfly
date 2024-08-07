@@ -4,10 +4,17 @@ using Silverfly.Text.Formatting.Themes;
 
 namespace Silverfly.Text.Formatting;
 
+/// <summary>
+/// Provides methods to format and display compiler messages with syntax highlighting and theming.
+/// </summary>
 public static class MessageFormatter
 {
     internal static FormatterTheme Theme = new DefaultFormatterTheme();
 
+    /// <summary>
+    /// Sets the theme for highlighting source code.
+    /// </summary>
+    /// <param name="theme">The new theme to be used.</param>
     public static void SetTheme(FormatterTheme theme)
     {
         Theme = theme;
@@ -91,7 +98,8 @@ public static class MessageFormatter
         };
     }
 
-    static void WriteHighlightedSource(string line)
+    //Todo: add loading keywords from grammar
+    private static void WriteHighlightedSource(string line)
     {
         string[] keywords = ["using", "class", "static", "void", "Console", "WriteLine"];
 

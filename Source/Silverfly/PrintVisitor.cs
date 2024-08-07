@@ -6,6 +6,14 @@ using Silverfly.Nodes.Operators;
 
 namespace Silverfly;
 
+/// <summary>
+/// A visitor class that processes nodes in an abstract syntax tree (AST) and produces a string representation of each node.
+/// </summary>
+/// <remarks>
+/// This class derives from <see cref="NodeVisitor{T}"/> with <typeparamref name="string"/> as the return type.
+/// It provides implementations for visiting different types of nodes in the AST and generates a string output for each node.
+/// The actual behavior and string formatting are defined in the methods of this class that override the base class methods.
+/// </remarks>
 public class PrintVisitor : NodeVisitor<string>
 {
     public PrintVisitor()
@@ -46,20 +54,20 @@ public class PrintVisitor : NodeVisitor<string>
 
             if (property.PropertyType == typeof(Token))
             {
-                builder.Append($" {property.Name}={(Token)value}");
+                builder.Append($" {property.Name}={(Token)value!}");
                 continue;
             }
 
             if (property.PropertyType == typeof(ImmutableList<AstNode>))
             {
                 var list = (ImmutableList<AstNode>)value;
-                builder.Append($" {property.Name}={string.Join(',', list.Select(Visit))}");
+                builder.Append($" {property.Name}={string.Join(',', list!.Select(Visit))}");
                 continue;
             }
 
             if (property.PropertyType == typeof(Token))
             {
-                builder.Append($" {property.Name}={(Token)property.GetValue(node)}");
+                builder.Append($" {property.Name}={(Token)property.GetValue(node)!}");
                 continue;
             }
 

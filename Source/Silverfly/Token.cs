@@ -49,13 +49,58 @@ public readonly struct Token(Symbol type, ReadOnlyMemory<char> text, int line, i
 
     public override string ToString() => Text.ToString();
 
+    /// <summary>
+    /// Gets the starting <see cref="SourceSpan"/> of the current text segment.
+    /// </summary>
+    /// <returns>
+    /// A <see cref="SourceSpan"/> representing the starting position of the current text segment, based on the current line and column.
+    /// </returns>
+    /// <remarks>
+    /// This method creates a <see cref="SourceSpan"/> object that represents the starting position of the text segment.
+    /// The starting position is defined by the current line and column properties.
+    /// </remarks>
     public SourceSpan GetSourceSpanStart() => new(Line, Column);
 
+    /// <summary>
+    /// Gets the ending <see cref="SourceSpan"/> of the current text segment.
+    /// </summary>
+    /// <returns>
+    /// A <see cref="SourceSpan"/> representing the ending position of the current text segment, calculated based on the current line, column, and the length of the text.
+    /// </returns>
+    /// <remarks>
+    /// This method creates a <see cref="SourceSpan"/> object that represents the ending position of the text segment.
+    /// The ending position is calculated as the current column plus the length of the text minus one, on the same line.
+    /// </remarks>
     public SourceSpan GetSourceSpanEnd() => new(Line, Column + Text.Length - 1);
 
+    /// <summary>
+    /// Gets the <see cref="SourceRange"/> of the current text segment.
+    /// </summary>
+    /// <returns>
+    /// A <see cref="SourceRange"/> object representing the range of the current text segment within the document.
+    /// </returns>
+    /// <remarks>
+    /// This method creates a <see cref="SourceRange"/> object that represents the full range of the text segment within the document.
+    /// It uses the starting and ending <see cref="SourceSpan"/> objects to define the range.
+    /// </remarks>
     public SourceRange GetRange() => new(Document, GetSourceSpanStart(), GetSourceSpanEnd());
 
     public static bool operator ==(Token left, Token right) => left.Equals(right);
 
     public static bool operator !=(Token left, Token right) => !left.Equals(right);
+    
+    public bool Equals(Token other)
+    {
+        return Equals(Type, other.Type) && Text.Equals(other.Text) && Line == other.Line && Column == other.Column && Equals(Document, other.Document);
+    }
+
+    public override bool Equals(object obj)
+    {
+        return obj is Token other && Equals(other);
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(Type, Text, Line, Column, Document);
+    }
 }
