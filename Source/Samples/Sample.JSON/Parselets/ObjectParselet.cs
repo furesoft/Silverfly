@@ -8,6 +8,9 @@ public class ObjectParselet : IStatementParselet
 {
     public AstNode Parse(Parser parser, Token token)
     {
+        //ToDo: implement object parsing
+        
+        parser.Consume("}");
         return null;
     }
 }

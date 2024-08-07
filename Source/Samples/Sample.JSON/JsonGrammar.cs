@@ -1,3 +1,4 @@
+using Sample.JSON.Nodes;
 using Sample.JSON.Parselets;
 using Silverfly;
 
@@ -11,6 +12,7 @@ public class JsonGrammar : Parser
         lexer.MatchBoolean();
         lexer.MatchNumber(false, false);
         lexer.MatchString("\"", "\"");
+        lexer.AddSymbol("null");
     }
 
     protected override void InitParser(ParserDefinition parserDefinition)
@@ -18,5 +20,6 @@ public class JsonGrammar : Parser
         parserDefinition.AddCommonLiterals();
 
         parserDefinition.Register("{", new ObjectParselet());
+        parserDefinition.Register("null", new NullParselet());
     }
 }
