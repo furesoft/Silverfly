@@ -6,6 +6,7 @@ using PrettyPrompt.Highlighting;
 using Silverfly.Nodes;
 using Silverfly.Nodes.Operators;
 using Silverfly.Sample.Func.Values;
+using Silverfly.Text.Formatting;
 
 namespace Silverfly.Sample.Func;
 
@@ -128,8 +129,52 @@ internal class FuncPromptCallbacks : PromptCallbacks
 
     protected override async Task<IReadOnlyCollection<FormatSpan>> HighlightCallbackAsync(string text, CancellationToken cancellationToken)
     {
-        return EnumerateFormatSpans(text, _keywords.Select(f => (f, AnsiColor.Blue))).ToList();
+        var keywords = _keywords.Select(f => (f, AnsiColor.Blue));
+        var brackets = GetBracketSpans(text);
+
+        var spans = EnumerateFormatSpans(text, keywords)
+            .Concat(brackets)
+            .ToList();
+
+        return spans;
     }
+
+    private static IEnumerable<FormatSpan> GetBracketSpans(string text)
+    {
+        var bracketPairs = new Dictionary<char, char>
+        {
+            { '(', ')' },
+            { '[', ']' },
+            { '{', '}' }
+        };
+
+        var stack = new Stack<(AnsiColor Color, int Index)>();
+        var colorIndex = 0;
+
+        for (int i = 0; i < text.Length; i++)
+        {
+            if (MessageFormatter.IsOpenBracket(text[i]))
+            {
+                var consoleColor = MessageFormatter.Theme.BracketColors[colorIndex % MessageFormatter.Theme.BracketColors.Length];
+                colorIndex++;
+
+                _ = AnsiColor.TryParse(consoleColor.ToString(), out var color);
+
+                stack.Push((color, i));
+            }
+            else if (bracketPairs.ContainsValue(text[i]))
+            {
+                if (stack.Count > 0 && MessageFormatter.IsClosingBracket(text[i]))
+                {
+                    var (color, startIndex) = stack.Pop();
+
+                    yield return new FormatSpan(startIndex, 1, color); // Opening bracket
+                    yield return new FormatSpan(i, 1, color); // Closing bracket
+                }
+            }
+        }
+    }
+
 
     private static IEnumerable<FormatSpan> EnumerateFormatSpans(string text, IEnumerable<(string TextToFormat, AnsiColor Color)> formattingInfo)
     {

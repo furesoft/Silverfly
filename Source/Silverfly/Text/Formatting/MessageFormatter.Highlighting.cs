@@ -37,14 +37,14 @@ public partial class MessageFormatter
         }
     }
     
-    private bool IsClosingBracket(string line, int currentIndex)
+    public static bool IsClosingBracket(char c)
     {
-        return line[currentIndex] == ')' || line[currentIndex] == '}' || line[currentIndex] == '>' || line[currentIndex] == '[';
+        return c is ')' or '}' or '>' or ']';
     }
 
-    private bool IsOpenBracket(string line, int currentIndex)
+    public static bool IsOpenBracket(char c)
     {
-        return line[currentIndex] == '(' || line[currentIndex] == '{' || line[currentIndex] == '<' || line[currentIndex] == ']';
+        return c is '(' or '{' or '<' or '[';
     }
 
     private int _currentBracketColorIndex = 0;

@@ -15,7 +15,7 @@ namespace Silverfly.Text.Formatting;
 /// </summary>
 public partial class MessageFormatter(Parser parser)
 {
-    internal static FormatterTheme Theme = new DefaultFormatterTheme();
+    public static FormatterTheme Theme = new DefaultFormatterTheme();
 
     /// <summary>
     /// Sets the theme for highlighting source code.
@@ -167,7 +167,7 @@ public partial class MessageFormatter(Parser parser)
             }
             
             // Highlight parentheses and braces
-            if (IsOpenBracket(line, currentIndex))
+            if (IsOpenBracket(line[currentIndex]))
             {
                 var color = GetNextBracketColor();
                 openBrackets.Push(color);
@@ -176,7 +176,7 @@ public partial class MessageFormatter(Parser parser)
                 Console.Write(line[currentIndex]);
                 currentIndex++;
             }
-            else if (IsClosingBracket(line, currentIndex))
+            else if (IsClosingBracket(line[currentIndex]))
             {
                 if (openBrackets.Count > 0)
                 {
@@ -189,6 +189,7 @@ public partial class MessageFormatter(Parser parser)
                 else
                 {
                     // No matching opening bracket, just print it normally
+                    Theme.Reset();
                     Console.Write(line[currentIndex]);
                 }
 

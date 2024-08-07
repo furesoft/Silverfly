@@ -217,10 +217,9 @@ public sealed partial class Lexer
     {
         var oldColumn = _column;
 
-        _column += punctuatorKey.Length;
-        _index += punctuatorKey.Length;
+        Advance(punctuatorKey.Length);
 
-        return new(punctuatorKey, _line, oldColumn, document);
+        return new(punctuatorKey, punctuatorKey.AsMemory(), _line, oldColumn, document);
     }
 
     private Token LexName(SourceDocument document)
