@@ -21,21 +21,6 @@ internal class FuncPromptCallbacks : ReplPromptCallbacks
     }
     */
 
-    protected override async Task<(IReadOnlyList<OverloadItem>, int ArgumentIndex)> GetOverloadsAsync(string text, int caret, CancellationToken cancellationToken)
-    {
-        /*
-        if (text == "print(")
-        {
-            var item = new OverloadItem("print(value)", "prints any value to the console", "returns unit", [new OverloadItem.Parameter("src", "The value to print")]);
-
-            return ([item], 0);
-        }
-        */
-
-        return (Array.Empty<OverloadItem>(), 0);
-    }
-
-
     protected override Task<IReadOnlyList<CompletionItem>> GetCompletionItemsAsync(string text, int caret, TextSpan spanToBeReplaced, CancellationToken cancellationToken)
     {
         var typedWord = text.AsSpan(spanToBeReplaced.Start, spanToBeReplaced.Length).ToString();
