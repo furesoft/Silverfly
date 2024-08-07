@@ -19,7 +19,7 @@ public class DefaultFormatterTheme : FormatterTheme
         SeverityHint = ConsoleColor.DarkYellow;
 
         Number = ConsoleColor.Magenta;
-        String = ConsoleColor.Green;
+        String = ConsoleColor.Yellow;
         Keyword = ConsoleColor.Blue;
     }
 }

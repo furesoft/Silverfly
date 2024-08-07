@@ -129,14 +129,22 @@ internal class FuncPromptCallbacks : PromptCallbacks
 
     protected override async Task<IReadOnlyCollection<FormatSpan>> HighlightCallbackAsync(string text, CancellationToken cancellationToken)
     {
-        var keywords = _keywords.Select(f => (f, AnsiColor.Blue));
+        var keywords = _keywords.Select(f => (f, ToAnsi(MessageFormatter.Theme.Keyword)));
         var brackets = GetBracketSpans(text);
 
-        var spans = EnumerateFormatSpans(text, keywords)
+        var spans = GetKeywordSpans(text, keywords)
             .Concat(brackets)
+            .Concat(GetStringsSpans(text))
             .ToList();
 
         return spans;
+    }
+
+    private static AnsiColor ToAnsi(ConsoleColor c)
+    {
+        _ = AnsiColor.TryParse(c.ToString(), out var color);
+
+        return color;
     }
 
     private static IEnumerable<FormatSpan> GetBracketSpans(string text)
@@ -158,9 +166,7 @@ internal class FuncPromptCallbacks : PromptCallbacks
                 var consoleColor = MessageFormatter.Theme.BracketColors[colorIndex % MessageFormatter.Theme.BracketColors.Length];
                 colorIndex++;
 
-                _ = AnsiColor.TryParse(consoleColor.ToString(), out var color);
-
-                stack.Push((color, i));
+                stack.Push((ToAnsi(consoleColor), i));
             }
             else if (bracketPairs.ContainsValue(text[i]))
             {
@@ -176,7 +182,7 @@ internal class FuncPromptCallbacks : PromptCallbacks
     }
 
 
-    private static IEnumerable<FormatSpan> EnumerateFormatSpans(string text, IEnumerable<(string TextToFormat, AnsiColor Color)> formattingInfo)
+    private static IEnumerable<FormatSpan> GetKeywordSpans(string text, IEnumerable<(string TextToFormat, AnsiColor Color)> formattingInfo)
     {
         foreach (var (textToFormat, color) in formattingInfo)
         {
@@ -188,6 +194,31 @@ internal class FuncPromptCallbacks : PromptCallbacks
                 yield return new FormatSpan(offset + startIndex, textToFormat.Length, color);
                 offset += startIndex + textToFormat.Length;
             }
+        }
+    }
+
+    private static IEnumerable<FormatSpan> GetStringsSpans(string text)
+    {
+        int offset = 0;
+
+        while (offset < text.Length)
+        {
+            int startIndex = text.IndexOf('"', offset);
+            if (startIndex == -1)
+            {
+                break;
+            }
+
+            int endIndex = text.IndexOf('"', startIndex + 1);
+            if (endIndex == -1)
+            {
+                break;
+            }
+
+            int length = endIndex - startIndex + 1;
+            yield return new FormatSpan(startIndex, length, ToAnsi(MessageFormatter.Theme.String));
+
+            offset = endIndex + 1;
         }
     }
 }
