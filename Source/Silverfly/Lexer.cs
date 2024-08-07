@@ -185,7 +185,7 @@ public sealed partial class Lexer
 
     private bool InvokeParts(char c, out Token token)
     {
-        foreach (var part in Config.Parts)
+        foreach (var part in Config.Matchers)
         {
             if (part.Match(this, c))
             {

@@ -13,7 +13,7 @@ public class LexerConfig
 {
     internal INameAdvancer NameAdvancer = new DefaultNameAdvancer();
     internal Dictionary<string, Symbol> Punctuators = [];
-    internal readonly List<IMatcher> Parts = [];
+    internal readonly List<IMatcher> Matchers = [];
     internal readonly List<IIgnoreMatcher> IgnoreMatchers = [];
 
     public LexerConfig()
@@ -48,7 +48,7 @@ public class LexerConfig
 
     public void AddMatcher(IMatcher matcher)
     {
-        Parts.Add(matcher);
+        Matchers.Add(matcher);
     }
 
     public void UseNameAdvancer(INameAdvancer advancer)

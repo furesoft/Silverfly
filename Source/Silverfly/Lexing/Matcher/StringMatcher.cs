@@ -13,6 +13,9 @@ using Silverfly.Text;
 /// <param name="allowUnicodeChars">Indicates whether Unicode escape sequences are allowed within the string.</param>
 public class StringMatcher(Symbol leftStr, Symbol rightStr, bool allowEscapeChars = true, bool allowUnicodeChars = true) : IMatcher
 {
+    public Symbol Left { get; set; } = leftStr;
+    public Symbol Right { get; set; } = rightStr;
+    
     /// <summary>
     /// Determines whether the current lexer position matches the start of a string.
     /// </summary>
@@ -23,7 +26,7 @@ public class StringMatcher(Symbol leftStr, Symbol rightStr, bool allowEscapeChar
     /// </returns>
     public bool Match(Lexer lexer, char c)
     {
-        return leftStr != null && rightStr != null && lexer.IsMatch(leftStr);
+        return Left != null && Right != null && lexer.IsMatch(Left);
     }
 
     /// <summary>
@@ -47,7 +50,7 @@ public class StringMatcher(Symbol leftStr, Symbol rightStr, bool allowEscapeChar
         //StringBuilder is mandatory to build an escaped string
         var builder = new StringBuilder();
 
-        while (lexer.IsNotAtEnd() && !lexer.IsMatch(rightStr.Name))
+        while (lexer.IsNotAtEnd() && !lexer.IsMatch(Right.Name))
         {
             if (lexer.IsMatch("\\") && allowEscapeChars)
             {
@@ -69,7 +72,7 @@ public class StringMatcher(Symbol leftStr, Symbol rightStr, bool allowEscapeChar
             }
         }
 
-        if (!lexer.IsMatch(rightStr))
+        if (!lexer.IsMatch(Right))
         {
             var endSpan = new SourceSpan(line, column);
             lexer.Advance();

@@ -9,12 +9,12 @@ namespace Silverfly;
 //Todo: Add Synchronisation Mechanism For Better Error Reporting
 public abstract partial class Parser
 {
-    private Lexer _lexer;
-    private LexerConfig _lexerConfig = new();
-    private ParserDefinition _parserDefinition = new();
+    internal readonly Lexer Lexer;
+    private readonly LexerConfig _lexerConfig = new();
+    public readonly ParserDefinition ParserDefinition = new();
     public ParserOptions Options = new(true, true);
     private readonly List<Token> _read = [];
-    public MessageFormatter Formatter;
+    public readonly MessageFormatter Formatter;
 
     /// <summary>
     /// Gets the <see cref="SourceDocument"/> associated with the lexer.
@@ -24,7 +24,7 @@ public abstract partial class Parser
     /// This property provides access to the <see cref="SourceDocument"/> instance associated with the lexer.
     /// It allows retrieval of the document's contents and messages.
     /// </remarks>
-    public SourceDocument Document => _lexer.Document;
+    public SourceDocument Document => Lexer.Document;
 
     /// <summary>
     /// Parses a statement and optionally wraps expressions in an AST node.
@@ -35,7 +35,7 @@ public abstract partial class Parser
     {
         var token = LookAhead(0);
 
-        if (_parserDefinition._statementParselets.TryGetValue(token.Type, out var parselet))
+        if (ParserDefinition._statementParselets.TryGetValue(token.Type, out var parselet))
         {
             Consume();
 
@@ -70,15 +70,15 @@ public abstract partial class Parser
     {
         InitLexer(_lexerConfig);
 
-        _lexer = new Lexer(_lexerConfig);
+        Lexer = new Lexer(_lexerConfig);
         
-        InitParser(_parserDefinition);
+        InitParser(ParserDefinition);
 
-        AddLexerSymbols(_lexer, _parserDefinition._prefixParselets);
-        AddLexerSymbols(_lexer, _parserDefinition._infixParselets);
-        AddLexerSymbols(_lexer, _parserDefinition._statementParselets);
+        AddLexerSymbols(Lexer, ParserDefinition._prefixParselets);
+        AddLexerSymbols(Lexer, ParserDefinition._infixParselets);
+        AddLexerSymbols(Lexer, ParserDefinition._statementParselets);
 
-        _lexer.Config.OrderSymbols();
+        Lexer.Config.OrderSymbols();
 
         Formatter = new(this);
     }
@@ -91,7 +91,7 @@ public abstract partial class Parser
     /// <returns>The parsed translation unit representing the source code.</returns>
     public TranslationUnit Parse(ReadOnlyMemory<char> source, string filename = "synthetic.dsl")
     {
-        _lexer.SetSource(source, filename);
+        Lexer.SetSource(source, filename);
 
         var node = Options.UseStatementsAtToplevel
             ? ParseStatement()
@@ -102,7 +102,7 @@ public abstract partial class Parser
             Match(PredefinedSymbols.EOF);
         }
 
-        return new TranslationUnit(node, _lexer.Document);
+        return new TranslationUnit(node, Lexer.Document);
     }
 
     private void AddLexerSymbols<TParselet>(Lexer lexer, Dictionary<Symbol, TParselet> dict)
@@ -130,7 +130,7 @@ public abstract partial class Parser
             return new InvalidNode(token).WithRange(token);
         }
 
-        if (!_parserDefinition._prefixParselets.TryGetValue(token.Type, out var prefix))
+        if (!ParserDefinition._prefixParselets.TryGetValue(token.Type, out var prefix))
         {
             token.Document.Messages.Add(Message.Error("Could not parse prefix \"" + token.Type + "\".",
                 token.GetRange()));
@@ -144,7 +144,7 @@ public abstract partial class Parser
         {
             token = Consume();
 
-            if (!_parserDefinition._infixParselets.TryGetValue(token.Type, out var infix))
+            if (!ParserDefinition._infixParselets.TryGetValue(token.Type, out var infix))
             {
                 token.Document.Messages.Add(
                     Message.Error("Could not parse \"" + token.Text + "\".", token.GetRange()));
@@ -242,7 +242,7 @@ public abstract partial class Parser
 
     private void EnsureSymbolIsRegistered(Symbol expected)
     {
-        if (!_lexer.IsPunctuator(expected.Name))
+        if (!Lexer.IsPunctuator(expected.Name))
         {
             _lexerConfig.AddSymbol(expected.Name);
         }
@@ -325,7 +325,7 @@ public abstract partial class Parser
         // Read in as many as needed.
         while (distance >= _read.Count)
         {
-            _read.Add(_lexer.Next());
+            _read.Add(Lexer.Next());
         }
 
         // Get the queued token.
@@ -347,7 +347,7 @@ public abstract partial class Parser
 
     private int GetBindingPower()
     {
-        if (_parserDefinition._infixParselets.TryGetValue(LookAhead(0).Type, out var parselet))
+        if (ParserDefinition._infixParselets.TryGetValue(LookAhead(0).Type, out var parselet))
         {
             return parselet.GetBindingPower();
         }

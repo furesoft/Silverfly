@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
+using Silverfly.Lexing.Matcher;
+using Silverfly.Parselets.Literals;
 using Silverfly.Text.Formatting.Themes;
 
 namespace Silverfly.Text.Formatting;
@@ -101,6 +104,24 @@ public partial class MessageFormatter(Parser parser)
         };
     }
 
+    public bool IsMatch(Symbol token, string line, ref int currentIndex)
+    {
+        if (string.IsNullOrEmpty(token.Name))
+        {
+            return false;
+        }
+
+        if (currentIndex + token.Name.Length > line.Length)
+        {
+            return false;
+        }
+
+        var nameSpan = token.Name.AsMemory().Span;
+        var documentSliceSpan = line.AsSpan().Slice(currentIndex, token.Name.Length);
+        
+        return nameSpan.CompareTo(documentSliceSpan, StringComparison.Ordinal) == 0;
+    }
+
     //Todo: add loading keywords from grammar
     private void WriteHighlightedSource(string line)
     {
@@ -135,90 +156,54 @@ public partial class MessageFormatter(Parser parser)
                 continue;
             }
 
-            // Highlight string literals
-            if (line[currentIndex] == '"')
+            foreach (var stringMatcher in parser.Lexer.Config.Matchers.OfType<StringMatcher>())
             {
-                var closingQuoteIndex = line.IndexOf('"', currentIndex + 1);
-                if (closingQuoteIndex == -1)
-                {
-                    closingQuoteIndex = line.Length - 1;
-                }
-
-                Console.ForegroundColor = Theme.String;
-                Console.Write(line.Substring(currentIndex, closingQuoteIndex - currentIndex + 1));
-
-                currentIndex = closingQuoteIndex + 1;
+                HighlightString(line, ref currentIndex, stringMatcher.Left, stringMatcher.Right);
             }
-            // Highlight numbers
-            else
+
+            if (parser.Lexer.Config.Matchers.OfType<NumberMatcher>().Any())
             {
-                var match = NumberRegex().Match(line[currentIndex..]);
-                
-                if (match.Success)
-                {
-                    Console.ForegroundColor = Theme.Number;
-                    Console.Write(match.Value);
+                HighlightNumber(line, ref currentIndex);
+            }
+            
+            // Highlight parentheses and braces
+            if (IsOpenBracket(line, currentIndex))
+            {
+                var color = GetNextBracketColor();
+                openBrackets.Push(color);
 
-                    currentIndex += match.Value.Length;
-                }
-                // Highlight parentheses and braces
-                else if (IsOpenBracket(line, currentIndex))
+                Console.ForegroundColor = color;
+                Console.Write(line[currentIndex]);
+                currentIndex++;
+            }
+            else if (IsClosingBracket(line, currentIndex))
+            {
+                if (openBrackets.Count > 0)
                 {
-                    var color = GetNextBracketColor();
-                    openBrackets.Push(color);
+                    var openingBracket = openBrackets.Pop();
 
-                    Console.ForegroundColor = color;
+                    // Highlight matching pairs
+                    Console.ForegroundColor = openingBracket;
                     Console.Write(line[currentIndex]);
-                    currentIndex++;
-                }
-                else if (IsClosingBracket(line, currentIndex))
-                {
-                    if (openBrackets.Count > 0)
-                    {
-                        var openingBracket = openBrackets.Pop();
-
-                        // Highlight matching pairs
-                        Console.ForegroundColor = openingBracket;
-                        Console.Write(line[currentIndex]);
-                    }
-                    else
-                    {
-                        // No matching opening bracket, just print it normally
-                        Console.Write(line[currentIndex]);
-                    }
-
-                    currentIndex++;
                 }
                 else
                 {
-                    // Default color
-                    Theme.Reset();
+                    // No matching opening bracket, just print it normally
                     Console.Write(line[currentIndex]);
-                    currentIndex++;
                 }
+
+                currentIndex++; 
+            }
+            else
+            {
+                // Default color
+                Theme.Reset();
+                Console.Write(line[currentIndex]);
+                currentIndex++;
             }
         }
 
         Console.WriteLine();
         Theme.Reset();
     }
-
-    private bool IsClosingBracket(string line, int currentIndex)
-    {
-        return line[currentIndex] == ')' || line[currentIndex] == '}' || line[currentIndex] == '>' || line[currentIndex] == '[';
-    }
-
-    private bool IsOpenBracket(string line, int currentIndex)
-    {
-        return line[currentIndex] == '(' || line[currentIndex] == '{' || line[currentIndex] == '<' || line[currentIndex] == ']';
-    }
-
-    private int _currentBracketColorIndex = 0;
-    private ConsoleColor GetNextBracketColor()
-    {
-        return Theme.BracketColors[_currentBracketColorIndex++ % Theme.BracketColors.Length];
-    }
-
-    [GeneratedRegex(@"^(0x[0-9A-Fa-f]+|0b[01]+|\d+)")]
-    private static partial Regex NumberRegex();
 }

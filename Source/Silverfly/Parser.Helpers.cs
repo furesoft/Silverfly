@@ -32,7 +32,7 @@ public partial class Parser
             {
                 args.Add(node);
             }
-        } while (Match(separator) && _lexer.IsNotAtEnd());
+        } while (Match(separator) && Lexer.IsNotAtEnd());
 
         if (!IsMatch(terminator))
         {
@@ -54,7 +54,7 @@ public partial class Parser
     {
         var args = new List<AstNode>();
 
-        while (!IsMatch(terminators) && _lexer.IsNotAtEnd())
+        while (!IsMatch(terminators) && Lexer.IsNotAtEnd())
         {
             var node = Parse(bindingPower);
 
@@ -93,7 +93,7 @@ public partial class Parser
             {
                 args.Add(node);
             }
-        } while (Match(separator) && _lexer.IsNotAtEnd());
+        } while (Match(separator) && Lexer.IsNotAtEnd());
 
         Match(terminators);
 
