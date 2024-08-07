@@ -99,4 +99,6 @@ public partial class Parser
 
         return [.. args];
     }
+
+    public bool IsAtEnd() => IsMatch(PredefinedSymbols.EOF);
 }

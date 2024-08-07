@@ -1,4 +1,5 @@
-﻿using PrettyPrompt;
+﻿using System.Runtime.CompilerServices;
+using PrettyPrompt;
 using PrettyPrompt.Consoles;
 using PrettyPrompt.Highlighting;
 using Silverfly.Sample.Func.Values;
@@ -39,8 +40,13 @@ public static class Repl
 
             scope.Define("members", new ListValue(members));
             scope.Define("annotations", Value.From(x.Annotations));
+            
+            scope.Define("hasAnnotation", nameValue =>
+            {
+                var name = (StringValue)nameValue;
 
-            //todo: add 'hasAnnotation" function to scope
+                return x.Annotations.Any(a => a.Name == name.Value);
+            });
 
             return new ModuleValue(scope);
         });

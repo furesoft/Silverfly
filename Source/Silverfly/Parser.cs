@@ -128,7 +128,7 @@ public abstract partial class Parser
 
         if (!_parserDefinition._prefixParselets.TryGetValue(token.Type, out var prefix))
         {
-            token.Document.Messages.Add(Message.Error("Could not parse prefix \"" + token.Text + "\".",
+            token.Document.Messages.Add(Message.Error("Could not parse prefix \"" + token.Type + "\".",
                 token.GetRange()));
 
             return new InvalidNode(token).WithRange(token);

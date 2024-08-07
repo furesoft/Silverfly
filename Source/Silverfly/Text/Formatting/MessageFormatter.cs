@@ -4,6 +4,8 @@ using Silverfly.Text.Formatting.Themes;
 
 namespace Silverfly.Text.Formatting;
 
+//ToDo: implement bracket matching coloring
+
 /// <summary>
 /// Provides methods to format and display compiler messages with syntax highlighting and theming.
 /// </summary>

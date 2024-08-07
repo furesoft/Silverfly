@@ -14,7 +14,7 @@ public class BlockParselet(Symbol terminator, Symbol seperator = null, bool wrap
         var block = new BlockNode(Seperator, Terminator);
         var children = new List<AstNode>();
 
-        while (!parser.Match(Terminator))
+        while (!parser.Match(Terminator) && !parser.IsAtEnd())
         {
             var node = parser.ParseStatement(wrapExpressions);
 
