@@ -56,6 +56,7 @@ jobs:
           sed -i "s/<Version>.*<\/Version>/<Version>${RELEASE_VERSION}<\/Version>/" Source/Silverfly/Silverfly.csproj
           sed -i "s/<Version>.*<\/Version>/<Version>${RELEASE_VERSION}<\/Version>/" Source/Silverfly.Testing/Silverfly.Testing.csproj
           sed -i "s/<Version>.*<\/Version>/<Version>${RELEASE_VERSION}<\/Version>/" Source/Silverfly.Generator/Silverfly.Generator.csproj
+          sed -i "s/<Version>.*<\/Version>/<Version>${RELEASE_VERSION}<\/Version>/" Source/Silverfly.Repl/Silverfly.Repl.csproj
           sed -i "s/<Version>.*<\/Version>/<Version>${RELEASE_VERSION}<\/Version>/" Source/Samples/Sample.FuncLanguage/Sample.FuncLanguage.csproj
         
       - name: Build and package
@@ -63,6 +64,7 @@ jobs:
           dotnet build -c Release -o ./nuget Source/Silverfly/Silverfly.csproj
           dotnet build -c Release -o ./nuget Source/Silverfly.Testing/Silverfly.Testing.csproj
           dotnet build -c Release -o ./nuget Source/Silverfly.Generator/Silverfly.Generator.csproj
+          dotnet build -c Release -o ./nuget Source/Silverfly.Repl/Silverfly.Repl.csproj
           dotnet build -c Release -o ./nuget Source/Samples/Sample.FuncLanguage/Sample.FuncLanguage.csproj
 
       - name: Publish to NuGet
@@ -83,7 +85,7 @@ jobs:
           message: "Update version to ${{ env.RELEASE_VERSION }}"
           push: true
           new_branch: update-version
-          add: '["Source/Silverfly/Silverfly.csproj", "Source/Silverfly.Testing/Silverfly.Testing.csproj", "Source/Silverfly.Generator/Silverfly.Generator.csproj", "Source/Samples/Sample.FuncLanguage.csproj"]'
+          add: '["Source/Silverfly/Silverfly.csproj", "Source/Silverfly.Testing/Silverfly.Testing.csproj", "Source/Silverfly.Generator/Silverfly.Generator.csproj", "Source/Silverfly.Repl/Silverfly.Repl.csproj", "Source/Samples/Sample.FuncLanguage.csproj"]'
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v5

@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Version>1.0.66</Version>
+    <LangVersion>preview</LangVersion>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Title>Silverfly.Repl</Title>
+    <Copyright>furesoft</Copyright>
+    <RepositoryUrl>https://github.com/furesoft/Silverfly</RepositoryUrl>
+    <Description>Out of the box repl for silverfly laguages</Description>
+    <PackageTags>parser, pratt, silverfly</PackageTags>
+    <TargetFramework>net8.0</TargetFramework>
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="PrettyPrompt" Version="4.1.1" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Silverfly\Silverfly.csproj" />
+  </ItemGroup>
+</Project>

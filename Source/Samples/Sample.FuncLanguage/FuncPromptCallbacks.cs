@@ -1,16 +1,15 @@
-using PrettyPrompt;
 using PrettyPrompt.Completion;
 using PrettyPrompt.Consoles;
 using PrettyPrompt.Documents;
 using PrettyPrompt.Highlighting;
 using Silverfly.Nodes;
 using Silverfly.Nodes.Operators;
+using Silverfly.Repl;
 using Silverfly.Sample.Func.Values;
-using Silverfly.Text.Formatting;
 
 namespace Silverfly.Sample.Func;
 
-internal class FuncPromptCallbacks : PromptCallbacks
+internal class FuncPromptCallbacks : ReplPromptCallbacks
 {
     /*
     protected override IEnumerable<(KeyPressPattern Pattern, KeyPressCallbackAsync Callback)> GetKeyPressCallbacks()
@@ -36,8 +35,6 @@ internal class FuncPromptCallbacks : PromptCallbacks
         return (Array.Empty<OverloadItem>(), 0);
     }
 
-    private readonly string[] _keywords = ["let", "if", "then", "else", "import", "enum"];
-    internal static readonly char[] characters = [' '];
 
     protected override Task<IReadOnlyList<CompletionItem>> GetCompletionItemsAsync(string text, int caret, TextSpan spanToBeReplaced, CancellationToken cancellationToken)
     {
@@ -58,7 +55,7 @@ internal class FuncPromptCallbacks : PromptCallbacks
         }
         else
         {
-            items = _keywords.Select(_ => new KeyValuePair<string, Value>(_, _)).ToList();
+            items = Keywords.Select(_ => new KeyValuePair<string, Value>(_, _)).ToList();
         }
 
         return Task.FromResult<IReadOnlyList<CompletionItem>>(
@@ -82,7 +79,7 @@ internal class FuncPromptCallbacks : PromptCallbacks
                         commitCharacterRules: [..new[]
                         {
                             new CharacterSetModificationRule(CharacterSetModificationKind.Add,
-                                [.. characters])
+                                [.. Characters])
                         }]
                     );
                 })
@@ -125,100 +122,5 @@ internal class FuncPromptCallbacks : PromptCallbacks
         }
 
         return scope;
-    }
-
-    protected override async Task<IReadOnlyCollection<FormatSpan>> HighlightCallbackAsync(string text, CancellationToken cancellationToken)
-    {
-        var keywords = _keywords.Select(f => (f, ToAnsi(MessageFormatter.Theme.Keyword)));
-        var brackets = GetBracketSpans(text);
-
-        var spans = GetKeywordSpans(text, keywords)
-            .Concat(brackets)
-            .Concat(GetStringsSpans(text))
-            .ToList();
-
-        return spans;
-    }
-
-    private static AnsiColor ToAnsi(ConsoleColor c)
-    {
-        _ = AnsiColor.TryParse(c.ToString(), out var color);
-
-        return color;
-    }
-
-    private static IEnumerable<FormatSpan> GetBracketSpans(string text)
-    {
-        var bracketPairs = new Dictionary<char, char>
-        {
-            { '(', ')' },
-            { '[', ']' },
-            { '{', '}' }
-        };
-
-        var stack = new Stack<(AnsiColor Color, int Index)>();
-        var colorIndex = 0;
-
-        for (int i = 0; i < text.Length; i++)
-        {
-            if (MessageFormatter.IsOpenBracket(text[i]))
-            {
-                var consoleColor = MessageFormatter.Theme.BracketColors[colorIndex % MessageFormatter.Theme.BracketColors.Length];
-                colorIndex++;
-
-                stack.Push((ToAnsi(consoleColor), i));
-            }
-            else if (bracketPairs.ContainsValue(text[i]))
-            {
-                if (stack.Count > 0 && MessageFormatter.IsClosingBracket(text[i]))
-                {
-                    var (color, startIndex) = stack.Pop();
-
-                    yield return new FormatSpan(startIndex, 1, color); // Opening bracket
-                    yield return new FormatSpan(i, 1, color); // Closing bracket
-                }
-            }
-        }
-    }
-
-
-    private static IEnumerable<FormatSpan> GetKeywordSpans(string text, IEnumerable<(string TextToFormat, AnsiColor Color)> formattingInfo)
-    {
-        foreach (var (textToFormat, color) in formattingInfo)
-        {
-            int startIndex;
-            int offset = 0;
-
-            while ((startIndex = text.AsSpan(offset).IndexOf(textToFormat)) != -1)
-            {
-                yield return new FormatSpan(offset + startIndex, textToFormat.Length, color);
-                offset += startIndex + textToFormat.Length;
-            }
-        }
-    }
-
-    private static IEnumerable<FormatSpan> GetStringsSpans(string text)
-    {
-        int offset = 0;
-
-        while (offset < text.Length)
-        {
-            int startIndex = text.IndexOf('"', offset);
-            if (startIndex == -1)
-            {
-                break;
-            }
-
-            int endIndex = text.IndexOf('"', startIndex + 1);
-            if (endIndex == -1)
-            {
-                break;
-            }
-
-            int length = endIndex - startIndex + 1;
-            yield return new FormatSpan(startIndex, length, ToAnsi(MessageFormatter.Theme.String));
-
-            offset = endIndex + 1;
-        }
     }
 }

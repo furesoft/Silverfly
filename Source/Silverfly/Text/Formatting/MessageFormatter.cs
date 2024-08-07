@@ -125,7 +125,7 @@ public partial class MessageFormatter(Parser parser)
     //Todo: add loading keywords from grammar
     private void WriteHighlightedSource(string line)
     {
-        string[] keywords = ["using", "class", "static", "void", "Console", "WriteLine"];
+        string[] keywords = ["let", "if", "then", "else", "import", "enum"];
 
         var currentIndex = 0;
         var openBrackets = new Stack<ConsoleColor>();
