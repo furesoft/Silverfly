@@ -7,8 +7,13 @@ public static class Program
 {
     public static async Task Main(string[] args)
     {
-        Scope.Root.Define("print", (Value x) =>
+        Scope.Root.Define("print", x =>
         {
+            if (x == UnitValue.Shared)
+            {
+                return x;
+            }
+
             Console.WriteLine(x);
 
             return UnitValue.Shared;
@@ -16,7 +21,7 @@ public static class Program
 
         OptionValue.AddToScope();
 
-        Scope.Root.Define("reflect", (Value x) =>
+        Scope.Root.Define("reflect", x =>
         {
             var scope = new Scope();
 
