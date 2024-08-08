@@ -17,7 +17,7 @@ public class ImportParselet : IPrefixParselet
         }
         else if (arg is NameNode name)
         {
-            node = new ImportNode(name.Name);
+            node = new ImportNode(name.Token.Text.ToString());
         }
 
         return node.WithRange(token, parser.LookAhead(0));

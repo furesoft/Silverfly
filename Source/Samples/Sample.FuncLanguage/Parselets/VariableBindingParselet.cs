@@ -37,7 +37,7 @@ public class VariableBindingParselet : IPrefixParselet
             // Tuple-Destructuring
             var value = parser.Parse(0);
 
-            return new TupleBindingNode([.. names.Select(_ => new NameNode(_.Text.ToString()))], value)
+            return new TupleBindingNode([.. names.Select(name => new NameNode(name))], value)
                 .WithRange(names[0], parser.LookAhead(0));
         }
         else

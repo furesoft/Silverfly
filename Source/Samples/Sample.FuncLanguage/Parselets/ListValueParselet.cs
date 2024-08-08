@@ -9,7 +9,7 @@ public class ListValueParselet : IPrefixParselet
     {
         var items = parser.ParseSeperated(",", bindingPower: 0, "]");
 
-        return new LiteralNode(items)
+        return new LiteralNode(items, token)
             .WithRange(token, parser.LookAhead(0));
     }
 }

@@ -84,23 +84,23 @@ internal class FuncPromptCallbacks : ReplPromptCallbacks
             return GetScope(block.Children.First(), scope);
         }
         
-        if (node is BinaryOperatorNode b && b.Operator == ".")
+        if (node is BinaryOperatorNode b && b.Operator.Text.Span == ".")
         {
             if (b.LeftExpr is NameNode nameNode && b.RightExpr is InvalidNode)
             {
-                return scope.Get(nameNode.Name).Members;
+                return scope.Get(nameNode.Token.Text.ToString()).Members;
             }
             else if (b.LeftExpr is NameNode n1 && b.RightExpr is NameNode n2)
             {
-                var s = scope.Get(n1.Name);
+                var s = scope.Get(n1.Token.Text.ToString());
                 if (s is LambdaValue)
                 {
                     return null;
                 }
 
-                return s.Get(n2.Name).Members;
+                return s.Get(n2.Token.Text.ToString()).Members;
             }
-            else if (b.LeftExpr is BinaryOperatorNode ib && ib.Operator == ".")
+            else if (b.LeftExpr is BinaryOperatorNode ib && ib.Operator.Text.Span == ".")
             {
                 return GetScope(b.LeftExpr, scope);
             }

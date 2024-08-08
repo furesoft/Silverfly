@@ -8,6 +8,6 @@ public class NullParselet : IPrefixParselet
 {
     public AstNode Parse(Parser parser, Token token)
     {
-        return new LiteralNode(null);
+        return new LiteralNode(null, token);
     }
 }

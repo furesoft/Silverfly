@@ -12,6 +12,6 @@ public record AnnotatedNode() : AstNode
         return Annotations
             .Where(_ => _.FunctionExpr is NameNode)
             .Select(_ => (NameNode)_.FunctionExpr)
-            .Any(_ => _.Name == name);
+            .Any(_ => _.Token.Text.ToString() == name);
     }
 }

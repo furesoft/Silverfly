@@ -16,7 +16,7 @@ public class PrefixOperatorParselet(int bindingPower) : IPrefixParselet
         // take *this* parselet's result as its left-hand argument.
         var right = parser.Parse(bindingPower);
 
-        var node = new PrefixOperatorNode(token.Type, right)
+        var node = new PrefixOperatorNode(token, right)
                 .WithRange(token.Document, token.GetSourceSpanStart(), right.Range.End);
 
         right.WithParent(node);

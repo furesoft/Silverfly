@@ -51,7 +51,7 @@ public partial class RewriterVisitor : Rewriter
     {
         var rewritten = (CallNode)base.Rewrite(call);
 
-        if (call.FunctionExpr is NameNode n && n.Name == "add")
+        if (call.FunctionExpr is NameNode name && name.Token.Text.Span == "add".AsSpan())
         {
             // Start with the first argument
             var result = rewritten.Arguments[0];
@@ -59,7 +59,7 @@ public partial class RewriterVisitor : Rewriter
             // Iterate over the rest of the arguments and create a BinaryOperatorNode for each addition
             for (int i = 1; i < rewritten.Arguments.Count; i++)
             {
-                result = new BinaryOperatorNode(result, "+", rewritten.Arguments[i]);
+                result = new BinaryOperatorNode(result, name.Token.Rewrite("+"), rewritten.Arguments[i]);
             }
 
             return result;

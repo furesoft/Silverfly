@@ -6,6 +6,6 @@ public class BooleanLiteralParselet : IPrefixParselet
 {
     public AstNode Parse(Parser parser, Token token)
     {
-        return new LiteralNode(bool.Parse(token.Text.Span)).WithRange(token);
+        return new LiteralNode(bool.Parse(token.Text.Span), token).WithRange(token);
     }
 }

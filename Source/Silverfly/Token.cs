@@ -103,4 +103,9 @@ public readonly struct Token(Symbol type, ReadOnlyMemory<char> text, int line, i
     {
         return HashCode.Combine(Type, Text, Line, Column, Document);
     }
+
+    public Token Rewrite(Symbol type)
+    {
+        return new Token(type, type.Name.AsMemory(), Line, Column, Document);
+    }
 }

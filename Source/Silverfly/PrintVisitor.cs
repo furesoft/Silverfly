@@ -154,7 +154,7 @@ public class PrintVisitor : NodeVisitor<string>
 
     public string Visit(NameNode name)
     {
-        return name.Name;
+        return name.Token.Text.ToString();
     }
 
     public string Visit(BinaryOperatorNode binary)
@@ -163,7 +163,7 @@ public class PrintVisitor : NodeVisitor<string>
 
         builder.Append('(');
         builder.Append(binary.LeftExpr.Accept(this));
-        builder.Append(' ').Append(binary.Operator.Punctuator()).Append(' ');
+        builder.Append(' ').Append(binary.Operator.Type.Punctuator()).Append(' ');
         builder.Append(binary.RightExpr.Accept(this));
         builder.Append(')');
 
@@ -177,12 +177,12 @@ public class PrintVisitor : NodeVisitor<string>
         builder.Append('(');
         builder.Append(postfix.Expr.Accept(this));
 
-        if (char.IsLetter(postfix.Operator.Punctuator()[0]))
+        if (char.IsLetter(postfix.Operator.Type.Punctuator()[0]))
         {
             builder.Append(' ');
         }
 
-        builder.Append(postfix.Operator.Punctuator()).Append(')');
+        builder.Append(postfix.Operator.Type.Punctuator()).Append(')');
 
         return builder.ToString();
     }
@@ -192,9 +192,9 @@ public class PrintVisitor : NodeVisitor<string>
         var builder = new StringBuilder();
 
         builder.Append('(');
-        builder.Append(prefix.Operator.Punctuator());
+        builder.Append(prefix.Operator.Type.Punctuator());
 
-        if (char.IsLetter(prefix.Operator.Punctuator()[0]))
+        if (char.IsLetter(prefix.Operator.Type.Punctuator()[0]))
         {
             builder.Append(' ');
         }

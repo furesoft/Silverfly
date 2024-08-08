@@ -18,10 +18,10 @@ public partial class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
 
         for (int i = 0; i < node.Names.Count; i++)
         {
-            var name = node.Names[i].Name;
+            var name = node.Names[i].Token;
             var destructedValue = value.Get(new NumberValue(i));
 
-            scope.Define(name, destructedValue);
+            scope.Define(name.Text.ToString(), destructedValue);
         }
 
         return UnitValue.Shared;
@@ -36,14 +36,14 @@ public partial class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
             var member = node.Members[i];
             if (member is NameNode name)
             {
-                memberScope.Define(name.Name, i);
+                memberScope.Define(name.Token.Text.ToString(), i);
             }
         }
 
         memberScope.Define("__name___", node.Name);
         memberScope.Define("to_string", (Value[] args) =>
         {
-            return $"enum {node.Name} = {string.Join(" | ", node.Members.Where(_ => _ is NameNode).Select(_ => ((NameNode)_).Name))}";
+            return $"enum {node.Name} = {string.Join(" | ", node.Members.Where(_ => _ is NameNode).Select(_ => ((NameNode)_).Token))}";
         });
         memberScope.Define("from_name", (Value name) =>
         {
@@ -96,13 +96,13 @@ public partial class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
         var leftVisited = Visit(binNode.LeftExpr, scope);
         var rightVisited = Visit(binNode.RightExpr, scope);
 
-        if (binNode.Operator == "=")
+        if (binNode.Operator.Text.Span == "=")
         {
             //ToDo: implement assignment
             return null;
         }
 
-        if (binNode.Operator == "..")
+        if (binNode.Operator.Text.Span == "..")
         {
             return RangeValue.Create(leftVisited, rightVisited);
         }
@@ -113,17 +113,17 @@ public partial class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
             return UnitValue.Shared;
         }
 
-        if (binNode.Operator == ".")
+        if (binNode.Operator.Text.Span == ".")
         {
             return leftVisited.Get(rightVisited);
         }
 
         LambdaValue func;
-        if (scope.TryGet($"'{binNode.Operator.Name}", out func))
+        if (scope.TryGet($"'{binNode.Operator.Text}", out func))
         {
             return func.Invoke(leftVisited, rightVisited);
         }
-        else if (leftVisited.Members.TryGet($"'{binNode.Operator.Name}", out func))
+        else if (leftVisited.Members.TryGet($"'{binNode.Operator.Text}", out func))
         {
             return func.Invoke(leftVisited, rightVisited);
         }
@@ -138,11 +138,11 @@ public partial class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
         var exprVisited = Visit(prefix.Expr, scope);
 
         LambdaValue func;
-        if (scope.TryGet($"'{prefix.Operator.Name}", out func))
+        if (scope.TryGet($"'{prefix.Operator.Text}", out func))
         {
             return func.Invoke(exprVisited);
         }
-        else if (exprVisited.Members.TryGet($"'{prefix.Operator.Name}", out func))
+        else if (exprVisited.Members.TryGet($"'{prefix.Operator.Text}", out func))
         {
             return func.Invoke(exprVisited);
         }
@@ -172,7 +172,7 @@ public partial class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
     {
         foreach (var annotation in node.Annotations)
         {
-            if (annotation.FunctionExpr is NameNode n && n.Name == annotationName)
+            if (annotation.FunctionExpr is NameNode n && n.Token.Text.Span == annotationName)
             {
                 var funcRef = annotation.Arguments[0];
                 var evaluatedFuncRef = (LambdaValue)Visit(funcRef, scope);
@@ -234,7 +234,7 @@ public partial class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
 
     Value Visit(NameNode name, Scope scope)
     {
-        return scope.Get(name.Name)! ?? new NameValue(name.Name);
+        return scope.Get(name.Token.Text.ToString())! ?? new NameValue(name.Token.Text.ToString());
     }
 
     Value Visit(CallNode call, Scope scope)
@@ -257,7 +257,7 @@ public partial class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
             {
                 var annotation = new Annotation
                 (
-                    ((NameNode)anotationNode.FunctionExpr).Name,
+                    ((NameNode)anotationNode.FunctionExpr).Token.Text.ToString(),
                     anotationNode.Arguments.Select(n => Visit(n, scope)).ToList()
                 );
 
@@ -298,14 +298,14 @@ public partial class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
     private Value VisitNamedFunction(NameNode func, CallNode call, Scope scope)
     {
         var args = call.Arguments.Select(arg => Visit(arg, scope)).ToArray();
-        var f = scope.Get(func.Name);
+        var f = scope.Get(func.Token.Text.ToString());
 
         if (f is LambdaValue lambda)
         {
             return lambda.Value(args);
         }
 
-        func.AddMessage(MessageSeverity.Error, $"Function '{func.Name}' not found");
+        func.AddMessage(MessageSeverity.Error, $"Function '{func.Token}' not found");
 
         return UnitValue.Shared;
     }
@@ -328,7 +328,7 @@ public partial class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
         for (int i = 0; i < parameters.Count; i++)
         {
             var index = i;
-            subScope.Define(parameters[index].Name, args[index]);
+            subScope.Define(parameters[index].Token.Text.ToString(), args[index]);
         }
 
         return Visit(definition, subScope);

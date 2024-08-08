@@ -19,16 +19,16 @@ public class AnnotationParselet : IPrefixParselet
             call = new CallNode(call, []);
         }
 
-        if (call is not CallNode)
+        if (call is not CallNode node)
         {
-            call.AddMessage(MessageSeverity.Error, "Annottion can only be a name or call");
+            call.AddMessage(MessageSeverity.Error, "Annotation can only be a name or call");
             return new InvalidNode(token).WithRange(token, parser.LookAhead(0));
         }
 
         var expr = parser.ParseExpression();
         if (expr is AnnotatedNode a)
         {
-            a.Annotations = a.Annotations.Add((CallNode)call);
+            a.Annotations = a.Annotations.Add(node);
         }
         else
         {
