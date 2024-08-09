@@ -39,7 +39,7 @@ public class Program
             Console.Write("> ");
             var input = Console.ReadLine();
 
-            var parsed = Parser.Parse<ExpressionGrammar>(input);
+            var parsed = new ExpressionGrammar().Parse(input);
             var evaluated = parsed.Tree.Accept(new EvaluationVisitor());
 
             Console.WriteLine("> " + evaluated);
