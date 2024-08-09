@@ -61,7 +61,7 @@ public abstract record Value()
         };
     }
 
-    public static Value Marshal(object obj)
+    public static Value MarshalPrimitive(object obj)
     {
         return obj switch
         {
@@ -70,8 +70,6 @@ public abstract record Value()
             int i => new NumberValue(i),
             double d => new NumberValue(d),
             bool b => new BoolValue(b),
-            List<Value> lv => new ListValue(lv),
-            List<object> lo => new ListValue(lo.Select(Marshal).ToList()),
             null => UnitValue.Shared,
             _ => null
         };
@@ -80,25 +78,30 @@ public abstract record Value()
     //Todo: implement method marshalling
     public static Value From(object o)
     {
-        var marshalled = Marshal(o);
+        var marshalled = MarshalPrimitive(o);
         if (marshalled != null)
         {
             return marshalled;
         }
 
+        if (o is Delegate d)
+        {
+            return MarshalDelegate(d);
+        }
+        
         if (o is IEnumerable e)
         {
-            var values = new List<Value>();
-            foreach (var item in e)
-            {
-                values.Add(From(item));
-            }
-
-            return new ListValue(values);
+            return MarshalList(e);
         }
 
+        return MarshalObject(o);
+    }
+
+    private static Value MarshalObject(object o)
+    {
         var scope = new Scope();
         var type = o.GetType();
+        
         foreach (var prop in type.GetProperties())
         {
             var value = prop.GetValue(o);
@@ -108,4 +111,50 @@ public abstract record Value()
 
         return new ModuleValue(scope);
     }
+
+    private static Value MarshalList(IEnumerable e)
+    {
+        var values = new List<Value>();
+        foreach (var item in e)
+        {
+            values.Add(From(item));
+        }
+
+        return new ListValue(values);
     }
+
+    private static Value MarshalDelegate(Delegate d)
+    {
+        return new LambdaValue(args =>
+        {
+            var parameters = d.Method.GetParameters();
+            var convertedArgs = new object[parameters.Length];
+
+            for (int i = 0; i < parameters.Length; i++)
+            {
+                if (parameters[i].ParameterType.IsAssignableFrom(typeof(Value)))
+                {
+                    convertedArgs[i] = args[i];
+                    continue;
+                }
+                
+                if (i < args.Length)
+                {
+                    convertedArgs[i] = args[i].Unmarshal() ?? args[i];
+                }
+                else if (parameters[i].HasDefaultValue)
+                {
+                    convertedArgs[i] = parameters[i].DefaultValue;
+                }
+                else
+                {
+                    throw new ArgumentException($"Missing argument for parameter '{parameters[i].Name}'");
+                }
+            }
+
+            var result = d.DynamicInvoke(convertedArgs);
+            
+            return From(result);
+        }, null);
+    }
+}

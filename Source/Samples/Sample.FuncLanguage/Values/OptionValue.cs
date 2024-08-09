@@ -5,14 +5,14 @@ public record OptionValue : Value
     public OptionValue()
     {
         Members.Define("__value", UnitValue.Shared);
-        Members.Define("__has_value", (Value[] args) =>
+        Members.Define("__has_value", () =>
         {
             var value = Members.Get("__value");
 
             return value != UnitValue.Shared;
         });
 
-        Members.Define("to_string", (Value[] args) =>
+        Members.Define("to_string", () =>
         {
             if (!HasValue())
             {
@@ -38,7 +38,7 @@ public record OptionValue : Value
         var memberScope = new Scope();
 
         memberScope.Define("none", None);
-        memberScope.Define("some", v => Some(v));
+        memberScope.Define("some", new Func<Value, Value>(Some));
 
         Scope.Root.Define("Option", new ModuleValue(memberScope));
     }

@@ -7,25 +7,23 @@ public static class Program
 {
     public static async Task Main(string[] args)
     {
-        Scope.Root.Define("print", x =>
+        Scope.Root.Define("print", new Action<object>(x =>
         {
             if (x == UnitValue.Shared)
             {
-                return x;
+                return;
             }
 
             Console.WriteLine(x);
-
-            return UnitValue.Shared;
-        });
+        }));
 
         OptionValue.AddToScope();
 
-        Scope.Root.Define("reflect", x =>
+        Scope.Root.Define("reflect", new Func<Value, ModuleValue>(x =>
         {
             var scope = new Scope();
 
-            scope.Define("name", x.Members.Get("__name___"));
+            scope.Define("name", x.Members.Get("__name___") ?? GetPrimitiveName(x));
 
             var members = new List<Value>();
             foreach (var member in x.Members.Bindings)
@@ -40,16 +38,30 @@ public static class Program
             scope.Define("members", new ListValue(members));
             scope.Define("annotations", Value.From(x.Annotations));
             
-            scope.Define("hasAnnotation", nameValue =>
+            scope.Define("hasAnnotation", new Func<string, bool>(name =>
             {
-                var name = (StringValue)nameValue;
-
-                return x.Annotations.Any(a => a.Name == name.Value);
-            });
+                return x.Annotations.Any(a => a.Name == name);
+            }));
 
             return new ModuleValue(scope);
-        });
+        }));
+        
+        Scope.Root.Define("greet", Value.From(new Func<Value>(() => null)));
 
         new Repl().Run();
+    }
+
+    private static Value GetPrimitiveName(Value value)
+    {
+        return value switch
+        {
+            StringValue => "string",
+            NumberValue => "number",
+            OptionValue => "option[]",
+            ListValue => "list",
+            UnitValue => "unit",
+            LambdaValue => "lambda",
+            _ => "no name"
+        };
     }
 }

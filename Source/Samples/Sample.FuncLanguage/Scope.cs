@@ -34,32 +34,14 @@ public class Scope(bool isRoot = false)
         return result;
     }
 
-    public void Define(string name, Func<Value[], Value> value)
-    {
-        Bindings[name] = new LambdaValue(value, null);
-    }
-
     public void Define(string name, Value value)
     {
         Bindings[name] = value;
     }
 
-    public void Define(string name, Func<Value, Value> value)
+    public void Define(string name, Delegate value)
     {
-        Define(name, args =>
-        {
-            if (args.Length != 1)
-            {
-                return UnitValue.Shared;
-            }
-
-            return value(args[0]);
-        });
-    }
-
-    public void Define(string name, Func<Value, Value, Value> value)
-    {
-        Define(name, args => value(args[0], args[1]));
+        Define(name, Value.From(value));
     }
 
     public Value? Get(string name)
