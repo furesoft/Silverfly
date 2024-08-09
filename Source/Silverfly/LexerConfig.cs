@@ -12,7 +12,8 @@ namespace Silverfly;
 public class LexerConfig
 {
     internal INameAdvancer NameAdvancer = new DefaultNameAdvancer();
-    internal Dictionary<string, Symbol> Punctuators = [];
+    internal Dictionary<string, Symbol> Symbols = [];
+    public readonly List<string> Keywords = [];
     internal readonly List<IMatcher> Matchers = [];
     internal readonly List<IIgnoreMatcher> IgnoreMatchers = [];
 
@@ -25,7 +26,7 @@ public class LexerConfig
 
             if (punctuator != "\0")
             {
-                Punctuators.Add(punctuator, type);
+                Symbols.Add(punctuator, type);
             }
         }
     }
@@ -33,29 +34,61 @@ public class LexerConfig
     // sort punctuators longest -> smallest to make it possible to use symbols with more than one character
     internal void OrderSymbols()
     {
-        Punctuators = new(Punctuators.OrderByDescending(_ => _.Key.Length));
+        Symbols = new(Symbols.OrderByDescending(_ => _.Key.Length));
     }
 
     public void AddSymbol(string symbol)
     {
-        if (Punctuators.ContainsKey(symbol))
+        if (Symbols.ContainsKey(symbol))
         {
             return;
         }
 
-        Punctuators.Add(symbol, PredefinedSymbols.Pool.Get(symbol));
+        Symbols.Add(symbol, PredefinedSymbols.Pool.Get(symbol));
     }
 
+    /// <summary>
+    /// Adds a keyword to the Keywords collection and Symbols dictionary.
+    /// </summary>
+    /// <param name="keyword">The keyword to be added.</param>
+    public void AddKeyword(string keyword)
+    {
+        Keywords.Add(keyword);
+
+        Symbols.TryAdd(keyword, keyword);
+    }
+    
+    /// <summary>
+    /// Adds multiple keywords to the Keywords collection and Symbols dictionary.
+    /// </summary>
+    /// <param name="keywords">An array of keywords to be added.</param>
+    public void AddKeywords(params string[] keywords)
+    {
+        this.Keywords.AddRange(keywords);
+    }
+
+    /// <summary>
+    /// Adds a matcher to the Matchers collection.
+    /// </summary>
+    /// <param name="matcher">The matcher to be added.</param>
     public void AddMatcher(IMatcher matcher)
     {
         Matchers.Add(matcher);
     }
 
+    /// <summary>
+    /// Sets the NameAdvancer property to the provided advancer.
+    /// </summary>
+    /// <param name="advancer">The name advancer to be used.</param>
     public void UseNameAdvancer(INameAdvancer advancer)
     {
         NameAdvancer = advancer;
     }
 
+    /// <summary>
+    /// Adds an ignore matcher to the IgnoreMatchers collection.
+    /// </summary>
+    /// <param name="matcher">The ignore matcher to be added.</param>
     public void Ignore(IIgnoreMatcher matcher)
     {
         IgnoreMatchers.Add(matcher);

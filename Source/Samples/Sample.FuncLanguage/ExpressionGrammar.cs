@@ -8,6 +8,8 @@ class ExpressionGrammar : Parser
 {
     protected override void InitLexer(LexerConfig lexer)
     {
+        lexer.AddKeywords("let", "if", "then", "else", "enum", "import", "module"); //mark this symbols as keyword for the repl to be recognized
+        
         lexer.IgnoreWhitespace();
         lexer.MatchNumber(allowHex: false, allowBin: false);
         lexer.UseNameAdvancer(new SampleNameAdvancer());

@@ -24,7 +24,7 @@ internal class FuncPromptCallbacks : ReplPromptCallbacks
     protected override Task<IReadOnlyList<CompletionItem>> GetCompletionItemsAsync(string text, int caret, TextSpan spanToBeReplaced, CancellationToken cancellationToken)
     {
         var typedWord = text.AsSpan(spanToBeReplaced.Start, spanToBeReplaced.Length).ToString();
-        var tree = new ExpressionGrammar().Parse(text);
+        var tree = Parser.Parse(text);
         var items = Scope.Root.Bindings.ToList();
 
         var scope = GetScope(tree.Tree, Scope.Root);
@@ -40,7 +40,7 @@ internal class FuncPromptCallbacks : ReplPromptCallbacks
         }
         else
         {
-            items = Keywords.Select(_ => new KeyValuePair<string, Value>(_, _)).ToList();
+            items = Parser.Lexer.Config.Keywords.Select(_ => new KeyValuePair<string, Value>(_, _)).ToList();
         }
 
         return Task.FromResult<IReadOnlyList<CompletionItem>>(

@@ -1,14 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using Silverfly.Lexing.Matcher;
-using Silverfly.Parselets.Literals;
 using Silverfly.Text.Formatting.Themes;
 
 namespace Silverfly.Text.Formatting;
-
-//ToDo: implement bracket matching coloring
 
 /// <summary>
 /// Provides methods to format and display compiler messages with syntax highlighting and theming.
@@ -16,15 +12,6 @@ namespace Silverfly.Text.Formatting;
 public partial class MessageFormatter(Parser parser)
 {
     public static FormatterTheme Theme = new DefaultFormatterTheme();
-
-    /// <summary>
-    /// Sets the theme for highlighting source code.
-    /// </summary>
-    /// <param name="theme">The new theme to be used.</param>
-    public static void SetTheme(FormatterTheme theme)
-    {
-        Theme = theme;
-    }
 
     void Write(string src, ConsoleColor color)
     {
@@ -121,12 +108,9 @@ public partial class MessageFormatter(Parser parser)
         
         return nameSpan.CompareTo(documentSliceSpan, StringComparison.Ordinal) == 0;
     }
-
-    //Todo: add loading keywords from grammar
+    
     private void WriteHighlightedSource(string line)
     {
-        string[] keywords = ["let", "if", "then", "else", "import", "enum"];
-
         var currentIndex = 0;
         var openBrackets = new Stack<ConsoleColor>();
 
@@ -135,7 +119,7 @@ public partial class MessageFormatter(Parser parser)
             var isKeyword = false;
 
             // Highlight keywords
-            foreach (var keyword in keywords)
+            foreach (var keyword in parser.Lexer.Config.Keywords)
             {
                 if (!line[currentIndex..].StartsWith(keyword) ||
                     (currentIndex + keyword.Length != line.Length &&

@@ -4,7 +4,7 @@ using Silverfly.Text;
 
 namespace Silverfly.Sample.Func;
 
-class Repl() : ReplInstance<ExpressionGrammar>(new FuncPromptCallbacks())
+class Repl() : ReplInstance<ExpressionGrammar, FuncPromptCallbacks>
 {
     public override void Evaluate(string input)
     {

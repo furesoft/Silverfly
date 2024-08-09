@@ -142,7 +142,7 @@ public sealed partial class Lexer
                 return LexName(Document);
             }
 
-            if (InvokePunctuators(out var next))
+            if (InvokeSymbols(out var next))
             {
                 return next;
             }
@@ -166,16 +166,16 @@ public sealed partial class Lexer
         _column = 1;
     }
 
-    private bool InvokePunctuators(out Token token)
+    private bool InvokeSymbols(out Token token)
     {
-        foreach (var punctuator in Config.Punctuators)
+        foreach (var symbol in Config.Symbols)
         {
-            if (!IsMatch(punctuator.Key))
+            if (!IsMatch(symbol.Key))
             {
                 continue;
             }
 
-            token = LexSymbol(punctuator.Key, Document);
+            token = LexSymbol(symbol.Key, Document);
             return true;
         }
 
@@ -233,7 +233,7 @@ public sealed partial class Lexer
         var nameSlice = Document.Source[start.._index];
         var name = nameSlice.ToString();
 
-        if (Config.Punctuators.ContainsKey(name))
+        if (Config.Symbols.ContainsKey(name))
         {
             return new(name, nameSlice, _line, oldColumn, document);
         }
@@ -264,7 +264,7 @@ public sealed partial class Lexer
     /// <returns><c>true</c> if the token name is a punctuator; otherwise, <c>false</c>.</returns>
     public bool IsPunctuator(string tokenName)
     {
-        return Config.Punctuators.ContainsKey(tokenName);
+        return Config.Symbols.ContainsKey(tokenName);
     }
 
     /// <summary>

@@ -11,12 +11,12 @@ namespace Silverfly.Repl;
 
 public class ReplPromptCallbacks : PromptCallbacks
 {
-    protected readonly string[] Keywords = ["let", "if", "then", "else", "import", "enum"];
     protected static readonly char[] Characters = [' '];
+    public Parser Parser { get; set; }
 
     protected override Task<IReadOnlyCollection<FormatSpan>> HighlightCallbackAsync(string text, CancellationToken cancellationToken)
     {
-        var keywords = Keywords.Select(f => (f, ToAnsi(MessageFormatter.Theme.Keyword)));
+        var keywords = Parser.Lexer.Config.Keywords.Select(f => (f, ToAnsi(MessageFormatter.Theme.Keyword)));
         var brackets = GetBracketSpans(text);
 
         var spans = GetKeywordSpans(text, keywords)

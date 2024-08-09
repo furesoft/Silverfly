@@ -6,8 +6,9 @@ using static System.ConsoleModifiers;
 
 namespace Silverfly.Repl;
 
-public abstract class ReplInstance<TParser>(PromptCallbacks funcPromptCallbacks)
+public abstract class ReplInstance<TParser, TCallbacks>()
     where TParser : Parser, new()
+    where TCallbacks : ReplPromptCallbacks, new()
 {
     protected readonly TParser Parser = new();
 
@@ -15,9 +16,12 @@ public abstract class ReplInstance<TParser>(PromptCallbacks funcPromptCallbacks)
 
     public async void Run()
     {
+        var callbacks = new TCallbacks();
+        callbacks.Parser = Parser;
+        
         await using var prompt = new Prompt(
             persistentHistoryFilepath: "./history-file",
-            callbacks: funcPromptCallbacks,
+            callbacks: callbacks,
             configuration: new PromptConfiguration(
                 prompt: new FormattedString("> "),
                 keyBindings: new KeyBindings(
