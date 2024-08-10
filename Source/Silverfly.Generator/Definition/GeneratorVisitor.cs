@@ -6,9 +6,10 @@ namespace Silverfly.Generator.Definition;
 
 public class GeneratorVisitor : NodeVisitor
 {
-    private readonly StringBuilder _builder;
-    private int _indentationLevel = 2;
     private const string IndentationString = "    "; // 4 spaces for each indentation level
+    private readonly StringBuilder _builder;
+    public readonly List<string> Names = [];
+    private int _indentationLevel = 2;
 
     public GeneratorVisitor(StringBuilder builder)
     {
@@ -19,6 +20,7 @@ public class GeneratorVisitor : NodeVisitor
         For<GroupNode>(Visit);
         For<BlockNode>(Visit);
         For<PrefixOperatorNode>(Visit);
+        For<PostfixOperatorNode>(VisitAsterisk, _ => _.Operator == "*");
     }
 
     private void AppendWithIndentation(string text)
@@ -36,8 +38,13 @@ public class GeneratorVisitor : NodeVisitor
     {
         if (prefix.Operator.Text.Span == "_")
         {
-            return; //ignore token
         }
+    }
+
+    private void VisitAsterisk(PostfixOperatorNode postfix)
+    {
+        //Todo: extract name from expression
+        //postfix.Expr.Accept(this);
     }
 
     private void Visit(NameNode name)
@@ -67,13 +74,15 @@ public class GeneratorVisitor : NodeVisitor
 
         if (group.Expr is BinaryOperatorNode bin && bin.Operator.Text.Span == ":")
         {
-            AppendWithIndentation($"_memorized.TryAdd(\"{GetName(bin.RightExpr)}\", ");
+            AppendWithIndentation($"var _{GetName(bin.RightExpr).ToLower()} = ");
+            Names.Add(GetName(bin.RightExpr));
+
             bin.LeftExpr.Accept(this);
             _builder.Append(");\n");
         }
     }
 
-    string GetName(AstNode node)
+    private string GetName(AstNode node)
     {
         if (node is NameNode name)
         {
@@ -95,5 +104,8 @@ public class GeneratorVisitor : NodeVisitor
         _indentationLevel++;
     }
 
-    public override string ToString() => _builder.ToString();
+    public override string ToString()
+    {
+        return _builder.ToString();
+    }
 }

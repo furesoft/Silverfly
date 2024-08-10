@@ -28,7 +28,7 @@ public abstract class TaggedNodeVisitor<TReturn, TTag> : NodeVisitorBase
             return VisitUnknown(node, tag);
         }
 
-        return AfterVisit(node, (TReturn)InvokeVisitor(node, tag));
+        return AfterVisit(node, InvokeVisitor<TReturn>(node, tag));
     }
 
     /// <summary>
@@ -43,7 +43,13 @@ public abstract class TaggedNodeVisitor<TReturn, TTag> : NodeVisitorBase
     public void For<TNode>(Func<TNode, TTag, TReturn> visitor)
         where TNode : AstNode
     {
-        Visitors[typeof(TNode)] = visitor;
+        RegisterVisitor<TNode>(visitor, _=> true);
+    }
+
+    public void For<TNode>(Func<TNode, TTag, TReturn> visitor, Predicate<TNode> predicate)
+        where TNode : AstNode
+    {
+        RegisterVisitor<TNode>(visitor, _ => predicate((TNode)_));
     }
 
     /// <summary>
@@ -85,11 +91,17 @@ public abstract class TaggedNodeVisitor<TTag> : NodeVisitorBase
 
         AfterVisit(node);
     }
-    
+
+    public void For<TNode>(Action<TNode, TTag> visitor, Predicate<TNode> predicate)
+        where TNode : AstNode
+    {
+        RegisterVisitor<TNode>(visitor, _ => predicate((TNode)_));
+    }
+
     public void For<TNode>(Action<TNode, TTag> visitor)
         where TNode : AstNode
     {
-        Visitors[typeof(TNode)] = visitor;
+        RegisterVisitor<TNode>(visitor, _ => true);
     }
 
     public virtual void Visit(BlockNode block, TTag tag)

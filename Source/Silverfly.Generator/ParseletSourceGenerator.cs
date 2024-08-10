@@ -125,8 +125,6 @@ public class ParseletSourceGenerator : IIncrementalGenerator
 
                          public partial class {{className}} {
                          
-                            private Dictionary<string, object> _memorized = new();
-                         
                             {{method}}
                          }
 
@@ -166,9 +164,15 @@ public class ParseletSourceGenerator : IIncrementalGenerator
             child.Accept(generator);
         }
 
-        builder.AppendLine("\t\treturn null;");
+        builder.AppendLine($"\t\treturn new {nodeType}({GenerateCtorCall(generator)});");
 
         builder.AppendLine("\t}");
+    }
+
+    private string GenerateCtorCall(GeneratorVisitor generator)
+    {
+        //name: ref
+        return string.Join(',', generator.Names.Select(n => $"{n}: _{n.ToLower()}"));
     }
 
     private void GenerateInfixParse(StringBuilder builder, AstNode definition, INamedTypeSymbol nodeType)
