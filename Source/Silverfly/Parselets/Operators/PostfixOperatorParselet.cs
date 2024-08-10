@@ -6,13 +6,12 @@ namespace Silverfly.Parselets.Operators;
 /// <summary>
 /// Generic infix parselet for an unary arithmetic operator.
 /// </summary>
-public class PostfixOperatorParselet(int bindingPower) : IInfixParselet
+public class PostfixOperatorParselet(int bindingPower, string tag) : IInfixParselet
 {
-    private readonly int _bindingPower = bindingPower;
 
     public AstNode Parse(Parser parser, AstNode left, Token token)
     {
-        var node = new PostfixOperatorNode(left, token)
+        var node = new PostfixOperatorNode(left, token, tag)
                 .WithRange(left.Range.Document, left.Range.Start, token.GetSourceSpanEnd());
 
         left.WithParent(node);
@@ -20,5 +19,5 @@ public class PostfixOperatorParselet(int bindingPower) : IInfixParselet
         return node;
     }
 
-    public int GetBindingPower() => _bindingPower;
+    public int GetBindingPower() => bindingPower;
 }
