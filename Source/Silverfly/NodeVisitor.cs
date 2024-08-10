@@ -80,7 +80,7 @@ public abstract class NodeVisitor : NodeVisitorBase
     /// If a registered visitor is found, it invokes that visitor and returns the result. If no specific visitor is found, it invokes the <see cref="VisitUnknown"/> method.
     /// After the visit, it processes the result through the <see cref="AfterVisit"/> method.
     /// </remarks>
-    public void Visit(AstNode node)
+    public virtual void Visit(AstNode node)
     {
         if (!HasVisitor(node))
         {
