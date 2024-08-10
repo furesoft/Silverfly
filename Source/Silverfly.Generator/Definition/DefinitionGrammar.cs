@@ -1,10 +1,14 @@
-﻿namespace Silverfly.Generator.Definition;
+﻿using Silverfly.Parselets;
+using Silverfly.Parselets.Literals;
+
+namespace Silverfly.Generator.Definition;
 
 public class DefinitionGrammar : Parser
 {
     protected override void InitLexer(LexerConfig lexer)
     {
         lexer.IgnoreWhitespace();
+        lexer.MatchString("'", "'");
     }
 
     protected override void InitParser(ParserDefinition def)
@@ -14,5 +18,10 @@ public class DefinitionGrammar : Parser
 
         def.Block(PredefinedSymbols.SOF, PredefinedSymbols.EOF,
             separator: PredefinedSymbols.EOL);
+
+        def.Register(PredefinedSymbols.Name, new NameParselet());
+        def.Register(PredefinedSymbols.String, new StringLiteralParselet());
+
+        def.InfixLeft(":", "Sum");
     }
 }

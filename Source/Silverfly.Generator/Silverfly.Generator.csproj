@@ -6,6 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PublishSingleFile>true</PublishSingleFile>
 
     <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
     <IncludeBuildOutput>false</IncludeBuildOutput>

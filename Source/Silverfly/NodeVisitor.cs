@@ -85,6 +85,7 @@ public abstract class NodeVisitor : NodeVisitorBase
         if (!HasVisitor(node))
         {
             VisitUnknown(node);
+            return;
         }
 
         InvokeVisitor(node);
