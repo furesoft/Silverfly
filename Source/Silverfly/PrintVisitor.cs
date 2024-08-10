@@ -32,7 +32,7 @@ public class PrintVisitor : NodeVisitor<string>
 
     private string Visit(GroupNode group)
     {
-        return $"({Visit(group.Expr)})";
+        return group.LeftSymbol + Visit(group.Expr) + group.RightSymbol;
     }
 
     protected string Visit(InvalidNode invalid)
