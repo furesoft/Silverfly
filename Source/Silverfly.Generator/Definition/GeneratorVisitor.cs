@@ -7,7 +7,7 @@ namespace Silverfly.Generator.Definition;
 public class GeneratorVisitor : NodeVisitor
 {
     private readonly StringBuilder _builder;
-    private int _indentationLevel = 1;
+    private int _indentationLevel = 2;
     private const string IndentationString = "    "; // 4 spaces for each indentation level
 
     public GeneratorVisitor(StringBuilder builder)
@@ -18,6 +18,7 @@ public class GeneratorVisitor : NodeVisitor
         For<LiteralNode>(Visit);
         For<GroupNode>(Visit);
         For<BlockNode>(Visit);
+        For<PrefixOperatorNode>(Visit);
     }
 
     private void AppendWithIndentation(string text)
@@ -31,15 +32,23 @@ public class GeneratorVisitor : NodeVisitor
         AppendWithIndentation($"parser.Consume(\"{name.Value}\");\n");
     }
 
+    private void Visit(PrefixOperatorNode prefix)
+    {
+        if (prefix.Operator.Text.Span == "_")
+        {
+            return; //ignore token
+        }
+    }
+
     private void Visit(NameNode name)
     {
         switch (name.Token.Text.ToString())
         {
             case "id":
-                AppendWithIndentation("parser.Consume(PredefinedSymbols.Name);\n");
+                AppendWithIndentation("parser.Consume(PredefinedSymbols.Name)");
                 break;
             case "expr":
-                AppendWithIndentation("parser.ParseExpression();\n");
+                AppendWithIndentation("parser.ParseExpression()");
                 break;
         }
     }
@@ -53,16 +62,14 @@ public class GeneratorVisitor : NodeVisitor
 
         if (group.Expr is NameNode nonterminal)
         {
-            if (nonterminal.Token.Text.Span == "expr")
-            {
-                AppendWithIndentation("parser.ParseExpr();\n");
-            }
+            group.Expr.Accept(this);
         }
 
         if (group.Expr is BinaryOperatorNode bin && bin.Operator.Text.Span == ":")
         {
-            AppendWithIndentation($"var {GetName(bin.RightExpr)} = ");
+            AppendWithIndentation($"_memorized.TryAdd(\"{GetName(bin.RightExpr)}\", ");
             bin.LeftExpr.Accept(this);
+            _builder.Append(");\n");
         }
     }
 
@@ -74,16 +81,6 @@ public class GeneratorVisitor : NodeVisitor
         }
 
         return null;
-    }
-
-    private new void Visit(BlockNode block)
-    {
-        BeginBlock();
-        foreach (var child in block.Children)
-        {
-            child.Accept(this);
-        }
-        EndBlock();
     }
 
     private void EndBlock()
