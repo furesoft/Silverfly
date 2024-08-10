@@ -129,7 +129,7 @@ public partial class {className}
     private bool IsVisitorMethod(SourceProductionContext context, IMethodSymbol method, INamedTypeSymbol classSymbol, ClassDeclarationSyntax classDeclarationSyntax)
     {
         // Check if the class inherits from TaggedNodeVisitor
-        var baseType = InheritsFrom(classSymbol, "NodeVisitorBase");
+        var baseType = Utils.InheritsFrom(classSymbol, "NodeVisitorBase");
 
         if (baseType == null) {
             return false; // Not inheriting from NodeVisitorBase
@@ -147,18 +147,5 @@ public partial class {className}
         }
 
         return true;
-    }
-
-    private static INamedTypeSymbol? InheritsFrom(INamedTypeSymbol classSymbol, string name)
-    {
-        var baseType = classSymbol.BaseType;
-        while (baseType != null)
-        {
-            if (baseType.Name == name)
-                break;
-            baseType = baseType.BaseType;
-        }
-
-        return baseType;
     }
 }
