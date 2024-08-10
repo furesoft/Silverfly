@@ -16,6 +16,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Costura.Fody" Version="5.7.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Fody" Version="6.8.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.4">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -25,20 +33,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Silverfly\Silverfly.csproj" />
-
-    <ProjectReference Include="..\Silverfly\Silverfly.csproj">
-      <Private>false</Private>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-      <OutputItemType>Analyzer</OutputItemType>
-    </ProjectReference>
-
-    <None Include="..\Silverfly\bin\$(Configuration)\net8.0\Silverfly.dll"
-          Pack="true"
-          PackagePath="analyzers/dotnet/cs"
-          Visible="false" />
+    <ProjectReference Include="..\Silverfly\Silverfly.csproj" PrivateAssets="all" ExcludeAssets="true" />
   </ItemGroup>
-
+  
   <ItemGroup>
     <Folder Include="Definition\Nodes\" />
     <Folder Include="Definition\Parselets\" />

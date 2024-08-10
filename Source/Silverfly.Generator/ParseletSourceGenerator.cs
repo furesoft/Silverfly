@@ -103,8 +103,9 @@ internal class {ParseletAttributeName}(string definition) : System.Attribute
             var className = classDeclarationSyntax.Identifier.Text;
             var filename = $"{className}.g.cs";
 
-            //var parser = new DefinitionGrammar();
-            //var parsed = parser.Parse((string)propertyValue, filename);
+
+            var parser = new DefinitionGrammar();
+            var parsed = parser.Parse((string)propertyValue, filename);
 
             var methodBody = GenerateParseMethod((string)propertyValue, classSymbol);
 
