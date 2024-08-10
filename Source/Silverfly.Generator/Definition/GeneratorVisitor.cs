@@ -7,6 +7,8 @@ namespace Silverfly.Generator.Definition;
 public class GeneratorVisitor : NodeVisitor
 {
     private readonly StringBuilder _builder;
+    private int _indentationLevel = 1;
+    private const string IndentationString = "    "; // 4 spaces for each indentation level
 
     public GeneratorVisitor(StringBuilder builder)
     {
@@ -18,16 +20,27 @@ public class GeneratorVisitor : NodeVisitor
         For<BlockNode>(Visit);
     }
 
+    private void AppendWithIndentation(string text)
+    {
+        _builder.Append(string.Concat(Enumerable.Repeat(IndentationString, _indentationLevel)));
+        _builder.Append(text);
+    }
+
     private void Visit(LiteralNode name)
     {
-        _builder.Append($"parser.Consume(\"{name.Value}\");");
+        AppendWithIndentation($"parser.Consume(\"{name.Value}\");\n");
     }
 
     private void Visit(NameNode name)
     {
-        if (name.Token.Text.ToString() == "id")
+        switch (name.Token.Text.ToString())
         {
-            _builder.Append("parser.Consume(PredefinedSymbols.Name)");
+            case "id":
+                AppendWithIndentation("parser.Consume(PredefinedSymbols.Name);\n");
+                break;
+            case "expr":
+                AppendWithIndentation("parser.ParseExpression();\n");
+                break;
         }
     }
 
@@ -42,15 +55,14 @@ public class GeneratorVisitor : NodeVisitor
         {
             if (nonterminal.Token.Text.Span == "expr")
             {
-                _builder.Append("parser.ParseExpr()");
+                AppendWithIndentation("parser.ParseExpr();\n");
             }
         }
 
         if (group.Expr is BinaryOperatorNode bin && bin.Operator.Text.Span == ":")
         {
-            _builder.Append($"\nvar {GetName(bin.RightExpr)} = ");
+            AppendWithIndentation($"var {GetName(bin.RightExpr)} = ");
             bin.LeftExpr.Accept(this);
-            _builder.AppendLine(";");
         }
     }
 
@@ -66,11 +78,24 @@ public class GeneratorVisitor : NodeVisitor
 
     private new void Visit(BlockNode block)
     {
+        BeginBlock();
         foreach (var child in block.Children)
         {
-            _builder.Append('\t');
             child.Accept(this);
         }
+        EndBlock();
+    }
+
+    private void EndBlock()
+    {
+        _indentationLevel--;
+        AppendWithIndentation("}\n");
+    }
+
+    private void BeginBlock()
+    {
+        AppendWithIndentation("{\n");
+        _indentationLevel++;
     }
 
     public override string ToString() => _builder.ToString();

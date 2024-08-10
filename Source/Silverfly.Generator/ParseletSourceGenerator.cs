@@ -110,7 +110,7 @@ public class ParseletSourceGenerator : IIncrementalGenerator
             var parser = new DefinitionGrammar();
             var parsed = parser.Parse((string)definition, filename);
 
-            var methodBody = GenerateParseMethod(parsed.Tree, classSymbol, nodeType);
+            var method = GenerateParseMethod(parsed.Tree, classSymbol, nodeType);
 
             // Build up the source code
             var code = $$"""
@@ -123,10 +123,10 @@ public class ParseletSourceGenerator : IIncrementalGenerator
 
                          namespace {{namespaceName}};
 
-                         public partial class {{className}}
-                         {
-                            {{methodBody}}
-                         }
+                         public partial class {{className}} {
+                         
+                            {{method}}
+                         
 
                          """;
 
@@ -157,12 +157,9 @@ public class ParseletSourceGenerator : IIncrementalGenerator
     {
         var generator = new GeneratorVisitor(builder);
 
-        builder.AppendLine("\tpublic AstNode Parse(Parser parser, Token token) {");
+        builder.AppendLine("\tpublic AstNode Parse(Parser parser, Token token)");
 
         definition.Accept(generator);
-
-        builder.AppendLine("\n\t\treturn null;");
-        builder.Append("\t}");
     }
 
     private void GenerateInfixParse(StringBuilder builder, AstNode definition, INamedTypeSymbol nodeType)
