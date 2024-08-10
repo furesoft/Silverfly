@@ -16,4 +16,24 @@ public static class Utils
 
         return baseType;
     }
+
+    public static bool ImplementsInterface(INamedTypeSymbol classSymbol, string interfaceName)
+    {
+        // Überprüfe die direkt implementierten Interfaces
+        foreach (var @interface in classSymbol.Interfaces)
+        {
+            if (@interface.Name == interfaceName || @interface.ToDisplayString() == interfaceName)
+            {
+                return true;
+            }
+        }
+
+        // Überprüfe rekursiv die Basisklassen
+        if (classSymbol.BaseType != null)
+        {
+            return ImplementsInterface(classSymbol.BaseType, interfaceName);
+        }
+
+        return false;
+    }
 }
