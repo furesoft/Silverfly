@@ -24,4 +24,24 @@
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.3.0"/>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Silverfly\Silverfly.csproj" />
+
+    <ProjectReference Include="..\Silverfly\Silverfly.csproj">
+      <Private>false</Private>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <OutputItemType>Analyzer</OutputItemType>
+    </ProjectReference>
+
+    <None Include="..\Silverfly\bin\$(Configuration)\net8.0\Silverfly.dll"
+          Pack="true"
+          PackagePath="analyzers/dotnet/cs"
+          Visible="false" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Definition\Nodes\" />
+    <Folder Include="Definition\Parselets\" />
+  </ItemGroup>
+
 </Project>
