@@ -18,9 +18,15 @@ public class GeneratorVisitor : NodeVisitor
         For<NameNode>(Visit);
         For<LiteralNode>(Visit);
         For<GroupNode>(VisitNonTerminal, group => group.LeftSymbol == "<" && group.RightSymbol == ">");
+        For<GroupNode>(VisitGroup, group => group.LeftSymbol == "(" && group.RightSymbol == ")");
         For<BlockNode>(Visit);
         For<PrefixOperatorNode>(Visit);
         For<PostfixOperatorNode>(VisitAsterisk, p => p.Operator == "*");
+    }
+
+    private void VisitGroup(GroupNode group)
+    {
+        Visit(group.Expr);
     }
 
     private void AppendWithIndentation(string text)

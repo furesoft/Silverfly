@@ -51,7 +51,7 @@ class ExpressionGrammar : Parser
         parserDefinition.Register("import", new ImportParselet());
         parserDefinition.Register("module", new ModuleParselet());
         parserDefinition.Register("@", new AnnotationParselet());
-        parserDefinition.Register("def", new GeneratedParselet());
+        //parserDefinition.Register("def", new GeneratedParselet());
 
         parserDefinition.Block(PredefinedSymbols.SOF, PredefinedSymbols.EOF,
             separator: PredefinedSymbols.EOL);
