@@ -1,4 +1,4 @@
-﻿using System.Collections.Immutable;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Text;
 using Silverfly.Nodes;
@@ -115,7 +115,7 @@ public class ConfigurablePrintVisitor : NodeVisitor<string>
 
         _indentLevel--;
 
-        builder.Append(Indent()).Append("}");
+        builder.Append(Indent()).Append('}');
         return builder.ToString();
     }
 
