@@ -97,9 +97,10 @@ public partial class ParserDefinition
     /// </summary>
     /// <param name="token">The symbol token.</param>
     /// <param name="bindingPowerName">The name of the binding power. Default is "Postfix".</param>
-    public void Postfix(Symbol token, string bindingPowerName = "Postfix")
+    public void Postfix(Symbol token, string bindingPowerName = "Postfix", string tag = null)
     {
-        Register(token, new PostfixOperatorParselet(PrecedenceLevels.GetPrecedence(bindingPowerName)));
+        Register(token,
+            new PostfixOperatorParselet(PrecedenceLevels.GetPrecedence(bindingPowerName), tag));
     }
 
     /// <summary>
@@ -107,9 +108,10 @@ public partial class ParserDefinition
     /// </summary>
     /// <param name="token">The symbol token.</param>
     /// <param name="bindingPowerName">The name of the binding power. Default is "Prefix".</param>
-    public void Prefix(Symbol token, string bindingPowerName = "Prefix")
+    public void Prefix(Symbol token, string bindingPowerName = "Prefix", string tag = null)
     {
-        Register(token, new PrefixOperatorParselet(PrecedenceLevels.GetPrecedence(bindingPowerName)));
+        Register(token,
+            new PrefixOperatorParselet(PrecedenceLevels.GetPrecedence(bindingPowerName), tag));
     }
 
     /// <summary>
