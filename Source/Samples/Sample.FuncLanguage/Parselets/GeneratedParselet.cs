@@ -8,6 +8,7 @@ namespace Silverfly.Sample.Func.Parselets;
 // _ ignore token
 // : name a token
 //<> nonterminal like <expr>, <block>, <statement>
+// ? 0..1
 // + 1..n
 // * 0..n
 [Parselet("_'def' <id:Name> '=' <expr:Value>", typeof(DefNode))]

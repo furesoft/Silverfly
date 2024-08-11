@@ -11,7 +11,7 @@ public class IndexParselet(int bindingPower) : IInfixParselet
         var expr = parser.Parse(0);
         parser.Consume(PredefinedSymbols.RightSquare);
 
-        return new BinaryOperatorNode(left, token.Rewrite("."), expr);
+        return new BinaryOperatorNode(left, token.Rewrite("."), expr).WithRange(token, parser.LookAhead(0));
     }
 
     public int GetBindingPower() => bindingPower;

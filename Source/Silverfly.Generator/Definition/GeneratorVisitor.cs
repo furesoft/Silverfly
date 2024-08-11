@@ -22,6 +22,12 @@ public class GeneratorVisitor : NodeVisitor
         For<BlockNode>(Visit);
         For<PrefixOperatorNode>(Visit);
         For<PostfixOperatorNode>(VisitAsterisk, p => p.Operator == "*");
+        For<PostfixOperatorNode>(VisitOptional, p => p.Operator == "?");
+    }
+
+    private void VisitOptional(PostfixOperatorNode obj)
+    {
+        throw new NotImplementedException();
     }
 
     private void VisitGroup(GroupNode group)

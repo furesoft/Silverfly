@@ -117,6 +117,7 @@ public class ParseletSourceGenerator : IIncrementalGenerator
 
                          namespace {{namespaceName}};
 
+                         //{{definition}}
                          public partial class {{className}} {
                          
                             {{method}}
@@ -158,7 +159,7 @@ public class ParseletSourceGenerator : IIncrementalGenerator
             child.Accept(generator);
         }
 
-        builder.AppendLine($"\t\treturn new {nodeType}({GenerateCtorCall(generator)});");
+        builder.AppendLine($"\n\t\treturn new {nodeType}({GenerateCtorCall(generator)})\n\t\t\t.WithRange(token, parser.LookAhead(0));");
         //builder.Append("return null;");
         builder.AppendLine("\t}");
     }

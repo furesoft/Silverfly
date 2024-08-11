@@ -17,6 +17,7 @@ public class DefinitionGrammar : Parser
         def.Group("(", ")");
 
         def.Prefix("_", tag: "keyword");
+        def.Postfix("?", tag: "optional");
         def.Postfix("*", tag: "zeroOrMore");
 
         def.Block(PredefinedSymbols.SOF, PredefinedSymbols.EOF,
