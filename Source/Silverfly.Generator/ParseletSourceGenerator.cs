@@ -93,12 +93,7 @@ public class ParseletSourceGenerator : IIncrementalGenerator
 
             // Get the property value from the attribute (replace "PropertyName" with the actual property name)
             var definition = attribute.ConstructorArguments[0].Value;
-            var nodeType = (INamedTypeSymbol)attribute.ConstructorArguments[1].Value;
-
-            if (definition == null || nodeType == null)
-            {
-                continue;
-            }
+            var nodeType = (INamedTypeSymbol)attribute.ConstructorArguments[1].Value!;
 
             var namespaceName = classSymbol.ContainingNamespace.ToDisplayString();
 
@@ -106,9 +101,8 @@ public class ParseletSourceGenerator : IIncrementalGenerator
             var className = classDeclarationSyntax.Identifier.Text;
             var filename = $"{className}.g.cs";
 
-
             var parser = new DefinitionGrammar();
-            var parsed = parser.Parse((string)definition, filename);
+            var parsed = parser.Parse((string)definition!, filename);
 
             var method = GenerateParseMethod(parsed.Tree, classSymbol, nodeType);
 
@@ -165,7 +159,7 @@ public class ParseletSourceGenerator : IIncrementalGenerator
         }
 
         builder.AppendLine($"\t\treturn new {nodeType}({GenerateCtorCall(generator)});");
-
+        //builder.Append("return null;");
         builder.AppendLine("\t}");
     }
 

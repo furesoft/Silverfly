@@ -16,4 +16,4 @@ public partial class GeneratedParselet : IPrefixParselet
 
 }
 
-record DefNode(Token Name, AstNode Value) : AstNode;
+public record DefNode(Token Name, AstNode Value) : AstNode;
