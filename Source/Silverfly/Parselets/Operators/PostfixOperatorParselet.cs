@@ -8,7 +8,6 @@ namespace Silverfly.Parselets.Operators;
 /// </summary>
 public class PostfixOperatorParselet(int bindingPower, string tag) : IInfixParselet
 {
-
     public AstNode Parse(Parser parser, AstNode left, Token token)
     {
         var node = new PostfixOperatorNode(left, token, tag)
