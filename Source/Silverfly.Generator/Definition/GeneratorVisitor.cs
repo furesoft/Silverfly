@@ -27,7 +27,14 @@ public class GeneratorVisitor : NodeVisitor
 
     private void VisitOptional(PostfixOperatorNode obj)
     {
-        throw new NotImplementedException();
+        if (obj.Expr is LiteralNode terminal)
+        {
+            AppendWithIndentation($"if (parser.IsMatch(\"{terminal.Value}\")) {{\n");
+            _indentationLevel++;
+            AppendWithIndentation($"parser.Consume();\n");
+            _indentationLevel--;
+            AppendWithIndentation("}\n");
+        }
     }
 
     private void VisitGroup(GroupNode group)
