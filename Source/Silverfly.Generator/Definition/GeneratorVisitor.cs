@@ -17,10 +17,10 @@ public class GeneratorVisitor : NodeVisitor
 
         For<NameNode>(Visit);
         For<LiteralNode>(Visit);
-        For<GroupNode>(Visit);
+        For<GroupNode>(VisitNonTerminal, group => group.LeftSymbol == "<" && group.RightSymbol == ">");
         For<BlockNode>(Visit);
         For<PrefixOperatorNode>(Visit);
-        For<PostfixOperatorNode>(VisitAsterisk, _ => _.Operator == "*");
+        For<PostfixOperatorNode>(VisitAsterisk, p => p.Operator == "*");
     }
 
     private void AppendWithIndentation(string text)
@@ -60,13 +60,8 @@ public class GeneratorVisitor : NodeVisitor
         }
     }
 
-    private void Visit(GroupNode group)
+    private void VisitNonTerminal(GroupNode group)
     {
-        if (group.LeftSymbol != "<" || group.RightSymbol != ">")
-        {
-            return;
-        }
-
         if (group.Expr is NameNode nonterminal)
         {
             group.Expr.Accept(this);
@@ -78,7 +73,7 @@ public class GeneratorVisitor : NodeVisitor
             Names.Add(GetName(bin.RightExpr));
 
             bin.LeftExpr.Accept(this);
-            _builder.Append(");\n");
+            _builder.Append(";\n");
         }
     }
 
