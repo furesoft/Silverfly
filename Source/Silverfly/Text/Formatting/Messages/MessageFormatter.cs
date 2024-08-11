@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Silverfly.Lexing.Matcher;
-using Silverfly.Text.Formatting.Themes;
+using Silverfly.Text.Formatting.Messages.Themes;
 
-namespace Silverfly.Text.Formatting;
+namespace Silverfly.Text.Formatting.Messages;
 
 /// <summary>
 /// Provides methods to format and display compiler messages with syntax highlighting and theming.

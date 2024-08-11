@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Silverfly.Text.Formatting.Themes;
+namespace Silverfly.Text.Formatting.Messages.Themes;
 
 public class DefaultFormatterTheme : FormatterTheme
 {

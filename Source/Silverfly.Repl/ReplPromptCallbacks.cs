@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using PrettyPrompt;
 using PrettyPrompt.Highlighting;
 using Silverfly.Text.Formatting;
+using Silverfly.Text.Formatting.Messages;
 
 namespace Silverfly.Repl;
 

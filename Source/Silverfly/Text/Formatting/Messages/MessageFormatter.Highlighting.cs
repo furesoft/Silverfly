@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 
-namespace Silverfly.Text.Formatting;
+namespace Silverfly.Text.Formatting.Messages;
 
 public partial class MessageFormatter
 {
