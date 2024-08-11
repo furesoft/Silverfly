@@ -14,6 +14,8 @@ public class DefinitionGrammar : Parser
     protected override void InitParser(ParserDefinition def)
     {
         def.Group("<", ">", "nonTerminal");
+        def.Group("(", ")");
+
         def.Prefix("_", tag: "keyword");
         def.Postfix("*", tag: "zeroOrMore");
 
