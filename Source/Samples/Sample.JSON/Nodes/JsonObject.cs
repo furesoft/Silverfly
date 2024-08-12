@@ -2,4 +2,4 @@
 
 namespace Sample.JSON.Nodes;
 
-public record JsonObject(KeyValuePair<string, AstNode> Values) : AstNode;
+public record JsonObject(Dictionary<string, AstNode> Members) : AstNode;

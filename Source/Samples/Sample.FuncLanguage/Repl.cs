@@ -6,7 +6,7 @@ namespace Silverfly.Sample.Func;
 
 class Repl() : ReplInstance<ExpressionGrammar, FuncPromptCallbacks>
 {
-    public override void Evaluate(string input)
+    protected override void Evaluate(string input)
     {
         var parsed = Parser.Parse(input, "repl.f");
         var rewritten = parsed.Tree.Accept(new RewriterVisitor());

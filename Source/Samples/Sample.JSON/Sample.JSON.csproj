@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Silverfly.Repl\Silverfly.Repl.csproj" />
     <ProjectReference Include="..\..\Silverfly\Silverfly.csproj" />
   </ItemGroup>
 

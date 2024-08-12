@@ -6,13 +6,17 @@ using static System.ConsoleModifiers;
 
 namespace Silverfly.Repl;
 
+public abstract class ReplInstance<TParser>() : ReplInstance<TParser, ReplPromptCallbacks>
+    where TParser : Parser, new()
+{}
+
 public abstract class ReplInstance<TParser, TCallbacks>()
     where TParser : Parser, new()
     where TCallbacks : ReplPromptCallbacks, new()
 {
     protected readonly TParser Parser = new();
 
-    public abstract void Evaluate(string input);
+    protected abstract void Evaluate(string input);
 
     public async void Run()
     {

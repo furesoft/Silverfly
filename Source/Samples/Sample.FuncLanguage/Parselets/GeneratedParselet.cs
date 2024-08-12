@@ -8,8 +8,8 @@ namespace Silverfly.Sample.Func.Parselets;
 // : name a token
 //<> nonterminal like <expr>, <block>, <statement>
 // ? 0..1
-// + 1..n
 // * 0..n
+// + 1..n
 [Parselet("_'let' 'mut'? <id:Name> '=' <expr:Value>", typeof(DefNode))]
 public partial class GeneratedParselet : IPrefixParselet
 {
