@@ -8,7 +8,8 @@ namespace Sample.JSON;
 [Visitor]
 partial class JsonPrinter : NodeVisitor
 {
-    private void VisitArr(JsonArray obj)
+    [VisitorCondition("_.Values.Count > 0")]
+    private void VisitArray(JsonArray obj)
     {
         Console.Write("[");
         
@@ -21,7 +22,7 @@ partial class JsonPrinter : NodeVisitor
         Console.Write("]");
     }
 
-    private void VsitLiteral(LiteralNode lit)
+    private void VisitLiteral(LiteralNode lit)
     {
         Console.Write(lit.Value);
     }
