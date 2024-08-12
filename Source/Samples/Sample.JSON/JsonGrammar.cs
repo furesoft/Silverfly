@@ -12,7 +12,7 @@ public class JsonGrammar : Parser
         lexer.MatchBoolean();
         lexer.MatchNumber(false, false);
         lexer.MatchString("\"", "\"");
-        lexer.AddSymbol("null");
+        lexer.AddKeywords("null", "true", "false");
     }
 
     protected override void InitParser(ParserDefinition parserDefinition)
@@ -21,5 +21,6 @@ public class JsonGrammar : Parser
 
         parserDefinition.Register("{", new ObjectParselet());
         parserDefinition.Register("null", new NullParselet());
+        parserDefinition.Register("[", new JsonArrayParselet());
     }
 }

@@ -1,6 +1,4 @@
-﻿using Silverfly;
-
-namespace Sample.JSON;
+﻿namespace Sample.JSON;
 
 public static class Program
 {

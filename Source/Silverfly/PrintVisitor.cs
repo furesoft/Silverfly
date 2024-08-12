@@ -48,42 +48,38 @@ public class PrintVisitor : NodeVisitor<string>
         builder.Append(node.GetType().Name);
 
         var properties = node.GetType().GetProperties();
+        var firstProperty = true;
+
         foreach (var property in properties)
         {
             var value = property.GetValue(node);
 
+            if (value == null) continue; // Skip null values
+
             if (property.PropertyType == typeof(Token))
             {
-                builder.Append($" {property.Name}={(Token)value!}");
+                if (!firstProperty) builder.Append(',');
+                builder.Append($" {property.Name}={(Token)value}");
+                firstProperty = false;
                 continue;
             }
 
             if (property.PropertyType == typeof(ImmutableList<AstNode>))
             {
                 var list = (ImmutableList<AstNode>)value;
-                builder.Append($" {property.Name}={string.Join(',', list!.Select(Visit))}");
+                if (!firstProperty) builder.Append(',');
+                builder.Append($" {property.Name}=[{string.Join(", ", list!.Select(Visit))}]");
+                firstProperty = false;
                 continue;
             }
 
-            if (property.PropertyType == typeof(Token))
+            if (property.PropertyType == typeof(AstNode))
             {
-                builder.Append($" {property.Name}={(Token)property.GetValue(node)!}");
-                continue;
+                if (!firstProperty) builder.Append(',');
+                builder.Append($" {property.Name}={Visit((AstNode)value)}");
+                firstProperty = false;
             }
-
-            if (property.PropertyType != typeof(AstNode) || property.GetValue(node) == null) continue;
-
-            builder.Append(' ');
-            builder.Append(property.Name);
-            builder.Append('=');
-
-            builder.Append(Visit((AstNode)value));
-
-            builder.Append(',');
         }
-
-        // remove the trailing comma
-        builder.Length -= 1;
 
         builder.Append(')');
 
