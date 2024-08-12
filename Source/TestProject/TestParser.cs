@@ -6,29 +6,29 @@ namespace TestProject;
 
 public class TestParser : Parser
 {
-    protected override void InitParser(ParserDefinition parserDefinition)
+    protected override void InitParser(ParserDefinition def)
     {
-        parserDefinition.Register(PredefinedSymbols.Name, new NameParselet());
+        def.Register(PredefinedSymbols.Name, new NameParselet());
 
-        parserDefinition.Register("(", new CallParselet(parserDefinition.PrecedenceLevels.GetPrecedence("Call")));
+        def.Register("(", new CallParselet(def.PrecedenceLevels.GetPrecedence("Call")));
 
-        parserDefinition.Ternary("?", ":", "Conditional");
-        parserDefinition.InfixLeft(".", "Call");
+        def.Ternary("?", ":", "Conditional");
+        def.InfixLeft(".", "Call");
 
-        parserDefinition.AddArithmeticOperators();
-        parserDefinition.AddBitOperators();
-        parserDefinition.AddLogicalOperators();
-        parserDefinition.AddCommonLiterals();
-        parserDefinition.AddCommonAssignmentOperators();
+        def.AddArithmeticOperators();
+        def.AddBitOperators();
+        def.AddLogicalOperators();
+        def.AddCommonLiterals();
+        def.AddCommonAssignmentOperators();
 
-        parserDefinition.Prefix("not");
-        parserDefinition.Postfix("!");
+        def.Prefix("not");
+        def.Postfix("!");
 
-        parserDefinition.InfixRight("^", "Exponent");
+        def.InfixRight("^", "Exponent");
 
-        parserDefinition.InfixLeft("->", "Product");
+        def.InfixLeft("->", "Product");
 
-        parserDefinition.Block(PredefinedSymbols.SOF, PredefinedSymbols.EOF,
+        def.Block(PredefinedSymbols.SOF, PredefinedSymbols.EOF,
             separator: PredefinedSymbols.Semicolon);
     }
 

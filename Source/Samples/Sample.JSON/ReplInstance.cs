@@ -1,5 +1,4 @@
-﻿using Silverfly.Generator;
-using Silverfly.Repl;
+﻿using Silverfly.Repl;
 
 namespace Sample.JSON;
 

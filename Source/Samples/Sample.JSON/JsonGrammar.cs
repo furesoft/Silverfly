@@ -8,19 +8,22 @@ public class JsonGrammar : Parser
 {
     protected override void InitLexer(LexerConfig lexer)
     {
+        lexer.AddKeywords("null", "true", "false");
+        
         lexer.IgnoreWhitespace();
+        
         lexer.MatchBoolean();
         lexer.MatchNumber(false, false);
         lexer.MatchString("\"", "\"");
-        lexer.AddKeywords("null", "true", "false");
+        
     }
 
-    protected override void InitParser(ParserDefinition parserDefinition)
+    protected override void InitParser(ParserDefinition def)
     {
-        parserDefinition.AddCommonLiterals();
+        def.AddCommonLiterals();
 
-        parserDefinition.Register("{", new ObjectParselet());
-        parserDefinition.Register("null", new NullParselet());
-        parserDefinition.Register("[", new JsonArrayParselet());
+        def.Register("{", new ObjectParselet());
+        def.Register("null", new NullParselet());
+        def.Register("[", new JsonArrayParselet());
     }
 }

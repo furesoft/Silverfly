@@ -182,12 +182,12 @@ public abstract partial class Parser
     /// <summary>
     /// Initializes the parser with the specified parser definition.
     /// </summary>
-    /// <param name="parserDefinition">The definition settings for initializing the parser.</param>
+    /// <param name="def">The definition settings for initializing the parser.</param>
     /// <remarks>
     /// This abstract method must be implemented in derived classes to provide custom initialization logic for the parser.
-    /// The <paramref name="parserDefinition"/> parameter contains the settings and rules that define how the parser should be configured.
+    /// The <paramref name="def"/> parameter contains the settings and rules that define how the parser should be configured.
     /// </remarks>
-    protected abstract void InitParser(ParserDefinition parserDefinition);
+    protected abstract void InitParser(ParserDefinition def);
 
     /// <summary>
     /// Checks if the current symbol matches the expected symbol and consumes it if it does.
