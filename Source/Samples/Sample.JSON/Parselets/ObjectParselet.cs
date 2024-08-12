@@ -9,10 +9,8 @@ public class ObjectParselet : IPrefixParselet
 {
     public AstNode Parse(Parser parser, Token token)
     {
-        // Erstellt eine leere Map für die Schlüssel-Wert-Paare
         var objectMembers = new Dictionary<string, AstNode>();
-
-        // Schleife über die Objektmitglieder
+        
         while (!parser.Match("}"))
         {
             var keyToken = parser.Consume(PredefinedSymbols.String);

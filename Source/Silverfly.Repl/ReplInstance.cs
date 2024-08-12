@@ -20,9 +20,8 @@ public abstract class ReplInstance<TParser, TCallbacks>()
 
     public async void Run()
     {
-        var callbacks = new TCallbacks();
-        callbacks.Parser = Parser;
-        
+        var callbacks = new TCallbacks { Parser = Parser };
+
         await using var prompt = new Prompt(
             persistentHistoryFilepath: "./history-file",
             callbacks: callbacks,
