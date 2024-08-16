@@ -12,14 +12,19 @@ public class RockstarGrammar : Parser
     protected override void InitLexer(LexerConfig lexer)
     {
         lexer.AddSymbols("(", ")");
+        
         lexer.AddKeywords(AliasedBooleanMatcher.TrueAliases);
         lexer.AddKeywords(AliasedBooleanMatcher.FalseAliases);
         lexer.AddKeywords(EmptyStringMatcher.Aliases);
+        lexer.AddKeywords(PronounMatcher.Pronouns);
+        
+        lexer.MatchNumber(false,false);
         
         lexer.UseNameAdvancer(new RockstarNameAdvancer());
+        
         lexer.AddMatcher(new AliasedBooleanMatcher());
-        lexer.MatchNumber(false,false);
         lexer.AddMatcher(new EmptyStringMatcher());
+        lexer.AddMatcher(new PronounMatcher());
         
         lexer.IgnoreWhitespace();
         lexer.Ignore(new MultiLineCommentIgnoreMatcher("(", ")"));
