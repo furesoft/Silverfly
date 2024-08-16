@@ -3,9 +3,9 @@ using Silverfly.Lexing;
 
 namespace Sample.Rockstar.Matchers;
 
-public class EmptyStringMatcher : IMatcher
+public class MappingMatcher(Symbol type, string[] aliases) : IMatcher
 {
-    public static readonly string[] Aliases = ["empty", "silent", "silence"];
+    public string[] Aliases { get; } = aliases;
     public bool Match(Lexer lexer, char c)
     {
         return Aliases.Any(alias => lexer.IsMatch(alias));
@@ -24,6 +24,6 @@ public class EmptyStringMatcher : IMatcher
             }
         }
 
-        return new("#empty_string", lexer.Document.Source[oldIndex..index], line, oldColumn, lexer.Document);
+        return new(type, lexer.Document.Source[oldIndex..index], line, oldColumn, lexer.Document);
     }
 }

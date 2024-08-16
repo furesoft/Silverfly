@@ -4,10 +4,10 @@ using Silverfly.Parselets;
 
 namespace Sample.Rockstar.Parselets;
 
-public class EmptyStringParselet : IPrefixParselet
+public class MappingParselet(object Value) : IPrefixParselet
 {
     public AstNode Parse(Parser parser, Token token)
     {
-        return new LiteralNode("", token).WithRange(token);
+        return new LiteralNode(Value, token).WithRange(token);
     }
 }
