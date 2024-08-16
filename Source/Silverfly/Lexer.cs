@@ -52,7 +52,7 @@ public sealed partial class Lexer
     /// </summary>
     /// <param name="distance">The distance from the current index to peek.</param>
     /// <returns>The character at the specified distance, or '\0' if the distance is out of range.</returns>
-    public char Peek(int distance)
+    public char Peek(int distance = 0)
     {
         if (_index + distance >= Document.Source.Length)
         {
