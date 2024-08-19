@@ -3,6 +3,7 @@ using Sample.Rockstar.Parselets;
 using Silverfly;
 using Silverfly.Lexing.IgnoreMatcher.Comments;
 using Silverfly.Parselets;
+using Silverfly.Parselets.Literals;
 using static Silverfly.PredefinedSymbols;
 
 namespace Sample.Rockstar;
@@ -20,6 +21,7 @@ public class RockstarGrammar : Parser
         lexer.AddKeywords(AliasedBooleanMatcher.FalseAliases);
         lexer.AddKeywords(emptyStringMatcher.Aliases);
         lexer.AddKeywords(pronounMatcher.Aliases);
+        lexer.AddKeywords("let", "be", "put", "into");
 
         lexer.MatchNumber(false,false);
 
@@ -32,6 +34,8 @@ public class RockstarGrammar : Parser
         
         lexer.IgnoreWhitespace();
         lexer.Ignore(new MultiLineCommentIgnoreMatcher("(", ")"));
+
+        lexer.IgnoreCasing = true;
     }
 
     protected override void InitParser(ParserDefinition def)
@@ -43,7 +47,10 @@ public class RockstarGrammar : Parser
         def.Register("#empty_string", new MappingParselet(""));
         def.Register("#null", new MappingParselet(null));
         def.Register("#pronoun", new MappingParselet(null));
+        
+        def.Register(new AssignmentParselet(), "let", "put");
 
         def.Register(Name, new NameParselet());
+        def.Register(Number, new NumberParselet());
     }
 }
