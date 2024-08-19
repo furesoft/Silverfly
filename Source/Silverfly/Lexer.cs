@@ -34,6 +34,9 @@ public sealed partial class Lexer
     public void SetSource(ReadOnlyMemory<char> source, string filename = "tmp.synthetic")
     {
         _index = -1;
+        _line = 1;
+        _column = 1;
+        
         Document = new() { Filename = filename, Source = source };
     }
     
