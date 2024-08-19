@@ -11,6 +11,11 @@ public class RockstarCallbacks : ReplPromptCallbacks
     protected override Task<IReadOnlyList<CompletionItem>> GetCompletionItemsAsync(string text, int caret, TextSpan spanToBeReplaced, CancellationToken cancellationToken)
     {
         var samples = Directory.GetFiles("Samples");
+
+        if (text != "samples") //toDo: fix completion
+        {
+            return Task.FromResult<IReadOnlyList<CompletionItem>>(Array.Empty<CompletionItem>());
+        }
         
         return Task.FromResult<IReadOnlyList<CompletionItem>>(
             samples
