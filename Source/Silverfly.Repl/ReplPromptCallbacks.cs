@@ -69,14 +69,14 @@ public class ReplPromptCallbacks : PromptCallbacks
     }
 
 
-    private static IEnumerable<FormatSpan> GetKeywordSpans(string text, IEnumerable<(string TextToFormat, AnsiColor Color)> formattingInfo)
+    private IEnumerable<FormatSpan> GetKeywordSpans(string text, IEnumerable<(string TextToFormat, AnsiColor Color)> formattingInfo)
     {
         foreach (var (textToFormat, color) in formattingInfo)
         {
             int startIndex;
             int offset = 0;
 
-            while ((startIndex = text.AsSpan(offset).IndexOf(textToFormat)) != -1)
+            while ((startIndex = text.AsSpan(offset).ToString().IndexOf(textToFormat, Parser.Lexer.Config.Casing)) != -1)
             {
                 yield return new FormatSpan(offset + startIndex, textToFormat.Length, color);
                 offset += startIndex + textToFormat.Length;

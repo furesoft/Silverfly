@@ -16,6 +16,8 @@ public class LexerConfig
     public readonly List<string> Keywords = [];
     internal readonly List<IMatcher> Matchers = [];
     internal readonly List<IIgnoreMatcher> IgnoreMatchers = [];
+    public bool IgnoreCasing { get; set; }
+    public StringComparison Casing => IgnoreCasing ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal;
 
     public LexerConfig()
     {
@@ -30,6 +32,7 @@ public class LexerConfig
             }
         }
     }
+
 
     // sort punctuators longest -> smallest to make it possible to use symbols with more than one character
     internal void OrderSymbols()
