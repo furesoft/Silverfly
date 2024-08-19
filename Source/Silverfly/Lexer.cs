@@ -173,7 +173,7 @@ public sealed partial class Lexer
     {
         foreach (var symbol in Config.Symbols)
         {
-            if (!IsMatch(symbol.Key))
+            if (!IsMatch(symbol.Key, Config.IgnoreCasing))
             {
                 continue;
             }

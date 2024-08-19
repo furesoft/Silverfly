@@ -236,7 +236,7 @@ public abstract partial class Parser
 
         var token = LookAhead(distance);
 
-        return token.Type.Equals(expected);
+        return CompareToken(token, expected);
     }
 
     private void EnsureSymbolIsRegistered(Symbol expected)
@@ -263,6 +263,11 @@ public abstract partial class Parser
         return result;
     }
 
+    private bool CompareToken(Token token, Symbol expected)
+    {
+        return token.Type.Name.AsSpan().CompareTo(expected.Name.AsSpan(), _lexerConfig.Casing) != 0;
+    }
+
     /// <summary>
     /// If the <paramref name="expected"/> symbol is matched, consume the token.
     /// </summary>
@@ -273,8 +278,8 @@ public abstract partial class Parser
         var token = LookAhead(0);
 
         EnsureSymbolIsRegistered(expected);
-
-        if (!token.Type.Equals(expected))
+        
+        if (!CompareToken(token, expected))
         {
             token.Document.Messages.Add(
                 Message.Error($"Expected token {expected} and found {token.Type}({token})", token.GetRange()));

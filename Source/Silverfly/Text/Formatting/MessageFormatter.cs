@@ -64,6 +64,11 @@ public partial class MessageFormatter(Parser parser)
 
         var highlightIndex = error.Message.Range.Start.Column;
 
+        if (error.Message.Range.End.Column - highlightIndex < 0)
+        {
+            return;
+        }
+
         var underline = new string(' ', highlightIndex) +
                         new string('~', error.Message.Range.End.Column - highlightIndex);
 
@@ -121,7 +126,7 @@ public partial class MessageFormatter(Parser parser)
             // Highlight keywords
             foreach (var keyword in parser.Lexer.Config.Keywords)
             {
-                if (!line[currentIndex..].StartsWith(keyword) ||
+                if (!line[currentIndex..].StartsWith(keyword, parser.Lexer.Config.Casing) ||
                     (currentIndex + keyword.Length != line.Length &&
                      char.IsLetterOrDigit(line[currentIndex + keyword.Length])))
                 {
