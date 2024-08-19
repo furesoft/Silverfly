@@ -12,6 +12,8 @@ public class RockstarGrammar : Parser
 {
     protected override void InitLexer(LexerConfig lexer)
     {
+        lexer.IgnoreCasing = true;
+        
         lexer.AddSymbols("(", ")");
         var emptyStringMatcher = new MappingMatcher("#empty_string", ["empty", "silent", "silence"]);
         var nullStringMatcher = new MappingMatcher("#null", ["null", "nothing", "nowhere", "nobody", "gone"]);
@@ -21,6 +23,7 @@ public class RockstarGrammar : Parser
         lexer.AddKeywords(AliasedBooleanMatcher.FalseAliases);
         lexer.AddKeywords(emptyStringMatcher.Aliases);
         lexer.AddKeywords(pronounMatcher.Aliases);
+        lexer.AddKeywords(PrintParselet.Aliases);
         lexer.AddKeywords("let", "be", "put", "into");
 
         lexer.MatchNumber(false,false);
@@ -35,7 +38,6 @@ public class RockstarGrammar : Parser
         lexer.IgnoreWhitespace();
         lexer.Ignore(new MultiLineCommentIgnoreMatcher("(", ")"));
 
-        lexer.IgnoreCasing = true;
     }
 
     protected override void InitParser(ParserDefinition def)
@@ -52,5 +54,7 @@ public class RockstarGrammar : Parser
 
         def.Register(Name, new NameParselet());
         def.Register(Number, new NumberParselet());
+        
+        def.Register(new PrintParselet(), PrintParselet.Aliases.Select(a => (Symbol)a).ToArray());
     }
 }
