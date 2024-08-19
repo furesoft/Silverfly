@@ -149,6 +149,11 @@ public partial class MessageFormatter(Parser parser)
             {
                 HighlightNumber(line, ref currentIndex);
             }
+
+            if (currentIndex >= line.Length)
+            {
+                break;
+            }
             
             // Highlight parentheses and braces
             if (IsOpenBracket(line[currentIndex]))
