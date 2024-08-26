@@ -140,14 +140,14 @@ public sealed partial class Lexer
                 return token;
             }
 
-            if (Config.NameAdvancer.IsNameStart(c))
-            {
-                return LexName(Document);
-            }
-
             if (InvokeSymbols(out var next))
             {
                 return next;
+            }
+
+            if (Config.NameAdvancer.IsNameStart(c))
+            {
+                return LexName(Document);
             }
 
             Document.Messages.Add(Message.Error($"Unknown Character '{c}'", SourceRange.From(Document, _line, _column, _line, _column)));
@@ -173,7 +173,7 @@ public sealed partial class Lexer
     {
         foreach (var symbol in Config.Symbols)
         {
-            if (!IsMatch(symbol.Key, Config.IgnoreCasing))
+            if (IsSpecialToken(symbol.Key) || !IsMatch(symbol.Key, Config.IgnoreCasing))
             {
                 continue;
             }

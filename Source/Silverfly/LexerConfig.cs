@@ -68,6 +68,11 @@ public class LexerConfig
     public void AddKeywords(params string[] keywords)
     {
         this.Keywords.AddRange(keywords);
+
+        foreach (var keyword in keywords)
+        {
+            Symbols.TryAdd(keyword, keyword);
+        }
     }
 
     /// <summary>

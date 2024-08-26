@@ -37,7 +37,6 @@ public class RockstarGrammar : Parser
         
         lexer.IgnoreWhitespace();
         lexer.Ignore(new MultiLineCommentIgnoreMatcher("(", ")"));
-
     }
 
     protected override void InitParser(ParserDefinition def)
@@ -54,6 +53,6 @@ public class RockstarGrammar : Parser
         def.Register(Name, new NameParselet());
         def.Register(Number, new NumberParselet());
         
-        def.Register(new PrintParselet(), PrintParselet.Aliases.Select(a => (Symbol)a).ToArray());
+        def.Register(new PrintParselet(), PrintParselet.Aliases);
     }
 }
