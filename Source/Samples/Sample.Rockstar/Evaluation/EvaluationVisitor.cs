@@ -20,12 +20,22 @@ public partial class EvaluationVisitor : TaggedNodeVisitor<object, Scope>
 
     private object VisitCall(CallNode call, Scope scope)
     {
-        if (call.FunctionExpr is NameNode name && name.Token == "call")
+        if (call.FunctionExpr is NameNode name && name.Token == "say")
         {
             Console.WriteLine(Visit(call.Arguments[0], scope));
         }
 
         return null;
+    }
+
+    private object VisitLiteral(LiteralNode node, Scope scope)
+    {
+        return node.Value;
+    }
+
+    private object VisitName(NameNode node, Scope scope)
+    {
+        return scope.Get(node.Token.Text.ToString());
     }
 
     private object VisitBlock(BlockNode block, Scope scope)

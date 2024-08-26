@@ -68,6 +68,19 @@ public partial class ParserDefinition
     }
 
     /// <summary>
+    /// Registers a prefix parselet for multiple tokens.
+    /// </summary>
+    /// <param name="parselet">The prefix parselet to be registered.</param>
+    /// <param name="tokens">The array of symbol tokens.</param>
+    public void Register(IPrefixParselet parselet, params string[] tokens)
+    {
+        foreach (var token in tokens)
+        {
+            Register(token, parselet);
+        }
+    }
+
+    /// <summary>
     /// Registers a group parselet for the given left and right tokens.
     /// </summary>
     /// <param name="leftToken">The left symbol token.</param>

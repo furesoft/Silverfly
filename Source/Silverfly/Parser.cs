@@ -265,7 +265,7 @@ public abstract partial class Parser
 
     private bool CompareToken(Token token, Symbol expected)
     {
-        return token.Type.Name.AsSpan().CompareTo(expected.Name.AsSpan(), _lexerConfig.Casing) != 0;
+        return token.Type.Name.AsSpan().CompareTo(expected.Name.AsSpan(), _lexerConfig.Casing) == 0;
     }
 
     /// <summary>
