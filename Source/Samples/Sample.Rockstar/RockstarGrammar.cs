@@ -42,8 +42,7 @@ public class RockstarGrammar : Parser
 
     protected override void InitParser(ParserDefinition def)
     {
-        def.Block(SOF, EOF,
-            separator: EOL);
+        def.Block(SOF, EOF, separator: EOL);
         
         def.Register(PredefinedSymbols.Boolean, new AliasedBooleanParselet());
         def.Register("#empty_string", new MappingParselet(""));

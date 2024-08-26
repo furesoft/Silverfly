@@ -121,7 +121,7 @@ internal class {VisitorConditionAttributeName}(string condition) : System.Attrib
                 
                 if (conditionAttribute != null)
                 {
-                    return $"{call}, _ => {conditionAttribute.ConstructorArguments[0].Value});";
+                    return $"{call}, _ => {conditionAttribute.ConstructorArguments[0].Value.ToString().Replace('\'', '"')});";
                 }
                 
                 
