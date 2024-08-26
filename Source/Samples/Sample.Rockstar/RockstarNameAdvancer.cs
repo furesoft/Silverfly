@@ -1,11 +1,10 @@
-﻿using Silverfly;
+using Silverfly;
 using Silverfly.Lexing;
 
 namespace Sample.Rockstar;
 
 public class RockstarNameAdvancer : INameAdvancer
 {
-
     public bool IsNameStart(char c)
     {
         return char.IsLetter(c);
