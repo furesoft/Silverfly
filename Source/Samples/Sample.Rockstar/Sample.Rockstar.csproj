@@ -1,10 +1,19 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <OutputType>Exe</OutputType>
-        <TargetFramework>net8.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
+      <Version>1.0.68</Version>
+      <OutputType>Exe</OutputType>
+      <LangVersion>preview</LangVersion>
+      <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+      <Title>Silverfly.Sample.Rockstar</Title>
+      <AssemblyName>Silverfly.Sample.Rockstar</AssemblyName>
+      <RootNamespace>Silverfly.Sample.Rockstar</RootNamespace>
+      <Copyright>furesoft</Copyright>
+      <RepositoryUrl>https://github.com/furesoft/Silverfly</RepositoryUrl>
+      <Description>A full blown example of Silverfly</Description>
+      <PackageTags>parser, pratt</PackageTags>
+      <TargetFramework>net8.0</TargetFramework>
+      <ImplicitUsings>enable</ImplicitUsings>
     </PropertyGroup>
   
   <ItemGroup>
