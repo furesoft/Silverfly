@@ -27,6 +27,8 @@ public class RockstarGrammar : Parser
         lexer.AddKeywords(PrintParselet.Aliases);
         lexer.AddKeywords("let", "be", "put", "into");
 
+        lexer.AddSymbol(Environment.NewLine);
+
         lexer.MatchNumber(false,false);
 
         lexer.UseNameAdvancer(new RockstarNameAdvancer());
@@ -37,7 +39,7 @@ public class RockstarGrammar : Parser
         lexer.AddMatcher(pronounMatcher);
         lexer.AddMatcher(poeticLiteralMatcher);
         
-        lexer.IgnoreWhitespace();
+        lexer.Ignore(" ");
         lexer.Ignore(new MultiLineCommentIgnoreMatcher("(", ")"));
     }
 
@@ -51,7 +53,7 @@ public class RockstarGrammar : Parser
         def.Register("#pronoun", new MappingParselet(null));
         
         def.Register(new AssignmentParselet(), "let", "put");
-        def.InfixLeft("#poetic", "Sum");
+        def.Register("#poetic", new PoeticLiteralParselet());
 
         def.Register(Name, new NameParselet());
         def.Register(Number, new NumberParselet());
