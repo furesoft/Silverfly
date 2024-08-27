@@ -65,11 +65,11 @@ jobs:
         run: |
           dotnet build -c Release -o ./nuget Source/Silverfly/Silverfly.csproj
           dotnet build -c Release -o ./nuget Source/Silverfly.Testing/Silverfly.Testing.csproj
-          dotnet build -c Release -o ./nuget Source/Silverfly.Generator/Silverfly.Generator.csproj
           dotnet build -c Release -o ./nuget Source/Silverfly.Repl/Silverfly.Repl.csproj
-          dotnet build -c Release -o ./nuget Source/Samples/Sample.FuncLanguage/Sample.FuncLanguage.csproj
-          dotnet build -c Release -o ./nuget Source/Samples/Sample.JSON/Sample.JSON.csproj
-          dotnet build -c Release -o ./nuget Source/Samples/Sample.Rockstar/Sample.Rockstar.csproj
+          dotnet build -o ./nuget Source/Silverfly.Generator/Silverfly.Generator.csproj
+          dotnet build -o ./nuget Source/Samples/Sample.FuncLanguage/Sample.FuncLanguage.csproj
+          dotnet build -o ./nuget Source/Samples/Sample.JSON/Sample.JSON.csproj
+          dotnet build -o ./nuget Source/Samples/Sample.Rockstar/Sample.Rockstar.csproj
 
       - name: Publish to NuGet
         uses: actions/upload-artifact@v4
