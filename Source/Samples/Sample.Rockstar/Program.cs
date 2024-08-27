@@ -1,4 +1,4 @@
-﻿namespace Sample.Rockstar;
+﻿namespace Silverfly.Sample.Rockstar;
 
 class Program
 {

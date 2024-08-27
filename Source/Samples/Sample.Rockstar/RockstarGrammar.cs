@@ -1,12 +1,11 @@
-﻿using Sample.Rockstar.Matchers;
-using Sample.Rockstar.Parselets;
-using Silverfly;
-using Silverfly.Lexing.IgnoreMatcher.Comments;
+﻿using Silverfly.Lexing.IgnoreMatcher.Comments;
 using Silverfly.Parselets;
 using Silverfly.Parselets.Literals;
+using Silverfly.Sample.Rockstar.Matchers;
+using Silverfly.Sample.Rockstar.Parselets;
 using static Silverfly.PredefinedSymbols;
 
-namespace Sample.Rockstar;
+namespace Silverfly.Sample.Rockstar;
 
 public class RockstarGrammar : Parser
 {
@@ -18,11 +17,13 @@ public class RockstarGrammar : Parser
         var emptyStringMatcher = new MappingMatcher("#empty_string", ["empty", "silent", "silence"]);
         var nullStringMatcher = new MappingMatcher("#null", ["null", "nothing", "nowhere", "nobody", "gone"]);
         var pronounMatcher = new MappingMatcher("#pronoun", ["it", "he", "she", "him", "her", "they", "them", "ze", "hir", "zie", "zir", "xe", "xem", "ve", "ver"]);
+        var poeticLiteralMatcher = new MappingMatcher("#poetic", ["is", "are", "was", "were"]);
 
         lexer.AddKeywords(AliasedBooleanMatcher.TrueAliases);
         lexer.AddKeywords(AliasedBooleanMatcher.FalseAliases);
         lexer.AddKeywords(emptyStringMatcher.Aliases);
         lexer.AddKeywords(pronounMatcher.Aliases);
+        lexer.AddKeywords(poeticLiteralMatcher.Aliases);
         lexer.AddKeywords(PrintParselet.Aliases);
         lexer.AddKeywords("let", "be", "put", "into");
 
@@ -34,6 +35,7 @@ public class RockstarGrammar : Parser
         lexer.AddMatcher(emptyStringMatcher);
         lexer.AddMatcher(nullStringMatcher);
         lexer.AddMatcher(pronounMatcher);
+        lexer.AddMatcher(poeticLiteralMatcher);
         
         lexer.IgnoreWhitespace();
         lexer.Ignore(new MultiLineCommentIgnoreMatcher("(", ")"));
@@ -49,6 +51,7 @@ public class RockstarGrammar : Parser
         def.Register("#pronoun", new MappingParselet(null));
         
         def.Register(new AssignmentParselet(), "let", "put");
+        def.InfixLeft("#poetic", "Sum");
 
         def.Register(Name, new NameParselet());
         def.Register(Number, new NumberParselet());

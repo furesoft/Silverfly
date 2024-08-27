@@ -1,4 +1,4 @@
-namespace Sample.Rockstar.Evaluation;
+namespace Silverfly.Sample.Rockstar.Evaluation;
 
 public class Scope(bool isRoot = false)
 {
