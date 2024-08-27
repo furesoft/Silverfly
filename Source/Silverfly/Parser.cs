@@ -211,7 +211,7 @@ public abstract partial class Parser
     /// </summary>
     /// <param name="expected">An array of expected symbols to match.</param>
     /// <returns>True if any of the expected symbols match; otherwise, false.</returns>
-    public bool Match(Symbol[] expected)
+    public bool Match(params Symbol[] expected)
     {
         foreach (var symbol in expected)
         {
