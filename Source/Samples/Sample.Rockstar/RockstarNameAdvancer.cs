@@ -1,7 +1,6 @@
-using Silverfly;
 using Silverfly.Lexing;
 
-namespace Sample.Rockstar;
+namespace Silverfly.Sample.Rockstar;
 
 public class RockstarNameAdvancer : INameAdvancer
 {

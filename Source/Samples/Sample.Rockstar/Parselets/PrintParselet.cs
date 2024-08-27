@@ -1,9 +1,8 @@
 ﻿using System.Collections.Immutable;
-using Silverfly;
 using Silverfly.Nodes;
 using Silverfly.Parselets;
 
-namespace Sample.Rockstar.Parselets;
+namespace Silverfly.Sample.Rockstar.Parselets;
 
 public class PrintParselet : IPrefixParselet
 {

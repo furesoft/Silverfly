@@ -1,7 +1,6 @@
-﻿using Silverfly;
-using Silverfly.Lexing;
+﻿using Silverfly.Lexing;
 
-namespace Sample.Rockstar.Matchers;
+namespace Silverfly.Sample.Rockstar.Matchers;
 
 public class AliasedBooleanMatcher : IMatcher
 {

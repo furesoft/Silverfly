@@ -4,7 +4,7 @@ using PrettyPrompt.Documents;
 using PrettyPrompt.Highlighting;
 using Silverfly.Repl;
 
-namespace Sample.Rockstar;
+namespace Silverfly.Sample.Rockstar;
 
 public class RockstarCallbacks : ReplPromptCallbacks
 {

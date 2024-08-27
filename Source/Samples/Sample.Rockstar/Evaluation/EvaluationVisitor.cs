@@ -1,10 +1,9 @@
-﻿using Silverfly;
-using Silverfly.Generator;
+﻿using Silverfly.Generator;
 using Silverfly.Nodes;
 using Silverfly.Nodes.Operators;
 using Silverfly.Sample.Rockstar.Evaluation;
 
-namespace Sample.Rockstar.Evaluation;
+namespace Silverfly.Sample.Rockstar.Evaluation;
 
 [Visitor]
 public partial class EvaluationVisitor : TaggedNodeVisitor<object, Scope>

@@ -1,9 +1,8 @@
-﻿using Sample.Rockstar.Matchers;
-using Silverfly;
-using Silverfly.Nodes;
+﻿using Silverfly.Nodes;
 using Silverfly.Parselets;
+using Silverfly.Sample.Rockstar.Matchers;
 
-namespace Sample.Rockstar.Parselets;
+namespace Silverfly.Sample.Rockstar.Parselets;
 
 public class AliasedBooleanParselet : IPrefixParselet
 {
