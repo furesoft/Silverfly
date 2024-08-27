@@ -19,7 +19,7 @@ public partial class EvaluationVisitor : TaggedNodeVisitor<object, Scope>
 
     private object VisitCall(CallNode call, Scope scope)
     {
-        if (call.FunctionExpr is NameNode name && name.Token == "say")
+        if (call.FunctionExpr is NameNode name && name.Token == "print")
         {
             Console.WriteLine(Visit(call.Arguments[0], scope));
         }
