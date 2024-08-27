@@ -6,6 +6,7 @@
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 ![Discord](https://img.shields.io/discord/455738571186241536)
 ![Libraries.io SourceRank](https://img.shields.io/librariesio/sourcerank/nuget/silverfly)
+[![](https://tokei.rs/b1/github/furesoft/Silverfly)](https://github.com/furesoft/Silverfly).
 
 Silverfly is a versatile parsing framework that provides extensive support for building custom parsers with ease. It supports Pratt parsing, a powerful method for parsing expressions and statements in a flexible manner.
 
