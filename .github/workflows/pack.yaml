@@ -83,7 +83,7 @@ jobs:
           directory: ./Source
           badge: ./output/badge.svg
           ignore: 'node_modules/|README'
-          pattern: "*.cs"
+          patterns: "*.cs"
 
       - name: Print the output
         run: |
