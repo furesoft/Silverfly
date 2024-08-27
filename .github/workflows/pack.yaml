@@ -75,21 +75,6 @@ jobs:
         run: |
           dotnet nuget push ./nuget/*.nupkg --api-key "${{ secrets.NUGET_APIKEY }}" --source https://api.nuget.org/v3/index.json --skip-duplicate
 
-      - name: Launch the local action
-        uses: shadowmoose/GHA-LoC-Badge@1.0.0
-        id: badge
-        with:
-          debug: true
-          directory: ./Source
-          badge: ./output/badge.svg
-          ignore: 'node_modules/|README'
-          patterns: "*.cs"
-
-      - name: Print the output
-        run: |
-          echo "Scanned: ${{ steps.badge.outputs.counted_files }}";
-          echo "Line Count: ${{ steps.badge.outputs.total_lines }}";
-
       - name: Deploy to image-data branch
         uses: peaceiris/actions-gh-pages@v3
         with:
@@ -109,11 +94,4 @@ jobs:
           new_branch: update-version
           add: '["Source/Silverfly/Silverfly.csproj", "Source/Silverfly.Testing/Silverfly.Testing.csproj", "Source/Silverfly.Generator/Silverfly.Generator.csproj", "Source/Silverfly.Repl/Silverfly.Repl.csproj"]'
 
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v5
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          branch: update-version
-          base: main
-          title: "Update version to ${{ env.RELEASE_VERSION }}"
-          body: "This PR updates the .csproj files to version ${{ env.RELEASE_VERSION }}."
+
