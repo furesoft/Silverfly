@@ -26,7 +26,8 @@ public class RockstarGrammar : Parser
         lexer.AddKeywords(poeticLiteralMatcher.Aliases);
         lexer.AddKeywords(PrintParselet.Aliases);
         lexer.AddKeywords("let", "be", "put", "into");
-
+        
+        lexer.AddSymbol(Environment.NewLine + Environment.NewLine); //blank lines
         lexer.AddSymbol(Environment.NewLine);
 
         lexer.MatchNumber(false,false);
@@ -59,5 +60,7 @@ public class RockstarGrammar : Parser
         def.Register(Number, new NumberParselet());
         
         def.Register(new PrintParselet(), PrintParselet.Aliases);
+        
+        def.Block("if", "#line");
     }
 }
