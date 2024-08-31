@@ -4,7 +4,7 @@ using Silverfly.Nodes.Operators;
 
 namespace Silverfly.Generator.Definition;
 
-public class GeneratorVisitor : NodeVisitor
+internal class GeneratorVisitor : NodeVisitor
 {
     private const string IndentationString = "    "; // 4 spaces for each indentation level
     private readonly StringBuilder _builder;

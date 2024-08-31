@@ -3,7 +3,7 @@ using Silverfly.Parselets.Literals;
 
 namespace Silverfly.Generator.Definition;
 
-public class DefinitionGrammar : Parser
+internal class DefinitionGrammar : Parser
 {
     protected override void InitLexer(LexerConfig lexer)
     {
