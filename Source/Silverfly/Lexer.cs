@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Silverfly.Text;
 
@@ -178,7 +179,7 @@ public sealed partial class Lexer
                 continue;
             }
 
-            token = LexSymbol(symbol.Key, Document);
+            token = LexSymbol(symbol, Document);
             return true;
         }
 
@@ -216,13 +217,13 @@ public sealed partial class Lexer
         return false;
     }
 
-    private Token LexSymbol(string punctuatorKey, SourceDocument document)
+    private Token LexSymbol(KeyValuePair<string, Symbol> punctuatorKey, SourceDocument document)
     {
         var oldColumn = _column;
 
-        Advance(punctuatorKey.Length);
+        Advance(punctuatorKey.Key.Length);
 
-        return new(punctuatorKey, punctuatorKey.AsMemory(), _line, oldColumn, document);
+        return new(punctuatorKey.Value, punctuatorKey.Key.AsMemory(), _line, oldColumn, document);
     }
 
     private Token LexName(SourceDocument document)
