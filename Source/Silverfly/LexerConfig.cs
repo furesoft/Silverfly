@@ -50,6 +50,16 @@ public class LexerConfig
         Symbols.Add(symbol, PredefinedSymbols.Pool.Get(symbol));
     }
 
+    public void AddSymbol(string symbol, string type)
+    {
+        if (Symbols.ContainsKey(symbol))
+        {
+            return;
+        }
+
+        Symbols.Add(symbol, type);
+    }
+
     /// <summary>
     /// Adds a keyword to the Keywords collection and Symbols dictionary.
     /// </summary>
