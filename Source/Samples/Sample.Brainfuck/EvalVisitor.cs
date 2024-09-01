@@ -14,7 +14,7 @@ public partial class EvalVisitor : NodeVisitor
     [VisitorCondition("_.Token == '.'")]
     void Print(OperationNode node)
     {
-        Console.WriteLine(_cells[_pointer]);
+        Console.Write(_cells[_pointer]);
     }
 
     [VisitorCondition("_.Token == ','")]
