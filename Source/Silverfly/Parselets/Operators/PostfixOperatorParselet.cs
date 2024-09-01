@@ -11,8 +11,9 @@ public class PostfixOperatorParselet(int bindingPower, string tag) : IInfixParse
 
     public AstNode Parse(Parser parser, AstNode left, Token token)
     {
-        var node = new PostfixOperatorNode(left, token, tag)
-                .WithRange(left.Range.Document, left.Range.Start, token.GetSourceSpanEnd());
+        var node = new PostfixOperatorNode(left, token)
+            .WithTag(tag)
+            .WithRange(left.Range.Document, left.Range.Start, token.GetSourceSpanEnd());
 
         left.WithParent(node);
 

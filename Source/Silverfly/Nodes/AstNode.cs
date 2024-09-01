@@ -15,6 +15,11 @@ public abstract record AstNode
     public SourceRange Range { get; set; }
 
     /// <summary>
+    /// A property to store extra information
+    /// </summary>
+    public object Tag { get; set; }
+
+    /// <summary>
     /// Gets or sets the parent node of this AST node.
     /// </summary>
     public AstNode? Parent { get; set; }
@@ -106,5 +111,12 @@ public abstract record AstNode
     public void AddMessage(MessageSeverity severity, string message, Token token)
     {
         Range.Document.Messages.Add(new Message(severity, message, token.GetRange()));
+    }
+
+    public AstNode WithTag(object tag)
+    {
+        Tag = tag;
+
+        return this;
     }
 }
