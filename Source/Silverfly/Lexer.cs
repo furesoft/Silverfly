@@ -266,9 +266,9 @@ public sealed partial class Lexer
     /// </summary>
     public void AdvanceIfMatch(string symbol)
     {
-        if (lexer.IsMatch(symbol, Config.IgnoreCasing))
+        if (IsMatch(symbol, Config.IgnoreCasing))
         {
-            lexer.Advance(symbol.Length);
+            Advance(symbol.Length);
         }
     }
 

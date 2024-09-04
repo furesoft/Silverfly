@@ -3,8 +3,7 @@
 /// <summary>
 /// Represents a matcher that identifies boolean literals ("true" or "false") in the lexer input.
 /// </summary>
-/// <param name="ignoreCasing">Determines whether the casing of the boolean literals should be ignored.</param>
-public class BooleanMatcher(bool ignoreCasing = false) : IMatcher
+public class BooleanMatcher : IMatcher
 {
     /// <summary>
     /// Determines whether the current lexer position matches a boolean literal ("true" or "false").
@@ -16,7 +15,7 @@ public class BooleanMatcher(bool ignoreCasing = false) : IMatcher
     /// </returns>
     public bool Match(Lexer lexer, char c)
     {
-        return lexer.IsMatch("true", ignoreCasing) || lexer.IsMatch("false", ignoreCasing);
+        return lexer.IsMatch("true", lexer.Config.IgnoreCasing) || lexer.IsMatch("false", lexer.Config.IgnoreCasing);
     }
 
     /// <summary>
@@ -34,14 +33,8 @@ public class BooleanMatcher(bool ignoreCasing = false) : IMatcher
         var oldColumn = column;
         var oldIndex = index;
 
-        if (lexer.IsMatch("true", ignoreCasing))
-        {
-            lexer.Advance("true".Length);
-        }
-        else if (lexer.IsMatch("false", ignoreCasing))
-        {
-            lexer.Advance("false".Length);
-        }
+        lexer.AdvanceIfMatch("true");
+        lexer.AdvanceIfMatch("false");
 
         return new(PredefinedSymbols.Boolean, lexer.Document.Source[oldIndex..index], line, oldColumn, lexer.Document);
     }
