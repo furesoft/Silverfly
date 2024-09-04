@@ -262,6 +262,17 @@ public sealed partial class Lexer
     }
 
     /// <summary>
+    /// Advances the current position in the document if a symbol matches.
+    /// </summary>
+    public void AdvanceIfMatch(string symbol)
+    {
+        if (lexer.IsMatch(symbol, Config.IgnoreCasing))
+        {
+            lexer.Advance(symbol.Length);
+        }
+    }
+
+    /// <summary>
     /// Determines whether the specified token name is a punctuator.
     /// </summary>
     /// <param name="tokenName">The name of the token to check.</param>
