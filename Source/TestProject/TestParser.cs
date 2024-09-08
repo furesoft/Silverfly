@@ -37,7 +37,7 @@ public class TestParser : Parser
         lexer.IgnoreWhitespace();
         lexer.Ignore("\r", "\r\n");
 
-        lexer.MatchBoolean(ignoreCasing: true);
+        lexer.MatchBoolean();
         lexer.MatchString("'", "'");
         lexer.MatchNumber(allowHex: true, allowBin: true);
 
