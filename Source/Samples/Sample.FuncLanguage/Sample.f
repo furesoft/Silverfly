@@ -1,10 +1,5 @@
 import std // import all members of std.f to the current scope
 
-/*does not work
-let k = "hello world"
-print(k.1..5)
-*/
-
 /* not yet implemented
 
 let outer = Box.make(())
@@ -18,7 +13,7 @@ enum Color = R | G | B
 
 print(Color.R)
 
-let reflectedColor = reflect(Color) // get all metadata about object (name, members)
+let reflectedColor = reflect(Color) // get all metadata about color (name, members)
 print(reflectedColor.name) //returns type name
 print(reflectedColor.members) // returns list of members
 print(reflectedColor.members.0.name) // returns name of member 0 -> R
@@ -39,8 +34,11 @@ print("hello".length) // get an attribute from a value
 print("hello".0) // index based access - returns the first character
 print("hello".(1+1)) // computed index based access . returns the third character
 
+let k = "hello world"
+print(k[1..5])
+
 let m = (2,3,5,7,11) // define a tuple variable
-print(m.2) //print the third element of m - 5
+print(m.2) //print the third element of m = 5
 
 // define functions to be decorated to other functions
 let on_enter call = print("Entering " + call)
