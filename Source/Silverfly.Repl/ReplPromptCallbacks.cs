@@ -21,6 +21,7 @@ public class ReplPromptCallbacks : PromptCallbacks
 
         var spans = GetKeywordSpans(text, keywords)
             .Concat(brackets)
+            .Concat(GetNumberSpans(text))
             .Concat(GetStringsSpans(text))
             .ToList();
 
@@ -107,6 +108,26 @@ public class ReplPromptCallbacks : PromptCallbacks
             yield return new FormatSpan(startIndex, length, ToAnsi(MessageFormatter.Theme.String));
 
             offset = endIndex + 1;
+        }
+    }
+
+    private static IEnumerable<FormatSpan> GetNumberSpans(string text)
+    {
+        int offset = 0;
+
+        while (offset < text.Length)
+        {
+            if (char.IsDigit(text[offset]))
+            {
+                int startIndex = offset;
+
+                while (char.IsDigit(text[offset]))
+                {
+                    offset++;
+                }
+
+                yield return new FormatSpan(startIndex, offset, ToAnsi(MessageFormatter.Theme.Number));
+            }
         }
     }
 }
