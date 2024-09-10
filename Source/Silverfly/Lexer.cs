@@ -264,12 +264,16 @@ public sealed partial class Lexer
     /// <summary>
     /// Advances the current position in the document if a symbol matches.
     /// </summary>
-    public void AdvanceIfMatch(string symbol)
+    public bool AdvanceIfMatch(string symbol)
     {
         if (IsMatch(symbol, Config.IgnoreCasing))
         {
             Advance(symbol.Length);
+
+            return true;
         }
+
+        return false;
     }
 
     /// <summary>
