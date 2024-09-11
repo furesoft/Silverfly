@@ -15,8 +15,8 @@ public class LexerConfig
     internal INameAdvancer NameAdvancer = new DefaultNameAdvancer();
     internal Dictionary<string, Symbol> Symbols = [];
     public readonly List<string> Keywords = [];
-    internal readonly List<IMatcher> Matchers = [];
-    internal readonly List<IIgnoreMatcher> IgnoreMatchers = [];
+    public readonly List<IMatcher> Matchers = [];
+    public readonly List<IIgnoreMatcher> IgnoreMatchers = [];
     public bool IgnoreCasing { get; set; }
     public StringComparison Casing => IgnoreCasing ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal;
 
