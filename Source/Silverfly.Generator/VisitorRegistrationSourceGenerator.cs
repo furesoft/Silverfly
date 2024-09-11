@@ -115,13 +115,13 @@ internal class {VisitorConditionAttributeName}(string condition) : System.Attrib
             string GenerateFor(IMethodSymbol p)
             {
                 var conditionAttribute = p.GetAttributes()
-                    .FirstOrDefault(a => a.AttributeClass.Name == VisitorConditionAttributeName);
+                    .FirstOrDefault(a => a.AttributeClass!.Name == VisitorConditionAttributeName);
 
                 var call = $"        For<{p.Parameters.First().Type.ToDisplayString()}>({p.Name}";
                 
                 if (conditionAttribute != null)
                 {
-                    return $"{call}, _ => {conditionAttribute.ConstructorArguments[0].Value.ToString().Replace('\'', '"')});";
+                    return $"{call}, _ => {conditionAttribute.ConstructorArguments[0].Value!.ToString()!.Replace('\'', '"')});";
                 }
                 
                 
@@ -171,11 +171,6 @@ public partial class {className}
                 return false;
         }
 
-        if (method.IsAbstract || method.IsOverride)
-        {
-            return false;
-        }
-
-        return true;
+        return method is { IsAbstract: false, IsOverride: false };
     }
 }

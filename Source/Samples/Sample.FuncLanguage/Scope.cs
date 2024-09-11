@@ -54,14 +54,9 @@ public class Scope(bool isRoot = false)
         return Parent?.Get(name)!;
     }
 
-    public T Get<T>(string name)
+    public T? Get<T>(string name)
         where T : Value
     {
-        return (T)Get(name);
-    }
-
-    public string NewIdentifier()
-    {
-        return $"__tmp__{Guid.NewGuid():N}";
+        return (T)Get(name)!;
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Sample.Rockstar.Evaluation;
 using Silverfly.Repl;
+using Silverfly.Sample.Rockstar.Evaluation;
 
 namespace Sample.Rockstar;
 

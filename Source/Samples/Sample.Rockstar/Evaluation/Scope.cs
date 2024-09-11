@@ -1,10 +1,11 @@
-namespace Sample.Rockstar.Evaluation;
+#nullable enable
+namespace Silverfly.Sample.Rockstar.Evaluation;
 
 public class Scope(bool isRoot = false)
 {
-    public Scope? Parent { get; set; }
+    public Scope? Parent { get; init; }
     public bool IsRoot { get; set; } = isRoot;
-    public Dictionary<string, object> Bindings { get; set; } = [];
+    public Dictionary<string, object> Bindings { get; } = [];
 
     public static readonly Scope Root = new(true);
 

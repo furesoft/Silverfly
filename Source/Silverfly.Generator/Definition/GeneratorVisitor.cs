@@ -81,22 +81,28 @@ public class GeneratorVisitor : NodeVisitor
 
     private void VisitNonTerminal(GroupNode group)
     {
-        if (group.Expr is NameNode nonterminal)
+        switch (group.Expr)
         {
-            group.Expr.Accept(this);
-        }
+            case NameNode nonterminal:
+                group.Expr.Accept(this);
+                break;
+            case BinaryOperatorNode bin when bin.Operator == ":":
+                {
+                    var name = GetName(bin.RightExpr);
 
-        if (group.Expr is BinaryOperatorNode bin && bin.Operator.Text.Span == ":")
-        {
-            AppendWithIndentation($"var _{GetName(bin.RightExpr).ToLower()} = ");
-            Names.Add(GetName(bin.RightExpr));
+                    if (name is null) return;
+            
+                    AppendWithIndentation($"var _{name.ToLower()} = ");
+                    Names.Add(name);
 
-            bin.LeftExpr.Accept(this);
-            _builder.Append(";\n");
+                    bin.LeftExpr.Accept(this);
+                    _builder.Append(";\n");
+                    break;
+                }
         }
     }
 
-    private string GetName(AstNode node)
+    private string? GetName(AstNode node)
     {
         if (node is NameNode name)
         {

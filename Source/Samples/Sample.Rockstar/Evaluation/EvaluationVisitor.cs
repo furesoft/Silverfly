@@ -2,6 +2,7 @@
 using Silverfly.Generator;
 using Silverfly.Nodes;
 using Silverfly.Nodes.Operators;
+using Silverfly.Sample.Rockstar.Evaluation;
 
 namespace Sample.Rockstar.Evaluation;
 

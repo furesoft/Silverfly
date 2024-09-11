@@ -5,11 +5,11 @@ namespace Silverfly.Sample.Func;
 
 public static class Program
 {
-    public static async Task Main(string[] args)
+    public static Task Main(string[] args)
     {
         Scope.Root.Define("print", new Action<object>(x =>
         {
-            if (x == UnitValue.Shared)
+            if ((Value)x == UnitValue.Shared)
             {
                 return;
             }
@@ -49,6 +49,7 @@ public static class Program
         Scope.Root.Define("greet", Value.From(new Func<Value>(() => null)));
 
         new Repl().Run();
+        return Task.CompletedTask;
     }
 
     private static Value GetPrimitiveName(Value value)
