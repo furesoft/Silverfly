@@ -49,7 +49,7 @@ public class Program
 }
 ```
 
-For more detailed instructions and advanced usage, please refer to the [Wiki](https://github.com/furesoft/Silverfly/wiki).
+For more detailed instructions and advanced usage, please refer to the [Docs]([https://github.com/furesoft/Silverfly/wiki](https://furesoft.gitbook.io/silverfly)).
 A great example can be found [here](https://github.com/furesoft/Silverfly/tree/main/Source/Samples/Sample.FuncLanguage)
 
 ## Contributing
