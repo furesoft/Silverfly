@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Silverfly.Lexing;
@@ -70,14 +71,14 @@ public class LexerConfig
 
         Symbols.TryAdd(keyword, keyword);
     }
-    
+
     /// <summary>
     /// Adds multiple keywords to the Keywords collection and Symbols dictionary.
     /// </summary>
     /// <param name="keywords">An array of keywords to be added.</param>
     public void AddKeywords(params string[] keywords)
     {
-        this.Keywords.AddRange(keywords);
+        Keywords.AddRange(keywords);
 
         foreach (var keyword in keywords)
         {
@@ -136,7 +137,7 @@ public class LexerConfig
         AddMatcher(new NumberMatcher(allowHex, allowBin, floatingPointSymbol ?? PredefinedSymbols.Dot,
             separatorSymbol ?? PredefinedSymbols.Underscore));
     }
-    
+
     /// <summary>
     /// Adds a new regular expression matcher for a specified symbol type.
     /// </summary>
@@ -150,7 +151,7 @@ public class LexerConfig
     {
         AddMatcher(new RegexMatcher(type, regex));
     }
-    
+
     /// <summary>
     /// Adds a new regular expression matcher for a specified symbol type.
     /// </summary>
@@ -160,7 +161,7 @@ public class LexerConfig
     /// This method creates a new instance of <see cref="RegexMatcher"/> with the given symbol type
     /// and regular expression pattern, and adds it to the matchers collection.
     /// </remarks>
-    public void MatchPattern(Symbol type, string pattern)
+    public void MatchPattern(Symbol type, [StringSyntax(StringSyntaxAttribute.Regex)] string pattern)
     {
         MatchPattern(type, new Regex(pattern));
     }
@@ -203,7 +204,7 @@ public class LexerConfig
     /// This method converts the provided pattern into a <see cref="Regex"/> object and 
     /// calls the <see cref="IgnorePattern(Regex)"/> method to handle the exclusion.
     /// </remarks>
-    public void IgnorePattern(string pattern)
+    public void IgnorePattern([StringSyntax(StringSyntaxAttribute.Regex)] string pattern)
     {
         IgnorePattern(new Regex(pattern));
     }
