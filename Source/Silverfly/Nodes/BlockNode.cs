@@ -1,4 +1,6 @@
-﻿using System.Collections.Immutable;
+﻿using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Linq;
 
 namespace Silverfly.Nodes;
 
@@ -21,5 +23,25 @@ public record BlockNode(Symbol SeperatorSymbol, Symbol Terminator) : AstNode
     {
         Children = nodes;
         return this;
+    }
+
+    /// <summary>
+    /// Get children of a specific type
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public IEnumerable<T> GetChildren<T>()
+    {
+        return Children.OfType<T>();
+    }
+
+    /// <summary>
+    /// Checks if it has at least one child of a specific type
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public bool HasChild<T>()
+    {
+        return Children.Any(n => n is T);
     }
 }
