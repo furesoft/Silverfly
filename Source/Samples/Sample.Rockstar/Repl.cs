@@ -1,8 +1,7 @@
-﻿using Sample.Rockstar.Evaluation;
-using Silverfly.Repl;
+﻿using Silverfly.Repl;
 using Silverfly.Sample.Rockstar.Evaluation;
 
-namespace Sample.Rockstar;
+namespace Silverfly.Sample.Rockstar;
 
 public class Repl : ReplInstance<RockstarGrammar, RockstarCallbacks>
 {

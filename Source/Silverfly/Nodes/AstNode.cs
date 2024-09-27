@@ -15,6 +15,11 @@ public abstract record AstNode
     public SourceRange Range { get; set; }
 
     /// <summary>
+    /// A property to store extra information
+    /// </summary>
+    public object? Tag { get; set; }
+
+    /// <summary>
     /// Gets or sets the parent node of this AST node.
     /// </summary>
     public AstNode? Parent { get; set; }
@@ -98,13 +103,77 @@ public abstract record AstNode
     /// <param name="tag">The tag to provide to the visitor.</param>
     public void Accept<TTag>(TaggedNodeVisitor<TTag> visitor, TTag tag) => visitor.Visit(this, tag);
 
+    /// <summary>
+    /// Adds a message to the document with the current node range
+    /// </summary>
+    /// <param name="severity"></param>
+    /// <param name="message"></param>
     public void AddMessage(MessageSeverity severity, string message)
     {
         Range.Document.Messages.Add(new Message(severity, message, Range));
     }
 
+    /// <summary>
+    /// Adds a message to the document and uses a token for a location
+    /// </summary>
+    /// <param name="severity"></param>
+    /// <param name="message"></param>
     public void AddMessage(MessageSeverity severity, string message, Token token)
     {
         Range.Document.Messages.Add(new Message(severity, message, token.GetRange()));
+    }
+
+    /// <summary>
+    /// Set a tag
+    /// </summary>
+    /// <param name="tag"></param>
+    /// <returns></returns>
+    public AstNode WithTag(object tag)
+    {
+        Tag = tag;
+
+        return this;
+    }
+
+    /// <summary>
+    /// Check if the node has a parent of a specific type
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public bool HasParent<T>()
+        where T : AstNode
+    {
+        return Parent is T;
+    }
+
+    /// <summary>
+    /// Get the parent as specific type
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public T? GetParentAs<T>()
+        where T : AstNode
+    {
+        return Parent as T;
+    }
+
+    /// <summary>
+    /// Checks if the node has a specific tag set
+    /// </summary>
+    /// <param name="tag"></param>
+    /// <returns></returns>
+    public bool HasTag(object tag)
+    {
+        return Tag == tag;
+    }
+
+    /// <summary>
+    /// Get the tag as type
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public T? GetTag<T>()
+    {
+        return (T?)Tag;
     }
 }

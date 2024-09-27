@@ -132,7 +132,7 @@ public abstract partial class Parser
 
         if (!ParserDefinition._prefixParselets.TryGetValue(token.Type, out var prefix))
         {
-            token.Document.AddMessage(MessageSeverity.Error, "Could not parse prefix \"" + token.Type + "\".", token.GetRange());
+            token.Document.AddMessage(MessageSeverity.Error, $"Failed to parse token '{token.Text}'", token.GetRange());
 
             return new InvalidNode(token).WithRange(token);
         }
@@ -146,7 +146,9 @@ public abstract partial class Parser
             if (!ParserDefinition._infixParselets.TryGetValue(token.Type, out var infix))
             {
                 token.Document.Messages.Add(
-                    Message.Error("Could not parse \"" + token.Text + "\".", token.GetRange()));
+                    Message.Error($"Failed to parse token '{token.Text}'", token.GetRange()));
+
+                return new InvalidNode(token).WithRange(token);
             }
 
             left = infix!.Parse(this, left, token);
@@ -211,7 +213,7 @@ public abstract partial class Parser
     /// </summary>
     /// <param name="expected">An array of expected symbols to match.</param>
     /// <returns>True if any of the expected symbols match; otherwise, false.</returns>
-    public bool Match(Symbol[] expected)
+    public bool Match(params Symbol[] expected)
     {
         foreach (var symbol in expected)
         {

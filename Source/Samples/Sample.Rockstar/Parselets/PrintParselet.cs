@@ -1,16 +1,15 @@
 ﻿using System.Collections.Immutable;
-using Silverfly;
 using Silverfly.Nodes;
 using Silverfly.Parselets;
 
-namespace Sample.Rockstar.Parselets;
+namespace Silverfly.Sample.Rockstar.Parselets;
 
 public class PrintParselet : IPrefixParselet
 {
     public static readonly string[] Aliases = ["say", "shout", "whisper", "scream"];
     public AstNode Parse(Parser parser, Token token)
     {
-        var func = new NameNode(token);
+        var func = new NameNode(token.Rewrite("print"));
         ImmutableList<AstNode> args = [parser.ParseExpression()];
         
         return new CallNode(func, args).WithRange(token, parser.LookAhead(0));

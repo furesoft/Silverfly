@@ -1,10 +1,9 @@
-﻿using Silverfly;
-using Silverfly.Generator;
+﻿using Silverfly.Generator;
 using Silverfly.Nodes;
 using Silverfly.Nodes.Operators;
-using Silverfly.Sample.Rockstar.Evaluation;
+using Silverfly.Text;
 
-namespace Sample.Rockstar.Evaluation;
+namespace Silverfly.Sample.Rockstar.Evaluation;
 
 [Visitor]
 public partial class EvaluationVisitor : TaggedNodeVisitor<object, Scope>
@@ -14,16 +13,24 @@ public partial class EvaluationVisitor : TaggedNodeVisitor<object, Scope>
     {
         if (node.LeftExpr is not NameNode name) return null;
 
-        scope.Define(name.Token.Text.ToString(), Visit(node.RightExpr, scope));
+        scope.Define(name.Token.Text.Trim().ToString(), Visit(node.RightExpr, scope));
 
         return null;
     }
 
     private object VisitCall(CallNode call, Scope scope)
     {
-        if (call.FunctionExpr is NameNode name && name.Token == "say")
+        if (call.FunctionExpr is NameNode name && name.Token == "print")
         {
-            Console.WriteLine(Visit(call.Arguments[0], scope));
+            var arg = Visit(call.Arguments[0], scope);
+
+            if (arg is null && call.Arguments[0] is NameNode n)
+            {
+                call.Arguments[0].AddMessage(MessageSeverity.Error, $"Variable '{n.Token.Text}' is not defined");
+                return null;
+            }
+            
+            Console.WriteLine(arg);
         }
 
         return null;
