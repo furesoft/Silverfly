@@ -1,4 +1,4 @@
-﻿using Silverfly.Nodes;
+using Silverfly.Nodes;
 using Silverfly.Nodes.Operators;
 using Silverfly.Parselets;
 
@@ -63,7 +63,7 @@ public class PoeticLiteralParselet : IInfixParselet
                 }
                 else
                 {
-                    numValue = numValue * 10 + digit;
+                    numValue = (numValue * 10) + digit;
                 }
             }
         }
