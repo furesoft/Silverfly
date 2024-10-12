@@ -38,7 +38,7 @@ jobs:
 
       - name: Get release version
         id: get_release
-        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+        run: echo "RELEASE_VERSION=1.0.73" >> $GITHUB_ENV
 
       - name: Update .csproj file
         run: |
