@@ -326,7 +326,7 @@ public abstract partial class Parser
     /// </summary>
     /// <param name="distance">The number of tokens to look ahead.</param>
     /// <returns>The token at the specified distance.</returns>
-    public Token LookAhead(uint distance)
+    public Token LookAhead(uint distance = 0)
     {
         // Read in as many as needed.
         while (distance >= _read.Count)

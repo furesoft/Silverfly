@@ -31,9 +31,10 @@ public class SnapshotParserTestBase<TParser>
         Settings.UseDirectory("TestResults");
     }
 
-    public static TranslationUnit Parse(string src) => new TParser().Parse(src, _options.Filename);
+    public TParser Parser { get; } = new();
+    public TranslationUnit Parse(string src) => Parser.Parse(src, _options.Filename);
 
-    public static Task Test(string source)
+    public Task Test(string source)
     {
         var parsed = Parse(source);
 
