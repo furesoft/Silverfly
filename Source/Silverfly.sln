@@ -25,6 +25,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample.Rockstar", "Samples\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample.Brainfuck", "Samples\Sample.Brainfuck\Sample.Brainfuck.csproj", "{C43A7724-4D0D-4600-9778-E479F8BD946B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silverfly.TreeVisualizer", "Silverfly.TreeVisualizer\Silverfly.TreeVisualizer.csproj", "{A0D943E1-2579-4C51-84C6-375374FA0104}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -71,6 +73,10 @@ Global
 		{C43A7724-4D0D-4600-9778-E479F8BD946B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C43A7724-4D0D-4600-9778-E479F8BD946B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C43A7724-4D0D-4600-9778-E479F8BD946B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A0D943E1-2579-4C51-84C6-375374FA0104}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0D943E1-2579-4C51-84C6-375374FA0104}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0D943E1-2579-4C51-84C6-375374FA0104}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0D943E1-2579-4C51-84C6-375374FA0104}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
