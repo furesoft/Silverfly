@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <PackAsTool>true</PackAsTool>
+        <ToolCommandName>silver-tree</ToolCommandName>
+
+        <Version>1.0.70</Version>
+        <LangVersion>preview</LangVersion>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <Title>Silverfly.TreeVisualizer</Title>
+        <Copyright>furesoft</Copyright>
+        <RepositoryUrl>https://github.com/furesoft/Silverfly</RepositoryUrl>
+        <Description>A tool to view Silverfly trees</Description>
+        <PackageTags>parser, pratt, silverfly, ast</PackageTags>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Spectre.Console" Version="0.49.1" />
+      <PackageReference Include="Spectre.Console.Cli" Version="0.49.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Silverfly\Silverfly.csproj" />
+    </ItemGroup>
+
+</Project>
