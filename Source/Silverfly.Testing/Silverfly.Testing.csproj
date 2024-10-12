@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Version>1.0.70</Version>
+    <Version>1.0.71</Version>
     <LangVersion>preview</LangVersion>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Title>Silverfly.Testing</Title>
@@ -9,7 +9,7 @@
     <RepositoryUrl>https://github.com/furesoft/Silverfly</RepositoryUrl>
     <Description>A little framework to build parsers</Description>
     <PackageTags>parser, pratt</PackageTags>
-    <TargetFrameworks>net8.0</TargetFrameworks>
+    <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
