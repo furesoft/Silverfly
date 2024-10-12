@@ -130,7 +130,7 @@ internal sealed class TreeCommand : Command<TreeCommand.Settings>
 
             if (propValue is Token token)
             {
-                childNode.AddNode($"{property.Name}={token}");
+                childNode.AddNode($"{property.Name} '{token}'");
                 continue;
             }
             else if (propValue is IEnumerable enumerable)
