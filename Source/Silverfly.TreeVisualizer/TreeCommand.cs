@@ -11,24 +11,18 @@ internal sealed class TreeCommand : Command<TreeCommand.Settings>
 {
     public sealed class Settings : CommandSettings
     {
-        [Description("Path to the assembly containing the parsers")]
-        [CommandArgument(0, "<assembly>")]
-        public string? AssemblyPath { get; set; }
-
         [CommandOption("-p|--parser")]
         [Description("Specify the parser to use")]
         public string? Parser { get; set; }
 
         [Description("The source to parse")]
-        [CommandOption("-s|--source")]
+        [CommandArgument(0, "<source>")]
         public string Source { get; set; }
     }
 
     public override int Execute(CommandContext context, Settings settings)
     {
-        var parserAssembly = Assembly.LoadFrom(Path.Combine(Environment.CurrentDirectory, settings.AssemblyPath));
-        var parserType = parserAssembly.GetType(settings.Parser);
-        var parserInstance = (Parser)Activator.CreateInstance(parserType);
+        var parserInstance = FindParser(settings);
 
         var parsed = parserInstance.Parse(settings.Source);
 
@@ -41,6 +35,55 @@ internal sealed class TreeCommand : Command<TreeCommand.Settings>
         AnsiConsole.Write(root);
 
         return 0;
+    }
+
+    private Parser FindParser(Settings settings)
+    {
+        foreach (var file in Directory.GetFiles(Environment.CurrentDirectory, "*.dll"))
+        {
+            try
+            {
+                var assembly = Assembly.LoadFrom(file);
+
+                if (assembly == typeof(Parser).Assembly || assembly.FullName!.StartsWith("Microsoft"))
+                {
+                    continue;
+                }
+
+                var types = assembly.GetTypes();
+
+                if (settings.Parser == null)
+                {
+                    foreach (var type in types)
+                    {
+                        if (type.IsSubclassOf(typeof(Parser)))
+                        {
+                            return (Parser)Activator.CreateInstance(type)!;
+                        }
+                    }
+
+                    continue;
+                }
+
+                var parserType = assembly.GetTypes().ToList()
+                    .FirstOrDefault(t => t.IsSubclassOf(typeof(Parser)) && t.FullName == settings.Parser);
+
+                if (parserType == null)
+                {
+                    continue;
+                }
+
+                return (Parser)Activator.CreateInstance(parserType)!;
+            }
+            catch
+            {
+            }
+        }
+
+        AnsiConsole.WriteLine("Could not find parser");
+        Environment.Exit(1);
+
+        return null;
     }
 
     private string[] ignorePropNames = ["Tag", "Range", "Parent"];

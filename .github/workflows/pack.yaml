@@ -31,17 +31,6 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '8.x'
-          
-      - uses: actions/cache@v4
-        name: Setup Cache
-        id: cache-setup
-        with:
-          path: |
-            ~/.nuget/packages
-            ~/.dotnet
-          key: ${{ runner.os }}-${{ github.ref_name }}
-          restore-keys: |
-            ${{ runner.os }}-${{ github.ref_name }}
 
       - name: Install dependencies
         run: dotnet restore Source/Silverfly/Silverfly.csproj
@@ -65,6 +54,7 @@ jobs:
           dotnet build -c Release -o ./nuget Source/Silverfly.Testing/Silverfly.Testing.csproj
           dotnet build -c Release -o ./nuget Source/Silverfly.Repl/Silverfly.Repl.csproj
           dotnet build -c Release -o ./nuget Source/Silverfly.TreeVisualizer/Silverfly.TreeVisualizer.csproj
+          dotnet build -c Release -o ./nuget Source/Samples/Sample.FuncLanguage/Sample.FuncLanguage.csproj
           dotnet build -o ./nuget Source/Silverfly.Generator/Silverfly.Generator.csproj
 
       - name: Publish to NuGet

@@ -61,7 +61,6 @@ public class ParseletSourceGenerator : IIncrementalGenerator
 
             var attributeName = attributeSymbol.ContainingType.ToDisplayString();
 
-            // Check the full name of the [Report] attribute.
             if (attributeName == $"{Namespace}.{ParseletAttributeName}")
                 return (classDeclarationSyntax, true);
         }
