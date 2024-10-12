@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using Silverfly.Lexing;
 using Silverfly.Text;
 
 namespace Silverfly;
@@ -15,6 +16,8 @@ public sealed partial class Lexer
     private int _line = 1, _column = 1;
 
     public int CurrentIndex => _index;
+
+    private ILexerContext _context;
 
     public SourceDocument Document { get; private set; }
 
@@ -136,7 +139,12 @@ public sealed partial class Lexer
                 continue;
             }
 
-            if (InvokeParts(c, out var token))
+            if (InvokeContextMatcher(c, out var contextToken))
+            {
+                return contextToken;
+            }
+
+            if (InvokeMatcher(c, out var token))
             {
                 return token;
             }
@@ -187,13 +195,28 @@ public sealed partial class Lexer
         return false;
     }
 
-    private bool InvokeParts(char c, out Token token)
+    private bool InvokeMatcher(char c, out Token token)
     {
-        foreach (var part in Config.Matchers)
+        foreach (var matcher in Config.Matchers)
         {
-            if (part.Match(this, c))
+            if (matcher.Match(this, c))
             {
-                token = part.Build(this, ref _index, ref _column, ref _line);
+                token = matcher.Build(this, ref _index, ref _column, ref _line);
+                return true;
+            }
+        }
+
+        token = default;
+        return false;
+    }
+
+    private bool InvokeContextMatcher(char c, out Token token)
+    {
+        foreach (var matcher in Config.ContextMatchers)
+        {
+            if (matcher.Match(this, c))
+            {
+                token = matcher.Build(this, ref _index, ref _column, ref _line);
                 return true;
             }
         }
@@ -294,5 +317,23 @@ public sealed partial class Lexer
     public bool IsSpecialToken(string tokenName)
     {
         return tokenName != "#" && tokenName.StartsWith('#');
+    }
+
+    public LexerContext<TContext> OpenContext<TContext>()
+        where TContext : ILexerContext, new()
+    {
+        _context = new TContext();
+        return new LexerContext<TContext>((c) => _context = c);
+    }
+
+    public bool IsContext<TContext>()
+        where TContext : ILexerContext, new()
+    {
+        return _context is TContext;
+    }
+
+    public bool HasContext()
+    {
+        return _context is not null;
     }
 }

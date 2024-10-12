@@ -16,6 +16,7 @@ public class LexerConfig
     internal Dictionary<string, Symbol> Symbols = [];
     public readonly List<string> Keywords = [];
     public readonly List<IMatcher> Matchers = [];
+    public readonly List<IMatcher> ContextMatchers = [];
     public readonly List<IIgnoreMatcher> IgnoreMatchers = [];
     public bool IgnoreCasing { get; set; }
     public StringComparison Casing => IgnoreCasing ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal;
@@ -134,8 +135,8 @@ public class LexerConfig
     /// <param name="separatorSymbol">Optional symbol indicating the number separator.</param>
     public void MatchNumber(bool allowHex, bool allowBin, Symbol floatingPointSymbol = null, Symbol separatorSymbol = null)
     {
-        AddMatcher(new NumberMatcher(allowHex, allowBin, floatingPointSymbol ?? PredefinedSymbols.Dot,
-            separatorSymbol ?? PredefinedSymbols.Underscore));
+        AddMatcher(new NumberMatcher(allowHex, allowBin, floatingPointSymbol ?? ".",
+            separatorSymbol ?? "_"));
     }
 
     /// <summary>
@@ -270,5 +271,12 @@ public class LexerConfig
         {
             Ignore(symbol);
         }
+    }
+
+
+    public void Context<TContext>(Symbol symbol)
+        where TContext : ILexerContext, new()
+    {
+        ContextMatchers.Add(new ContextualSymbolMatcher<TContext>(symbol));
     }
 }

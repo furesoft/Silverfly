@@ -14,9 +14,10 @@ public static class TypeNameParser
             return false;
         }
 
+        using var context = parser.Lexer.OpenContext<TypenameContext>();
         var name = parser.Consume();
 
-        if (parser.Lexer.Peek() == '<')
+        if (parser.LookAhead() == "<")
         {
             parser.Consume('<');
             var genericArgs = ParseGenericArguments(parser);
