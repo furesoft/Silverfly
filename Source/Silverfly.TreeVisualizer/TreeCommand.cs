@@ -106,7 +106,16 @@ internal sealed class TreeCommand : Command<TreeCommand.Settings>
     private void BuildTreeChild(IHasTreeNodes node, object child)
     {
         var childType = child.GetType();
-        var childNode = node.AddNode(childType.Name);
+
+        IHasTreeNodes childNode;
+        if (child is not LiteralNode and not Token and not NameNode)
+        {
+            childNode = node.AddNode(childType.Name);
+        }
+        else
+        {
+            childNode = node;
+        }
 
         foreach (var property in childType.GetProperties(BindingFlags.Instance | BindingFlags.Public))
         {
