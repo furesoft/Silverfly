@@ -3,6 +3,10 @@ using Silverfly.Nodes;
 
 namespace Silverfly.Parselets;
 
+/// <summary>
+/// Produces a <see cref="LiteralNode" />
+/// </summary>
+/// <typeparam name="TRegister"></typeparam>
 public class EnumParselet<TRegister> : IPrefixParselet
     where TRegister : struct
 {

@@ -1,8 +1,7 @@
 using Sample.JSON.Nodes;
 using Sample.JSON.Parselets;
-using Silverfly;
 
-namespace Sample.JSON;
+namespace Silverfly.Sample.JSON;
 
 public class JsonGrammar : Parser
 {
