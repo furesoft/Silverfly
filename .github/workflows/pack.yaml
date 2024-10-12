@@ -1,7 +1,6 @@
 name: Build and Publish NuGet Package
 
 on:
-  push:
   release:
     types: [published]
 
@@ -33,12 +32,9 @@ jobs:
         with:
           dotnet-version: '8.x'
 
-      - name: Install dependencies
-        run: dotnet restore Source/Silverfly/Silverfly.csproj
-
       - name: Get release version
         id: get_release
-        run: echo "RELEASE_VERSION=1.0.73" >> $GITHUB_ENV
+        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
 
       - name: Update .csproj file
         run: |
