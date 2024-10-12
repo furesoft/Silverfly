@@ -1,6 +1,7 @@
 name: Build and Publish NuGet Package
 
 on:
+  push:
   release:
     types: [published]
 
