@@ -319,6 +319,11 @@ public sealed partial class Lexer
         return tokenName != "#" && tokenName.StartsWith('#');
     }
 
+    /// <summary>
+    /// Opens a new lexer context of the specified type.
+    /// </summary>
+    /// <typeparam name="TContext">The type of the lexer context to open, which must implement <see cref="ILexerContext"/> and have a parameterless constructor.</typeparam>
+    /// <returns>A new instance of <see cref="LexerContext{TContext}"/> that allows setting the current context.</returns>
     public LexerContext<TContext> OpenContext<TContext>()
         where TContext : ILexerContext, new()
     {
@@ -326,12 +331,33 @@ public sealed partial class Lexer
         return new LexerContext<TContext>((c) => _context = c);
     }
 
+    /// <summary>
+    /// Retrieves the current lexer context of the specified type.
+    /// </summary>
+    /// <typeparam name="TContext">The type of the lexer context to retrieve, which must implement <see cref="ILexerContext"/> and have a parameterless constructor.</typeparam>
+    /// <returns>The current context of type <typeparamref name="TContext"/>.</returns>
+    /// <exception cref="InvalidCastException">Thrown if the current context is not of type <typeparamref name="TContext"/>.</exception>
+    public TContext GetContext<TContext>()
+        where TContext : ILexerContext, new()
+    {
+        return (TContext)_context;
+    }
+
+    /// <summary>
+    /// Checks if the current context is of the specified type.
+    /// </summary>
+    /// <typeparam name="TContext">The type to check against, which must implement <see cref="ILexerContext"/> and have a parameterless constructor.</typeparam>
+    /// <returns><c>true</c> if the current context is of type <typeparamref name="TContext"/>; otherwise, <c>false</c>.</returns>
     public bool IsContext<TContext>()
         where TContext : ILexerContext, new()
     {
         return _context is TContext;
     }
 
+    /// <summary>
+    /// Determines whether there is currently an active lexer context.
+    /// </summary>
+    /// <returns><c>true</c> if there is an active context; otherwise, <c>false</c>.</returns>
     public bool HasContext()
     {
         return _context is not null;
