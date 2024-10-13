@@ -1,6 +1,5 @@
-﻿namespace Silverfly.Lexing;
+namespace Silverfly.Lexing;
 
 public interface ILexerContext
 {
-    
 }
