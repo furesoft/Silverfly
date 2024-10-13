@@ -1,5 +1,7 @@
 using Silverfly;
+using Silverfly.Helpers;
 using Silverfly.Lexing.IgnoreMatcher.Comments;
+using Silverfly.Lexing.Matcher;
 using Silverfly.Parselets;
 
 namespace TestProject;
@@ -8,6 +10,7 @@ public class TestParser : Parser
 {
     protected override void InitParser(ParserDefinition def)
     {
+        def.Typename("<", ">", ",");
         def.Register(PredefinedSymbols.Name, new NameParselet());
 
         def.Register("(", new CallParselet(def.PrecedenceLevels.GetPrecedence("Call")));
@@ -27,15 +30,25 @@ public class TestParser : Parser
         def.InfixRight("^", "Exponent");
 
         def.InfixLeft("->", "Product");
+        def.InfixLeft(">>", "Product");
+        def.InfixLeft("<<", "Product");
 
         def.Block(PredefinedSymbols.SOF, PredefinedSymbols.EOF,
-            separator: PredefinedSymbols.Semicolon);
+            separator: ';');
     }
 
     protected override void InitLexer(LexerConfig lexer)
     {
         lexer.IgnoreWhitespace();
         lexer.Ignore("\r", "\r\n");
+
+        lexer.Context<TypenameContext>("<");
+        lexer.Context<TypenameContext>(">");
+
+        lexer.AddSymbols("<", ">");
+        lexer.AddSymbols("<<", ">>");
+
+        lexer.AddSymbol(",");
 
         lexer.MatchBoolean();
         lexer.MatchString("'", "'");

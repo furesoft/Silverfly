@@ -279,4 +279,10 @@ public class Tests : SnapshotParserTestBase<TestParser>
 
         return Verify(result, Settings);
     }
+
+    [Test]
+    public Task RightShift_Should_Pass()
+    {
+        return Test("1 >> 2");
+    }
 }

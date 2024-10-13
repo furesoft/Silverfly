@@ -1,6 +1,6 @@
-using Silverfly.Nodes;
 using System.Collections.Immutable;
+using Silverfly.Nodes;
 
-namespace Sample.JSON.Nodes;
+namespace Silverfly.Sample.JSON.Nodes;
 
 public record JsonArray(ImmutableList<AstNode> Values) : AstNode;

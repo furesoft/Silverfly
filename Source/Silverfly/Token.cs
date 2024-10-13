@@ -86,8 +86,8 @@ public readonly struct Token(Symbol type, ReadOnlyMemory<char> text, int line, i
     public SourceRange GetRange() => new(Document, GetSourceSpanStart(), GetSourceSpanEnd());
 
     public static bool operator ==(Token left, Token right) => left.Equals(right);
-    public static bool operator ==(Token left, string right) => left.Text.Span == right;
-    public static bool operator !=(Token left, string right) => left.Text.Span != right;
+    public static bool operator ==(Token left, string right) => left.Type == right;
+    public static bool operator !=(Token left, string right) => left.Type != right;
 
     public static bool operator !=(Token left, Token right) => !left.Equals(right);
     
