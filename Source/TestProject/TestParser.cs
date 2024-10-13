@@ -10,6 +10,7 @@ public class TestParser : Parser
 {
     protected override void InitParser(ParserDefinition def)
     {
+        def.Typename("<", ">", ",");
         def.Register(PredefinedSymbols.Name, new NameParselet());
 
         def.Register("(", new CallParselet(def.PrecedenceLevels.GetPrecedence("Call")));
