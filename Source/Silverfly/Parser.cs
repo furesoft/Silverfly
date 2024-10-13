@@ -1,5 +1,7 @@
+#nullable enable
 using System;
 using System.Collections.Generic;
+using Silverfly.Helpers;
 using Silverfly.Nodes;
 using Silverfly.Text;
 using Silverfly.Text.Formatting;
@@ -169,6 +171,15 @@ public abstract partial class Parser
         }
 
         return Parse(0);
+    }
+
+    /// <summary>
+    /// Parses a typename
+    /// </summary>
+    /// <returns></returns>
+    public TypeName? ParseTypeName()
+    {
+        return ParserDefinition._typeNameParser.TryParse(this, out var typename) ? typename : null;
     }
 
     /// <summary>
