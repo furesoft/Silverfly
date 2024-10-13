@@ -29,6 +29,8 @@ public class TestParser : Parser
         def.InfixRight("^", "Exponent");
 
         def.InfixLeft("->", "Product");
+        def.InfixLeft(">>", "Product");
+        def.InfixLeft("<<", "Product");
 
         def.Block(PredefinedSymbols.SOF, PredefinedSymbols.EOF,
             separator: ';');

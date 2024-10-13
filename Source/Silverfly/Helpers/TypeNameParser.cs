@@ -1,4 +1,5 @@
 ﻿#nullable enable
+
 using System.Collections.Generic;
 using System.Collections.Immutable;
 
@@ -43,9 +44,9 @@ public static class TypeNameParser
                 args.Add(typename!);
             }
 
-            if (parser.Lexer.Peek() == ',')
+            if (parser.LookAhead() == ",")
                 parser.Consume(',');
-        } while (parser.Lexer.Peek() != '>' && parser.Lexer.IsNotAtEnd());
+        } while (parser.LookAhead() != ">" && parser.Lexer.IsNotAtEnd());
 
         return args.ToImmutableList();
     }
