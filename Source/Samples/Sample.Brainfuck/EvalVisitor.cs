@@ -1,53 +1,56 @@
 ﻿using Sample.Brainfuck.Nodes;
 using Silverfly;
-using Silverfly.Generator;
 using Silverfly.Nodes;
 
 namespace Sample.Brainfuck;
 
-[Visitor]
-public partial class EvalVisitor : NodeVisitor
+public class EvalVisitor : NodeVisitor
 {
-    private int _pointer = 0;
+    private int _pointer;
     readonly char[] _cells = new char[100];
 
-    [VisitorCondition("_.Token == '.'")]
+    public EvalVisitor()
+    {
+        For<OperationNode>(Print, _=> _.Token == ".");
+        For<OperationNode>(Read, _=> _.Token == ",");
+        For<OperationNode>(Decrement, _=> _.Token == "<");
+        For<OperationNode>(Increment, _=> _.Token == ">");
+        For<OperationNode>(DecrementCell, _=> _.Token == "-");
+        For<OperationNode>(IncrementCell, _=> _.Token == "+");
+        For<BlockNode>(Loop, _ => _.Tag == "loop");
+        For<BlockNode>(Block, _ => _.Tag == null);
+    }
+
     void Print(OperationNode node)
     {
         Console.Write(_cells[_pointer]);
     }
 
-    [VisitorCondition("_.Token == ','")]
     void Read(OperationNode node)
     {
         _cells[_pointer] = Console.ReadKey().KeyChar;
     }
 
-    [VisitorCondition("_.Token == '<'")]
     void Decrement(OperationNode node)
     {
         _pointer--;
     }
 
-    [VisitorCondition("_.Token == '>'")]
     void Increment(OperationNode node)
     {
         _pointer++;
     }
 
-    [VisitorCondition("_.Token == '+'")]
     void IncrementCell(OperationNode node)
     {
         _cells[_pointer]++;
     }
 
-    [VisitorCondition("_.Token == '-'")]
     void DecrementCell(OperationNode node)
     {
         _cells[_pointer]--;
     }
 
-    [VisitorCondition("_.Tag == 'loop'")]
     void Loop(BlockNode node)
     {
         while (_cells[_pointer] != '\0')
@@ -59,7 +62,6 @@ public partial class EvalVisitor : NodeVisitor
         }
     }
 
-    [VisitorCondition("_.Tag == null")]
     void Block(BlockNode node)
     {
         foreach (var child in node.Children)

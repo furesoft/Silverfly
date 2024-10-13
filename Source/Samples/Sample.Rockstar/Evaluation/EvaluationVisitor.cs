@@ -1,14 +1,20 @@
-﻿using Silverfly.Generator;
-using Silverfly.Nodes;
+﻿using Silverfly.Nodes;
 using Silverfly.Nodes.Operators;
 using Silverfly.Text;
 
 namespace Silverfly.Sample.Rockstar.Evaluation;
 
-[Visitor]
-public partial class EvaluationVisitor : TaggedNodeVisitor<object, Scope>
+public class EvaluationVisitor : TaggedNodeVisitor<object, Scope>
 {
-    [VisitorCondition("_.Operator == '='")]
+    public EvaluationVisitor()
+    {
+        For<BinaryOperatorNode>(VisitAssignment, _ => _.Operator == "=");
+        For<CallNode>(VisitCall);
+        For<LiteralNode>(VisitLiteral);
+        For<NameNode>(VisitName);
+        For<BlockNode>(VisitBlock);
+    }
+
     private object VisitAssignment(BinaryOperatorNode node, Scope scope)
     {
         if (node.LeftExpr is not NameNode name) return null;
