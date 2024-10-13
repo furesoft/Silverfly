@@ -1,14 +1,17 @@
-﻿using Sample.JSON.Nodes;
-using Silverfly;
-using Silverfly.Generator;
-using Silverfly.Nodes;
+﻿using Silverfly.Nodes;
+using Silverfly.Sample.JSON.Nodes;
 
-namespace Sample.JSON;
+namespace Silverfly.Sample.JSON;
 
-[Visitor]
-partial class JsonPrinter : NodeVisitor
+public class JsonPrinter : NodeVisitor
 {
-    [VisitorCondition("_.Values.Count > 0")]
+    public JsonPrinter()
+    {
+        For<JsonArray>(VisitArray, _ => _.Values.Count > 0);
+        For<LiteralNode>(VisitLiteral);
+        For<JsonObject>(VisitObject);
+    }
+
     private void VisitArray(JsonArray obj)
     {
         Console.Write("[");
@@ -40,8 +43,7 @@ partial class JsonPrinter : NodeVisitor
     }
 
     private int _indentLevel = 0;
-    
-    [VisitorIgnore]
+
     void Indent(string src)
     {
         _indentLevel++;

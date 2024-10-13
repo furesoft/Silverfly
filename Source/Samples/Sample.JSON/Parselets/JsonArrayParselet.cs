@@ -1,9 +1,8 @@
-﻿using Sample.JSON.Nodes;
-using Silverfly;
-using Silverfly.Nodes;
+﻿using Silverfly.Nodes;
 using Silverfly.Parselets;
+using Silverfly.Sample.JSON.Nodes;
 
-namespace Sample.JSON.Parselets;
+namespace Silverfly.Sample.JSON.Parselets;
 
 class JsonArrayParselet : IPrefixParselet
 {

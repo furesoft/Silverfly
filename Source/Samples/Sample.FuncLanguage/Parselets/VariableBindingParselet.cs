@@ -16,23 +16,23 @@ public class VariableBindingParselet : IPrefixParselet
         {
             var name = parser.Consume(Name);
             names.Add(name);
-            if (parser.LookAhead(0).Type != Comma)
+            if (parser.LookAhead(0).Type != ",")
                 break;
 
-            parser.Consume(Comma);
+            parser.Consume(",");
         }
 
-        if (names.Count == 1 && parser.LookAhead(0).Type == PredefinedSymbols.Equals)
+        if (names.Count == 1 && parser.LookAhead(0).Type == "=")
         {
-            parser.Consume(PredefinedSymbols.Equals);
+            parser.Consume("=");
 
             // No parameter with single name
             var value = parser.Parse(0);
             return new VariableBindingNode(names[0], [], value).WithRange(names[0], parser.LookAhead(0));
         }
-        else if (names.Count > 1 && parser.LookAhead(0).Type == PredefinedSymbols.Equals)
+        else if (names.Count > 1 && parser.LookAhead(0).Type == "=")
         {
-            parser.Consume(PredefinedSymbols.Equals);
+            parser.Consume("=");
 
             // Tuple-Destructuring
             var value = parser.Parse(0);

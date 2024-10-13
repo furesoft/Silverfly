@@ -1,5 +1,5 @@
-using Sample.JSON.Nodes;
-using Sample.JSON.Parselets;
+using Silverfly.Sample.JSON.Nodes;
+using Silverfly.Sample.JSON.Parselets;
 
 namespace Silverfly.Sample.JSON;
 
