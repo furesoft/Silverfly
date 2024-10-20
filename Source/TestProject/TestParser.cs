@@ -43,7 +43,6 @@ public class TestParser : Parser
         lexer.Ignore("\r", "\r\n");
 
         lexer.Context<TypenameContext>("<");
-        lexer.Context<TypenameContext>(">");
 
         lexer.AddSymbols("<", ">");
         lexer.AddSymbols("<<", ">>");

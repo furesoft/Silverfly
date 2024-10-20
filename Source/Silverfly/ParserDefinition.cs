@@ -166,6 +166,13 @@ public partial class ParserDefinition
     {
         _typeNameParser.Start = genericStart;
         _typeNameParser.End = genericEnd;
-        _typeNameParser.Seperator = genericSeperator;
+        _typeNameParser.Separator = genericSeperator;
+    }
+
+    public void Typename()
+    {
+        _typeNameParser.Start = null;
+        _typeNameParser.End = null;
+        _typeNameParser.Separator = null;
     }
 }

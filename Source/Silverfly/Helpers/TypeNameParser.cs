@@ -7,9 +7,9 @@ namespace Silverfly.Helpers;
 
 public class TypeNameParser
 {
-    public Symbol Start { get; set; }
-    public Symbol End { get; set; }
-    public Symbol Seperator { get; set; }
+    public Symbol? Start { get; set; }
+    public Symbol? End { get; set; }
+    public Symbol? Separator { get; set; }
 
     public bool TryParse(Parser parser, out TypeName? typename)
     {
@@ -21,6 +21,12 @@ public class TypeNameParser
 
         using var context = parser.Lexer.OpenContext<TypenameContext>();
         var name = parser.Consume();
+
+        if (Start is null || End is null || Separator is null)
+        {
+            typename = (TypeName)new TypeName(name).WithRange(name, parser.LookAhead(0));
+            return true;
+        }
 
         if (parser.LookAhead().Type == Start)
         {
@@ -48,8 +54,8 @@ public class TypeNameParser
                 args.Add(typename!);
             }
 
-            if (parser.LookAhead().Type == Seperator)
-                parser.Consume(Seperator);
+            if (parser.LookAhead().Type == Separator)
+                parser.Consume(Separator);
         } while (parser.LookAhead().Type != End && parser.Lexer.IsNotAtEnd());
 
         return args.ToImmutableList();
