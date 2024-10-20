@@ -44,6 +44,16 @@ jobs:
           sed -i "s/<Version>.*<\/Version>/<Version>${RELEASE_VERSION}<\/Version>/" Source/Silverfly.Generator/Silverfly.Generator.csproj
           sed -i "s/<Version>.*<\/Version>/<Version>${RELEASE_VERSION}<\/Version>/" Source/Silverfly.Repl/Silverfly.Repl.csproj
           sed -i "s/<Version>.*<\/Version>/<Version>${RELEASE_VERSION}<\/Version>/" Source/Silverfly.TreeVisualizer/Silverfly.TreeVisualizer.csproj
+
+      - name: GIT commit and push overriding conflicts with local changes (verbose)
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add Source/*.csproj
+          git commit -m "Update version to ${{ env.RELEASE_VERSION }}"
+          git fetch origin
+          git rebase --strategy-option=theirs origin/main
+          git push
           
       - name: Build and package
         run: |
@@ -63,14 +73,4 @@ jobs:
       - name: Publish package To Nuget
         run: |
           dotnet nuget push ./nuget/*.nupkg --api-key "${{ secrets.NUGET_APIKEY }}" --source https://api.nuget.org/v3/index.json --skip-duplicate
-
-      - name: GIT commit and push docs overriding conflicts with local changes (verbose)
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add Source/*.csproj
-          git commit -m "Update version to ${{ env.RELEASE_VERSION }}"
-          git fetch origin
-          git rebase --strategy-option=theirs origin/main
-          git push
           
