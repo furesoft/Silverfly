@@ -1,6 +1,7 @@
 #nullable enable
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Silverfly.Helpers;
 using Silverfly.Nodes;
 using Silverfly.Text;
@@ -109,11 +110,20 @@ public abstract partial class Parser
 
     private void AddLexerSymbols<TParselet>(Lexer lexer, Dictionary<Symbol, TParselet> dict)
     {
-        foreach (var prefix in dict)
+        foreach (var parselet in dict)
         {
-            if (!lexer.IsPunctuator(prefix.Key.Name) && !lexer.IsSpecialToken(prefix.Key.Name))
+            if (!lexer.IsPunctuator(parselet.Key.Name) && !lexer.IsSpecialToken(parselet.Key.Name))
             {
-                _lexerConfig.AddSymbol(prefix.Key.Name);
+                _lexerConfig.AddSymbol(parselet.Key.Name);
+            }
+
+            if (parselet is ISymbolDiscovery sd)
+            {
+                _ = sd.GetSymbols().All(s =>
+                {
+                    _lexerConfig.AddSymbol(s.Name);
+                    return true;
+                });
             }
         }
     }
