@@ -7,8 +7,8 @@
     <Title>Silverfly.Testing</Title>
     <Copyright>furesoft</Copyright>
     <RepositoryUrl>https://github.com/furesoft/Silverfly</RepositoryUrl>
-    <Description>A little framework to build parsers</Description>
-    <PackageTags>parser, pratt</PackageTags>
+    <Description>Helpers to test Silverfly parsers</Description>
+    <PackageTags>parser, pratt, silverfly</PackageTags>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>

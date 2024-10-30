@@ -14,6 +14,10 @@
 
     <RootNamespace>Silverfly.Generator</RootNamespace>
     <PackageId>Silverfly.Generator</PackageId>
+    <Copyright>furesoft</Copyright>
+    <RepositoryUrl>https://github.com/furesoft/Silverfly</RepositoryUrl>
+    <Description>Source Generator for Silverfly</Description>
+    <PackageTags>parser, pratt, silverfly</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
