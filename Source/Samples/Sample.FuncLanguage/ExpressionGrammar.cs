@@ -39,7 +39,7 @@ class ExpressionGrammar : Parser
         def.Register("enum", new EnumParselet());
         def.Postfix("!");
         def.InfixLeft(".", DefaultPrecedenceLevels.Call);
-        def.InfixLeft("=", DefaultPrecedenceLevels.Assignment);
+        def.InfixRight("=", DefaultPrecedenceLevels.Assignment);
         def.InfixLeft("..", "Range");
         def.Register("[", new IndexParselet(def.PrecedenceLevels.GetPrecedence("Range")));
 
