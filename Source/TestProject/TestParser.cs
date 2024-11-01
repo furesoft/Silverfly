@@ -15,7 +15,6 @@ public class SecondParser : Parser
 
     protected override void InitParser(ParserDefinition def)
     {
-
     }
 }
 

@@ -1,4 +1,4 @@
-﻿using System.Runtime.CompilerServices;
+using System.Runtime.CompilerServices;
 using Silverfly;
 using Silverfly.Helpers;
 using Silverfly.Testing;
@@ -263,7 +263,6 @@ public class Tests : SnapshotParserTestBase<TestParser>
     {
         var p1 = new TestParser();
         var p2 = new SecondParser();
-
     }
 
     [Test]
