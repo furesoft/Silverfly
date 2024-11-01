@@ -25,7 +25,7 @@ public class DefaultNameAdvancer : INameAdvancer
     {
         while (lexer.IsNotAtEnd())
         {
-            if (!char.IsLetter(lexer.Peek(0)))
+            if (!char.IsLetter(lexer.Peek()))
             {
                 break;
             }

@@ -48,7 +48,7 @@ public partial class ParserDefinition
     /// </remarks>
     public void AddBitOperators()
     {
-        Prefix("~", "Prefix");
+        Prefix("~");
         InfixLeft("&", "Product");
         InfixLeft("|", "Sum");
         InfixLeft("<<", "Product");

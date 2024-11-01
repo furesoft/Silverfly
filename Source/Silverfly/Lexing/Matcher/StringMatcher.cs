@@ -67,7 +67,7 @@ public class StringMatcher(Symbol leftStr, Symbol rightStr, bool allowEscapeChar
             }
             else
             {
-                builder.Append(lexer.Peek(0));
+                builder.Append(lexer.Peek());
                 lexer.Advance();
             }
         }
@@ -95,7 +95,7 @@ public class StringMatcher(Symbol leftStr, Symbol rightStr, bool allowEscapeChar
     /// <param name="builder">The string builder to append the escape character to.</param>
     private static void ParseEscapeChar(Lexer lexer, StringBuilder builder)
     {
-        switch (lexer.Peek(0))
+        switch (lexer.Peek())
         {
             case '\\':
                 builder.Append('\\');
@@ -114,7 +114,7 @@ public class StringMatcher(Symbol leftStr, Symbol rightStr, bool allowEscapeChar
                 break;
             default:
                 builder.Append('\\');
-                builder.Append(lexer.Peek(0));
+                builder.Append(lexer.Peek());
                 break;
         }
 
@@ -138,13 +138,13 @@ public class StringMatcher(Symbol leftStr, Symbol rightStr, bool allowEscapeChar
         int codePoint = 0;
         for (int i = 0; i < 4; i++)
         {
-            if (!char.IsDigit(lexer.Peek(0)) && !(lexer.IsBetween('a', 'f') || lexer.IsBetween('A', 'F')))
+            if (!char.IsDigit(lexer.Peek()) && !(lexer.IsBetween('a', 'f') || lexer.IsBetween('A', 'F')))
             {
                 lexer.Document.Messages.Add(Message.Error("Invalid Unicode escape sequence", SourceRange.From(lexer.Document, oldLine, oldColumn, line, column)));
                 return;
             }
 
-            codePoint = (codePoint * 16) + Convert.ToInt32(char.ToString(lexer.Peek(0)), 16);
+            codePoint = (codePoint * 16) + Convert.ToInt32(char.ToString(lexer.Peek()), 16);
 
             lexer.Advance();
         }

@@ -36,7 +36,7 @@ public abstract partial class Parser
     /// <returns>The parsed abstract syntax tree (AST) node representing the statement.</returns>
     public AstNode ParseStatement(bool wrapExpressions = false)
     {
-        var token = LookAhead(0);
+        var token = LookAhead();
 
         if (ParserDefinition._statementParselets.TryGetValue(token.Type, out var parselet))
         {
@@ -298,7 +298,7 @@ public abstract partial class Parser
     /// <returns>The consumed token if the expected symbol is matched; otherwise, an invalid token.</returns>
     public Token Consume(Symbol expected)
     {
-        var token = LookAhead(0);
+        var token = LookAhead();
 
         EnsureSymbolIsRegistered(expected);
         
@@ -319,7 +319,7 @@ public abstract partial class Parser
     /// <returns>The next <see cref="Token"/>.</returns>
     public Token Consume()
     {
-        var token = LookAhead(0);
+        var token = LookAhead();
 
         _read.RemoveAt(0);
 
@@ -374,7 +374,7 @@ public abstract partial class Parser
 
     private int GetBindingPower()
     {
-        if (ParserDefinition._infixParselets.TryGetValue(LookAhead(0).Type, out var parselet))
+        if (ParserDefinition._infixParselets.TryGetValue(LookAhead().Type, out var parselet))
         {
             return parselet.GetBindingPower();
         }

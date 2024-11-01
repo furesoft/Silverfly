@@ -22,7 +22,7 @@ public class AnnotationParselet : IPrefixParselet
         if (call is not CallNode node)
         {
             call.AddMessage(MessageSeverity.Error, "Annotation can only be a name or call");
-            return new InvalidNode(token).WithRange(token, parser.LookAhead(0));
+            return new InvalidNode(token).WithRange(token, parser.LookAhead());
         }
 
         var expr = parser.ParseExpression();

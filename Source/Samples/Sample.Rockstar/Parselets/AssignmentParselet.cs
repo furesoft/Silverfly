@@ -18,6 +18,6 @@ public class AssignmentParselet : IPrefixParselet
 
         var value = parser.ParseExpression();
 
-        return new BinaryOperatorNode(name, operatorToken.Rewrite("="), value).WithRange(token, parser.LookAhead(0));
+        return new BinaryOperatorNode(name, operatorToken.Rewrite("="), value).WithRange(token, parser.LookAhead());
     }
 }

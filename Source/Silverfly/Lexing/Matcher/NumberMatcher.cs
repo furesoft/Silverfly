@@ -21,7 +21,7 @@ public class NumberMatcher(bool allowHex, bool allowBin, Symbol floatingPointSym
     /// </returns>
     public bool Match(Lexer lexer, char c)
     {
-        var isDigit = char.IsDigit(lexer.Peek(0));
+        var isDigit = char.IsDigit(lexer.Peek());
         var isHexDigit = lexer.IsMatch("0x");
         var isBinaryDigit = lexer.IsMatch("0b");
 
@@ -113,7 +113,7 @@ public class NumberMatcher(bool allowHex, bool allowBin, Symbol floatingPointSym
             AdvanceNumber(lexer, ref index, char.IsDigit);
 
             // Handle E-Notation
-            if (lexer.Peek(0) == 'e' || lexer.Peek(0) == 'E')
+            if (lexer.Peek() == 'e' || lexer.Peek() == 'E')
             {
                 AdvanceNumber(lexer, ref index, char.IsDigit, 1);
             }
@@ -134,7 +134,7 @@ public class NumberMatcher(bool allowHex, bool allowBin, Symbol floatingPointSym
         do
         {
             lexer.Advance();
-        } while ((index < lexer.Document.Source.Length && charPredicate(lexer.Peek(0))) ||
+        } while ((index < lexer.Document.Source.Length && charPredicate(lexer.Peek())) ||
                  lexer.IsMatch(seperatorSymbol.Name));
     }
 

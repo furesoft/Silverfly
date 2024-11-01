@@ -16,21 +16,21 @@ public class VariableBindingParselet : IPrefixParselet
         {
             var name = parser.Consume(Name);
             names.Add(name);
-            if (parser.LookAhead(0).Type != ",")
+            if (parser.LookAhead().Type != ",")
                 break;
 
             parser.Consume(",");
         }
 
-        if (names.Count == 1 && parser.LookAhead(0).Type == "=")
+        if (names.Count == 1 && parser.LookAhead().Type == "=")
         {
             parser.Consume("=");
 
             // No parameter with single name
             var value = parser.Parse(0);
-            return new VariableBindingNode(names[0], [], value).WithRange(names[0], parser.LookAhead(0));
+            return new VariableBindingNode(names[0], [], value).WithRange(names[0], parser.LookAhead());
         }
-        else if (names.Count > 1 && parser.LookAhead(0).Type == "=")
+        else if (names.Count > 1 && parser.LookAhead().Type == "=")
         {
             parser.Consume("=");
 
@@ -38,7 +38,7 @@ public class VariableBindingParselet : IPrefixParselet
             var value = parser.Parse(0);
 
             return new TupleBindingNode([.. names.Select(name => new NameNode(name))], value)
-                .WithRange(names[0], parser.LookAhead(0));
+                .WithRange(names[0], parser.LookAhead());
         }
         else
         {
@@ -46,7 +46,7 @@ public class VariableBindingParselet : IPrefixParselet
             var parameters = parser.ParseList(bindingPower: 0, "=");
             var value = parser.Parse(0);
 
-            return new VariableBindingNode(names[0], parameters.Cast<NameNode>().ToImmutableList(), value).WithRange(names[0], parser.LookAhead(0));
+            return new VariableBindingNode(names[0], parameters.Cast<NameNode>().ToImmutableList(), value).WithRange(names[0], parser.LookAhead());
         }
     }
 }

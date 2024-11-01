@@ -75,7 +75,7 @@ public sealed partial class Lexer
     /// <param name="first">The lower bound character.</param>
     /// <param name="second">The upper bound character.</param>
     /// <returns><c>true</c> if the current character is between <paramref name="first"/> and <paramref name="second"/>; otherwise, <c>false</c>.</returns>
-    public bool IsBetween(char first, char second) => Peek(0) >= first && Peek(0) <= second;
+    public bool IsBetween(char first, char second) => Peek() >= first && Peek() <= second;
 
     /// <summary>
     /// Determines whether the current position in the document matches the specified token's name.
@@ -130,7 +130,7 @@ public sealed partial class Lexer
 
         while (IsNotAtEnd())
         {
-            var c = Peek(0);
+            var c = Peek();
 
             RecognizeLine(c);
 

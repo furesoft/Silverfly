@@ -16,6 +16,6 @@ public class ModuleParselet : IPrefixParselet
             node = new ModuleNode(name.Token.Text.ToString());
         }
 
-        return node.WithRange(token, parser.LookAhead(0));
+        return node.WithRange(token, parser.LookAhead());
     }
 }

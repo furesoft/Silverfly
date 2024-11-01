@@ -26,6 +26,6 @@ public class PredicateIgnoreMatcher(Predicate<char> predicate) : IIgnoreMatcher
     /// <param name="lexer">The lexer processing the input.</param>
     public void Advance(Lexer lexer)
     {
-        lexer.Advance(1);
+        lexer.Advance();
     }
 }

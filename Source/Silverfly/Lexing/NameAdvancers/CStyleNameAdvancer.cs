@@ -25,7 +25,7 @@ public class CStyleNameAdvancer : INameAdvancer
     {
         while (lexer.IsNotAtEnd())
         {
-            if (!char.IsLetterOrDigit(lexer.Peek(0)))
+            if (!IsNameStart(lexer.Peek()) && !char.IsDigit(lexer.Peek()))
             {
                 break;
             }

@@ -220,7 +220,7 @@ public class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
                 return res;
             };
 
-            var value = new LambdaValue(func, null, true);
+            var value = new LambdaValue(func, null);
             AddAnnotations(binding, value, scope);
 
             scope.Define(binding.Name.Text.ToString(), value);

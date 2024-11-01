@@ -12,6 +12,6 @@ public class PrintParselet : IPrefixParselet
         var func = new NameNode(token.Rewrite("print"));
         ImmutableList<AstNode> args = [parser.ParseExpression()];
         
-        return new CallNode(func, args).WithRange(token, parser.LookAhead(0));
+        return new CallNode(func, args).WithRange(token, parser.LookAhead());
     }
 }

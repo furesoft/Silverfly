@@ -13,7 +13,7 @@ public class CallParselet(int bindingPower) : IInfixParselet
         var args = parser.ParseSeperated(",", ")");
 
         var call = new CallNode(left, args)
-            .WithRange(left, parser.LookAhead(0));
+            .WithRange(left, parser.LookAhead());
 
         left = left.WithParent(call);
 

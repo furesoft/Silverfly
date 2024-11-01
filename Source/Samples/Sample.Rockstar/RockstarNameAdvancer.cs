@@ -12,7 +12,7 @@ public class RockstarNameAdvancer : INameAdvancer
     public void AdvanceName(Lexer lexer)
     {
         // Check if we're at the start of a proper variable
-        if (char.IsUpper(lexer.Peek(0)))
+        if (char.IsUpper(lexer.Peek()))
         {
             while (lexer.IsNotAtEnd())
             {
@@ -65,7 +65,7 @@ public class RockstarNameAdvancer : INameAdvancer
 
     private static bool IsSimpleVariableStart(Lexer lexer)
     {
-        return char.IsLetter(lexer.Peek(0));
+        return char.IsLetter(lexer.Peek());
     }
 
     private static void SkipWhitespace(Lexer lexer)

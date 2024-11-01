@@ -31,7 +31,7 @@ public class BlockParselet(Symbol terminator, Symbol separator = null, bool wrap
 
         return block
             .WithChildren(children.ToImmutableList())
-            .WithRange(token, parser.LookAhead(0));
+            .WithRange(token, parser.LookAhead());
     }
 
     public Symbol[] GetSymbols()

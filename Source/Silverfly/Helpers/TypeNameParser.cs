@@ -24,7 +24,7 @@ public class TypeNameParser
 
         if (Start is null || End is null || Separator is null)
         {
-            typename = (TypeName)new TypeName(name).WithRange(name, parser.LookAhead(0));
+            typename = (TypeName)new TypeName(name).WithRange(name, parser.LookAhead());
             return true;
         }
 
@@ -35,7 +35,7 @@ public class TypeNameParser
             parser.Consume(End);
 
             typename = (TypeName)new GenericTypeName(name, genericArgs)
-                .WithRange(name, parser.LookAhead(0));
+                .WithRange(name, parser.LookAhead());
             return true;
         }
 

@@ -13,6 +13,6 @@ public class LoopParselet : IPrefixParselet
         return new BlockNode(null, "]")
             .WithChildren(instructions)
             .WithTag("loop")
-            .WithRange(token, parser.LookAhead(0));
+            .WithRange(token, parser.LookAhead());
     }
 }
