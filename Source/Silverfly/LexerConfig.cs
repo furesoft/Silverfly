@@ -21,20 +21,6 @@ public class LexerConfig
     public bool IgnoreCasing { get; set; }
     public StringComparison Casing => IgnoreCasing ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal;
 
-    public LexerConfig()
-    {
-        // Register all of the Symbols that are explicit punctuators.
-        foreach (var type in PredefinedSymbols.Pool)
-        {
-            var punctuator = type.Punctuator();
-
-            if (punctuator != "\0")
-            {
-                Symbols.Add(punctuator, type);
-            }
-        }
-    }
-
 
     // sort punctuators longest -> smallest to make it possible to use symbols with more than one character
     internal void OrderSymbols()

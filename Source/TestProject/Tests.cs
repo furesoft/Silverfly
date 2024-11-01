@@ -259,6 +259,14 @@ public class Tests : SnapshotParserTestBase<TestParser>
     }
 
     [Test]
+    public void Multiple_Parsers_Should_Pass()
+    {
+        var p1 = new TestParser();
+        var p2 = new SecondParser();
+
+    }
+
+    [Test]
     public Task GenericMultipleTypeName_Should_Pass()
     {
         Parser.Lexer.SetSource("MyCustomType<string, int>");
