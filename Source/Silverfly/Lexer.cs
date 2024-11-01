@@ -323,12 +323,13 @@ public sealed partial class Lexer
     /// Opens a new lexer context of the specified type.
     /// </summary>
     /// <typeparam name="TContext">The type of the lexer context to open, which must implement <see cref="ILexerContext"/> and have a parameterless constructor.</typeparam>
-    /// <returns>A new instance of <see cref="LexerContext{TContext}"/> that allows setting the current context.</returns>
-    public LexerContext<TContext> OpenContext<TContext>()
+    /// <returns>A new instance of <see cref="LexerContext"/> that allows setting the current context.</returns>
+    public LexerContext OpenContext<TContext>()
         where TContext : ILexerContext, new()
     {
+        var lexerContext = new LexerContext(_context, (c) => _context = c);
         _context = new TContext();
-        return new LexerContext<TContext>((c) => _context = c);
+        return lexerContext;
     }
 
     /// <summary>

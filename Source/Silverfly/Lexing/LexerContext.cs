@@ -2,11 +2,10 @@
 
 namespace Silverfly.Lexing;
 
-public class LexerContext<TContext>(Action<ILexerContext> setContext) : IDisposable
-    where TContext : ILexerContext, new()
+public class LexerContext(ILexerContext oldContext, Action<ILexerContext> setContext) : IDisposable
 {
     public void Dispose()
     {
-        setContext(null);
+        setContext(oldContext);
     }
 }
