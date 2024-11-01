@@ -13,7 +13,6 @@ namespace Silverfly;
 public abstract partial class Parser
 {
     public readonly Lexer Lexer;
-    private readonly LexerConfig _lexerConfig = new();
     public readonly ParserDefinition ParserDefinition = new();
     public ParserOptions Options = new(true, true);
     private readonly List<Token> _read = [];
@@ -71,9 +70,10 @@ public abstract partial class Parser
 
     public Parser()
     {
-        InitLexer(_lexerConfig);
+        var lexerConfig = new LexerConfig();
+        InitLexer(lexerConfig);
 
-        Lexer = new Lexer(_lexerConfig);
+        Lexer = new Lexer(lexerConfig);
         
         InitParser(ParserDefinition);
 
@@ -114,14 +114,14 @@ public abstract partial class Parser
         {
             if (!lexer.IsPunctuator(parselet.Key.Name) && !lexer.IsSpecialToken(parselet.Key.Name))
             {
-                _lexerConfig.AddSymbol(parselet.Key.Name);
+                lexer.Config.AddSymbol(parselet.Key.Name);
             }
 
             if (parselet is ISymbolDiscovery sd)
             {
                 _ = sd.GetSymbols().All(s =>
                 {
-                    _lexerConfig.AddSymbol(s.Name);
+                    lexer.Config.AddSymbol(s.Name);
                     return true;
                 });
             }
@@ -266,7 +266,7 @@ public abstract partial class Parser
     {
         if (!Lexer.IsPunctuator(expected.Name))
         {
-            _lexerConfig.AddSymbol(expected.Name);
+            Lexer.Config.AddSymbol(expected.Name);
         }
     }
 
@@ -288,7 +288,7 @@ public abstract partial class Parser
 
     private bool CompareToken(Token token, Symbol expected)
     {
-        return token.Type.Name.AsSpan().CompareTo(expected.Name.AsSpan(), _lexerConfig.Casing) == 0;
+        return token.Type.Name.AsSpan().CompareTo(expected.Name.AsSpan(), Lexer.Config.Casing) == 0;
     }
 
     /// <summary>

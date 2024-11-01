@@ -6,6 +6,18 @@ using Silverfly.Parselets;
 
 namespace TestProject;
 
+public class SecondParser : Parser
+{
+    protected override void InitLexer(LexerConfig lexer)
+    {
+        lexer.AddSymbols("blub", "bob");
+    }
+
+    protected override void InitParser(ParserDefinition def)
+    {
+    }
+}
+
 public class TestParser : Parser
 {
     protected override void InitParser(ParserDefinition def)

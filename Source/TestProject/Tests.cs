@@ -1,4 +1,4 @@
-﻿using System.Runtime.CompilerServices;
+using System.Runtime.CompilerServices;
 using Silverfly;
 using Silverfly.Helpers;
 using Silverfly.Testing;
@@ -256,6 +256,13 @@ public class Tests : SnapshotParserTestBase<TestParser>
         var result = Parser.ParseTypeName();
 
         return Verify(result, Settings);
+    }
+
+    [Test]
+    public void Multiple_Parsers_Should_Pass()
+    {
+        var p1 = new TestParser();
+        var p2 = new SecondParser();
     }
 
     [Test]
