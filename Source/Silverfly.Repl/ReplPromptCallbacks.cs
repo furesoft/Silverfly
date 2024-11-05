@@ -21,7 +21,7 @@ public class ReplPromptCallbacks : PromptCallbacks
 
         var spans = GetKeywordSpans(text, keywords)
             .Concat(brackets)
-            .Concat(GetNumberSpans(text))
+            //.Concat(GetNumberSpans(text))
             .Concat(GetStringsSpans(text))
             .ToList();
 
