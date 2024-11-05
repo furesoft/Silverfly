@@ -14,6 +14,8 @@ public class JsonGrammar : Parser
         lexer.MatchBoolean();
         lexer.MatchNumber(false, false);
         lexer.MatchString("\"", "\"");
+
+        lexer.AddSymbols(":", "{", "}");
     }
 
     protected override void InitParser(ParserDefinition def)
