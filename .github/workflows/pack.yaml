@@ -44,6 +44,7 @@ jobs:
           sed -i "s/<Version>.*<\/Version>/<Version>${RELEASE_VERSION}<\/Version>/" Source/Silverfly.Generator/Silverfly.Generator.csproj
           sed -i "s/<Version>.*<\/Version>/<Version>${RELEASE_VERSION}<\/Version>/" Source/Silverfly.Repl/Silverfly.Repl.csproj
           sed -i "s/<Version>.*<\/Version>/<Version>${RELEASE_VERSION}<\/Version>/" Source/Silverfly.TreeVisualizer/Silverfly.TreeVisualizer.csproj
+          sed -i "s/<Version>.*<\/Version>/<Version>${RELEASE_VERSION}<\/Version>/" Source/Silverfly.Backend/Silverfly.Backend.csproj
 
       - name: GIT commit and push overriding conflicts with local changes (verbose)
         run: |
@@ -61,6 +62,7 @@ jobs:
           dotnet build -c Release -o ./nuget Source/Silverfly.Testing/Silverfly.Testing.csproj
           dotnet build -c Release -o ./nuget Source/Silverfly.Repl/Silverfly.Repl.csproj
           dotnet build -c Release -o ./nuget Source/Silverfly.TreeVisualizer/Silverfly.TreeVisualizer.csproj
+          dotnet build -c Release -o ./nuget Source/Silverfly.Backend/Silverfly.Backend.csproj
           dotnet build -c Release -o ./nuget Source/Samples/Sample.FuncLanguage/Sample.FuncLanguage.csproj
           dotnet build -o ./nuget Source/Silverfly.Generator/Silverfly.Generator.csproj
 
