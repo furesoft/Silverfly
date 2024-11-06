@@ -12,6 +12,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
     <IsTrimmable>true</IsTrimmable>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
     <ItemGroup>
