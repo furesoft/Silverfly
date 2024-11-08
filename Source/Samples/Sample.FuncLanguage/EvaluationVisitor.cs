@@ -346,28 +346,16 @@ public class EvaluationVisitor : TaggedNodeVisitor<Value, Scope>
 
     private Value Visit(LiteralNode literal, Scope scope)
     {
-        if (literal.Value is double d)
+        return literal.Value switch
         {
-            return new NumberValue(d);
-        }
-        else if (literal.Value is bool b)
-        {
-            return new BoolValue(b);
-        }
-        else if (literal.Value is string s)
-        {
-            return new StringValue(s);
-        }
-        else if (literal.Value is UnitValue unit)
-        {
-            return unit;
-        }
-        else if (literal.Value is ImmutableList<AstNode> v)
-        {
-            return new ListValue(v.Select(_ => Visit(_, scope)).ToList());
-        }
-
-        return UnitValue.Shared;
+            double d => new NumberValue(d),
+            ulong ul => new NumberValue(ul),
+            bool b => new BoolValue(b),
+            string s => new StringValue(s),
+            UnitValue unit => unit,
+            ImmutableList<AstNode> v => new ListValue(v.Select(_ => Visit(_, scope)).ToList()),
+            _ => UnitValue.Shared
+        };
     }
 
     Value Visit(TupleNode tuple, Scope scope)
