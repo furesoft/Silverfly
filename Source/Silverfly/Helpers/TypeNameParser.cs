@@ -13,6 +13,11 @@ public class TypeNameParser
 
     public bool TryParse(Parser parser, out TypeName? typename)
     {
+        if (TryParsePointerName(parser, out typename))
+        {
+            return true;
+        }
+
         if (!parser.IsMatch(PredefinedSymbols.Name))
         {
             typename = null;
@@ -41,6 +46,28 @@ public class TypeNameParser
 
         typename = (TypeName)new TypeName(name).WithRange(name);
         return true;
+    }
+
+    private bool TryParsePointerName(Parser parser, out TypeName? pointerTypeName)
+    {
+        if (!parser.IsMatch("*") && !parser.IsMatch("&"))
+        {
+            pointerTypeName = null;
+            return false;
+        }
+
+        var pointerToken = parser.Consume();
+        var pointerKind = pointerToken.Type.Name is "*" ? PointerKind.Transient : PointerKind.Reference;
+
+        if (TryParse(parser, out var innerType) && innerType != null)
+        {
+            pointerTypeName = new PointerTypeName(pointerToken, innerType, pointerKind);
+
+            return true;
+        }
+
+        pointerTypeName = null;
+        return false;
     }
 
     private ImmutableList<TypeName> ParseGenericArguments(Parser parser)

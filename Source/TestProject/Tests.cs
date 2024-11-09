@@ -248,6 +248,28 @@ public class Tests : SnapshotParserTestBase<TestParser>
     }
 
     [Test]
+    public Task SimplePointerTypeName_Should_Pass()
+    {
+        Parser.Lexer.SetSource("*MyCustomType");
+        Parser.Consume(PredefinedSymbols.SOF);
+
+        var result = Parser.ParseTypeName();
+
+        return Verify(result, Settings);
+    }
+
+    [Test]
+    public Task SimpleReferenceTypeName_Should_Pass()
+    {
+        Parser.Lexer.SetSource("&MyCustomType");
+        Parser.Consume(PredefinedSymbols.SOF);
+
+        var result = Parser.ParseTypeName();
+
+        return Verify(result, Settings);
+    }
+
+    [Test]
     public Task GenericTypeName_Should_Pass()
     {
         Parser.Lexer.SetSource("MyCustomType<string>");
