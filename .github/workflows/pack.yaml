@@ -12,6 +12,15 @@ jobs:
       packages: write
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      PROJECTS: |
+        Source/Silverfly/Silverfly.csproj
+        Source/Silverfly.Testing/Silverfly.Testing.csproj
+        Source/Silverfly.Generator/Silverfly.Generator.csproj
+        Source/Silverfly.Repl/Silverfly.Repl.csproj
+        Source/Silverfly.TreeVisualizer/Silverfly.TreeVisualizer.csproj
+        Source/Silverfly.Backend/Silverfly.Backend.csproj
+        Source/Samples/Sample.FuncLanguage/Sample.FuncLanguage.csproj
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4.1.7
@@ -36,15 +45,13 @@ jobs:
         id: get_release
         run: echo "RELEASE_VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
 
-      - name: Update .csproj file
+      - name: Update .csproj files
         run: |
-          RELEASE_VERSION=$(echo ${{ env.RELEASE_VERSION }})
-          sed -i "s/<Version>.*<\/Version>/<Version>${RELEASE_VERSION}<\/Version>/" Source/Silverfly/Silverfly.csproj
-          sed -i "s/<Version>.*<\/Version>/<Version>${RELEASE_VERSION}<\/Version>/" Source/Silverfly.Testing/Silverfly.Testing.csproj
-          sed -i "s/<Version>.*<\/Version>/<Version>${RELEASE_VERSION}<\/Version>/" Source/Silverfly.Generator/Silverfly.Generator.csproj
-          sed -i "s/<Version>.*<\/Version>/<Version>${RELEASE_VERSION}<\/Version>/" Source/Silverfly.Repl/Silverfly.Repl.csproj
-          sed -i "s/<Version>.*<\/Version>/<Version>${RELEASE_VERSION}<\/Version>/" Source/Silverfly.TreeVisualizer/Silverfly.TreeVisualizer.csproj
-          sed -i "s/<Version>.*<\/Version>/<Version>${RELEASE_VERSION}<\/Version>/" Source/Silverfly.Backend/Silverfly.Backend.csproj
+          RELEASE_VERSION=${{ env.RELEASE_VERSION }}
+          IFS=$'\n' # Set the Internal Field Separator to newline for reading multi-line variable
+          for PROJECT in $PROJECTS; do
+            sed -i "s/<Version>.*<\/Version>/<Version>${RELEASE_VERSION}<\/Version>/" "$PROJECT"
+          done
 
       - name: GIT commit and push overriding conflicts with local changes (verbose)
         run: |
@@ -55,16 +62,13 @@ jobs:
           git fetch origin
           git rebase --strategy-option=theirs origin/main
           git push
-          
+
       - name: Build and package
         run: |
-          dotnet build -c Release -o ./nuget Source/Silverfly/Silverfly.csproj
-          dotnet build -c Release -o ./nuget Source/Silverfly.Testing/Silverfly.Testing.csproj
-          dotnet build -c Release -o ./nuget Source/Silverfly.Repl/Silverfly.Repl.csproj
-          dotnet build -c Release -o ./nuget Source/Silverfly.TreeVisualizer/Silverfly.TreeVisualizer.csproj
-          dotnet build -c Release -o ./nuget Source/Silverfly.Backend/Silverfly.Backend.csproj
-          dotnet build -c Release -o ./nuget Source/Samples/Sample.FuncLanguage/Sample.FuncLanguage.csproj
-          dotnet build -o ./nuget Source/Silverfly.Generator/Silverfly.Generator.csproj
+          IFS=$'\n' # Set the Internal Field Separator to newline for reading multi-line variable
+          for PROJECT in $PROJECTS; do
+            dotnet build -c Release -o ./nuget "$PROJECT"
+          done
 
       - name: Publish to NuGet
         uses: actions/upload-artifact@v4
@@ -75,4 +79,3 @@ jobs:
       - name: Publish package To Nuget
         run: |
           dotnet nuget push ./nuget/*.nupkg --api-key "${{ secrets.NUGET_APIKEY }}" --source https://api.nuget.org/v3/index.json --skip-duplicate
-          
