@@ -6,6 +6,7 @@ using Silverfly.Helpers;
 using Silverfly.Nodes;
 using Silverfly.Text;
 using Silverfly.Text.Formatting;
+// ReSharper disable VirtualMemberCallInConstructor
 
 namespace Silverfly;
 
@@ -94,7 +95,12 @@ public abstract partial class Parser
     /// <returns>The parsed translation unit representing the source code.</returns>
     public TranslationUnit Parse(ReadOnlyMemory<char> source, string filename = "synthetic.dsl")
     {
-        Lexer.SetSource(source, filename);
+        return Parse(SourceDocument.Create(filename, source));
+    }
+
+    public TranslationUnit Parse(SourceDocument document)
+    {
+        Lexer.SetDocument(document);
 
         var node = Options.UseStatementsAtToplevel
             ? ParseStatement()

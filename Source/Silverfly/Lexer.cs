@@ -37,11 +37,16 @@ public sealed partial class Lexer
     /// <param name="filename">The name of the file containing the source code. Default is "tmp.synthetic".</param>
     public void SetSource(ReadOnlyMemory<char> source, string filename = "tmp.synthetic")
     {
+        SetDocument(new() { Filename = filename, Source = source });
+    }
+
+    public void SetDocument(SourceDocument document)
+    {
         _index = -1;
         _line = 1;
         _column = 1;
-        
-        Document = new() { Filename = filename, Source = source };
+
+        Document = document;
     }
     
     /// <summary>
