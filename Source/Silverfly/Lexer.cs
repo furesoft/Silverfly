@@ -174,13 +174,13 @@ public sealed partial class Lexer
 
     private void RecognizeLine(char c)
     {
-        if (c != '\r' && c != '\n')
+        if (c is not ('\r' or '\n'))
         {
             return;
         }
 
         _line++;
-        _column = 1;
+        _column = 0;
     }
 
     private bool InvokeSymbols(out Token token)

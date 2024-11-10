@@ -236,6 +236,13 @@ public class Tests : SnapshotParserTestBase<TestParser>
         return Test("-42.5;13");
     }
 
+
+    [Test]
+    public Task SourceLocation_Should_Pass()
+    {
+        return Test("hello\nworld");
+    }
+
     [Test]
     public Task SimpleTypeName_Should_Pass()
     {
