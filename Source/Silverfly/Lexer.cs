@@ -169,7 +169,7 @@ public sealed partial class Lexer
 
     private void RecognizeLine(char c)
     {
-        if (c != '\r')
+        if (c != '\r' && c != '\n')
         {
             return;
         }
@@ -280,6 +280,8 @@ public sealed partial class Lexer
     /// <param name="distance">The number of characters to advance. Default is 1.</param>
     public void Advance(int distance = 1)
     {
+        RecognizeLine(Peek());
+
         _index += distance;
         _column += distance;
     }
