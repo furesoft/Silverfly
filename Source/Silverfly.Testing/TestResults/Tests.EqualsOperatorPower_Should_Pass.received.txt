@@ -1,0 +1,12 @@
+﻿{
+  $type: TestResult,
+  ParsedTree: a; bc; ,
+  Document: {
+    Filename: test.src,
+    Source: a = b = c,
+    Messages: [
+      test.src:1:3 Error: Failed to parse token '=',
+      test.src:1:7 Error: Failed to parse token '='
+    ]
+  }
+}

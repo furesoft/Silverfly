@@ -1,0 +1,11 @@
+﻿{
+  $type: TestResult,
+  ParsedTree: a; ((b + ((c * d) ^ e)) - (f / g)),
+  Document: {
+    Filename: test.src,
+    Source: a = b + c * d ^ e - f / g,
+    Messages: [
+      test.src:1:3 Error: Failed to parse token '='
+    ]
+  }
+}

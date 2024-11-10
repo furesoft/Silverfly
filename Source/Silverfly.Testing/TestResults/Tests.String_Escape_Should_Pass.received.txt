@@ -1,0 +1,9 @@
+﻿{
+  $type: TestResult,
+  ParsedTree: #Invalid(),
+  Document: {
+    Filename: test.src,
+    Source: 'hel	lo',
+    Messages: []
+  }
+}

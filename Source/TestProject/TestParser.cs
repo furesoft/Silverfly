@@ -39,6 +39,8 @@ public class TestParser : Parser
 
     protected override void InitLexer(LexerConfig lexer)
     {
+        lexer.IgnoreCasing = true;
+
         lexer.IgnoreWhitespace();
         lexer.Ignore("\r", "\r\n");
 
@@ -47,7 +49,7 @@ public class TestParser : Parser
         lexer.AddSymbols("<", ">");
         lexer.AddSymbols("<<", ">>");
 
-        lexer.AddSymbol(",");
+        lexer.AddSymbols(",", "(", ")");
 
         lexer.MatchBoolean();
         lexer.MatchString("'", "'");

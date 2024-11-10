@@ -207,6 +207,11 @@ public class PrintVisitor : NodeVisitor<string>
             return $"({string.Join(',', list.Select(Visit))})";
         }
 
+        if (literalNode.Value is string strValue)
+        {
+            return $"'{strValue}'";
+        }
+
         return literalNode.Value.ToString();
     }
 }

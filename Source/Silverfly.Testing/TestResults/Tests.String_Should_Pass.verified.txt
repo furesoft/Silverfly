@@ -1,0 +1,9 @@
+﻿{
+  $type: TestResult,
+  ParsedTree: 'hello'; ; ,
+  Document: {
+    Filename: test.src,
+    Source: 'hello',
+    Messages: []
+  }
+}
