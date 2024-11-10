@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Silverfly.Text;
 
@@ -47,4 +48,9 @@ public class SourceDocument
     {
         AddMessage(messageSeverity, message, SourceRange.From(this, startLine, startColumn, endLine, endColumn));
     }
+
+    public bool HasErrors => Messages.Any(msg => msg.Severity == MessageSeverity.Error);
+    public bool HasWarnings => Messages.Any(msg => msg.Severity == MessageSeverity.Warning);
+    public bool HasInfo => Messages.Any(msg => msg.Severity == MessageSeverity.Info);
+    public bool HasHints => Messages.Any(msg => msg.Severity == MessageSeverity.Hint);
 }
