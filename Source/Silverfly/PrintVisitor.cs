@@ -111,19 +111,19 @@ public class PrintVisitor : NodeVisitor<string>
         builder.Append('(');
         builder.Append('(' + call.FunctionExpr.Accept(this) + ")");
 
-        if (call.Arguments.Count > 0)
+        if (call.Arguments.Any())
         {
             builder.Append(' ');
         }
 
-        for (var i = 0; i < call.Arguments.Count; i++)
+        for (var i = 0; i < call.Arguments.Count(); i++)
         {
             if (i > 0)
             {
                 builder.Append(", ");
             }
 
-            builder.Append(call.Arguments[i].Accept(this));
+            builder.Append(call.Arguments.Skip(i).First().Accept(this));
         }
 
         builder.Append(')');
@@ -158,9 +158,9 @@ public class PrintVisitor : NodeVisitor<string>
         var builder = new StringBuilder();
 
         builder.Append('(');
-        builder.Append(binary.LeftExpr.Accept(this));
+        builder.Append(binary.Left.Accept(this));
         builder.Append(' ').Append(binary.Operator.Type.Punctuator()).Append(' ');
-        builder.Append(binary.RightExpr.Accept(this));
+        builder.Append(binary.Right.Accept(this));
         builder.Append(')');
 
         return builder.ToString();

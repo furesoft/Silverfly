@@ -30,8 +30,8 @@ public abstract class Rewriter : NodeVisitor<AstNode>
 
     protected AstNode Rewrite(BinaryOperatorNode binary)
     {
-        var left = binary.LeftExpr.Accept(this);
-        var right = binary.RightExpr.Accept(this);
+        var left = binary.Left.Accept(this);
+        var right = binary.Right.Accept(this);
 
         return binary with
         {

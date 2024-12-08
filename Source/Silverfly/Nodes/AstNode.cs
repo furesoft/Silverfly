@@ -7,7 +7,7 @@ namespace Silverfly.Nodes;
 /// <summary>
 /// Abstract base class for nodes in an abstract syntax tree (AST).
 /// </summary>
-public abstract record AstNode
+public abstract class AstNode : MrKWatkins.Ast.PropertyNode<AstNode>
 {
     /// <summary>
     /// Gets the source range associated with this AST node.
@@ -17,26 +17,34 @@ public abstract record AstNode
     /// <summary>
     /// A property to store extra information
     /// </summary>
-    public object? Tag { get; set; }
-
-    /// <summary>
-    /// Gets or sets the parent node of this AST node.
-    /// </summary>
-    public AstNode? Parent { get; set; }
+    public object? Tag
+    {
+        get => Properties.GetOrDefault<object>(nameof(Tag));
+        set => Properties.Set(nameof(Tag), value);
+    }
 
     /// <summary>
     /// Sets the source range of the AST node using the given token.
     /// </summary>
     /// <param name="token">The token providing the source range.</param>
     /// <returns>A new instance of the AST node with the updated range.</returns>
-    public AstNode WithRange(Token token) => this with { Range = new SourceRange(token.Document, token.GetSourceSpanStart(), token.GetSourceSpanEnd()) };
+    public AstNode WithRange(Token token)
+    {
+        Range = new SourceRange(token.Document, token.GetSourceSpanStart(), token.GetSourceSpanEnd());
+
+        return this;
+    }
 
     /// <summary>
     /// Sets the source range of the AST node.
     /// </summary>
     /// <param name="range">The source range to set.</param>
     /// <returns>A new instance of the AST node with the updated range.</returns>
-    public AstNode WithRange(SourceRange range) => this with { Range = range };
+    public AstNode WithRange(SourceRange range)
+    {
+        Range = range;
+        return this;
+    }
 
     /// <summary>
     /// Sets the source range of the AST node.
@@ -54,7 +62,12 @@ public abstract record AstNode
     /// <param name="start">The start position of the range.</param>
     /// <param name="end">The end position of the range.</param>
     /// <returns>A new instance of the AST node with the updated range.</returns>
-    public AstNode WithRange(SourceDocument document, SourceSpan start, SourceSpan end) => this with { Range = new SourceRange(document, start, end) };
+    public AstNode WithRange(SourceDocument document, SourceSpan start, SourceSpan end)
+    {
+        Range = new SourceRange(document, start, end);
+
+        return this;
+    }
 
     /// <summary>
     /// Sets the source range of the AST node using the start and end tokens.
@@ -62,14 +75,12 @@ public abstract record AstNode
     /// <param name="start">The start token providing the start position of the range.</param>
     /// <param name="end">The end token providing the end position of the range.</param>
     /// <returns>A new instance of the AST node with the updated range.</returns>
-    public AstNode WithRange(Token start, Token end) => this with { Range = new SourceRange(start.Document, start.GetSourceSpanStart(), end.GetSourceSpanEnd()) };
+    public AstNode WithRange(Token start, Token end)
+    {
+        Range = new SourceRange(start.Document, start.GetSourceSpanStart(), end.GetSourceSpanEnd());
 
-    /// <summary>
-    /// Sets the parent node of the AST node.
-    /// </summary>
-    /// <param name="parent">The parent node to set.</param>
-    /// <returns>A new instance of the AST node with the updated parent.</returns>
-    public AstNode WithParent(AstNode parent) => this with { Parent = parent };
+        return this;
+    }
 
     /// <summary>
     /// Accepts a visitor for processing the AST node and returns a result of type <typeparamref name="T"/>.
@@ -133,17 +144,6 @@ public abstract record AstNode
         Tag = tag;
 
         return this;
-    }
-
-    /// <summary>
-    /// Check if the node has a parent of a specific type
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <returns></returns>
-    public bool HasParent<T>()
-        where T : AstNode
-    {
-        return Parent is T;
     }
 
     /// <summary>

@@ -7,12 +7,16 @@ namespace Silverfly.Nodes;
 /// <summary>
 /// Represents a block node in an abstract syntax tree (AST), which contains a list of child nodes.
 /// </summary>
-public record BlockNode(Symbol SeperatorSymbol, Symbol Terminator) : AstNode
+public class BlockNode : AstNode
 {
-    /// <summary>
-    /// Gets or sets the children nodes of this block node.
-    /// </summary>
-    public ImmutableList<AstNode> Children { get; set; }
+    public Symbol SeperatorSymbol => Properties.GetOrThrow<Symbol>(nameof(SeperatorSymbol));
+    public Symbol Terminator => Properties.GetOrThrow<Symbol>(nameof(Terminator));
+
+    public BlockNode(Symbol seperatorSymbol, Symbol terminator)
+    {
+        Properties.Set(nameof(SeperatorSymbol), seperatorSymbol);
+        Properties.Set(nameof(Terminator), terminator);
+    }
 
     /// <summary>
     /// Sets the children nodes of this block node to the specified list of nodes.
@@ -21,7 +25,11 @@ public record BlockNode(Symbol SeperatorSymbol, Symbol Terminator) : AstNode
     /// <returns>This block node with the updated children nodes.</returns>
     public BlockNode WithChildren(ImmutableList<AstNode> nodes)
     {
-        Children = nodes;
+        foreach (var child in nodes)
+        {
+            Children.Add(child);
+        }
+
         return this;
     }
 

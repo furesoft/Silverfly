@@ -16,11 +16,7 @@ public class GroupParselet(Symbol leftSymbol, Symbol rightSymbol, Symbol tag) : 
         var expression = parser.ParseExpression();
         var rightToken = parser.Consume(RightSymbol);
 
-        var node = new GroupNode(LeftSymbol, RightSymbol, expression)
+        return new GroupNode(LeftSymbol, RightSymbol, expression)
                 .WithRange(token, rightToken);
-
-        expression.WithParent(node);
-
-        return node;
     }
 }

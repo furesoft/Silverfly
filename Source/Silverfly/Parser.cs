@@ -46,10 +46,7 @@ public abstract partial class Parser
 
         if (wrapExpressions)
         {
-            var exprStmt = new ExpressionStatement(expression);
-            expression.WithParent(exprStmt);
-
-            return exprStmt;
+            return new ExpressionStatement(expression);
         }
 
         return expression;
