@@ -20,7 +20,7 @@ public abstract class AstNode : MrKWatkins.Ast.PropertyNode<AstNode>
     public object? Tag
     {
         get => Properties.GetOrDefault<object>(nameof(Tag));
-        set => Properties.Set(nameof(Tag), value);
+        set => Properties.Set(nameof(Tag), value!);
     }
 
     /// <summary>
@@ -81,38 +81,6 @@ public abstract class AstNode : MrKWatkins.Ast.PropertyNode<AstNode>
 
         return this;
     }
-
-    /// <summary>
-    /// Accepts a visitor for processing the AST node and returns a result of type <typeparamref name="T"/>.
-    /// </summary>
-    /// <typeparam name="T">The type of result returned by the visitor.</typeparam>
-    /// <param name="visitor">The visitor to accept.</param>
-    /// <returns>The result of processing the AST node with the visitor.</returns>
-    public T Accept<T>(NodeVisitor<T> visitor) => visitor.Visit(this);
-
-    /// <summary>
-    /// Accepts a visitor for processing the AST node.
-    /// </summary>
-    /// <param name="visitor">The visitor to accept.</param>
-    public void Accept(NodeVisitor visitor) => visitor.Visit(this);
-
-    /// <summary>
-    /// Accepts a tagged visitor for processing the AST node and returns a result of type <typeparamref name="TReturn"/>.
-    /// </summary>
-    /// <typeparam name="TReturn">The type of result returned by the visitor.</typeparam>
-    /// <typeparam name="TTag">The type of the tag provided to the visitor.</typeparam>
-    /// <param name="visitor">The tagged visitor to accept.</param>
-    /// <param name="tag">The tag to provide to the visitor.</param>
-    /// <returns>The result of processing the AST node with the tagged visitor.</returns>
-    public TReturn Accept<TReturn, TTag>(TaggedNodeVisitor<TReturn, TTag> visitor, TTag tag) => visitor.Visit(this, tag);
-
-    /// <summary>
-    /// Accepts a tagged visitor for processing the AST node.
-    /// </summary>
-    /// <typeparam name="TTag">The type of the tag provided to the visitor.</typeparam>
-    /// <param name="visitor">The tagged visitor to accept.</param>
-    /// <param name="tag">The tag to provide to the visitor.</param>
-    public void Accept<TTag>(TaggedNodeVisitor<TTag> visitor, TTag tag) => visitor.Visit(this, tag);
 
     /// <summary>
     /// Adds a message to the document with the current node range
