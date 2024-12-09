@@ -1,17 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Version>1.0.69</Version>
-    <LangVersion>preview</LangVersion>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Title>Silverfly</Title>
-    <Copyright>furesoft</Copyright>
-    <RepositoryUrl>https://github.com/furesoft/Silverfly</RepositoryUrl>
-    <Description>A little framework to build parsers</Description>
-    <PackageTags>parser, pratt</PackageTags>
-    <TargetFramework>net9.0</TargetFramework>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
 
   <ItemGroup>

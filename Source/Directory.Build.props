@@ -1,0 +1,15 @@
+<Project>
+
+    <PropertyGroup>
+        <Version>1.0.69</Version>
+        <LangVersion>preview</LangVersion>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <Copyright>furesoft</Copyright>
+        <RepositoryUrl>https://github.com/furesoft/Silverfly</RepositoryUrl>
+        <Description>A little framework to build parsers</Description>
+        <PackageTags>parser, pratt</PackageTags>
+        <TargetFramework>net9.0</TargetFramework>
+        <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>    
+    </PropertyGroup>
+
+</Project>
