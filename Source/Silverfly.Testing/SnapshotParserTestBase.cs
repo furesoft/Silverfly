@@ -40,7 +40,7 @@ public class SnapshotParserTestBase<TParser>
         object result = parsed.Tree;
         if (_options.OutputMode == OutputMode.Small)
         {
-            result = new TestResult(parsed.Tree.Accept(new PrintVisitor()), parsed.Document);
+            result = new TestResult(parsed.Tree.Accept(new PrintListener()), parsed.Document);
         }
 
         return Verify(result, Settings);
