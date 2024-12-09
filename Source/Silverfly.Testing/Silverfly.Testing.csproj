@@ -9,20 +9,20 @@
     <RepositoryUrl>https://github.com/furesoft/Silverfly</RepositoryUrl>
     <Description>A little framework to build parsers</Description>
     <PackageTags>parser, pratt</PackageTags>
-    <TargetFrameworks>net8.0</TargetFrameworks>
+    <TargetFrameworks>net9.0</TargetFrameworks>
     <ImplicitUsings>enable</ImplicitUsings>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Verify" Version="20.6.0"/>
-    <PackageReference Include="NUnit" Version="3.13.3" />
-    <PackageReference Include="Verify.NUnit" Version="20.6.0" />
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All"/>
+    <PackageReference Include="Verify" Version="28.4.0" />
+    <PackageReference Include="NUnit" Version="4.2.2" />
+    <PackageReference Include="Verify.NUnit" Version="28.4.0" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Silverfly\Silverfly.csproj"/>
+    <ProjectReference Include="..\Silverfly\Silverfly.csproj" />
   </ItemGroup>
 
 </Project>

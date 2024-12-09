@@ -52,5 +52,7 @@ public class Program
 For more detailed instructions and advanced usage, please refer to the [Wiki](https://github.com/furesoft/Silverfly/wiki).
 A great example can be found [here](https://github.com/furesoft/Silverfly/tree/main/Source/Samples/Sample.FuncLanguage)
 
+Silverfly uses the brilliant library from [MrKWatkins](https://github.com/MrKWatkins/Ast/) to build an AST.
+
 ## Contributing
 We welcome contributions! Please see our contributing guidelines for more details on how to get involved.

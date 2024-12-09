@@ -15,8 +15,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MrKWatkins.Ast" Version="0.9.122" />
-    <PackageReference Include="System.Collections.Immutable" Version="8.0.0" />
+    <PackageReference Include="MrKWatkins.Ast" Version="0.9.123" />
+    <PackageReference Include="System.Collections.Immutable" Version="9.0.0" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
   </ItemGroup>
 
