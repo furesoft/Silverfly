@@ -1,70 +1,99 @@
-﻿using Sample.Brainfuck.Nodes;
-using Silverfly;
-using Silverfly.Generator;
+﻿using MrKWatkins.Ast.Listening;
+using Sample.Brainfuck.Nodes;
 using Silverfly.Nodes;
 
 namespace Sample.Brainfuck;
 
-[Visitor]
-public partial class EvalVisitor : NodeVisitor
+public class EvaluationContext
 {
-    private int _pointer = 0;
-    readonly char[] _cells = new char[100];
+    internal int _pointer = 0;
+    internal char[] _cells = new char[100];
+}
 
-    [VisitorCondition("_.Token == '.'")]
-    void Print(OperationNode node)
+public partial class EvalListener
+{
+    public static CompositeListener<EvaluationContext, AstNode> Listener => CompositeListener<EvaluationContext, AstNode>
+                    .Build()
+                    .With(new PrintListener())
+                    .With(new ReadListener())
+                    .With(new DecrementListener())
+                    .With(new IncrementListener())
+                    .With(new IncrementCellListener())
+                    .With(new DecrementCellListener())
+                    .With(new BlockListener())
+                    .With(new LoopListener())
+                    .ToListener();
+
+    class PrintListener : Listener<EvaluationContext, AstNode, PrintNode>
     {
-        Console.Write(_cells[_pointer]);
+        protected override void ListenToNode(EvaluationContext context, PrintNode node)
+        {
+            Console.Write(context._cells[context._pointer]);
+        }
     }
 
-    [VisitorCondition("_.Token == ','")]
-    void Read(OperationNode node)
+    class ReadListener : Listener<EvaluationContext, AstNode, PrintNode>
     {
-        _cells[_pointer] = Console.ReadKey().KeyChar;
+        protected override void ListenToNode(EvaluationContext context, PrintNode node)
+        {
+            context._cells[context._pointer] = Console.ReadKey().KeyChar;
+        }
     }
 
-    [VisitorCondition("_.Token == '<'")]
-    void Decrement(OperationNode node)
+    class DecrementListener : Listener<EvaluationContext, AstNode, DecrementNode>
     {
-        _pointer--;
+        protected override void ListenToNode(EvaluationContext context, DecrementNode node)
+        {
+            context._pointer--;
+        }
     }
 
-    [VisitorCondition("_.Token == '>'")]
-    void Increment(OperationNode node)
+    class IncrementListener : Listener<EvaluationContext, AstNode, DecrementNode>
     {
-        _pointer++;
+        protected override void ListenToNode(EvaluationContext context, DecrementNode node)
+        {
+            context._pointer++;
+        }
     }
 
-    [VisitorCondition("_.Token == '+'")]
-    void IncrementCell(OperationNode node)
+    class IncrementCellListener : Listener<EvaluationContext, AstNode, DecrementNode>
     {
-        _cells[_pointer]++;
+        protected override void ListenToNode(EvaluationContext context, DecrementNode node)
+        {
+            context._cells[context._pointer]++;
+        }
     }
 
-    [VisitorCondition("_.Token == '-'")]
-    void DecrementCell(OperationNode node)
+    class DecrementCellListener : Listener<EvaluationContext, AstNode, DecrementNode>
     {
-        _cells[_pointer]--;
+        protected override void ListenToNode(EvaluationContext context, DecrementNode node)
+        {
+            context._cells[context._pointer]--;
+        }
     }
 
-    [VisitorCondition("_.Tag == 'loop'")]
-    void Loop(BlockNode node)
+    class BlockListener : Listener<EvaluationContext, AstNode, BlockNode>
     {
-        while (_cells[_pointer] != '\0')
+        protected override void ListenToNode(EvaluationContext context, BlockNode node)
         {
             foreach (var child in node.Children)
             {
-                Visit(child);
+                Listen(context, child);
             }
         }
     }
 
-    [VisitorCondition("_.Tag == null")]
-    void Block(BlockNode node)
+    class LoopListener : Listener<EvaluationContext, AstNode, LoopNode>
     {
-        foreach (var child in node.Children)
+        protected override void ListenToNode(EvaluationContext context, LoopNode node)
         {
-            Visit(child);
+            while (context._cells[context._pointer] != '\0')
+            {
+                foreach (var child in node.Children)
+                {
+                    Listen(context, child);
+                }
+            }
         }
     }
 }

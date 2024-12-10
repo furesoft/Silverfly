@@ -27,6 +27,7 @@ public class Repl : ReplInstance<BrainfuckParser>
                          +++.                    
 """;
         var parsed = Parser.Parse(helloWorld);
-        parsed.Tree.Accept(new EvalVisitor());
+
+        EvalListener.Listener.Listen(new EvaluationContext(), parsed.Tree);
     }
 }
