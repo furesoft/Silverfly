@@ -80,17 +80,17 @@ internal class FuncPromptCallbacks : ReplPromptCallbacks
             {
                 return scope;
             }
-            
+
             return GetScope(block.Children.First(), scope);
         }
-        
+
         if (node is BinaryOperatorNode b && b.Operator.Text.Span == ".")
         {
-            if (b.LeftExpr is NameNode nameNode && b.RightExpr is InvalidNode)
+            if (b.Left is NameNode nameNode && b.Right is InvalidNode)
             {
                 return scope.Get(nameNode.Token.Text.ToString()).Members;
             }
-            else if (b.LeftExpr is NameNode n1 && b.RightExpr is NameNode n2)
+            else if (b.Left is NameNode n1 && b.Right is NameNode n2)
             {
                 var s = scope.Get(n1.Token.Text.ToString());
                 if (s is LambdaValue)
@@ -100,9 +100,9 @@ internal class FuncPromptCallbacks : ReplPromptCallbacks
 
                 return s.Get(n2.Token.Text.ToString()).Members;
             }
-            else if (b.LeftExpr is BinaryOperatorNode ib && ib.Operator.Text.Span == ".")
+            else if (b.Left is BinaryOperatorNode ib && ib.Operator.Text.Span == ".")
             {
-                return GetScope(b.LeftExpr, scope);
+                return GetScope(b.Left, scope);
             }
         }
 

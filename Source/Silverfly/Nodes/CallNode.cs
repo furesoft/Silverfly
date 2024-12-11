@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Immutable;
@@ -17,5 +18,5 @@ public class CallNode : AstNode
     }
 
     public AstNode FunctionExpr => Children.First;
-    public IEnumerable<AstNode> Arguments => Children.Skip(1);
+    public AstNode[] Arguments => [.. Children.Skip(1)];
 }

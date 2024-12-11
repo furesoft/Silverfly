@@ -3,6 +3,14 @@ using Silverfly.Nodes;
 
 namespace Silverfly.Sample.Func.Nodes;
 
-public record LambdaNode(ImmutableList<NameNode> Parameters, AstNode Value) : AstNode
+public class LambdaNode : AstNode
 {
+    public AstNode Value => Children.First;
+    public IEnumerable<NameNode> Parameters => Children.Skip(1).OfType<NameNode>();
+
+    public LambdaNode(ImmutableList<NameNode> parameters, AstNode value)
+    {
+        Children.Add(value);
+        Children.Add(parameters);
+    }
 }

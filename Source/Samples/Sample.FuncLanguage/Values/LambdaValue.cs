@@ -43,7 +43,7 @@ public record LambdaValue : Value
         }
         else
         {
-            paramCount = Definition.Parameters.Count;
+            paramCount = Definition.Parameters.Count();
         }
 
         var paramList = string.Join(',', Enumerable.Repeat("Value", paramCount));

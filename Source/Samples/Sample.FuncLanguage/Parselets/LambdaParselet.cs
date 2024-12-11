@@ -17,7 +17,7 @@ public class LambdaParselet : IInfixParselet
         }
         else if (parameters is TupleNode t)
         {
-            p.AddRange(t.Values.Cast<NameNode>());
+            p.AddRange(t.Children.Cast<NameNode>());
         }
 
         var value = parser.ParseExpression();

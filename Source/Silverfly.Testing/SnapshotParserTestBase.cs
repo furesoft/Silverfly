@@ -1,5 +1,9 @@
+using System.Text;
+using System.Threading.Tasks;
 using Argon;
 using Silverfly.Testing.Converter;
+using VerifyNUnit;
+using VerifyTests;
 using static VerifyTests.VerifierSettings;
 
 namespace Silverfly.Testing;
@@ -40,9 +44,12 @@ public class SnapshotParserTestBase<TParser>
         object result = parsed.Tree;
         if (_options.OutputMode == OutputMode.Small)
         {
-            result = new TestResult(parsed.Tree.Accept(new PrintListener()), parsed.Document);
+            var builder = new StringBuilder();
+            PrintListener.Listener.Listen(builder, parsed.Tree);
+
+            result = new TestResult(builder.ToString(), parsed.Document);
         }
 
-        return Verify(result, Settings);
+        return Verifier.Verify(result, Settings);
     }
 }

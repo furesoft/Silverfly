@@ -12,7 +12,6 @@ class JsonPrinter
                         .With(new LiteralListener())
                         .With(new JsonObjectListener())
                         .ToListener();
-    private int _indentLevel = 0;
 
     class ArrayListener : Listener<object, AstNode, JsonArray>
     {
@@ -45,18 +44,11 @@ class JsonPrinter
             Console.WriteLine();
             foreach (var member in node.Members)
             {
-                Indent(member.Key + ":");
+                Console.WriteLine(member.Key + ":");
 
                 Listen(null!, member.Value);
                 Console.WriteLine();
             }
         }
-    }
-
-    void Indent(string src)
-    {
-        _indentLevel++;
-        Console.Write(new string(' ', _indentLevel * 2));
-        Console.Write(src);
     }
 }

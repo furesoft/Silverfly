@@ -3,6 +3,14 @@ using Silverfly.Nodes;
 
 namespace Sivlerfly.Sample.FuncLanguage.Nodes;
 
-public record EnumNode(string Name, ImmutableList<AstNode> Members) : AstNode
+public class EnumNode : AstNode
 {
+    public string Name => Properties.GetOrThrow<string>(nameof(Name));
+
+    public EnumNode(string name, ImmutableList<AstNode> members)
+    {
+        Properties.Set(nameof(Name), name);
+
+        Children.Add(members);
+    }
 }

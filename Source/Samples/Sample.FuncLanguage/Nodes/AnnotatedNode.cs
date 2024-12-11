@@ -1,11 +1,14 @@
-using System.Collections.Immutable;
 using Silverfly.Nodes;
 
 namespace Silverfly.Sample.Func.Nodes;
 
-public record AnnotatedNode() : AstNode
+public class AnnotatedNode : AstNode
 {
-    public ImmutableList<CallNode> Annotations { get; set; } = [];
+    public AnnotatedNode()
+    {
+        Properties.Set(nameof(Annotations), new List<CallNode>());
+    }
+    public List<CallNode> Annotations => Properties.GetOrThrow<List<CallNode>>(nameof(Annotations));
 
     public bool HasAnnotation(string name)
     {
