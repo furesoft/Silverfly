@@ -1,4 +1,6 @@
-﻿namespace Silverfly.Testing.Converter;
+﻿using VerifyTests;
+
+namespace Silverfly.Testing.Converter;
 
 public class SymbolConverter : WriteOnlyJsonConverter<Symbol>
 {

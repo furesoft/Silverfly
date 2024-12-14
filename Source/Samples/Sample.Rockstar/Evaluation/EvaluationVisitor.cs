@@ -1,64 +1,83 @@
-﻿using Silverfly.Nodes;
+﻿using MrKWatkins.Ast.Listening;
+using Silverfly.Nodes;
 using Silverfly.Nodes.Operators;
-using Silverfly.Text;
 
 namespace Silverfly.Sample.Rockstar.Evaluation;
 
-public class EvaluationVisitor : TaggedNodeVisitor<object, Scope>
+public class EvaluationListener
 {
-    public EvaluationVisitor()
+    public static CompositeListener<EvaluationContext, AstNode> Listener = CompositeListener<EvaluationContext, AstNode>
+        .Build()
+        .With(new BinaryListener())
+        .With(new LiteralListener())
+        .With(new NameListener())
+        .With(new BlockListener())
+        .With(new CallListener())
+        .ToListener();
+
+    private class BinaryListener : Listener<EvaluationContext, AstNode, BinaryOperatorNode>
     {
-        For<BinaryOperatorNode>(VisitAssignment, _ => _.Operator == "=");
-        For<CallNode>(VisitCall);
-        For<LiteralNode>(VisitLiteral);
-        For<NameNode>(VisitName);
-        For<BlockNode>(VisitBlock);
-    }
-
-    private object VisitAssignment(BinaryOperatorNode node, Scope scope)
-    {
-        if (node.LeftExpr is not NameNode name) return null;
-
-        scope.Define(name.Token.Text.Trim().ToString(), Visit(node.RightExpr, scope));
-
-        return null;
-    }
-
-    private object VisitCall(CallNode call, Scope scope)
-    {
-        if (call.FunctionExpr is NameNode name && name.Token == "print")
+        protected override void ListenToNode(EvaluationContext context, BinaryOperatorNode node)
         {
-            var arg = Visit(call.Arguments[0], scope);
-
-            if (arg is null && call.Arguments[0] is NameNode n)
+            if (node.Operator == "=")
             {
-                call.Arguments[0].AddMessage(MessageSeverity.Error, $"Variable '{n.Token.Text}' is not defined");
-                return null;
+                if (node.Left is not NameNode name)
+                {
+                    return;
+                }
+
+                Listen(context, node.Right);
+
+                context.Scope.Define(name.Token.Text.Trim().ToString(), context.Stack.Pop());
             }
-            
-            Console.WriteLine(arg);
         }
-
-        return null;
     }
 
-    private object VisitLiteral(LiteralNode node, Scope scope)
+    private class LiteralListener : Listener<EvaluationContext, AstNode, LiteralNode>
     {
-        return node.Value;
-    }
-
-    private object VisitName(NameNode node, Scope scope)
-    {
-        return scope.Get(node.Token.Text.ToString());
-    }
-
-    private object VisitBlock(BlockNode block, Scope scope)
-    {
-        foreach (var child in block.Children)
+        protected override void ListenToNode(EvaluationContext context, LiteralNode node)
         {
-            Visit(child, scope);
+            context.Stack.Push(node.Value);
         }
+    }
 
-        return null;
+    private class NameListener : Listener<EvaluationContext, AstNode, NameNode>
+    {
+        protected override void ListenToNode(EvaluationContext context, NameNode node)
+        {
+            context.Stack.Push(context.Scope.Get(node.Token.Text.ToString()));
+        }
+    }
+
+    private class BlockListener : Listener<EvaluationContext, AstNode, BlockNode>
+    {
+        protected override void ListenToNode(EvaluationContext context, BlockNode node)
+        {
+            foreach (var child in node.Children)
+            {
+                Listen(context, child);
+            }
+        }
+    }
+
+    private class CallListener : Listener<EvaluationContext, AstNode, CallNode>
+    {
+        protected override void ListenToNode(EvaluationContext context, CallNode node)
+        {
+            if (node.FunctionExpr is NameNode name && name.Token == "print")
+            {
+                Listen(context, node.Arguments.First());
+
+                var arg = context.Stack.Pop();
+
+                if (arg is null && node.Arguments.First() is NameNode n)
+                {
+                    node.Arguments.First().AddError($"Variable '{n.Token.Text}' is not defined");
+                    return;
+                }
+
+                Console.WriteLine(arg);
+            }
+        }
     }
 }

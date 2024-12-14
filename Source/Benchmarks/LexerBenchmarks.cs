@@ -8,7 +8,7 @@ namespace Benchmarks;
 [Config(typeof(AntiVirusFriendlyConfig))]
 public class LexerBenchmarks
 {
-    private readonly Lexer _lexer = new(new());
+    private readonly Lexer _lexer = new(new LexerConfig());
 
     [Benchmark]
     public Token Number()

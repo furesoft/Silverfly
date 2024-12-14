@@ -12,7 +12,13 @@ public record TupleValue(List<Value> Values) : Value
         return OptionValue.None;
     }
 
-    public override bool IsTruthy() => true;
+    public override bool IsTruthy()
+    {
+        return true;
+    }
 
-    public override string ToString() => "(" + string.Join(',', Values) + ")";
+    public override string ToString()
+    {
+        return "(" + string.Join(',', Values) + ")";
+    }
 }

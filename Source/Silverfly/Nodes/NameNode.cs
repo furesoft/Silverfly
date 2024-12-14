@@ -1,8 +1,17 @@
 namespace Silverfly.Nodes;
 
 /// <summary>
-/// A simple variable name expression like "abc".
+///     A simple variable name expression like "abc".
 /// </summary>
-public record NameNode(Token Token) : AstNode
+public class NameNode : AstNode
 {
+    public NameNode(Token token)
+    {
+        Properties.Set(nameof(Token), token);
+    }
+
+    public Token Token
+    {
+        get => Properties.GetOrThrow<Token>(nameof(Token));
+    }
 }

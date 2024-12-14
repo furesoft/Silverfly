@@ -1,10 +1,16 @@
 namespace Silverfly.Sample.Func.Values;
 
-public record UnitValue() : Value
+public record UnitValue : Value
 {
     public static readonly Value Shared = new UnitValue();
 
-    public override bool IsTruthy() => false;
+    public override bool IsTruthy()
+    {
+        return false;
+    }
 
-    public override string ToString() => "()";
+    public override string ToString()
+    {
+        return "()";
+    }
 }

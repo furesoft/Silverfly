@@ -3,4 +3,10 @@ using Silverfly.Nodes;
 
 namespace Silverfly.Sample.JSON.Nodes;
 
-public record JsonArray(ImmutableList<AstNode> Values) : AstNode;
+public class JsonArray : AstNode
+{
+    public JsonArray(ImmutableList<AstNode> values)
+    {
+        Children.Add(values);
+    }
+}

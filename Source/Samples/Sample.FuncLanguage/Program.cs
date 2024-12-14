@@ -1,6 +1,5 @@
 ﻿using Silverfly.Sample.Func.Values;
 
-
 namespace Silverfly.Sample.Func;
 
 public static class Program
@@ -37,15 +36,15 @@ public static class Program
 
             scope.Define("members", new ListValue(members));
             scope.Define("annotations", Value.From(x.Annotations));
-            
+
             scope.Define("hasAnnotation", new Func<string, bool>(name =>
             {
-                return x.Annotations.Any(a => a.Name == name);
+                return Enumerable.Any(x.Annotations, a => a.Name == name);
             }));
 
             return new ModuleValue(scope);
         }));
-        
+
         Scope.Root.Define("greet", Value.From(new Func<Value>(() => null)));
 
         new Repl().Run();

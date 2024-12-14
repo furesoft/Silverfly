@@ -17,13 +17,17 @@ public class LambdaParselet : IInfixParselet
         }
         else if (parameters is TupleNode t)
         {
-            p.AddRange(t.Values.Cast<NameNode>());
+            p.AddRange(t.Children.Cast<NameNode>());
         }
 
         var value = parser.ParseExpression();
 
-        return new LambdaNode(p.ToImmutableList(), value).WithRange(parser.Document, parameters.Range.Start, parser.LookAhead().GetSourceSpanEnd());
+        return new LambdaNode(p.ToImmutableList(), value).WithRange(parser.Document, parameters.Range.Start,
+            parser.LookAhead(0).GetSourceSpanEnd());
     }
 
-    public int GetBindingPower() => 100;
+    public int GetBindingPower()
+    {
+        return 100;
+    }
 }

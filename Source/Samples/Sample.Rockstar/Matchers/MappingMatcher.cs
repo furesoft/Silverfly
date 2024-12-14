@@ -5,6 +5,7 @@ namespace Silverfly.Sample.Rockstar.Matchers;
 public class MappingMatcher(Symbol type, string[] aliases) : IMatcher
 {
     public string[] Aliases { get; } = aliases;
+
     public bool Match(Lexer lexer, char c)
     {
         return Aliases.Any(alias => lexer.IsMatch(alias));
@@ -23,6 +24,6 @@ public class MappingMatcher(Symbol type, string[] aliases) : IMatcher
             }
         }
 
-        return new(type, lexer.Document.Source[oldIndex..index], line, oldColumn, lexer.Document);
+        return new Token(type, lexer.Document.Source[oldIndex..index], line, oldColumn, lexer.Document);
     }
 }

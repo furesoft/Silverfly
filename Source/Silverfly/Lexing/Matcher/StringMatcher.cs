@@ -1,28 +1,29 @@
-namespace Silverfly.Lexing.Matcher;
-
 using System;
 using System.Text;
 using Silverfly.Text;
 
+namespace Silverfly.Lexing.Matcher;
+
 /// <summary>
-/// Represents a matcher that identifies and parses string tokens.
+///     Represents a matcher that identifies and parses string tokens.
 /// </summary>
 /// <param name="leftStr">The symbol representing the start of a string.</param>
 /// <param name="rightStr">The symbol representing the end of a string.</param>
 /// <param name="allowEscapeChars">Indicates whether escape characters are allowed within the string.</param>
 /// <param name="allowUnicodeChars">Indicates whether Unicode escape sequences are allowed within the string.</param>
-public class StringMatcher(Symbol leftStr, Symbol rightStr, bool allowEscapeChars = true, bool allowUnicodeChars = true) : IMatcher
+public class StringMatcher(Symbol leftStr, Symbol rightStr, bool allowEscapeChars = true, bool allowUnicodeChars = true)
+    : IMatcher
 {
     public Symbol Left { get; set; } = leftStr;
     public Symbol Right { get; set; } = rightStr;
-    
+
     /// <summary>
-    /// Determines whether the current lexer position matches the start of a string.
+    ///     Determines whether the current lexer position matches the start of a string.
     /// </summary>
     /// <param name="lexer">The lexer processing the input.</param>
     /// <param name="c">The current character being processed.</param>
     /// <returns>
-    /// <c>true</c> if the current lexer position matches the start of a string; otherwise, <c>false</c>.
+    ///     <c>true</c> if the current lexer position matches the start of a string; otherwise, <c>false</c>.
     /// </returns>
     public bool Match(Lexer lexer, char c)
     {
@@ -30,7 +31,7 @@ public class StringMatcher(Symbol leftStr, Symbol rightStr, bool allowEscapeChar
     }
 
     /// <summary>
-    /// Builds a token for the matched string input.
+    ///     Builds a token for the matched string input.
     /// </summary>
     /// <param name="lexer">The lexer processing the input.</param>
     /// <param name="index">The current index in the lexer's input source.</param>
@@ -38,7 +39,7 @@ public class StringMatcher(Symbol leftStr, Symbol rightStr, bool allowEscapeChar
     /// <param name="line">The current line in the lexer's input source.</param>
     /// <param name="document"></param>
     /// <returns>
-    /// A <see cref="Token"/> representing the matched string input.
+    ///     A <see cref="Token" /> representing the matched string input.
     /// </returns>
     public Token Build(Lexer lexer, ref int index, ref int column, ref int line)
     {
@@ -89,7 +90,7 @@ public class StringMatcher(Symbol leftStr, Symbol rightStr, bool allowEscapeChar
     }
 
     /// <summary>
-    /// Parses an escape character within a string and appends it to the string builder.
+    ///     Parses an escape character within a string and appends it to the string builder.
     /// </summary>
     /// <param name="lexer">The lexer processing the input.</param>
     /// <param name="builder">The string builder to append the escape character to.</param>
@@ -122,7 +123,7 @@ public class StringMatcher(Symbol leftStr, Symbol rightStr, bool allowEscapeChar
     }
 
     /// <summary>
-    /// Parses a Unicode escape sequence within a string and appends it to the string builder.
+    ///     Parses a Unicode escape sequence within a string and appends it to the string builder.
     /// </summary>
     /// <param name="lexer">The lexer processing the input.</param>
     /// <param name="builder">The string builder to append the Unicode character to.</param>
@@ -135,16 +136,17 @@ public class StringMatcher(Symbol leftStr, Symbol rightStr, bool allowEscapeChar
 
         lexer.Advance(); // Consume 'u'
 
-        int codePoint = 0;
-        for (int i = 0; i < 4; i++)
+        var codePoint = 0;
+        for (var i = 0; i < 4; i++)
         {
             if (!char.IsDigit(lexer.Peek()) && !(lexer.IsBetween('a', 'f') || lexer.IsBetween('A', 'F')))
             {
-                lexer.Document.Messages.Add(Message.Error("Invalid Unicode escape sequence", SourceRange.From(lexer.Document, oldLine, oldColumn, line, column)));
+                lexer.Document.Messages.Add(Message.Error("Invalid Unicode escape sequence",
+                    SourceRange.From(lexer.Document, oldLine, oldColumn, line, column)));
                 return;
             }
 
-            codePoint = (codePoint * 16) + Convert.ToInt32(char.ToString(lexer.Peek()), 16);
+            codePoint = codePoint * 16 + Convert.ToInt32(char.ToString(lexer.Peek()), 16);
 
             lexer.Advance();
         }

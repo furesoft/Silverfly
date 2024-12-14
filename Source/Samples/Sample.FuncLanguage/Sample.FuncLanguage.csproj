@@ -12,14 +12,13 @@
     <RepositoryUrl>https://github.com/furesoft/Silverfly</RepositoryUrl>
     <Description>A full blown example of Silverfly</Description>
     <PackageTags>parser, pratt</PackageTags>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
   <ItemGroup>
     <None Include="*.f" CopyToOutputDirectory="PreserveNewest"/>
-    <ProjectReference Include="../../Silverfly.Generator/Silverfly.Generator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
-    <ProjectReference Include="..\..\Silverfly.Repl\Silverfly.Repl.csproj" />
-    <ProjectReference Include="..\..\Silverfly\Silverfly.csproj" />
+    <ProjectReference Include="..\..\Silverfly.Repl\Silverfly.Repl.csproj"/>
+    <ProjectReference Include="..\..\Silverfly\Silverfly.csproj"/>
   </ItemGroup>
 </Project>

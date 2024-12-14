@@ -3,18 +3,14 @@ namespace Silverfly.Sample.Rockstar.Evaluation;
 
 public class Scope(bool isRoot = false)
 {
+    public static readonly Scope Root = new(true);
     public Scope? Parent { get; init; }
     public bool IsRoot { get; set; } = isRoot;
     public Dictionary<string, object> Bindings { get; } = [];
 
-    public static readonly Scope Root = new(true);
-
     public Scope NewSubScope()
     {
-        return new Scope
-        {
-            Parent = this
-        };
+        return new Scope { Parent = this };
     }
 
     public bool TryGet(string name, out object value)
@@ -45,9 +41,9 @@ public class Scope(bool isRoot = false)
         return Parent?.Get(name)!;
     }
 
-    public T Get<T>(string name)
+    public T? Get<T>(string name)
     {
-        return (T)Get(name);
+        return (T?)Get(name);
     }
 
     public string NewIdentifier()

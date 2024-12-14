@@ -3,7 +3,7 @@ using Silverfly.Nodes;
 namespace Silverfly.Parselets;
 
 /// <summary>
-/// Simple parselet for a named variable like "abc".
+///     Simple parselet for a named variable like "abc".
 /// </summary>
 public class NameParselet : IPrefixParselet
 {

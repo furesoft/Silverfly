@@ -3,25 +3,21 @@ using Silverfly.Nodes;
 namespace Silverfly.Parselets;
 
 /// <summary>
-/// Parselet to parse a function call like "a(b, c, d)".
+///     Parselet to parse a function call like "a(b, c, d)".
 /// </summary>
 public class CallParselet(int bindingPower) : IInfixParselet
 {
     public AstNode Parse(Parser parser, AstNode left, Token token)
     {
         // Parse the comma-separated arguments until we hit ')'.
-        var args = parser.ParseSeperated(",", ")");
+        var args = parser.ParseSeperated(PredefinedSymbols.Comma, PredefinedSymbols.RightParen);
 
-        var call = new CallNode(left, args)
-            .WithRange(left, parser.LookAhead());
-
-        left = left.WithParent(call);
-
-        return (CallNode)call with
-        {
-            FunctionExpr = left
-        };
+        return new CallNode(left, args)
+            .WithRange(left, parser.LookAhead(0));
     }
 
-    public int GetBindingPower() => bindingPower;
+    public int GetBindingPower()
+    {
+        return bindingPower;
+    }
 }

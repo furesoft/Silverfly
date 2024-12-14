@@ -1,18 +1,17 @@
 ﻿using Silverfly.Nodes;
-using System.Collections.Generic;
-using System.Collections.Immutable;
 
 namespace Silverfly.Parselets;
-public class BlockParselet(Symbol terminator, Symbol separator = null, bool wrapExpressions = false, Symbol tag = null) : IStatementParselet, ISymbolDiscovery
+
+public class BlockParselet(Symbol terminator, Symbol seperator = null, bool wrapExpressions = false, Symbol tag = null)
+    : IStatementParselet
 {
     public Symbol Terminator { get; } = terminator;
-    public Symbol Separator { get; } = separator;
+    public Symbol Seperator { get; } = seperator;
     public Symbol Tag { get; } = tag;
 
     public AstNode Parse(Parser parser, Token token)
     {
-        var block = new BlockNode(Separator, Terminator);
-        var children = new List<AstNode>();
+        var block = new BlockNode(Seperator, Terminator);
 
         while (!parser.Match(Terminator) && !parser.IsAtEnd())
         {
@@ -20,22 +19,15 @@ public class BlockParselet(Symbol terminator, Symbol separator = null, bool wrap
 
             if (node is not InvalidNode)
             {
-                children.Add(node with { Parent = block });
+                block.Children.Add(node);
             }
 
-            if (Separator != null && parser.IsMatch(Separator))
+            if (Seperator != null && parser.IsMatch(Seperator))
             {
-                parser.Consume(Separator);
+                parser.Consume(Seperator);
             }
         }
 
-        return block
-            .WithChildren(children.ToImmutableList())
-            .WithRange(token, parser.LookAhead());
-    }
-
-    public Symbol[] GetSymbols()
-    {
-        return [terminator, separator];
+        return block.WithRange(token, parser.LookAhead(0));
     }
 }

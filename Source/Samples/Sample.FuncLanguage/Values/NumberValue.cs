@@ -2,7 +2,6 @@ namespace Silverfly.Sample.Func.Values;
 
 public record NumberValue : Value
 {
-    public double Value { get; set; }
     public NumberValue(double value)
     {
         Value = value;
@@ -13,11 +12,23 @@ public record NumberValue : Value
         Members.Define("'/", Div);
     }
 
-    public override bool IsTruthy() => Value != 0;
+    public double Value { get; set; }
 
-    public override string ToString() => Value.ToString();
+    public override bool IsTruthy()
+    {
+        return Value != 0;
+    }
 
-    private static Value Add(Value left, Value right) => ((NumberValue)left).Value + ((NumberValue)right).Value;
+    public override string ToString()
+    {
+        return Value.ToString();
+    }
+
+    private static Value Add(Value left, Value right)
+    {
+        return ((NumberValue)left).Value + ((NumberValue)right).Value;
+    }
+
     private static Value Sub(Value[] args)
     {
         if (args.Length == 1)
@@ -28,6 +39,13 @@ public record NumberValue : Value
         return ((NumberValue)args[0]).Value - ((NumberValue)args[1]).Value;
     }
 
-    private static Value Mul(Value left, Value right) => ((NumberValue)left).Value * ((NumberValue)right).Value;
-    private static Value Div(Value left, Value right) => ((NumberValue)left).Value / ((NumberValue)right).Value;
+    private static Value Mul(Value left, Value right)
+    {
+        return ((NumberValue)left).Value * ((NumberValue)right).Value;
+    }
+
+    private static Value Div(Value left, Value right)
+    {
+        return ((NumberValue)left).Value / ((NumberValue)right).Value;
+    }
 }

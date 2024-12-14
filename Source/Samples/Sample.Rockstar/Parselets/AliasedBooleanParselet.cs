@@ -12,7 +12,7 @@ public class AliasedBooleanParselet : IPrefixParselet
         {
             return new LiteralNode(true, token).WithRange(token);
         }
-        
+
         if (AliasedBooleanMatcher.FalseAliases.Contains(token.Text.ToString()))
         {
             return new LiteralNode(false, token).WithRange(token);

@@ -13,8 +13,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample.FuncLanguage", "Samp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Benchmarks", "Benchmarks\Benchmarks.csproj", "{8219DB33-8E85-4DF0-BBBA-428AC349DA79}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silverfly.Generator", "Silverfly.Generator\Silverfly.Generator.csproj", "{D00A5E37-FB89-4543-B058-9E0F04A7692F}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{DBC8A4C9-DBD3-4397-9EDC-CE9363947718}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample.JSON", "Samples\Sample.JSON\Sample.JSON.csproj", "{AF32C673-CC70-4012-89D9-0249EC74ACB6}"

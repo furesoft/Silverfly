@@ -2,6 +2,8 @@ namespace Silverfly.Sample.Func.Values;
 
 public record OptionValue : Value
 {
+    public static readonly OptionValue None = new();
+
     public OptionValue()
     {
         Members.Define("__value", UnitValue.Shared);
@@ -22,8 +24,6 @@ public record OptionValue : Value
             return $"some({Members.Get("__value")})";
         });
     }
-
-    public static readonly OptionValue None = new();
 
     public static OptionValue Some(Value value)
     {

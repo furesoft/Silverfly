@@ -1,23 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Version>1.0.80</Version>
-    <LangVersion>preview</LangVersion>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Title>Silverfly.Testing</Title>
-    <Copyright>furesoft</Copyright>
-    <RepositoryUrl>https://github.com/furesoft/Silverfly</RepositoryUrl>
-    <Description>Helpers to test Silverfly parsers</Description>
-    <PackageTags>parser, pratt, silverfly</PackageTags>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Verify" Version="28.1.3" />
-    <PackageReference Include="NUnit" Version="4.2.2" />
-    <PackageReference Include="Verify.NUnit" Version="28.1.3" />
+    <PackageReference Include="Verify" Version="28.4.0"/>
+    <PackageReference Include="NUnit" Version="4.2.2"/>
+    <PackageReference Include="Verify.NUnit" Version="28.4.0"/>
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All"/>
   </ItemGroup>
 

@@ -4,9 +4,9 @@ using Silverfly.Nodes.Operators;
 namespace Silverfly.Parselets.Operators;
 
 /// <summary>
-/// Generic infix parselet for a binary arithmetic operator. The only
-/// difference when parsing, "+", "-", "*", "/", and "^" is binding power
-/// and associativity, so we can use a single parselet class for all of those.
+///     Generic infix parselet for a binary arithmetic operator. The only
+///     difference when parsing, "+", "-", "*", "/", and "^" is binding power
+///     and associativity, so we can use a single parselet class for all of those.
 /// </summary>
 public class BinaryOperatorParselet(int bindingPower, bool isRightAssociative) : IInfixParselet
 {
@@ -18,14 +18,12 @@ public class BinaryOperatorParselet(int bindingPower, bool isRightAssociative) :
         // take *this* parselet's result as its left-hand argument.
         var rightExpr = parser.Parse(bindingPower - (isRightAssociative ? 1 : 0));
 
-        var node = new BinaryOperatorNode(left, token, rightExpr)
+        return new BinaryOperatorNode(left, token, rightExpr)
             .WithRange(left.Range.Document, left.Range.Start, rightExpr.Range.End);
-
-        left.WithParent(node);
-        rightExpr.WithParent(node);
-
-        return node;
     }
 
-    public int GetBindingPower() => bindingPower;
+    public int GetBindingPower()
+    {
+        return bindingPower;
+    }
 }

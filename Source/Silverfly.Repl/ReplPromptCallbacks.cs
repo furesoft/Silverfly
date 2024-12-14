@@ -14,7 +14,8 @@ public class ReplPromptCallbacks : PromptCallbacks
     protected static readonly char[] Characters = [' '];
     public Parser Parser { get; set; }
 
-    protected override Task<IReadOnlyCollection<FormatSpan>> HighlightCallbackAsync(string text, CancellationToken cancellationToken)
+    protected override Task<IReadOnlyCollection<FormatSpan>> HighlightCallbackAsync(string text,
+        CancellationToken cancellationToken)
     {
         var keywords = Parser.Lexer.Config.Keywords.Select(f => (f, ToAnsi(MessageFormatter.Theme.Keyword)));
         var brackets = GetBracketSpans(text);
@@ -37,21 +38,17 @@ public class ReplPromptCallbacks : PromptCallbacks
 
     private static IEnumerable<FormatSpan> GetBracketSpans(string text)
     {
-        var bracketPairs = new Dictionary<char, char>
-        {
-            { '(', ')' },
-            { '[', ']' },
-            { '{', '}' }
-        };
+        var bracketPairs = new Dictionary<char, char> { { '(', ')' }, { '[', ']' }, { '{', '}' } };
 
         var stack = new Stack<(AnsiColor Color, int Index)>();
         var colorIndex = 0;
 
-        for (int i = 0; i < text.Length; i++)
+        for (var i = 0; i < text.Length; i++)
         {
             if (MessageFormatter.IsOpenBracket(text[i]))
             {
-                var consoleColor = MessageFormatter.Theme.BracketColors[colorIndex % MessageFormatter.Theme.BracketColors.Length];
+                var consoleColor =
+                    MessageFormatter.Theme.BracketColors[colorIndex % MessageFormatter.Theme.BracketColors.Length];
                 colorIndex++;
 
                 stack.Push((ToAnsi(consoleColor), i));
@@ -70,14 +67,16 @@ public class ReplPromptCallbacks : PromptCallbacks
     }
 
 
-    private IEnumerable<FormatSpan> GetKeywordSpans(string text, IEnumerable<(string TextToFormat, AnsiColor Color)> formattingInfo)
+    private IEnumerable<FormatSpan> GetKeywordSpans(string text,
+        IEnumerable<(string TextToFormat, AnsiColor Color)> formattingInfo)
     {
         foreach (var (textToFormat, color) in formattingInfo)
         {
             int startIndex;
-            int offset = 0;
+            var offset = 0;
 
-            while ((startIndex = text.AsSpan(offset).ToString().IndexOf(textToFormat, Parser.Lexer.Config.Casing)) != -1)
+            while ((startIndex = text.AsSpan(offset).ToString().IndexOf(textToFormat, Parser.Lexer.Config.Casing)) !=
+                   -1)
             {
                 yield return new FormatSpan(offset + startIndex, textToFormat.Length, color);
                 offset += startIndex + textToFormat.Length;
@@ -88,23 +87,23 @@ public class ReplPromptCallbacks : PromptCallbacks
     //ToDo: use highlighting information from error highlighter
     private static IEnumerable<FormatSpan> GetStringsSpans(string text)
     {
-        int offset = 0;
+        var offset = 0;
 
         while (offset < text.Length)
         {
-            int startIndex = text.IndexOf('"', offset);
+            var startIndex = text.IndexOf('"', offset);
             if (startIndex == -1)
             {
                 break;
             }
 
-            int endIndex = text.IndexOf('"', startIndex + 1);
+            var endIndex = text.IndexOf('"', startIndex + 1);
             if (endIndex == -1)
             {
                 break;
             }
 
-            int length = endIndex - startIndex + 1;
+            var length = endIndex - startIndex + 1;
             yield return new FormatSpan(startIndex, length, ToAnsi(MessageFormatter.Theme.String));
 
             offset = endIndex + 1;
@@ -113,13 +112,13 @@ public class ReplPromptCallbacks : PromptCallbacks
 
     private static IEnumerable<FormatSpan> GetNumberSpans(string text)
     {
-        int offset = 0;
+        var offset = 0;
 
         while (offset < text.Length)
         {
             if (char.IsDigit(text[offset]))
             {
-                int startIndex = offset;
+                var startIndex = offset;
 
                 while (offset < text.Length && char.IsDigit(text[offset]))
                 {

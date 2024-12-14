@@ -4,11 +4,13 @@ namespace Silverfly.Sample.Rockstar;
 
 public class RockstarNameAdvancer : INameAdvancer
 {
+    private static readonly string[] CommonVariableStarts = ["a", "an", "the", "my", "your", "our"];
+
     public bool IsNameStart(char c)
     {
         return char.IsLetter(c);
     }
-    
+
     public void AdvanceName(Lexer lexer)
     {
         // Check if we're at the start of a proper variable
@@ -38,9 +40,9 @@ public class RockstarNameAdvancer : INameAdvancer
                     break;
                 }
             }
-            
+
             SkipWhitespace(lexer);
-                
+
             ReadWhile(lexer, char.IsLower); // Read the lowercase variable name
         }
         else if (IsSimpleVariableStart(lexer)) // Check for a simple variable
@@ -48,18 +50,17 @@ public class RockstarNameAdvancer : INameAdvancer
             ReadWhile(lexer, char.IsLetter); // Read the entire simple variable name
         }
     }
-    
-    static string[] CommonVariableStarts = ["a", "an", "the", "my", "your", "our"];
+
     private static bool IsCommonVariableStart(Lexer lexer)
     {
-        foreach (string keyword in CommonVariableStarts)
+        foreach (var keyword in CommonVariableStarts)
         {
             if (lexer.IsMatch(keyword, true))
             {
                 return true;
             }
         }
-        
+
         return false;
     }
 

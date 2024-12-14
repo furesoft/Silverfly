@@ -3,21 +3,22 @@ using System;
 namespace Silverfly.Lexing.Matcher;
 
 /// <summary>
-/// Represents a matcher that identifies and parses number literals in the lexer input.
+///     Represents a matcher that identifies and parses number literals in the lexer input.
 /// </summary>
 /// <param name="allowHex">If set to <c>true</c>, allows hexadecimal numbers.</param>
 /// <param name="allowBin">If set to <c>true</c>, allows binary numbers.</param>
 /// <param name="floatingPointSymbol">The symbol representing a floating-point number.</param>
 /// <param name="seperatorSymbol">The symbol used as a separator in the number (e.g., '_').</param>
-public class NumberMatcher(bool allowHex, bool allowBin, Symbol floatingPointSymbol, Symbol seperatorSymbol = null) : IMatcher
+public class NumberMatcher(bool allowHex, bool allowBin, Symbol floatingPointSymbol, Symbol seperatorSymbol = null)
+    : IMatcher
 {
     /// <summary>
-    /// Determines whether the current lexer position matches a number literal.
+    ///     Determines whether the current lexer position matches a number literal.
     /// </summary>
     /// <param name="lexer">The lexer processing the input.</param>
     /// <param name="c">The current character being processed.</param>
     /// <returns>
-    /// <c>true</c> if the current lexer position matches a number literal; otherwise, <c>false</c>.
+    ///     <c>true</c> if the current lexer position matches a number literal; otherwise, <c>false</c>.
     /// </returns>
     public bool Match(Lexer lexer, char c)
     {
@@ -29,7 +30,7 @@ public class NumberMatcher(bool allowHex, bool allowBin, Symbol floatingPointSym
     }
 
     /// <summary>
-    /// Builds a token for the matched number literal.
+    ///     Builds a token for the matched number literal.
     /// </summary>
     /// <param name="lexer">The lexer processing the input.</param>
     /// <param name="index">The current index in the lexer's input source.</param>
@@ -37,7 +38,7 @@ public class NumberMatcher(bool allowHex, bool allowBin, Symbol floatingPointSym
     /// <param name="line">The current line in the lexer's input source.</param>
     /// <param name="document"></param>
     /// <returns>
-    /// A <see cref="Token"/> representing the matched number literal.
+    ///     A <see cref="Token" /> representing the matched number literal.
     /// </returns>
     public Token Build(Lexer lexer, ref int index, ref int column, ref int line)
     {
@@ -54,7 +55,7 @@ public class NumberMatcher(bool allowHex, bool allowBin, Symbol floatingPointSym
     }
 
     /// <summary>
-    /// Advances the lexer through a number literal.
+    ///     Advances the lexer through a number literal.
     /// </summary>
     /// <param name="lexer">The lexer processing the input.</param>
     /// <param name="index">The current index in the lexer's input source.</param>
@@ -76,7 +77,7 @@ public class NumberMatcher(bool allowHex, bool allowBin, Symbol floatingPointSym
     }
 
     /// <summary>
-    /// Advances the lexer through a binary number literal.
+    ///     Advances the lexer through a binary number literal.
     /// </summary>
     /// <param name="lexer">The lexer processing the input.</param>
     /// <param name="index">The current index in the lexer's input source.</param>
@@ -86,7 +87,7 @@ public class NumberMatcher(bool allowHex, bool allowBin, Symbol floatingPointSym
     }
 
     /// <summary>
-    /// Advances the lexer through a hexadecimal number literal.
+    ///     Advances the lexer through a hexadecimal number literal.
     /// </summary>
     /// <param name="lexer">The lexer processing the input.</param>
     /// <param name="index">The current index in the lexer's input source.</param>
@@ -96,7 +97,7 @@ public class NumberMatcher(bool allowHex, bool allowBin, Symbol floatingPointSym
     }
 
     /// <summary>
-    /// Advances the lexer through a floating-point number literal.
+    ///     Advances the lexer through a floating-point number literal.
     /// </summary>
     /// <param name="lexer">The lexer processing the input.</param>
     /// <param name="index">The current index in the lexer's input source.</param>
@@ -121,7 +122,7 @@ public class NumberMatcher(bool allowHex, bool allowBin, Symbol floatingPointSym
     }
 
     /// <summary>
-    /// Advances the lexer through a number literal, based on a predicate.
+    ///     Advances the lexer through a number literal, based on a predicate.
     /// </summary>
     /// <param name="lexer">The lexer processing the input.</param>
     /// <param name="index">The current index in the lexer's input source.</param>
@@ -139,16 +140,22 @@ public class NumberMatcher(bool allowHex, bool allowBin, Symbol floatingPointSym
     }
 
     /// <summary>
-    /// Determines whether a character is a valid binary digit (0 or 1).
+    ///     Determines whether a character is a valid binary digit (0 or 1).
     /// </summary>
     /// <param name="c">The character to check.</param>
     /// <returns><c>true</c> if the character is a valid binary digit; otherwise, <c>false</c>.</returns>
-    private bool IsValidBinChar(char c) => c is '1' or '0';
+    private bool IsValidBinChar(char c)
+    {
+        return c is '1' or '0';
+    }
 
     /// <summary>
-    /// Determines whether a character is a valid hexadecimal digit.
+    ///     Determines whether a character is a valid hexadecimal digit.
     /// </summary>
     /// <param name="c">The character to check.</param>
     /// <returns><c>true</c> if the character is a valid hexadecimal digit; otherwise, <c>false</c>.</returns>
-    private bool IsValidHexChar(char c) => char.IsDigit(c) || c is >= 'a' and <= 'z' || c is >= 'A' and <= 'Z';
+    private bool IsValidHexChar(char c)
+    {
+        return char.IsDigit(c) || c is >= 'a' and <= 'z' || c is >= 'A' and <= 'Z';
+    }
 }

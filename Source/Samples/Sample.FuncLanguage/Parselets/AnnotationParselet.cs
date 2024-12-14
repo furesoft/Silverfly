@@ -28,7 +28,7 @@ public class AnnotationParselet : IPrefixParselet
         var expr = parser.ParseExpression();
         if (expr is AnnotatedNode a)
         {
-            a.Annotations = a.Annotations.Add(node);
+            a.Annotations.Add(node);
         }
         else
         {

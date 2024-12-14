@@ -1,27 +1,26 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-      <Version>1.0.72</Version>
-      <OutputType>Exe</OutputType>
-      <LangVersion>preview</LangVersion>
-      <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-      <Title>Silverfly.Sample.Rockstar</Title>
-      <AssemblyName>Silverfly.Sample.Rockstar</AssemblyName>
-      <RootNamespace>Silverfly.Sample.Rockstar</RootNamespace>
-      <Copyright>furesoft</Copyright>
-      <RepositoryUrl>https://github.com/furesoft/Silverfly</RepositoryUrl>
-      <Description>A full blown example of Silverfly</Description>
-      <PackageTags>parser, pratt</PackageTags>
-      <TargetFramework>net8.0</TargetFramework>
-      <ImplicitUsings>enable</ImplicitUsings>
-    </PropertyGroup>
-  
+  <PropertyGroup>
+    <Version>1.0.69</Version>
+    <OutputType>Exe</OutputType>
+    <LangVersion>preview</LangVersion>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Title>Silverfly.Sample.Rockstar</Title>
+    <AssemblyName>Silverfly.Sample.Rockstar</AssemblyName>
+    <RootNamespace>Silverfly.Sample.Rockstar</RootNamespace>
+    <Copyright>furesoft</Copyright>
+    <RepositoryUrl>https://github.com/furesoft/Silverfly</RepositoryUrl>
+    <Description>A full blown example of Silverfly</Description>
+    <PackageTags>parser, pratt</PackageTags>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
   <ItemGroup>
-    <ProjectReference Include="../../Silverfly.Generator/Silverfly.Generator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
-    <ProjectReference Include="..\..\Silverfly.Repl\Silverfly.Repl.csproj" />
-    <ProjectReference Include="..\..\Silverfly\Silverfly.csproj" />
+    <ProjectReference Include="..\..\Silverfly.Repl\Silverfly.Repl.csproj"/>
+    <ProjectReference Include="..\..\Silverfly\Silverfly.csproj"/>
   </ItemGroup>
-  
+
   <ItemGroup>
     <None Update="Samples\fizzbuzz_minimal.rock">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

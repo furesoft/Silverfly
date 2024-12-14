@@ -29,6 +29,11 @@ public class PoeticLiteralParselet : IInfixParselet
         return new BinaryOperatorNode(left, token.Rewrite("="), value);
     }
 
+    public int GetBindingPower()
+    {
+        return 100;
+    }
+
     private static double ConvertPoeticNumber(List<string> tmp)
     {
         var numValue = 0.0;
@@ -36,7 +41,7 @@ public class PoeticLiteralParselet : IInfixParselet
         var decimalMultiplier = 0.1;
 
         // Iterate over words after the variable name and 'is/was/are/were'
-        for (int i = 0; i < tmp.Count; i++)
+        for (var i = 0; i < tmp.Count; i++)
         {
             var word = tmp[i];
 
@@ -70,6 +75,4 @@ public class PoeticLiteralParselet : IInfixParselet
 
         return numValue;
     }
-
-    public int GetBindingPower() => 100;
 }

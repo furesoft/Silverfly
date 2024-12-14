@@ -13,9 +13,9 @@ public partial class ParserDefinition
 
     internal TypeNameParser _typeNameParser = new TypeNameParser();
     public PrecedenceLevels PrecedenceLevels = new DefaultPrecedenceLevels();
-    
+
     /// <summary>
-    /// Registers a prefix parselet for the given token.
+    ///     Registers a prefix parselet for the given token.
     /// </summary>
     /// <param name="token">The symbol token.</param>
     /// <param name="parselet">The prefix parselet to be registered.</param>
@@ -25,7 +25,7 @@ public partial class ParserDefinition
     }
 
     /// <summary>
-    /// Registers an infix parselet for the given token.
+    ///     Registers an infix parselet for the given token.
     /// </summary>
     /// <param name="token">The symbol token.</param>
     /// <param name="parselet">The infix parselet to be registered.</param>
@@ -35,7 +35,7 @@ public partial class ParserDefinition
     }
 
     /// <summary>
-    /// Registers a statement parselet for the given token.
+    ///     Registers a statement parselet for the given token.
     /// </summary>
     /// <param name="token">The symbol token.</param>
     /// <param name="parselet">The statement parselet to be registered.</param>
@@ -45,7 +45,7 @@ public partial class ParserDefinition
     }
 
     /// <summary>
-    /// Registers an infix parselet for multiple tokens.
+    ///     Registers an infix parselet for multiple tokens.
     /// </summary>
     /// <param name="parselet">The infix parselet to be registered.</param>
     /// <param name="tokens">The array of symbol tokens.</param>
@@ -58,7 +58,7 @@ public partial class ParserDefinition
     }
 
     /// <summary>
-    /// Registers a prefix parselet for multiple tokens.
+    ///     Registers a prefix parselet for multiple tokens.
     /// </summary>
     /// <param name="parselet">The prefix parselet to be registered.</param>
     /// <param name="tokens">The array of symbol tokens.</param>
@@ -71,7 +71,7 @@ public partial class ParserDefinition
     }
 
     /// <summary>
-    /// Registers a prefix parselet for multiple tokens.
+    ///     Registers a prefix parselet for multiple tokens.
     /// </summary>
     /// <param name="parselet">The prefix parselet to be registered.</param>
     /// <param name="tokens">The array of symbol tokens.</param>
@@ -84,7 +84,7 @@ public partial class ParserDefinition
     }
 
     /// <summary>
-    /// Registers a group parselet for the given left and right tokens.
+    ///     Registers a group parselet for the given left and right tokens.
     /// </summary>
     /// <param name="leftToken">The left symbol token.</param>
     /// <param name="rightToken">The right symbol token.</param>
@@ -95,7 +95,7 @@ public partial class ParserDefinition
     }
 
     /// <summary>
-    /// Registers a block parselet for the given start and terminator tokens.
+    ///     Registers a block parselet for the given start and terminator tokens.
     /// </summary>
     /// <param name="start">The start symbol token.</param>
     /// <param name="terminator">The terminator symbol token.</param>
@@ -107,9 +107,9 @@ public partial class ParserDefinition
     {
         Register(start, new BlockParselet(terminator, separator, wrapExpressions, tag));
     }
-    
+
     /// <summary>
-    /// Registers a postfix unary operator parselet for the given token and binding power.
+    ///     Registers a postfix unary operator parselet for the given token and binding power.
     /// </summary>
     /// <param name="token">The symbol token.</param>
     /// <param name="bindingPowerName">The name of the binding power. Default is "Postfix".</param>
@@ -120,7 +120,7 @@ public partial class ParserDefinition
     }
 
     /// <summary>
-    /// Registers a prefix unary operator parselet for the given token and binding power.
+    ///     Registers a prefix unary operator parselet for the given token and binding power.
     /// </summary>
     /// <param name="token">The symbol token.</param>
     /// <param name="bindingPowerName">The name of the binding power. Default is "Prefix".</param>
@@ -131,7 +131,7 @@ public partial class ParserDefinition
     }
 
     /// <summary>
-    /// Registers a left-associative binary operator parselet for the given token and binding power.
+    ///     Registers a left-associative binary operator parselet for the given token and binding power.
     /// </summary>
     /// <param name="token">The symbol token.</param>
     /// <param name="bindingPowerName">The name of the binding power.</param>
@@ -141,7 +141,7 @@ public partial class ParserDefinition
     }
 
     /// <summary>
-    /// Registers a right-associative binary operator parselet for the given token and binding power.
+    ///     Registers a right-associative binary operator parselet for the given token and binding power.
     /// </summary>
     /// <param name="token">The symbol token.</param>
     /// <param name="bindingPowerName">The name of the binding power.</param>
@@ -151,7 +151,7 @@ public partial class ParserDefinition
     }
 
     /// <summary>
-    /// Registers a ternary operator like the ?: operator.
+    ///     Registers a ternary operator like the ?: operator.
     /// </summary>
     /// <param name="firstSymbol">The first symbol token.</param>
     /// <param name="secondSymbol">The second symbol token.</param>

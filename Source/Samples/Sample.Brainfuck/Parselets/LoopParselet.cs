@@ -1,4 +1,5 @@
-﻿using Silverfly;
+﻿using Sample.Brainfuck.Nodes;
+using Silverfly;
 using Silverfly.Nodes;
 using Silverfly.Parselets;
 
@@ -8,11 +9,10 @@ public class LoopParselet : IPrefixParselet
 {
     public AstNode Parse(Parser parser, Token token)
     {
+        var loopNode = new LoopNode();
         var instructions = parser.ParseList(terminators: "]");
+        loopNode.Children.Add(instructions);
 
-        return new BlockNode(null, "]")
-            .WithChildren(instructions)
-            .WithTag("loop")
-            .WithRange(token, parser.LookAhead());
+        return loopNode.WithRange(token, parser.LookAhead(0));
     }
 }

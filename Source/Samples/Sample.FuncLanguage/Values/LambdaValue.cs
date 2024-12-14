@@ -4,10 +4,6 @@ namespace Silverfly.Sample.Func.Values;
 
 public record LambdaValue : Value
 {
-    public Func<Value[], Value> Value { get; init; }
-
-    public LambdaNode Definition { get; init; }
-
     public LambdaValue(Func<Value[], Value> value, LambdaNode definition, bool addOperators = true)
     {
         Value = value;
@@ -21,6 +17,10 @@ public record LambdaValue : Value
         Members.Define("'+", new LambdaValue(Combine, definition, false));
     }
 
+    public Func<Value[], Value> Value { get; init; }
+
+    public LambdaNode Definition { get; init; }
+
     private static Value Combine(Value[] args)
     {
         if (args[0] is LambdaValue firstLambda && args[1] is LambdaValue secondLambda)
@@ -33,7 +33,11 @@ public record LambdaValue : Value
         return UnitValue.Shared;
     }
 
-    public override bool IsTruthy() => true;
+    public override bool IsTruthy()
+    {
+        return true;
+    }
+
     public override string ToString()
     {
         var paramCount = 0;
@@ -43,7 +47,7 @@ public record LambdaValue : Value
         }
         else
         {
-            paramCount = Definition.Parameters.Count;
+            paramCount = Definition.Parameters.Count();
         }
 
         var paramList = string.Join(',', Enumerable.Repeat("Value", paramCount));

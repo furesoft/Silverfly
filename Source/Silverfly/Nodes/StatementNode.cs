@@ -1,8 +1,8 @@
 namespace Silverfly.Nodes;
 
 /// <summary>
-/// Represents an abstract statement node in an abstract syntax tree (AST).
+///     Represents an abstract statement node in an abstract syntax tree (AST).
 /// </summary>
-public abstract record StatementNode : AstNode
+public abstract class StatementNode : AstNode
 {
 }

@@ -1,53 +1,54 @@
-﻿using Silverfly.Nodes;
-using Silverfly.Sample.JSON.Nodes;
+﻿using MrKWatkins.Ast.Listening;
+using Sample.JSON.Nodes;
+using Silverfly.Nodes;
 
-namespace Silverfly.Sample.JSON;
+namespace Sample.JSON;
 
-public class JsonPrinter : NodeVisitor
+internal class JsonPrinter
 {
-    public JsonPrinter()
-    {
-        For<JsonArray>(VisitArray, _ => _.Values.Count > 0);
-        For<LiteralNode>(VisitLiteral);
-        For<JsonObject>(VisitObject);
-    }
+    public static CompositeListener<object, AstNode> Listener = CompositeListener<object, AstNode>
+        .Build()
+        .With(new ArrayListener())
+        .With(new LiteralListener())
+        .With(new JsonObjectListener())
+        .ToListener();
 
-    private void VisitArray(JsonArray obj)
+    private class ArrayListener : Listener<object, AstNode, JsonArray>
     {
-        Console.Write("[");
-        
-        foreach (var value in obj.Values)
+        protected override void ListenToNode(object context, JsonArray node)
         {
-            value.Accept(this);
-            Console.Write(",");
+            Console.Write("[");
+
+            foreach (var value in node.Children)
+            {
+                Listen(null!, value);
+                Console.Write(",");
+            }
+
+            Console.Write("]");
         }
-        
-        Console.Write("]");
     }
 
-    private void VisitLiteral(LiteralNode lit)
+    private class LiteralListener : Listener<object, AstNode, LiteralNode>
     {
-        Console.Write(lit.Value);
-    }
-
-    private void VisitObject(JsonObject obj)
-    {
-        Console.WriteLine();
-        foreach (var member in obj.Members)
+        protected override void ListenToNode(object context, LiteralNode node)
         {
-            Indent(member.Key + ":");
-            
-            member.Value.Accept(this);
+            Console.Write(node.Value);
+        }
+    }
+
+    private class JsonObjectListener : Listener<object, AstNode, JsonObject>
+    {
+        protected override void ListenToNode(object context, JsonObject node)
+        {
             Console.WriteLine();
+            foreach (var member in node.Members)
+            {
+                Console.WriteLine(member.Key + ":");
+
+                Listen(null!, member.Value);
+                Console.WriteLine();
+            }
         }
-    }
-
-    private int _indentLevel = 0;
-
-    void Indent(string src)
-    {
-        _indentLevel++;
-        Console.Write(new string(' ', _indentLevel*2));
-        Console.Write(src);
     }
 }

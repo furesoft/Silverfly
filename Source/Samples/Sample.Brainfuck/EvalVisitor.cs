@@ -1,72 +1,102 @@
-﻿using Sample.Brainfuck.Nodes;
-using Silverfly;
+﻿using MrKWatkins.Ast.Listening;
+using Sample.Brainfuck.Nodes;
 using Silverfly.Nodes;
 
 namespace Sample.Brainfuck;
 
-public class EvalVisitor : NodeVisitor
+public class EvaluationContext
 {
-    private int _pointer;
-    readonly char[] _cells = new char[100];
+    internal char[] _cells = new char[100];
+    internal int _pointer;
+}
 
-    public EvalVisitor()
+public class EvalListener
+{
+    public static CompositeListener<EvaluationContext, AstNode> Listener
     {
-        For<OperationNode>(Print, _=> _.Token == ".");
-        For<OperationNode>(Read, _=> _.Token == ",");
-        For<OperationNode>(Decrement, _=> _.Token == "<");
-        For<OperationNode>(Increment, _=> _.Token == ">");
-        For<OperationNode>(DecrementCell, _=> _.Token == "-");
-        For<OperationNode>(IncrementCell, _=> _.Token == "+");
-        For<BlockNode>(Loop, _ => _.Tag == "loop");
-        For<BlockNode>(Block, _ => _.Tag == null);
+        get => CompositeListener<EvaluationContext, AstNode>
+            .Build()
+            .With(new PrintListener())
+            .With(new ReadListener())
+            .With(new DecrementListener())
+            .With(new IncrementListener())
+            .With(new IncrementCellListener())
+            .With(new DecrementCellListener())
+            .With(new BlockListener())
+            .With(new LoopListener())
+            .ToListener();
     }
 
-    void Print(OperationNode node)
+    private class PrintListener : Listener<EvaluationContext, AstNode, PrintNode>
     {
-        Console.Write(_cells[_pointer]);
+        protected override void ListenToNode(EvaluationContext context, PrintNode node)
+        {
+            Console.Write(context._cells[context._pointer]);
+        }
     }
 
-    void Read(OperationNode node)
+    private class ReadListener : Listener<EvaluationContext, AstNode, PrintNode>
     {
-        _cells[_pointer] = Console.ReadKey().KeyChar;
+        protected override void ListenToNode(EvaluationContext context, PrintNode node)
+        {
+            context._cells[context._pointer] = Console.ReadKey().KeyChar;
+        }
     }
 
-    void Decrement(OperationNode node)
+    private class DecrementListener : Listener<EvaluationContext, AstNode, DecrementNode>
     {
-        _pointer--;
+        protected override void ListenToNode(EvaluationContext context, DecrementNode node)
+        {
+            context._pointer--;
+        }
     }
 
-    void Increment(OperationNode node)
+    private class IncrementListener : Listener<EvaluationContext, AstNode, DecrementNode>
     {
-        _pointer++;
+        protected override void ListenToNode(EvaluationContext context, DecrementNode node)
+        {
+            context._pointer++;
+        }
     }
 
-    void IncrementCell(OperationNode node)
+    private class IncrementCellListener : Listener<EvaluationContext, AstNode, DecrementNode>
     {
-        _cells[_pointer]++;
+        protected override void ListenToNode(EvaluationContext context, DecrementNode node)
+        {
+            context._cells[context._pointer]++;
+        }
     }
 
-    void DecrementCell(OperationNode node)
+    private class DecrementCellListener : Listener<EvaluationContext, AstNode, DecrementNode>
     {
-        _cells[_pointer]--;
+        protected override void ListenToNode(EvaluationContext context, DecrementNode node)
+        {
+            context._cells[context._pointer]--;
+        }
     }
 
-    void Loop(BlockNode node)
+    private class BlockListener : Listener<EvaluationContext, AstNode, BlockNode>
     {
-        while (_cells[_pointer] != '\0')
+        protected override void ListenToNode(EvaluationContext context, BlockNode node)
         {
             foreach (var child in node.Children)
             {
-                Visit(child);
+                Listen(context, child);
             }
         }
     }
 
-    void Block(BlockNode node)
+    private class LoopListener : Listener<EvaluationContext, AstNode, LoopNode>
     {
-        foreach (var child in node.Children)
+        protected override void ListenToNode(EvaluationContext context, LoopNode node)
         {
-            Visit(child);
+            while (context._cells[context._pointer] != '\0')
+            {
+                foreach (var child in node.Children)
+                {
+                    Listen(context, child);
+                }
+            }
         }
     }
 }
