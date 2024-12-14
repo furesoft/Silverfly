@@ -15,7 +15,6 @@ jobs:
       PROJECTS: |
         Source/Silverfly/Silverfly.csproj
         Source/Silverfly.Testing/Silverfly.Testing.csproj
-        Source/Silverfly.Generator/Silverfly.Generator.csproj
         Source/Silverfly.Repl/Silverfly.Repl.csproj
         Source/Silverfly.TreeVisualizer/Silverfly.TreeVisualizer.csproj
         Source/Silverfly.Backend/Silverfly.Backend.csproj
