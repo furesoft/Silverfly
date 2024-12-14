@@ -3,8 +3,17 @@ using System.Text;
 
 namespace Silverfly.Helpers;
 
-public record PointerTypeName(Token Token, TypeName Type, PointerKind Kind) : TypeName(Token)
+public class PointerTypeName : TypeName
 {
+    public PointerTypeName(Token token, TypeName type, PointerKind kind) : base(token)
+    {
+        Properties.Set(nameof(Type), type);
+        Properties.Set(nameof(Kind), kind);
+    }
+
+    public TypeName Type => Properties.GetOrThrow<TypeName>(nameof(Type));
+    public PointerKind Kind => Properties.GetOrThrow<PointerKind>(nameof(Kind));
+
     public override string ToString()
     {
         var builder = new StringBuilder();

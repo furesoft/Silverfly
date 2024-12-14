@@ -28,8 +28,7 @@ public class TestParser : Parser
 
         def.InfixLeft("->", "Product");
 
-        def.Block(PredefinedSymbols.SOF, PredefinedSymbols.EOF,
-            PredefinedSymbols.Semicolon);
+        def.Block(PredefinedSymbols.SOF, PredefinedSymbols.EOF,";");
     }
 
     protected override void InitLexer(LexerConfig lexer)

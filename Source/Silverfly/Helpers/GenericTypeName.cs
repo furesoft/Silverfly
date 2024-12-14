@@ -2,6 +2,12 @@ using System.Collections.Immutable;
 
 namespace Silverfly.Helpers;
 
-public record GenericTypeName(Token Token, ImmutableList<TypeName> GenericArguments) : TypeName(Token)
+public class GenericTypeName : TypeName
 {
+    public GenericTypeName(Token token, ImmutableList<TypeName> genericArguments) : base(token)
+    {
+        Properties.Set(nameof(GenericArguments), genericArguments);
+    }
+
+    public ImmutableList<TypeName> GenericArguments => Properties.GetOrThrow<ImmutableList<TypeName>>(nameof(GenericArguments));
 }

@@ -2,14 +2,13 @@ using System.Text;
 using System.Threading.Tasks;
 using Argon;
 using Silverfly.Testing.Converter;
-using VerifyNUnit;
 using VerifyTests;
 using static VerifyTests.VerifierSettings;
 
 namespace Silverfly.Testing;
 
 /// <summary>
-///     Base class for snapshot parser tests using a specific parser type <typeparamref name="TParser" />.
+/// Base class for snapshot parser tests using a specific parser type <typeparamref name="TParser"/>.
 /// </summary>
 /// <typeparam name="TParser">The type of the parser being tested.</typeparam>
 public class SnapshotParserTestBase<TParser>
@@ -35,12 +34,10 @@ public class SnapshotParserTestBase<TParser>
         Settings.UseDirectory("TestResults");
     }
 
-    public static TranslationUnit Parse(string src)
-    {
-        return new TParser().Parse(src, _options.Filename);
-    }
+    public TParser Parser { get; } = new();
+    public TranslationUnit Parse(string src) => Parser.Parse(src, _options.Filename);
 
-    public static Task Test(string source)
+    public Task Test(string source)
     {
         var parsed = Parse(source);
 
@@ -49,10 +46,9 @@ public class SnapshotParserTestBase<TParser>
         {
             var builder = new StringBuilder();
             PrintListener.Listener.Listen(builder, parsed.Tree);
-
             result = new TestResult(builder.ToString(), parsed.Document);
         }
 
-        return Verifier.Verify(result, Settings);
+        return VerifyNUnit.Verifier.Verify(result, Settings);
     }
 }

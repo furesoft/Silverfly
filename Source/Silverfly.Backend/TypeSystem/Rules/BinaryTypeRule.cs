@@ -19,8 +19,8 @@ public class BinaryTypeRule : TypeRule
             throw new InvalidOperationException("Incompatible type");
         }
 
-        var inferredLeft = engine.InferType(binary.LeftExpr);
-        var inferredRight = engine.InferType(binary.RightExpr);
+        var inferredLeft = engine.InferType(binary.Left);
+        var inferredRight = engine.InferType(binary.Right);
 
         if (inferredLeft == inferredRight)
         {

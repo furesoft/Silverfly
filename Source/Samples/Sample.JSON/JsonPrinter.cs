@@ -1,8 +1,8 @@
 ﻿using MrKWatkins.Ast.Listening;
-using Sample.JSON.Nodes;
 using Silverfly.Nodes;
+using Silverfly.Sample.JSON.Nodes;
 
-namespace Sample.JSON;
+namespace Silverfly.Sample.JSON;
 
 internal class JsonPrinter
 {

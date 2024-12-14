@@ -1,51 +1,56 @@
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using Silverfly.Lexing;
 using Silverfly.Text;
 
 namespace Silverfly;
 
 /// <summary>
-///     Represents a lexer that tokenizes source code into meaningful tokens.
+/// Represents a lexer that tokenizes source code into meaningful tokens.
 /// </summary>
 public sealed partial class Lexer
 {
+    public LexerConfig Config;
     private int _index;
     private int _line = 1, _column = 1;
-    public LexerConfig Config;
 
-    /// <summary>
-    ///     Creates a new <see cref="Lexer" /> to tokenize the given string.
-    /// </summary>
-    /// <param name="source">String to tokenize</param>
-    public Lexer(LexerConfig config)
-    {
-        Config = config;
-    }
+    public int CurrentIndex => _index;
 
-    public int CurrentIndex
-    {
-        get => _index;
-    }
+    private ILexerContext _context;
 
     public SourceDocument Document { get; private set; }
 
     /// <summary>
-    ///     Sets the source code from a <see cref="ReadOnlyMemory{T}" /> of characters and a specified filename.
+    /// Creates a new <see cref="Lexer"/> to tokenize the given string.
+    /// </summary>
+    /// <param name="source">String to tokenize</param>
+    public Lexer(LexerConfig config)
+    {
+        this.Config = config;
+    }
+
+    /// <summary>
+    /// Sets the source code from a <see cref="ReadOnlyMemory{T}"/> of characters and a specified filename.
     /// </summary>
     /// <param name="source">The source code to set.</param>
     /// <param name="filename">The name of the file containing the source code. Default is "tmp.synthetic".</param>
     public void SetSource(ReadOnlyMemory<char> source, string filename = "tmp.synthetic")
     {
+        SetDocument(new() { Filename = filename, Source = source });
+    }
+
+    public void SetDocument(SourceDocument document)
+    {
         _index = -1;
         _line = 1;
         _column = 1;
 
-        Document = new SourceDocument { Filename = filename, Source = source };
+        Document = document;
     }
 
     /// <summary>
-    ///     Sets the source code from a string and a specified filename.
+    /// Sets the source code from a string and a specified filename.
     /// </summary>
     /// <param name="source">The source code to set.</param>
     /// <param name="filename">The name of the file containing the source code. Default is "tmp.synthetic".</param>
@@ -55,7 +60,7 @@ public sealed partial class Lexer
     }
 
     /// <summary>
-    ///     Peeks at a character at a specified distance from the current index without advancing the index.
+    /// Peeks at a character at a specified distance from the current index without advancing the index.
     /// </summary>
     /// <param name="distance">The distance from the current index to peek.</param>
     /// <returns>The character at the specified distance, or '\0' if the distance is out of range.</returns>
@@ -70,21 +75,15 @@ public sealed partial class Lexer
     }
 
     /// <summary>
-    ///     Determines whether the current character is between two specified characters, inclusive.
+    /// Determines whether the current character is between two specified characters, inclusive.
     /// </summary>
     /// <param name="first">The lower bound character.</param>
     /// <param name="second">The upper bound character.</param>
-    /// <returns>
-    ///     <c>true</c> if the current character is between <paramref name="first" /> and <paramref name="second" />;
-    ///     otherwise, <c>false</c>.
-    /// </returns>
-    public bool IsBetween(char first, char second)
-    {
-        return Peek() >= first && Peek() <= second;
-    }
+    /// <returns><c>true</c> if the current character is between <paramref name="first"/> and <paramref name="second"/>; otherwise, <c>false</c>.</returns>
+    public bool IsBetween(char first, char second) => Peek() >= first && Peek() <= second;
 
     /// <summary>
-    ///     Determines whether the current position in the document matches the specified token's name.
+    /// Determines whether the current position in the document matches the specified token's name.
     /// </summary>
     /// <param name="token">The token to match against the document.</param>
     /// <param name="ignoreCase">Whether to ignore case when comparing the token's name. Default is <c>false</c>.</param>
@@ -110,7 +109,7 @@ public sealed partial class Lexer
     }
 
     /// <summary>
-    ///     Determines whether the current position in the document matches the specified regular expression.
+    /// Determines whether the current position in the document matches the specified regular expression.
     /// </summary>
     /// <param name="regex">The regular expression to match against the document.</param>
     /// <returns><c>true</c> if the document matches the regular expression at the current position; otherwise, <c>false</c>.</returns>
@@ -122,9 +121,9 @@ public sealed partial class Lexer
     }
 
     /// <summary>
-    ///     Advances the lexer to the next token in the document.
+    /// Advances the lexer to the next token in the document.
     /// </summary>
-    /// <returns>The next <see cref="Token" /> in the document.</returns>
+    /// <returns>The next <see cref="Token"/> in the document.</returns>
     public Token Next()
     {
         if (_index == -1)
@@ -145,7 +144,12 @@ public sealed partial class Lexer
                 continue;
             }
 
-            if (InvokeParts(c, out var token))
+            if (InvokeContextMatcher(c, out var contextToken))
+            {
+                return contextToken;
+            }
+
+            if (InvokeMatcher(c, out var token))
             {
                 return token;
             }
@@ -160,8 +164,7 @@ public sealed partial class Lexer
                 return LexName(Document);
             }
 
-            Document.Messages.Add(Message.Error($"Unknown Character '{c}'",
-                SourceRange.From(Document, _line, _column, _line, _column)));
+            Document.Messages.Add(Message.Error($"Unknown Character '{c}'", SourceRange.From(Document, _line, _column, _line, _column)));
 
             return Token.Invalid(c, _line, _column, Document);
         }
@@ -171,7 +174,7 @@ public sealed partial class Lexer
 
     private void RecognizeLine(char c)
     {
-        if (c != '\r')
+        if (c != '\r' && c != '\n')
         {
             return;
         }
@@ -197,13 +200,28 @@ public sealed partial class Lexer
         return false;
     }
 
-    private bool InvokeParts(char c, out Token token)
+    private bool InvokeMatcher(char c, out Token token)
     {
-        foreach (var part in Config.Matchers)
+        foreach (var matcher in Config.Matchers)
         {
-            if (part.Match(this, c))
+            if (matcher.Match(this, c))
             {
-                token = part.Build(this, ref _index, ref _column, ref _line);
+                token = matcher.Build(this, ref _index, ref _column, ref _line);
+                return true;
+            }
+        }
+
+        token = default;
+        return false;
+    }
+
+    private bool InvokeContextMatcher(char c, out Token token)
+    {
+        foreach (var matcher in Config.ContextMatchers)
+        {
+            if (matcher.Match(this, c))
+            {
+                token = matcher.Build(this, ref _index, ref _column, ref _line);
                 return true;
             }
         }
@@ -233,7 +251,7 @@ public sealed partial class Lexer
 
         Advance(punctuatorKey.Key.Length);
 
-        return new Token(punctuatorKey.Value, punctuatorKey.Key.AsMemory(), _line, oldColumn, document);
+        return new(punctuatorKey.Value, punctuatorKey.Key.AsMemory(), _line, oldColumn, document);
     }
 
     private Token LexName(SourceDocument document)
@@ -249,33 +267,32 @@ public sealed partial class Lexer
 
         if (Config.Symbols.ContainsKey(name))
         {
-            return new Token(name, nameSlice, _line, oldColumn, document);
+            return new(name, nameSlice, _line, oldColumn, document);
         }
 
-        return new Token(PredefinedSymbols.Name, nameSlice, _line, oldColumn, document);
+        return new(PredefinedSymbols.Name, nameSlice, _line, oldColumn, document);
     }
 
     /// <summary>
-    ///     Determines whether the lexer has not reached the end of the document.
+    /// Determines whether the lexer has not reached the end of the document.
     /// </summary>
     /// <returns><c>true</c> if the lexer is not at the end of the document; otherwise, <c>false</c>.</returns>
-    public bool IsNotAtEnd()
-    {
-        return _index < Document.Source.Length;
-    }
+    public bool IsNotAtEnd() => _index < Document.Source.Length;
 
     /// <summary>
-    ///     Advances the current position in the document by a specified distance.
+    /// Advances the current position in the document by a specified distance.
     /// </summary>
     /// <param name="distance">The number of characters to advance. Default is 1.</param>
     public void Advance(int distance = 1)
     {
+        RecognizeLine(Peek());
+
         _index += distance;
         _column += distance;
     }
 
     /// <summary>
-    ///     Advances the current position in the document if a symbol matches.
+    /// Advances the current position in the document if a symbol matches.
     /// </summary>
     public bool AdvanceIfMatch(string symbol)
     {
@@ -290,7 +307,7 @@ public sealed partial class Lexer
     }
 
     /// <summary>
-    ///     Determines whether the specified token name is a punctuator.
+    /// Determines whether the specified token name is a punctuator.
     /// </summary>
     /// <param name="tokenName">The name of the token to check.</param>
     /// <returns><c>true</c> if the token name is a punctuator; otherwise, <c>false</c>.</returns>
@@ -300,12 +317,57 @@ public sealed partial class Lexer
     }
 
     /// <summary>
-    ///     Determines whether the specified token name is a special token like start or end of document
+    /// Determines whether the specified token name is a special token like start or end of document
     /// </summary>
     /// <param name="tokenName">The name of the token to check.</param>
     /// <returns><c>true</c> if the token name starts with a '#' and is not just "#"; otherwise, <c>false</c>.</returns>
     public bool IsSpecialToken(string tokenName)
     {
         return tokenName != "#" && tokenName.StartsWith('#');
+    }
+
+    /// <summary>
+    /// Opens a new lexer context of the specified type.
+    /// </summary>
+    /// <typeparam name="TContext">The type of the lexer context to open, which must implement <see cref="ILexerContext"/> and have a parameterless constructor.</typeparam>
+    /// <returns>A new instance of <see cref="LexerContext"/> that allows setting the current context.</returns>
+    public LexerContext OpenContext<TContext>()
+        where TContext : ILexerContext, new()
+    {
+        var lexerContext = new LexerContext(_context, (c) => _context = c);
+        _context = new TContext();
+        return lexerContext;
+    }
+
+    /// <summary>
+    /// Retrieves the current lexer context of the specified type.
+    /// </summary>
+    /// <typeparam name="TContext">The type of the lexer context to retrieve, which must implement <see cref="ILexerContext"/> and have a parameterless constructor.</typeparam>
+    /// <returns>The current context of type <typeparamref name="TContext"/>.</returns>
+    /// <exception cref="InvalidCastException">Thrown if the current context is not of type <typeparamref name="TContext"/>.</exception>
+    public TContext GetContext<TContext>()
+        where TContext : ILexerContext, new()
+    {
+        return (TContext)_context;
+    }
+
+    /// <summary>
+    /// Checks if the current context is of the specified type.
+    /// </summary>
+    /// <typeparam name="TContext">The type to check against, which must implement <see cref="ILexerContext"/> and have a parameterless constructor.</typeparam>
+    /// <returns><c>true</c> if the current context is of type <typeparamref name="TContext"/>; otherwise, <c>false</c>.</returns>
+    public bool IsContext<TContext>()
+        where TContext : ILexerContext, new()
+    {
+        return _context is TContext;
+    }
+
+    /// <summary>
+    /// Determines whether there is currently an active lexer context.
+    /// </summary>
+    /// <returns><c>true</c> if there is an active context; otherwise, <c>false</c>.</returns>
+    public bool HasContext()
+    {
+        return _context is not null;
     }
 }
