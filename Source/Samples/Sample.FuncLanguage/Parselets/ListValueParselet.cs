@@ -10,6 +10,6 @@ public class ListValueParselet : IPrefixParselet
         var items = parser.ParseSeperated(",", 0, "]");
 
         return new LiteralNode(items, token)
-            .WithRange(token, parser.LookAhead(0));
+            .WithRange(token, parser.LookAhead());
     }
 }

@@ -9,9 +9,9 @@ public class IndexParselet(int bindingPower) : IInfixParselet
     public AstNode Parse(Parser parser, AstNode left, Token token)
     {
         var expr = parser.Parse(0);
-        parser.Consume(PredefinedSymbols.RightSquare);
+        parser.Consume("]");
 
-        return new BinaryOperatorNode(left, token.Rewrite("."), expr).WithRange(token, parser.LookAhead(0));
+        return new BinaryOperatorNode(left, token.Rewrite("."), expr).WithRange(token, parser.LookAhead());
     }
 
     public int GetBindingPower()

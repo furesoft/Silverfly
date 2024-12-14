@@ -1,7 +1,7 @@
 ﻿using Silverfly.Nodes;
 using Silverfly.Parselets;
 
-namespace Silverfly.Sample.JSON.Parselets;
+namespace Silverfly.Sample.JSON.Nodes;
 
 public class NullParselet : IPrefixParselet
 {

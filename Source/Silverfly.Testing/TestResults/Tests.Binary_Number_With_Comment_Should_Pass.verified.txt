@@ -1,0 +1,10 @@
+﻿{
+  $type: TestResult,
+  ParsedTree: 4294967295; ,
+  Document: {
+    Filename: test.src,
+    Source: // this is a real long number
+0b11111111_11111111_11111111_11111111,
+    Messages: []
+  }
+}

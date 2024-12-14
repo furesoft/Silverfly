@@ -1,0 +1,15 @@
+﻿{
+  $type: TestResult,
+  ParsedTree: ((a) (b ? c : #Invalid(:))); d(e + f); ,
+  Document: {
+    Filename: test.src,
+    Source: a(b ? c : d, e + f),
+    Messages: [
+      test.src:1:9 Error: Unknown Character ':',
+      test.src:1:9 Error: Expected token : found #invalid(:),
+      test.src:1:3 Error: ) is missing,
+      test.src:1:12 Error: Failed to parse token ',',
+      test.src:1:19 Error: Failed to parse token ')'
+    ]
+  }
+}

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace Silverfly.Text;
 
@@ -48,5 +50,20 @@ public class SourceDocument
         int endColumn)
     {
         AddMessage(messageSeverity, message, SourceRange.From(this, startLine, startColumn, endLine, endColumn));
+    }
+
+    public bool HasErrors => Messages.Any(msg => msg.Severity == MessageSeverity.Error);
+    public bool HasWarnings => Messages.Any(msg => msg.Severity == MessageSeverity.Warning);
+    public bool HasInfo => Messages.Any(msg => msg.Severity == MessageSeverity.Info);
+    public bool HasHints => Messages.Any(msg => msg.Severity == MessageSeverity.Hint);
+
+    public static SourceDocument Create(string filename, ReadOnlyMemory<char> source)
+    {
+        return new SourceDocument { Filename = filename, Source = source };
+    }
+
+    public static SourceDocument Create(string filename)
+    {
+        return new SourceDocument { Filename = filename, Source = File.ReadAllText(filename).AsMemory() };
     }
 }

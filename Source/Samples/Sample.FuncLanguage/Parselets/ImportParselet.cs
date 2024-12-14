@@ -20,6 +20,6 @@ public class ImportParselet : IPrefixParselet
             node = new ImportNode(name.Token.Text.ToString());
         }
 
-        return node.WithRange(token, parser.LookAhead(0));
+        return node.WithRange(token, parser.LookAhead());
     }
 }

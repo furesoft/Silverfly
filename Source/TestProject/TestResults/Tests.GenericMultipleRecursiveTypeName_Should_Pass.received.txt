@@ -1,0 +1,86 @@
+﻿{
+  $type: GenericTypeName,
+  GenericArguments: {
+    $type: ImmutableList<TypeName>,
+    $values: [
+      {
+        $type: TypeName,
+        Token: {
+          $type: Token,
+          Type: #name,
+          Text: string,
+          Line: 1,
+          Column: 14,
+          Document: {
+            Filename: tmp.synthetic,
+            Source: MyCustomType<string, List<int>>,
+            Messages: [
+              tmp.synthetic:1:30 Error: Expected token > found >>(>>),
+              tmp.synthetic:1:30 Error: Expected token > found >>(>>)
+            ]
+          }
+        },
+        Range: 1:14-1:19
+      },
+      {
+        $type: GenericTypeName,
+        GenericArguments: {
+          $type: ImmutableList<TypeName>,
+          $values: [
+            {
+              $type: TypeName,
+              Token: {
+                $type: Token,
+                Type: #name,
+                Text: int,
+                Line: 1,
+                Column: 27,
+                Document: {
+                  Filename: tmp.synthetic,
+                  Source: MyCustomType<string, List<int>>,
+                  Messages: [
+                    tmp.synthetic:1:30 Error: Expected token > found >>(>>),
+                    tmp.synthetic:1:30 Error: Expected token > found >>(>>)
+                  ]
+                }
+              },
+              Range: 1:27-1:29
+            }
+          ]
+        },
+        Token: {
+          $type: Token,
+          Type: #name,
+          Text: List,
+          Line: 1,
+          Column: 22,
+          Document: {
+            Filename: tmp.synthetic,
+            Source: MyCustomType<string, List<int>>,
+            Messages: [
+              tmp.synthetic:1:30 Error: Expected token > found >>(>>),
+              tmp.synthetic:1:30 Error: Expected token > found >>(>>)
+            ]
+          }
+        },
+        Range: 1:22-1:31
+      }
+    ]
+  },
+  Token: {
+    $type: Token,
+    Type: #name,
+    Text: MyCustomType,
+    Line: 1,
+    Column: 1,
+    Document: {
+      Filename: tmp.synthetic,
+      Source: MyCustomType<string, List<int>>,
+      Messages: [
+        tmp.synthetic:1:30 Error: Expected token > found >>(>>),
+        tmp.synthetic:1:30 Error: Expected token > found >>(>>)
+      ]
+    }
+  },
+  Range: 1:1-1:31
+}

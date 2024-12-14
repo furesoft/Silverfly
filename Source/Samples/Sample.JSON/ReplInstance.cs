@@ -1,6 +1,6 @@
 ﻿using Silverfly.Repl;
 
-namespace Sample.JSON;
+namespace Silverfly.Sample.JSON;
 
 public class Repl : ReplInstance<JsonGrammar>
 {

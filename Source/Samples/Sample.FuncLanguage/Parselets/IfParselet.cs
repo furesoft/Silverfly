@@ -17,6 +17,6 @@ public class IfParselet : IPrefixParselet
 
         var falsePart = parser.ParseExpression();
 
-        return new IfNode(condition, truePart, falsePart).WithRange(token, parser.LookAhead(0));
+        return new IfNode(condition, truePart, falsePart).WithRange(token, parser.LookAhead());
     }
 }

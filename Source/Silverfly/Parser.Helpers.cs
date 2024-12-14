@@ -16,7 +16,7 @@ public partial class Parser
     /// <returns>An immutable list of AST nodes.</returns>
     public ImmutableList<AstNode> ParseSeperated(Symbol separator, Symbol terminator, int bindingPower = 0)
     {
-        var token = LookAhead(0);
+        var token = LookAhead();
         var args = new List<AstNode>();
 
         if (Match(terminator))

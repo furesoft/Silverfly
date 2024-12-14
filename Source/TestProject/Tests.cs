@@ -1,4 +1,6 @@
-﻿using System.Runtime.CompilerServices;
+using System.Runtime.CompilerServices;
+using Silverfly;
+using Silverfly.Helpers;
 using Silverfly.Testing;
 
 namespace TestProject;
@@ -232,5 +234,84 @@ public class Tests : SnapshotParserTestBase<TestParser>
     public Task Block_Should_Pass()
     {
         return Test("-42.5;13");
+    }
+
+
+    [Test]
+    public Task SourceLocation_Should_Pass()
+    {
+        return Test("hello\nworld");
+    }
+
+    [Test]
+    public Task SimpleTypeName_Should_Pass()
+    {
+        Parser.Lexer.SetSource("MyCustomType");
+        Parser.Consume(PredefinedSymbols.SOF);
+
+        var result = Parser.ParseTypeName();
+
+        return Verify(result, Settings);
+    }
+
+    [Test]
+    public Task SimplePointerTypeName_Should_Pass()
+    {
+        Parser.Lexer.SetSource("*MyCustomType");
+        Parser.Consume(PredefinedSymbols.SOF);
+
+        var result = Parser.ParseTypeName();
+
+        return Verify(result, Settings);
+    }
+
+    [Test]
+    public Task SimpleReferenceTypeName_Should_Pass()
+    {
+        Parser.Lexer.SetSource("&MyCustomType");
+        Parser.Consume(PredefinedSymbols.SOF);
+
+        var result = Parser.ParseTypeName();
+
+        return Verify(result, Settings);
+    }
+
+    [Test]
+    public Task GenericTypeName_Should_Pass()
+    {
+        Parser.Lexer.SetSource("MyCustomType<string>");
+        Parser.Consume(PredefinedSymbols.SOF);
+
+        var result = Parser.ParseTypeName();
+
+        return Verify(result, Settings);
+    }
+
+    [Test]
+    public Task GenericMultipleTypeName_Should_Pass()
+    {
+        Parser.Lexer.SetSource("MyCustomType<string, int>");
+        Parser.Consume(PredefinedSymbols.SOF);
+
+        var result = Parser.ParseTypeName();
+
+        return Verify(result, Settings);
+    }
+
+    [Test]
+    public Task GenericMultipleRecursiveTypeName_Should_Pass()
+    {
+        Parser.Lexer.SetSource("MyCustomType<string, List<int>>");
+        Parser.Consume(PredefinedSymbols.SOF);
+
+        var result = Parser.ParseTypeName();
+
+        return Verify(result, Settings);
+    }
+
+    [Test]
+    public Task RightShift_Should_Pass()
+    {
+        return Test("1 >> 2");
     }
 }

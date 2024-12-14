@@ -1,6 +1,6 @@
 ﻿using Silverfly.Nodes;
 
-namespace Sample.JSON.Nodes;
+namespace Silverfly.Sample.JSON.Nodes;
 
 public class JsonObject : AstNode
 {

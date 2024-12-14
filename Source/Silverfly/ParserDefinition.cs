@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Silverfly.Helpers;
 using Silverfly.Parselets;
 using Silverfly.Parselets.Operators;
 
@@ -9,6 +10,8 @@ public partial class ParserDefinition
     internal readonly Dictionary<Symbol, IInfixParselet> _infixParselets = [];
     internal readonly Dictionary<Symbol, IPrefixParselet> _prefixParselets = [];
     internal readonly Dictionary<Symbol, IStatementParselet> _statementParselets = [];
+
+    internal TypeNameParser _typeNameParser = new TypeNameParser();
     public PrecedenceLevels PrecedenceLevels = new DefaultPrecedenceLevels();
 
     /// <summary>
@@ -157,5 +160,19 @@ public partial class ParserDefinition
     {
         Register(firstSymbol,
             new TernaryOperatorParselet(secondSymbol, PrecedenceLevels.GetPrecedence(bindingPowerName)));
+    }
+
+    public void Typename(Symbol genericStart, Symbol genericEnd, Symbol genericSeperator)
+    {
+        _typeNameParser.Start = genericStart;
+        _typeNameParser.End = genericEnd;
+        _typeNameParser.Separator = genericSeperator;
+    }
+
+    public void Typename()
+    {
+        _typeNameParser.Start = null;
+        _typeNameParser.End = null;
+        _typeNameParser.Separator = null;
     }
 }

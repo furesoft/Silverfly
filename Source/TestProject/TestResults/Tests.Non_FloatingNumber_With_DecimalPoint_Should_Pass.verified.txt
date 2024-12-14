@@ -1,0 +1,11 @@
+﻿{
+  $type: TestResult,
+  ParsedTree: (42 . #Invalid(#eof)); ,
+  Document: {
+    Filename: test.src,
+    Source: 42.,
+    Messages: [
+      test.src:1:4 Could not parse prefix "#eof".
+    ]
+  }
+}

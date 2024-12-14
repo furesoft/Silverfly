@@ -91,6 +91,11 @@ public class Symbol
         return GSymbol.Pool.Get(name);
     }
 
+    public static implicit operator Symbol(char symbol)
+    {
+        return GSymbol.Pool.Get(symbol.ToString());
+    }
+
     public static implicit operator int(Symbol symbol)
     {
         return symbol.Id;

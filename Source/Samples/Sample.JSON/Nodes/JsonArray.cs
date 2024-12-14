@@ -1,7 +1,7 @@
 using System.Collections.Immutable;
 using Silverfly.Nodes;
 
-namespace Sample.JSON.Nodes;
+namespace Silverfly.Sample.JSON.Nodes;
 
 public class JsonArray : AstNode
 {

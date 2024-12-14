@@ -35,7 +35,7 @@ print("hello".0) // index based access - returns the first character
 print("hello".(1+1)) // computed index based access . returns the third character
 
 let k = "hello world"
-print(k[1..5])
+print(k[1..5]) // range access - substring
 
 let m = (2,3,5,7,11) // define a tuple variable
 print(m.2) //print the third element of m = 5

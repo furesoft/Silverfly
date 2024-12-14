@@ -6,7 +6,7 @@ namespace Silverfly.Parselets.Operators;
 /// <summary>
 ///     Generic infix parselet for an unary arithmetic operator.
 /// </summary>
-public class PostfixOperatorParselet(int bindingPower, string tag) : IInfixParselet
+public class PostfixOperatorParselet(int bindingPower, object tag) : IInfixParselet
 {
     public AstNode Parse(Parser parser, AstNode left, Token token)
     {

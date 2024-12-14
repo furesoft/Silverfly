@@ -29,11 +29,14 @@ public class MultiLineCommentIgnoreMatcher(Symbol start, Symbol end) : IIgnoreMa
     {
         lexer.Advance(start.Name.Length);
 
-        while (!lexer.IsMatch(end))
+        while (lexer.IsNotAtEnd())
         {
+            if (lexer.IsMatch(end))
+            {
+                lexer.Advance(end.Name.Length);
+                break;
+            }
             lexer.Advance();
         }
-
-        lexer.Advance(end.Name.Length);
     }
 }

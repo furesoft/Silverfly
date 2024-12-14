@@ -13,6 +13,6 @@ public class EnumParselet : IPrefixParselet
         parser.Consume("=");
         var members = parser.ParseSeperated("|", 0, PredefinedSymbols.EOL);
 
-        return new EnumNode(name.Text.ToString(), members).WithRange(token, parser.LookAhead(0));
+        return new EnumNode(name.Text.ToString(), members).WithRange(token, parser.LookAhead());
     }
 }

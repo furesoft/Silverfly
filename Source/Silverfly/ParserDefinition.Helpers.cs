@@ -81,11 +81,11 @@ public partial class ParserDefinition
     /// </remarks>
     public void AddCommonAssignmentOperators()
     {
-        InfixLeft("=", "Assignment");
-        InfixLeft("+=", "Assignment");
-        InfixLeft("-=", "Assignment");
-        InfixLeft("*=", "Assignment");
-        InfixLeft("/=", "Assignment");
+        InfixRight("=", "Assignment");
+        InfixRight("+=", "Assignment");
+        InfixRight("-=", "Assignment");
+        InfixRight("*=", "Assignment");
+        InfixRight("/=", "Assignment");
         Prefix("++");
         Prefix("--");
         Postfix("--");

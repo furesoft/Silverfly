@@ -1,0 +1,9 @@
+﻿{
+  $type: TestResult,
+  ParsedTree: 310000; ,
+  Document: {
+    Filename: test.src,
+    Source: 3.1e5,
+    Messages: []
+  }
+}
