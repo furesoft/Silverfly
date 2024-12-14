@@ -51,6 +51,7 @@ jobs:
           for PROJECT in $PROJECTS; do
             sed -i "s/<Version>.*<\/Version>/<Version>${RELEASE_VERSION}<\/Version>/" "$PROJECT"
           done
+          sed -i "s/<Version>.*<\/Version>/<Version>${RELEASE_VERSION}<\/Version>/" "Source/Directory.Build.props"
 
       - name: GIT commit and push overriding conflicts with local changes (verbose)
         run: |
