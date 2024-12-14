@@ -1,7 +1,9 @@
 ﻿using Silverfly.Nodes;
 
 namespace Silverfly.Parselets;
-public class BlockParselet(Symbol terminator, Symbol seperator = null, bool wrapExpressions = false, Symbol tag = null) : IStatementParselet
+
+public class BlockParselet(Symbol terminator, Symbol seperator = null, bool wrapExpressions = false, Symbol tag = null)
+    : IStatementParselet
 {
     public Symbol Terminator { get; } = terminator;
     public Symbol Seperator { get; } = seperator;

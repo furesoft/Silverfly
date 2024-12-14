@@ -1,21 +1,23 @@
+using MrKWatkins.Ast;
 using Silverfly.Text;
+using Message = Silverfly.Text.Message;
 
 namespace Silverfly.Nodes;
 
 #nullable enable
 
 /// <summary>
-/// Abstract base class for nodes in an abstract syntax tree (AST).
+///     Abstract base class for nodes in an abstract syntax tree (AST).
 /// </summary>
-public abstract class AstNode : MrKWatkins.Ast.PropertyNode<AstNode>
+public abstract class AstNode : PropertyNode<AstNode>
 {
     /// <summary>
-    /// Gets the source range associated with this AST node.
+    ///     Gets the source range associated with this AST node.
     /// </summary>
     public SourceRange Range { get; set; }
 
     /// <summary>
-    /// A property to store extra information
+    ///     A property to store extra information
     /// </summary>
     public object? Tag
     {
@@ -24,7 +26,7 @@ public abstract class AstNode : MrKWatkins.Ast.PropertyNode<AstNode>
     }
 
     /// <summary>
-    /// Sets the source range of the AST node using the given token.
+    ///     Sets the source range of the AST node using the given token.
     /// </summary>
     /// <param name="token">The token providing the source range.</param>
     /// <returns>A new instance of the AST node with the updated range.</returns>
@@ -36,7 +38,7 @@ public abstract class AstNode : MrKWatkins.Ast.PropertyNode<AstNode>
     }
 
     /// <summary>
-    /// Sets the source range of the AST node.
+    ///     Sets the source range of the AST node.
     /// </summary>
     /// <param name="range">The source range to set.</param>
     /// <returns>A new instance of the AST node with the updated range.</returns>
@@ -47,7 +49,7 @@ public abstract class AstNode : MrKWatkins.Ast.PropertyNode<AstNode>
     }
 
     /// <summary>
-    /// Sets the source range of the AST node.
+    ///     Sets the source range of the AST node.
     /// </summary>
     /// <returns>A new instance of the AST node with the updated range.</returns>
     public AstNode WithRange(AstNode node, Token token)
@@ -56,7 +58,7 @@ public abstract class AstNode : MrKWatkins.Ast.PropertyNode<AstNode>
     }
 
     /// <summary>
-    /// Sets the source range of the AST node using the provided document and span.
+    ///     Sets the source range of the AST node using the provided document and span.
     /// </summary>
     /// <param name="document">The source document.</param>
     /// <param name="start">The start position of the range.</param>
@@ -70,7 +72,7 @@ public abstract class AstNode : MrKWatkins.Ast.PropertyNode<AstNode>
     }
 
     /// <summary>
-    /// Sets the source range of the AST node using the start and end tokens.
+    ///     Sets the source range of the AST node using the start and end tokens.
     /// </summary>
     /// <param name="start">The start token providing the start position of the range.</param>
     /// <param name="end">The end token providing the end position of the range.</param>
@@ -83,7 +85,7 @@ public abstract class AstNode : MrKWatkins.Ast.PropertyNode<AstNode>
     }
 
     /// <summary>
-    /// Adds a message to the document with the current node range
+    ///     Adds a message to the document with the current node range
     /// </summary>
     /// <param name="severity"></param>
     /// <param name="message"></param>
@@ -93,7 +95,7 @@ public abstract class AstNode : MrKWatkins.Ast.PropertyNode<AstNode>
     }
 
     /// <summary>
-    /// Adds a message to the document and uses a token for a location
+    ///     Adds a message to the document and uses a token for a location
     /// </summary>
     /// <param name="severity"></param>
     /// <param name="message"></param>
@@ -103,7 +105,7 @@ public abstract class AstNode : MrKWatkins.Ast.PropertyNode<AstNode>
     }
 
     /// <summary>
-    /// Set a tag
+    ///     Set a tag
     /// </summary>
     /// <param name="tag"></param>
     /// <returns></returns>
@@ -115,7 +117,7 @@ public abstract class AstNode : MrKWatkins.Ast.PropertyNode<AstNode>
     }
 
     /// <summary>
-    /// Get the parent as specific type
+    ///     Get the parent as specific type
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
@@ -126,7 +128,7 @@ public abstract class AstNode : MrKWatkins.Ast.PropertyNode<AstNode>
     }
 
     /// <summary>
-    /// Checks if the node has a specific tag set
+    ///     Checks if the node has a specific tag set
     /// </summary>
     /// <param name="tag"></param>
     /// <returns></returns>
@@ -136,7 +138,7 @@ public abstract class AstNode : MrKWatkins.Ast.PropertyNode<AstNode>
     }
 
     /// <summary>
-    /// Get the tag as type
+    ///     Get the tag as type
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>

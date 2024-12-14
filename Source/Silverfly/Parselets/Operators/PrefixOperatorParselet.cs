@@ -4,7 +4,7 @@ using Silverfly.Nodes.Operators;
 namespace Silverfly.Parselets.Operators;
 
 /// <summary>
-/// Generic prefix parselet for an unary arithmetic operator.
+///     Generic prefix parselet for an unary arithmetic operator.
 /// </summary>
 public class PrefixOperatorParselet(int bindingPower, string tag) : IPrefixParselet
 {

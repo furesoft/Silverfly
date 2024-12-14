@@ -8,7 +8,8 @@ namespace Silverfly.Sample.Rockstar;
 
 public class RockstarCallbacks : ReplPromptCallbacks
 {
-    protected override Task<IReadOnlyList<CompletionItem>> GetCompletionItemsAsync(string text, int caret, TextSpan spanToBeReplaced, CancellationToken cancellationToken)
+    protected override Task<IReadOnlyList<CompletionItem>> GetCompletionItemsAsync(string text, int caret,
+        TextSpan spanToBeReplaced, CancellationToken cancellationToken)
     {
         var samples = Directory.GetFiles("Samples");
 
@@ -16,7 +17,7 @@ public class RockstarCallbacks : ReplPromptCallbacks
         {
             return Task.FromResult<IReadOnlyList<CompletionItem>>(Array.Empty<CompletionItem>());
         }
-        
+
         return Task.FromResult<IReadOnlyList<CompletionItem>>(
             samples
                 .Select(sample =>
@@ -25,13 +26,16 @@ public class RockstarCallbacks : ReplPromptCallbacks
                         new FormatSpan(0, sample.Length, AnsiColor.Blue));
 
                     return new CompletionItem(
-                        replacementText: File.ReadAllText(sample),
-                        displayText: displayText,
-                        commitCharacterRules: [..new[]
-                        {
-                            new CharacterSetModificationRule(CharacterSetModificationKind.Add,
-                                [.. Characters])
-                        }]
+                        File.ReadAllText(sample),
+                        displayText,
+                        commitCharacterRules:
+                        [
+                            ..new[]
+                            {
+                                new CharacterSetModificationRule(CharacterSetModificationKind.Add,
+                                    [.. Characters])
+                            }
+                        ]
                     );
                 })
                 .ToArray()

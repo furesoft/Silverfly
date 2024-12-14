@@ -18,7 +18,7 @@
 
   <ItemGroup>
     <None Include="*.f" CopyToOutputDirectory="PreserveNewest"/>
-    <ProjectReference Include="..\..\Silverfly.Repl\Silverfly.Repl.csproj" />
-    <ProjectReference Include="..\..\Silverfly\Silverfly.csproj" />
+    <ProjectReference Include="..\..\Silverfly.Repl\Silverfly.Repl.csproj"/>
+    <ProjectReference Include="..\..\Silverfly\Silverfly.csproj"/>
   </ItemGroup>
 </Project>

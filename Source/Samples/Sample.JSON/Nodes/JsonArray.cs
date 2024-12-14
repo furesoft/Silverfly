@@ -1,5 +1,5 @@
-using Silverfly.Nodes;
 using System.Collections.Immutable;
+using Silverfly.Nodes;
 
 namespace Sample.JSON.Nodes;
 
@@ -10,4 +10,3 @@ public class JsonArray : AstNode
         Children.Add(values);
     }
 }
-

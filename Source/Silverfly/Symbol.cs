@@ -77,7 +77,8 @@ public class Symbol
 
     public string Punctuator()
     {
-        if (this == PredefinedSymbols.Name || this == PredefinedSymbols.EOF || this == PredefinedSymbols.SOF || Name == string.Empty)
+        if (this == PredefinedSymbols.Name || this == PredefinedSymbols.EOF || this == PredefinedSymbols.SOF ||
+            Name == string.Empty)
         {
             return "\0";
         }
@@ -187,9 +188,15 @@ public class SymbolPool : IEnumerable<Symbol>
     }
 
     /// <summary>Returns the number of Symbols created in this pool.</summary>
-    public int TotalCount => _list.Count;
+    public int TotalCount
+    {
+        get => _list.Count;
+    }
 
-    protected internal int PoolId => _poolId;
+    protected internal int PoolId
+    {
+        get => _poolId;
+    }
 
     /// <summary>
     ///     Gets a symbol from this pool, or creates it if it does not
@@ -242,7 +249,7 @@ public class SymbolPool : IEnumerable<Symbol>
     /// <summary>Factory method to create a new Symbol.</summary>
     protected virtual Symbol NewSymbol(int id, string name)
     {
-        return new(id, name, this);
+        return new Symbol(id, name, this);
     }
 
     /// <summary>Gets a symbol from this pool, if the name exists already.</summary>

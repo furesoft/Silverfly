@@ -1,36 +1,35 @@
-using System.Collections.Immutable;
-using Silverfly.Nodes;
-using Silverfly.Nodes.Operators;
-using Silverfly.Text;
-using Silverfly.Sample.Func.Values;
-using Silverfly.Sample.Func.Nodes;
-using Sivlerfly.Sample.FuncLanguage.Nodes;
 using MrKWatkins.Ast.Listening;
 using MrKWatkins.Ast.Processing;
+using Silverfly.Nodes;
+using Silverfly.Nodes.Operators;
+using Silverfly.Sample.Func.Nodes;
+using Silverfly.Sample.Func.Values;
+using Silverfly.Text;
+using Sivlerfly.Sample.FuncLanguage.Nodes;
 
 namespace Silverfly.Sample.Func;
 
-public partial class EvaluationListener
+public class EvaluationListener
 {
     public static CompositeListener<EvaluationContext, AstNode> Listener = CompositeListener<EvaluationContext, AstNode>
-                    .Build()
-                    .With(new BinaryListener())
-                    .With(new PrefixListener())
-                    .With(new GroupListener())
-                    .With(new BlockListener())
-                    .With(new IfListener())
-                    .With(new TupleListener())
-                    .With(new ImportListener())
-                    .With(new EnumListener())
-                    .With(new NameListener())
-                    .With(new LiteralListener())
-                    .With(new TupleBindingListener())
-                    .With(new VariableBindingListener())
-                    .With(new LambdaListener())
-                    .With(new CallListener())
-                    .ToListener();
+        .Build()
+        .With(new BinaryListener())
+        .With(new PrefixListener())
+        .With(new GroupListener())
+        .With(new BlockListener())
+        .With(new IfListener())
+        .With(new TupleListener())
+        .With(new ImportListener())
+        .With(new EnumListener())
+        .With(new NameListener())
+        .With(new LiteralListener())
+        .With(new TupleBindingListener())
+        .With(new VariableBindingListener())
+        .With(new LambdaListener())
+        .With(new CallListener())
+        .ToListener();
 
-    class BinaryListener : Listener<EvaluationContext, AstNode, BinaryOperatorNode>
+    private class BinaryListener : Listener<EvaluationContext, AstNode, BinaryOperatorNode>
     {
         protected override void ListenToNode(EvaluationContext context, BinaryOperatorNode node)
         {
@@ -69,19 +68,18 @@ public partial class EvaluationListener
                 context.Stack.Push(func.Invoke(leftVisited, rightVisited));
                 return;
             }
-            else if (leftVisited.Members.TryGet($"'{node.Operator.Text}", out func))
+
+            if (leftVisited.Members.TryGet($"'{node.Operator.Text}", out func))
             {
                 context.Stack.Push(func.Invoke(leftVisited, rightVisited));
                 return;
             }
 
             node.AddMessage(MessageSeverity.Error, $"Operator '{node.Operator}' is not defined");
-
-            return;
         }
     }
 
-    class PrefixListener : Listener<EvaluationContext, AstNode, PrefixOperatorNode>
+    private class PrefixListener : Listener<EvaluationContext, AstNode, PrefixOperatorNode>
     {
         protected override void ListenToNode(EvaluationContext context, PrefixOperatorNode node)
         {
@@ -94,7 +92,8 @@ public partial class EvaluationListener
                 context.Stack.Push(func.Invoke(exprVisited));
                 return;
             }
-            else if (exprVisited.Members.TryGet($"'{node.Operator.Text}", out func))
+
+            if (exprVisited.Members.TryGet($"'{node.Operator.Text}", out func))
             {
                 context.Stack.Push(func.Invoke(exprVisited));
             }
@@ -103,7 +102,7 @@ public partial class EvaluationListener
         }
     }
 
-    class GroupListener : Listener<EvaluationContext, AstNode, GroupNode>
+    private class GroupListener : Listener<EvaluationContext, AstNode, GroupNode>
     {
         protected override void ListenToNode(EvaluationContext context, GroupNode node)
         {
@@ -111,7 +110,7 @@ public partial class EvaluationListener
         }
     }
 
-    class BlockListener : Listener<EvaluationContext, AstNode, BlockNode>
+    private class BlockListener : Listener<EvaluationContext, AstNode, BlockNode>
     {
         protected override void ListenToNode(EvaluationContext context, BlockNode node)
         {
@@ -122,7 +121,7 @@ public partial class EvaluationListener
         }
     }
 
-    class IfListener : Listener<EvaluationContext, AstNode, IfNode>
+    private class IfListener : Listener<EvaluationContext, AstNode, IfNode>
     {
         protected override void ListenToNode(EvaluationContext context, IfNode node)
         {
@@ -140,7 +139,7 @@ public partial class EvaluationListener
         }
     }
 
-    class TupleListener : Listener<EvaluationContext, AstNode, TupleNode>
+    private class TupleListener : Listener<EvaluationContext, AstNode, TupleNode>
     {
         protected override void ListenToNode(EvaluationContext context, TupleNode node)
         {
@@ -155,7 +154,7 @@ public partial class EvaluationListener
         }
     }
 
-    class ImportListener : Listener<EvaluationContext, AstNode, ImportNode>
+    private class ImportListener : Listener<EvaluationContext, AstNode, ImportNode>
     {
         protected override void ListenToNode(EvaluationContext context, ImportNode node)
         {
@@ -187,7 +186,7 @@ public partial class EvaluationListener
         }
     }
 
-    class EnumListener : Listener<EvaluationContext, AstNode, EnumNode>
+    private class EnumListener : Listener<EvaluationContext, AstNode, EnumNode>
     {
         protected override void ListenToNode(EvaluationContext context, EnumNode node)
         {
@@ -205,7 +204,8 @@ public partial class EvaluationListener
             memberScope.Define("__name___", node.Name);
             memberScope.Define("to_string", (Value[] args) =>
             {
-                return $"enum {node.Name} = {string.Join(" | ", node.Children.Where(_ => _ is NameNode).Select(_ => ((NameNode)_).Token))}";
+                return
+                    $"enum {node.Name} = {string.Join(" | ", node.Children.Where(_ => _ is NameNode).Select(_ => ((NameNode)_).Token))}";
             });
             memberScope.Define("from_name", (Value name) =>
             {
@@ -221,7 +221,7 @@ public partial class EvaluationListener
         }
     }
 
-    class NameListener : Listener<EvaluationContext, AstNode, NameNode>
+    private class NameListener : Listener<EvaluationContext, AstNode, NameNode>
     {
         protected override void ListenToNode(EvaluationContext context, NameNode node)
         {
@@ -230,7 +230,7 @@ public partial class EvaluationListener
         }
     }
 
-    class LiteralListener : Listener<EvaluationContext, AstNode, LiteralNode>
+    private class LiteralListener : Listener<EvaluationContext, AstNode, LiteralNode>
     {
         protected override void ListenToNode(EvaluationContext context, LiteralNode node)
         {
@@ -269,14 +269,14 @@ public partial class EvaluationListener
         }
     }
 
-    class TupleBindingListener : Listener<EvaluationContext, AstNode, TupleBindingNode>
+    private class TupleBindingListener : Listener<EvaluationContext, AstNode, TupleBindingNode>
     {
         protected override void ListenToNode(EvaluationContext context, TupleBindingNode node)
         {
             Listen(context, node.Value);
             var value = context.Stack.Pop();
 
-            for (int i = 0; i < node.Names.Count(); i++)
+            for (var i = 0; i < node.Names.Count(); i++)
             {
                 var name = node.Names[i].Token;
                 var destructedValue = value.Get(new NumberValue(i));
@@ -286,7 +286,7 @@ public partial class EvaluationListener
         }
     }
 
-    class VariableBindingListener : CallListenerBase<VariableBindingNode>
+    private class VariableBindingListener : CallListenerBase<VariableBindingNode>
     {
         protected override void ListenToNode(EvaluationContext context, VariableBindingNode node)
         {
@@ -310,7 +310,7 @@ public partial class EvaluationListener
                     return res;
                 };
 
-                var value = new LambdaValue(func, null, true);
+                var value = new LambdaValue(func, null);
                 AddAnnotations(node, value, context);
 
                 context.Scope.Define(node.Name.Text.ToString(), value);
@@ -319,7 +319,8 @@ public partial class EvaluationListener
 
         //@enter(on_enter)
         //@leave(on_leave)
-        private void CallAnnotationRef(string annotationName, AnnotatedNode node, EvaluationContext context, params Value[] args)
+        private void CallAnnotationRef(string annotationName, AnnotatedNode node, EvaluationContext context,
+            params Value[] args)
         {
             foreach (var annotation in node.Annotations)
             {
@@ -336,7 +337,7 @@ public partial class EvaluationListener
         }
     }
 
-    class LambdaListener : CallListenerBase<LambdaNode>
+    private class LambdaListener : CallListenerBase<LambdaNode>
     {
         protected override void ListenToNode(EvaluationContext context, LambdaNode node)
         {
@@ -345,7 +346,7 @@ public partial class EvaluationListener
         }
     }
 
-    class CallListener : Listener<EvaluationContext, AstNode, CallNode>
+    private class CallListener : Listener<EvaluationContext, AstNode, CallNode>
     {
         protected override void ListenToNode(EvaluationContext context, CallNode node)
         {
@@ -366,7 +367,7 @@ public partial class EvaluationListener
             }
         }
 
-        void VisitOtherFunction(CallNode call, EvaluationContext context)
+        private void VisitOtherFunction(CallNode call, EvaluationContext context)
         {
             var args = new List<Value>();
             foreach (var arg in call.Arguments)
@@ -380,7 +381,7 @@ public partial class EvaluationListener
 
             if (func is LambdaValue l)
             {
-                var result = (Value)l.Value.DynamicInvoke([args]);
+                var result = (Value)l.Value.DynamicInvoke(args);
                 context.Stack.Push(result);
             }
         }
@@ -423,7 +424,7 @@ public partial class EvaluationListener
         }
     }
 
-    class AnnotatableListener<T> : Listener<EvaluationContext, AstNode, T>
+    private class AnnotatableListener<T> : Listener<EvaluationContext, AstNode, T>
         where T : AstNode
     {
         protected void AddAnnotations(AstNode node, Value value, EvaluationContext context)
@@ -450,13 +451,15 @@ public partial class EvaluationListener
             }
         }
     }
-    class CallListenerBase<T> : AnnotatableListener<T>
+
+    private class CallListenerBase<T> : AnnotatableListener<T>
         where T : AstNode
     {
-        protected Value CallFunction(IEnumerable<NameNode> parameters, Value[] args, AstNode definition, EvaluationContext context)
+        protected Value CallFunction(IEnumerable<NameNode> parameters, Value[] args, AstNode definition,
+            EvaluationContext context)
         {
             var subScope = Scope.Root.NewSubScope();
-            for (int i = 0; i < parameters.Count(); i++)
+            for (var i = 0; i < parameters.Count(); i++)
             {
                 var index = i;
                 subScope.Define(parameters.Skip(index).First().Token.Text.ToString(), args[index]);

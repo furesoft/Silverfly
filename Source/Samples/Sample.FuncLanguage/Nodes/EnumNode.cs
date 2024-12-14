@@ -5,12 +5,15 @@ namespace Sivlerfly.Sample.FuncLanguage.Nodes;
 
 public class EnumNode : AstNode
 {
-    public string Name => Properties.GetOrThrow<string>(nameof(Name));
-
     public EnumNode(string name, ImmutableList<AstNode> members)
     {
         Properties.Set(nameof(Name), name);
 
         Children.Add(members);
+    }
+
+    public string Name
+    {
+        get => Properties.GetOrThrow<string>(nameof(Name));
     }
 }

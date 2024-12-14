@@ -6,12 +6,12 @@ using static System.ConsoleModifiers;
 
 namespace Silverfly.Repl;
 
-public abstract class ReplInstance<TParser>() : ReplInstance<TParser, ReplPromptCallbacks>
+public abstract class ReplInstance<TParser> : ReplInstance<TParser, ReplPromptCallbacks>
     where TParser : Parser, new()
-{}
+{
+}
 
-public abstract class ReplInstance<TParser, TCallbacks>()
-    where TParser : Parser, new()
+public abstract class ReplInstance<TParser, TCallbacks> where TParser : Parser, new()
     where TCallbacks : ReplPromptCallbacks, new()
 {
     protected readonly TParser Parser = new();
@@ -23,15 +23,15 @@ public abstract class ReplInstance<TParser, TCallbacks>()
         var callbacks = new TCallbacks { Parser = Parser };
 
         await using var prompt = new Prompt(
-            persistentHistoryFilepath: "./history-file",
-            callbacks: callbacks,
+            "./history-file",
+            callbacks,
             configuration: new PromptConfiguration(
                 prompt: new FormattedString("> "),
                 keyBindings: new KeyBindings(
-                    commitCompletion: new[] { new KeyPressPattern(Tab) },
+                    new[] { new KeyPressPattern(Tab) },
                     submitPrompt: new[] { new KeyPressPattern(Enter) },
                     newLine: new[] { new KeyPressPattern(Shift, Enter) },
-                    triggerOverloadList: new(new KeyPressPattern('('))
+                    triggerOverloadList: new KeyPressPatterns(new KeyPressPattern('('))
                 ),
                 completionItemDescriptionPaneBackground: AnsiColor.Rgb(30, 30, 30),
                 selectedCompletionItemBackground: AnsiColor.Rgb(30, 30, 30),
@@ -47,7 +47,10 @@ public abstract class ReplInstance<TParser, TCallbacks>()
                 continue;
             }
 
-            if (response.Text == "exit") break;
+            if (response.Text == "exit")
+            {
+                break;
+            }
 
             Evaluate(response.Text);
 

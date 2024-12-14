@@ -9,7 +9,7 @@ using static VerifyTests.VerifierSettings;
 namespace Silverfly.Testing;
 
 /// <summary>
-/// Base class for snapshot parser tests using a specific parser type <typeparamref name="TParser"/>.
+///     Base class for snapshot parser tests using a specific parser type <typeparamref name="TParser" />.
 /// </summary>
 /// <typeparam name="TParser">The type of the parser being tested.</typeparam>
 public class SnapshotParserTestBase<TParser>
@@ -35,7 +35,10 @@ public class SnapshotParserTestBase<TParser>
         Settings.UseDirectory("TestResults");
     }
 
-    public static TranslationUnit Parse(string src) => new TParser().Parse(src, _options.Filename);
+    public static TranslationUnit Parse(string src)
+    {
+        return new TParser().Parse(src, _options.Filename);
+    }
 
     public static Task Test(string source)
     {

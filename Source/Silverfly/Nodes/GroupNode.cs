@@ -1,7 +1,8 @@
 namespace Silverfly.Nodes;
 
 /// <summary>
-/// Represents a group node in an abstract syntax tree (AST), which represents an expression enclosed within grouping symbols.
+///     Represents a group node in an abstract syntax tree (AST), which represents an expression enclosed within grouping
+///     symbols.
 /// </summary>
 public class GroupNode : AstNode
 {
@@ -13,8 +14,18 @@ public class GroupNode : AstNode
         Children.Add(expr);
     }
 
-    public Symbol LeftSymbol => Properties.GetOrThrow<Symbol>(nameof(LeftSymbol));
-    public Symbol RightSymbol => Properties.GetOrThrow<Symbol>(nameof(RightSymbol));
+    public Symbol LeftSymbol
+    {
+        get => Properties.GetOrThrow<Symbol>(nameof(LeftSymbol));
+    }
 
-    public AstNode Expr => Children.First;
+    public Symbol RightSymbol
+    {
+        get => Properties.GetOrThrow<Symbol>(nameof(RightSymbol));
+    }
+
+    public AstNode Expr
+    {
+        get => Children.First;
+    }
 }

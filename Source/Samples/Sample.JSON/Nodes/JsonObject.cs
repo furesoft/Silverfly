@@ -9,6 +9,8 @@ public class JsonObject : AstNode
         Properties.Set(nameof(Members), members);
     }
 
-    public Dictionary<string, AstNode> Members => Properties.GetOrThrow<Dictionary<string, AstNode>>(nameof(Members));
+    public Dictionary<string, AstNode> Members
+    {
+        get => Properties.GetOrThrow<Dictionary<string, AstNode>>(nameof(Members));
+    }
 }
-

@@ -13,7 +13,10 @@ public record StringValue : Value
         Members.Define("'+", Concat);
     }
 
-    private Value Concat(Value left, Value right) => $"{left}{right}";
+    private Value Concat(Value left, Value right)
+    {
+        return $"{left}{right}";
+    }
 
     protected override Value GetByIndex(int index)
     {
@@ -25,9 +28,18 @@ public record StringValue : Value
         return OptionValue.None;
     }
 
-    protected override Value GetByRange(RangeValue range) => Value.Substring(range.Start, range.End - range.Start);
+    protected override Value GetByRange(RangeValue range)
+    {
+        return Value.Substring(range.Start, range.End - range.Start);
+    }
 
-    public override bool IsTruthy() => string.IsNullOrEmpty(Value);
+    public override bool IsTruthy()
+    {
+        return string.IsNullOrEmpty(Value);
+    }
 
-    public override string ToString() => Value.ToString();
+    public override string ToString()
+    {
+        return Value.ToString();
+    }
 }

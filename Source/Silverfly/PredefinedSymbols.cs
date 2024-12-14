@@ -8,6 +8,7 @@ public static class PredefinedSymbols
 
     /// <summary>Represents the start of the document</summary>
     public static Symbol SOF = Pool.Get("#sof");
+
     public static Symbol EOL = Pool.Get("\n");
 
     public static Symbol LeftParen = Pool.Get("(");

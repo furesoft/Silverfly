@@ -7,21 +7,25 @@ namespace Silverfly.Sample.Rockstar.Evaluation;
 public class EvaluationListener
 {
     public static CompositeListener<EvaluationContext, AstNode> Listener = CompositeListener<EvaluationContext, AstNode>
-            .Build()
-            .With(new BinaryListener())
-            .With(new LiteralListener())
-            .With(new NameListener())
-            .With(new BlockListener())
-            .With(new CallListener())
-            .ToListener();
+        .Build()
+        .With(new BinaryListener())
+        .With(new LiteralListener())
+        .With(new NameListener())
+        .With(new BlockListener())
+        .With(new CallListener())
+        .ToListener();
 
-    class BinaryListener : Listener<EvaluationContext, AstNode, BinaryOperatorNode>
+    private class BinaryListener : Listener<EvaluationContext, AstNode, BinaryOperatorNode>
     {
         protected override void ListenToNode(EvaluationContext context, BinaryOperatorNode node)
         {
             if (node.Operator == "=")
             {
-                if (node.Left is not NameNode name) return;
+                if (node.Left is not NameNode name)
+                {
+                    return;
+                }
+
                 Listen(context, node.Right);
 
                 context.Scope.Define(name.Token.Text.Trim().ToString(), context.Stack.Pop());
@@ -29,7 +33,7 @@ public class EvaluationListener
         }
     }
 
-    class LiteralListener : Listener<EvaluationContext, AstNode, LiteralNode>
+    private class LiteralListener : Listener<EvaluationContext, AstNode, LiteralNode>
     {
         protected override void ListenToNode(EvaluationContext context, LiteralNode node)
         {
@@ -37,7 +41,7 @@ public class EvaluationListener
         }
     }
 
-    class NameListener : Listener<EvaluationContext, AstNode, NameNode>
+    private class NameListener : Listener<EvaluationContext, AstNode, NameNode>
     {
         protected override void ListenToNode(EvaluationContext context, NameNode node)
         {
@@ -45,7 +49,7 @@ public class EvaluationListener
         }
     }
 
-    class BlockListener : Listener<EvaluationContext, AstNode, BlockNode>
+    private class BlockListener : Listener<EvaluationContext, AstNode, BlockNode>
     {
         protected override void ListenToNode(EvaluationContext context, BlockNode node)
         {
@@ -56,7 +60,7 @@ public class EvaluationListener
         }
     }
 
-    class CallListener : Listener<EvaluationContext, AstNode, CallNode>
+    private class CallListener : Listener<EvaluationContext, AstNode, CallNode>
     {
         protected override void ListenToNode(EvaluationContext context, CallNode node)
         {

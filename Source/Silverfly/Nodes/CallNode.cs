@@ -1,13 +1,10 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 
 namespace Silverfly.Nodes;
 
 /// <summary>
-/// A function call like "a(b, c, d)".
+///     A function call like "a(b, c, d)".
 /// </summary>
 public class CallNode : AstNode
 {
@@ -17,6 +14,13 @@ public class CallNode : AstNode
         Children.Add(arguments);
     }
 
-    public AstNode FunctionExpr => Children.First;
-    public AstNode[] Arguments => [.. Children.Skip(1)];
+    public AstNode FunctionExpr
+    {
+        get => Children.First;
+    }
+
+    public AstNode[] Arguments
+    {
+        get => [.. Children.Skip(1)];
+    }
 }

@@ -8,7 +8,8 @@
 ![Libraries.io SourceRank](https://img.shields.io/librariesio/sourcerank/nuget/silverfly)
 [![](https://tokei.rs/b1/github/furesoft/Silverfly)](https://github.com/furesoft/Silverfly)
 
-Silverfly is a versatile parsing framework that provides extensive support for building custom parsers with ease. It supports Pratt parsing, a powerful method for parsing expressions and statements in a flexible manner.
+Silverfly is a versatile parsing framework that provides extensive support for building custom parsers with ease. It
+supports Pratt parsing, a powerful method for parsing expressions and statements in a flexible manner.
 
 ## Features
 
@@ -49,10 +50,12 @@ public class Program
 }
 ```
 
-For more detailed instructions and advanced usage, please refer to the [Wiki](https://github.com/furesoft/Silverfly/wiki).
+For more detailed instructions and advanced usage, please refer to
+the [Wiki](https://github.com/furesoft/Silverfly/wiki).
 A great example can be found [here](https://github.com/furesoft/Silverfly/tree/main/Source/Samples/Sample.FuncLanguage)
 
 Silverfly uses the brilliant library from [MrKWatkins](https://github.com/MrKWatkins/Ast/) to build an AST.
 
 ## Contributing
+
 We welcome contributions! Please see our contributing guidelines for more details on how to get involved.

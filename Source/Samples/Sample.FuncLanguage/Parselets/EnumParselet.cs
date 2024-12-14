@@ -11,7 +11,7 @@ public class EnumParselet : IPrefixParselet
         var name = parser.Consume(PredefinedSymbols.Name);
 
         parser.Consume("=");
-        var members = parser.ParseSeperated("|", bindingPower: 0, PredefinedSymbols.EOL);
+        var members = parser.ParseSeperated("|", 0, PredefinedSymbols.EOL);
 
         return new EnumNode(name.Text.ToString(), members).WithRange(token, parser.LookAhead(0));
     }

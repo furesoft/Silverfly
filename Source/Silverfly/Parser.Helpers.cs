@@ -8,7 +8,7 @@ namespace Silverfly;
 public partial class Parser
 {
     /// <summary>
-    /// Parses a list of AST nodes separated by a given separator and terminated by a terminator symbol.
+    ///     Parses a list of AST nodes separated by a given separator and terminated by a terminator symbol.
     /// </summary>
     /// <param name="separator">The symbol used to separate the nodes.</param>
     /// <param name="terminator">The symbol used to terminate the list.</param>
@@ -45,7 +45,7 @@ public partial class Parser
     }
 
     /// <summary>
-    /// Parses a list of AST nodes terminated by any of the specified terminators.
+    ///     Parses a list of AST nodes terminated by any of the specified terminators.
     /// </summary>
     /// <param name="bindingPower">The binding power for parsing. Default is 0.</param>
     /// <param name="terminators">The symbols used to terminate the list.</param>
@@ -70,7 +70,7 @@ public partial class Parser
     }
 
     /// <summary>
-    /// Parses a list of AST nodes separated by a given separator and terminated by any of the specified terminators.
+    ///     Parses a list of AST nodes separated by a given separator and terminated by any of the specified terminators.
     /// </summary>
     /// <param name="separator">The symbol used to separate the nodes.</param>
     /// <param name="bindingPower">The binding power for parsing. Default is 0.</param>
@@ -100,5 +100,8 @@ public partial class Parser
         return [.. args];
     }
 
-    public bool IsAtEnd() => IsMatch(PredefinedSymbols.EOF);
+    public bool IsAtEnd()
+    {
+        return IsMatch(PredefinedSymbols.EOF);
+    }
 }

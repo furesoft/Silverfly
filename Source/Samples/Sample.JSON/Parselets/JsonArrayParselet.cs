@@ -1,11 +1,10 @@
 ﻿using Sample.JSON.Nodes;
-using Silverfly;
 using Silverfly.Nodes;
 using Silverfly.Parselets;
 
 namespace Silverfly.Sample.JSON.Parselets;
 
-class JsonArrayParselet : IPrefixParselet
+internal class JsonArrayParselet : IPrefixParselet
 {
     public AstNode Parse(Parser parser, Token token)
     {

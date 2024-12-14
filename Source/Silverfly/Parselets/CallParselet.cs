@@ -3,7 +3,7 @@ using Silverfly.Nodes;
 namespace Silverfly.Parselets;
 
 /// <summary>
-/// Parselet to parse a function call like "a(b, c, d)".
+///     Parselet to parse a function call like "a(b, c, d)".
 /// </summary>
 public class CallParselet(int bindingPower) : IInfixParselet
 {
@@ -16,5 +16,8 @@ public class CallParselet(int bindingPower) : IInfixParselet
             .WithRange(left, parser.LookAhead(0));
     }
 
-    public int GetBindingPower() => bindingPower;
+    public int GetBindingPower()
+    {
+        return bindingPower;
+    }
 }

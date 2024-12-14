@@ -1,7 +1,7 @@
 namespace Silverfly.Nodes.Operators;
 
 /// <summary>
-/// Represents a ternary operator node in an abstract syntax tree (AST).
+///     Represents a ternary operator node in an abstract syntax tree (AST).
 /// </summary>
 public class TernaryOperatorNode : AstNode
 {
@@ -12,7 +12,18 @@ public class TernaryOperatorNode : AstNode
         Children.Add(thirdExpr);
     }
 
-    public AstNode FirstExpr => Children.First;
-    public AstNode SecondExpr => Children[1];
-    public AstNode ThirdExpr => Children.Last;
+    public AstNode FirstExpr
+    {
+        get => Children.First;
+    }
+
+    public AstNode SecondExpr
+    {
+        get => Children[1];
+    }
+
+    public AstNode ThirdExpr
+    {
+        get => Children.Last;
+    }
 }

@@ -7,7 +7,10 @@ public record ModuleValue : Value
         Members = scope;
     }
 
-    public override bool IsTruthy() => true;
+    public override bool IsTruthy()
+    {
+        return true;
+    }
 
     public override string ToString()
     {

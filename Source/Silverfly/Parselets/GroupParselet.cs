@@ -3,7 +3,7 @@ using Silverfly.Nodes;
 namespace Silverfly.Parselets;
 
 /// <summary>
-/// Parses parentheses used to group an expression, like "(b + c)".
+///     Parses parentheses used to group an expression, like "(b + c)".
 /// </summary>
 public class GroupParselet(Symbol leftSymbol, Symbol rightSymbol, Symbol tag) : IPrefixParselet
 {
@@ -17,6 +17,6 @@ public class GroupParselet(Symbol leftSymbol, Symbol rightSymbol, Symbol tag) : 
         var rightToken = parser.Consume(RightSymbol);
 
         return new GroupNode(LeftSymbol, RightSymbol, expression)
-                .WithRange(token, rightToken);
+            .WithRange(token, rightToken);
     }
 }

@@ -9,10 +9,7 @@ public class Repl : ReplInstance<RockstarGrammar, RockstarCallbacks>
     {
         var tu = Parser.Parse(input, null);
 
-        var context = new EvaluationContext
-        {
-            Scope = Scope.Root
-        };
+        var context = new EvaluationContext { Scope = Scope.Root };
 
         EvaluationListener.Listener.Listen(context, tu.Tree);
     }

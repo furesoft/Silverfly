@@ -29,7 +29,7 @@ public class TestParser : Parser
         def.InfixLeft("->", "Product");
 
         def.Block(PredefinedSymbols.SOF, PredefinedSymbols.EOF,
-            separator: PredefinedSymbols.Semicolon);
+            PredefinedSymbols.Semicolon);
     }
 
     protected override void InitLexer(LexerConfig lexer)
@@ -39,7 +39,7 @@ public class TestParser : Parser
 
         lexer.MatchBoolean();
         lexer.MatchString("'", "'");
-        lexer.MatchNumber(allowHex: true, allowBin: true);
+        lexer.MatchNumber(true, true);
 
         lexer.Ignore(new SingleLineCommentIgnoreMatcher(PredefinedSymbols.SlashSlash));
         lexer.Ignore(

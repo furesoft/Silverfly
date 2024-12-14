@@ -9,25 +9,45 @@ namespace Silverfly;
 //Todo: Add Synchronisation Mechanism For Better Error Reporting
 public abstract partial class Parser
 {
-    public readonly Lexer Lexer;
     private readonly LexerConfig _lexerConfig = new();
-    public readonly ParserDefinition ParserDefinition = new();
-    public ParserOptions Options = new(true, true);
     private readonly List<Token> _read = [];
     public readonly MessageFormatter Formatter;
+    public readonly Lexer Lexer;
+    public readonly ParserDefinition ParserDefinition = new();
+    public ParserOptions Options = new(true, true);
+
+    public Parser()
+    {
+        InitLexer(_lexerConfig);
+
+        Lexer = new Lexer(_lexerConfig);
+
+        InitParser(ParserDefinition);
+
+        AddLexerSymbols(Lexer, ParserDefinition._prefixParselets);
+        AddLexerSymbols(Lexer, ParserDefinition._infixParselets);
+        AddLexerSymbols(Lexer, ParserDefinition._statementParselets);
+
+        Lexer.Config.OrderSymbols();
+
+        Formatter = new MessageFormatter(this);
+    }
 
     /// <summary>
-    /// Gets the <see cref="SourceDocument"/> associated with the lexer.
+    ///     Gets the <see cref="SourceDocument" /> associated with the lexer.
     /// </summary>
-    /// <value>The <see cref="SourceDocument"/> that the lexer is currently working with.</value>
+    /// <value>The <see cref="SourceDocument" /> that the lexer is currently working with.</value>
     /// <remarks>
-    /// This property provides access to the <see cref="SourceDocument"/> instance associated with the lexer.
-    /// It allows retrieval of the document's contents and messages.
+    ///     This property provides access to the <see cref="SourceDocument" /> instance associated with the lexer.
+    ///     It allows retrieval of the document's contents and messages.
     /// </remarks>
-    public SourceDocument Document => Lexer.Document;
+    public SourceDocument Document
+    {
+        get => Lexer.Document;
+    }
 
     /// <summary>
-    /// Parses a statement and optionally wraps expressions in an AST node.
+    ///     Parses a statement and optionally wraps expressions in an AST node.
     /// </summary>
     /// <param name="wrapExpressions">Indicates whether to wrap expressions in an AST node. Default is false.</param>
     /// <returns>The parsed abstract syntax tree (AST) node representing the statement.</returns>
@@ -53,7 +73,7 @@ public abstract partial class Parser
     }
 
     /// <summary>
-    /// Parses a source code string and returns the corresponding translation unit.
+    ///     Parses a source code string and returns the corresponding translation unit.
     /// </summary>
     /// <param name="source">The source code to parse as a string.</param>
     /// <param name="filename">The name of the file from which the source code was read. Default is "synthetic.dsl".</param>
@@ -63,27 +83,10 @@ public abstract partial class Parser
         return Parse(source.AsMemory(), filename);
     }
 
-    public Parser()
-    {
-        InitLexer(_lexerConfig);
-
-        Lexer = new Lexer(_lexerConfig);
-        
-        InitParser(ParserDefinition);
-
-        AddLexerSymbols(Lexer, ParserDefinition._prefixParselets);
-        AddLexerSymbols(Lexer, ParserDefinition._infixParselets);
-        AddLexerSymbols(Lexer, ParserDefinition._statementParselets);
-
-        Lexer.Config.OrderSymbols();
-
-        Formatter = new(this);
-    }
-
     /// <summary>
-    /// Parses a source code and returns the corresponding translation unit.
+    ///     Parses a source code and returns the corresponding translation unit.
     /// </summary>
-    /// <param name="source">The source code to parse as a <see cref="ReadOnlyMemory{char}"/>.</param>
+    /// <param name="source">The source code to parse as a <see cref="ReadOnlyMemory{char}" />.</param>
     /// <param name="filename">The name of the file from which the source code was read. Default is "synthetic.dsl".</param>
     /// <returns>The parsed translation unit representing the source code.</returns>
     public TranslationUnit Parse(ReadOnlyMemory<char> source, string filename = "synthetic.dsl")
@@ -114,7 +117,7 @@ public abstract partial class Parser
     }
 
     /// <summary>
-    /// Parses an expression based on the given precedence level.
+    ///     Parses an expression based on the given precedence level.
     /// </summary>
     /// <param name="precedence">The precedence level used for parsing the expression.</param>
     /// <returns>The parsed abstract syntax tree (AST) node representing the expression.</returns>
@@ -155,7 +158,7 @@ public abstract partial class Parser
     }
 
     /// <summary>
-    /// Parses an expression
+    ///     Parses an expression
     /// </summary>
     /// <returns>The parsed abstract syntax tree (AST) node.</returns>
     public AstNode ParseExpression()
@@ -169,27 +172,29 @@ public abstract partial class Parser
     }
 
     /// <summary>
-    /// Initializes the lexer with the specified configuration.
+    ///     Initializes the lexer with the specified configuration.
     /// </summary>
     /// <param name="lexer">The configuration settings for initializing the lexer.</param>
     /// <remarks>
-    /// This abstract method must be implemented in derived classes to provide custom initialization logic for the lexer.
-    /// The <paramref name="lexer"/> parameter contains the configuration settings that define how the lexer should be set up.
+    ///     This abstract method must be implemented in derived classes to provide custom initialization logic for the lexer.
+    ///     The <paramref name="lexer" /> parameter contains the configuration settings that define how the lexer should be set
+    ///     up.
     /// </remarks>
     protected abstract void InitLexer(LexerConfig lexer);
-    
+
     /// <summary>
-    /// Initializes the parser with the specified parser definition.
+    ///     Initializes the parser with the specified parser definition.
     /// </summary>
     /// <param name="def">The definition settings for initializing the parser.</param>
     /// <remarks>
-    /// This abstract method must be implemented in derived classes to provide custom initialization logic for the parser.
-    /// The <paramref name="def"/> parameter contains the settings and rules that define how the parser should be configured.
+    ///     This abstract method must be implemented in derived classes to provide custom initialization logic for the parser.
+    ///     The <paramref name="def" /> parameter contains the settings and rules that define how the parser should be
+    ///     configured.
     /// </remarks>
     protected abstract void InitParser(ParserDefinition def);
 
     /// <summary>
-    /// Checks if the current symbol matches the expected symbol and consumes it if it does.
+    ///     Checks if the current symbol matches the expected symbol and consumes it if it does.
     /// </summary>
     /// <param name="expected">The expected symbol to match.</param>
     /// <returns>True if the expected symbol matches and is consumed; otherwise, false.</returns>
@@ -206,7 +211,7 @@ public abstract partial class Parser
     }
 
     /// <summary>
-    /// Checks if any of the expected symbols match the current symbol.
+    ///     Checks if any of the expected symbols match the current symbol.
     /// </summary>
     /// <param name="expected">An array of expected symbols to match.</param>
     /// <returns>True if any of the expected symbols match; otherwise, false.</returns>
@@ -224,7 +229,7 @@ public abstract partial class Parser
     }
 
     /// <summary>
-    /// Checks if the symbol at a specified distance matches the expected symbol.
+    ///     Checks if the symbol at a specified distance matches the expected symbol.
     /// </summary>
     /// <param name="expected">The expected symbol to match.</param>
     /// <param name="distance">The distance ahead to look for the symbol (default is 0).</param>
@@ -247,7 +252,7 @@ public abstract partial class Parser
     }
 
     /// <summary>
-    /// Checks if a sequence of symbols matches the expected symbols.
+    ///     Checks if a sequence of symbols matches the expected symbols.
     /// </summary>
     /// <param name="expected">An array of expected symbols to match.</param>
     /// <returns>True if the sequence of symbols matches; otherwise, false.</returns>
@@ -268,7 +273,7 @@ public abstract partial class Parser
     }
 
     /// <summary>
-    /// If the <paramref name="expected"/> symbol is matched, consume the token.
+    ///     If the <paramref name="expected" /> symbol is matched, consume the token.
     /// </summary>
     /// <param name="expected">The expected symbol to match.</param>
     /// <returns>The consumed token if the expected symbol is matched; otherwise, an invalid token.</returns>
@@ -277,7 +282,7 @@ public abstract partial class Parser
         var token = LookAhead(0);
 
         EnsureSymbolIsRegistered(expected);
-        
+
         if (!CompareToken(token, expected))
         {
             token.Document.Messages.Add(
@@ -290,9 +295,9 @@ public abstract partial class Parser
     }
 
     /// <summary>
-    /// Returns the next <see cref="Token"/> and removes it from the read list.
+    ///     Returns the next <see cref="Token" /> and removes it from the read list.
     /// </summary>
-    /// <returns>The next <see cref="Token"/>.</returns>
+    /// <returns>The next <see cref="Token" />.</returns>
     public Token Consume()
     {
         var token = LookAhead(0);
@@ -303,7 +308,7 @@ public abstract partial class Parser
     }
 
     /// <summary>
-    /// Consumes as many tokens as given in <paramref name="count" />.
+    ///     Consumes as many tokens as given in <paramref name="count" />.
     /// </summary>
     /// <param name="count">The number of tokens to consume.</param>
     /// <returns>An array of consumed tokens.</returns>
@@ -319,7 +324,7 @@ public abstract partial class Parser
     }
 
     /// <summary>
-    /// Get the next token(s) and add it to a cache to reuse it later.
+    ///     Get the next token(s) and add it to a cache to reuse it later.
     /// </summary>
     /// <param name="distance">The number of tokens to look ahead.</param>
     /// <returns>The token at the specified distance.</returns>
@@ -334,9 +339,9 @@ public abstract partial class Parser
         // Get the queued token.
         return _read[(int)distance];
     }
-    
+
     /// <summary>
-    /// Prints all messages stored in the message list using the <see cref="MessageFormatter"/>.
+    ///     Prints all messages stored in the message list using the <see cref="MessageFormatter" />.
     /// </summary>
     public void PrintMessages()
     {

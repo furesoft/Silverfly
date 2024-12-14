@@ -2,7 +2,7 @@
 
 namespace Sample.JSON;
 
-public class Repl() : ReplInstance<JsonGrammar>
+public class Repl : ReplInstance<JsonGrammar>
 {
     protected override void Evaluate(string input)
     {

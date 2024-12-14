@@ -11,7 +11,7 @@ public class GSymbol
 {
     static GSymbol()
     {
-        Pool = new(0, 0);
+        Pool = new SymbolPool(0, 0);
         Empty = Pool.Get("");
 
         Debug.Assert(Empty.Id == 0 && Empty.Name == "");

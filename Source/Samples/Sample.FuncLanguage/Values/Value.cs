@@ -2,13 +2,20 @@ using System.Collections;
 
 namespace Silverfly.Sample.Func.Values;
 
-public abstract record Value()
+public abstract record Value
 {
-    public Scope Members = new();
     public List<Annotation> Annotations = [];
+    public Scope Members = new();
 
-    protected virtual Value GetByIndex(int index) => UnitValue.Shared;
-    protected virtual Value GetByRange(RangeValue range) => UnitValue.Shared;
+    protected virtual Value GetByIndex(int index)
+    {
+        return UnitValue.Shared;
+    }
+
+    protected virtual Value GetByRange(RangeValue range)
+    {
+        return UnitValue.Shared;
+    }
 
     public Value Get(Value key)
     {
@@ -42,13 +49,40 @@ public abstract record Value()
         throw new NotImplementedException();
     }
 
-    public static implicit operator Value(string str) => new StringValue(str);
-    public static implicit operator Value(char c) => new StringValue(c.ToString());
-    public static implicit operator Value(int c) => new NumberValue(c);
-    public static implicit operator Value(double c) => new NumberValue(c);
-    public static implicit operator Value(bool c) => new BoolValue(c);
-    public static implicit operator Value(List<Value> c) => new ListValue(c);
-    public static implicit operator Value(List<object> c) => new ListValue(c.Select(v => (Value)v).ToList());
+    public static implicit operator Value(string str)
+    {
+        return new StringValue(str);
+    }
+
+    public static implicit operator Value(char c)
+    {
+        return new StringValue(c.ToString());
+    }
+
+    public static implicit operator Value(int c)
+    {
+        return new NumberValue(c);
+    }
+
+    public static implicit operator Value(double c)
+    {
+        return new NumberValue(c);
+    }
+
+    public static implicit operator Value(bool c)
+    {
+        return new BoolValue(c);
+    }
+
+    public static implicit operator Value(List<Value> c)
+    {
+        return new ListValue(c);
+    }
+
+    public static implicit operator Value(List<object> c)
+    {
+        return new ListValue(c.Select(v => (Value)v).ToList());
+    }
 
     public object Unmarshal()
     {
@@ -74,7 +108,7 @@ public abstract record Value()
             _ => null
         };
     }
-    
+
     public static Value From(object o)
     {
         var marshalled = MarshalPrimitive(o);
@@ -87,7 +121,7 @@ public abstract record Value()
         {
             return MarshalDelegate(d);
         }
-        
+
         if (o is IEnumerable e)
         {
             return MarshalList(e);
@@ -100,7 +134,7 @@ public abstract record Value()
     {
         var scope = new Scope();
         var type = o.GetType();
-        
+
         foreach (var prop in type.GetProperties())
         {
             var value = prop.GetValue(o);
@@ -129,14 +163,14 @@ public abstract record Value()
             var parameters = d.Method.GetParameters();
             var convertedArgs = new object[parameters.Length];
 
-            for (int i = 0; i < parameters.Length; i++)
+            for (var i = 0; i < parameters.Length; i++)
             {
                 if (parameters[i].ParameterType.IsAssignableFrom(typeof(Value)))
                 {
                     convertedArgs[i] = args[i];
                     continue;
                 }
-                
+
                 if (i < args.Length)
                 {
                     convertedArgs[i] = args[i].Unmarshal() ?? args[i];
@@ -152,7 +186,7 @@ public abstract record Value()
             }
 
             var result = d.DynamicInvoke(convertedArgs);
-            
+
             return From(result);
         }, null);
     }

@@ -7,20 +7,20 @@ using Silverfly.Text.Formatting.Themes;
 namespace Silverfly.Text.Formatting;
 
 /// <summary>
-/// Provides methods to format and display compiler messages with syntax highlighting and theming.
+///     Provides methods to format and display compiler messages with syntax highlighting and theming.
 /// </summary>
 public partial class MessageFormatter(Parser parser)
 {
     public static FormatterTheme Theme = new DefaultFormatterTheme();
 
-    void Write(string src, ConsoleColor color)
+    private void Write(string src, ConsoleColor color)
     {
         Console.ForegroundColor = color;
         Console.Write(src);
         Theme.Reset();
     }
 
-    void WriteLine(string src, ConsoleColor color)
+    private void WriteLine(string src, ConsoleColor color)
     {
         Console.ForegroundColor = color;
         Console.WriteLine(src);
@@ -110,10 +110,10 @@ public partial class MessageFormatter(Parser parser)
 
         var nameSpan = token.Name.AsMemory().Span;
         var documentSliceSpan = line.AsSpan().Slice(currentIndex, token.Name.Length);
-        
+
         return nameSpan.CompareTo(documentSliceSpan, StringComparison.Ordinal) == 0;
     }
-    
+
     private void WriteHighlightedSource(string line)
     {
         var currentIndex = 0;
@@ -132,7 +132,7 @@ public partial class MessageFormatter(Parser parser)
                 {
                     continue;
                 }
-                
+
                 Write(keyword, Theme.Keyword);
 
                 currentIndex += keyword.Length;
@@ -159,7 +159,7 @@ public partial class MessageFormatter(Parser parser)
             {
                 break;
             }
-            
+
             // Highlight parentheses and braces
             if (IsOpenBracket(line[currentIndex]))
             {
@@ -187,7 +187,7 @@ public partial class MessageFormatter(Parser parser)
                     Console.Write(line[currentIndex]);
                 }
 
-                currentIndex++; 
+                currentIndex++;
             }
             else
             {

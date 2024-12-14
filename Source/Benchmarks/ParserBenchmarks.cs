@@ -9,7 +9,7 @@ namespace Benchmarks;
 [Config(typeof(AntiVirusFriendlyConfig))]
 public class ParserBenchmarks
 {
-    private TestParser parser = new();
+    private readonly TestParser parser = new();
 
     [Benchmark]
     public TranslationUnit ParseNumber()

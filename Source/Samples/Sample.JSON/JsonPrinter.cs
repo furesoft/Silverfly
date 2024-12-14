@@ -4,16 +4,16 @@ using Silverfly.Nodes;
 
 namespace Sample.JSON;
 
-class JsonPrinter
+internal class JsonPrinter
 {
     public static CompositeListener<object, AstNode> Listener = CompositeListener<object, AstNode>
-                        .Build()
-                        .With(new ArrayListener())
-                        .With(new LiteralListener())
-                        .With(new JsonObjectListener())
-                        .ToListener();
+        .Build()
+        .With(new ArrayListener())
+        .With(new LiteralListener())
+        .With(new JsonObjectListener())
+        .ToListener();
 
-    class ArrayListener : Listener<object, AstNode, JsonArray>
+    private class ArrayListener : Listener<object, AstNode, JsonArray>
     {
         protected override void ListenToNode(object context, JsonArray node)
         {
@@ -29,7 +29,7 @@ class JsonPrinter
         }
     }
 
-    class LiteralListener : Listener<object, AstNode, LiteralNode>
+    private class LiteralListener : Listener<object, AstNode, LiteralNode>
     {
         protected override void ListenToNode(object context, LiteralNode node)
         {
@@ -37,7 +37,7 @@ class JsonPrinter
         }
     }
 
-    class JsonObjectListener : Listener<object, AstNode, JsonObject>
+    private class JsonObjectListener : Listener<object, AstNode, JsonObject>
     {
         protected override void ListenToNode(object context, JsonObject node)
         {

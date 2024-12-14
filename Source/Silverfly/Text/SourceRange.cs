@@ -3,10 +3,11 @@
 namespace Silverfly.Text;
 
 /// <summary>
-/// Represents a range within a source document defined by start and end positions.
+///     Represents a range within a source document defined by start and end positions.
 /// </summary>
 /// <remarks>
-/// Initializes a new instance of the <see cref="SourceRange"/> struct with the specified document, start, and end spans.
+///     Initializes a new instance of the <see cref="SourceRange" /> struct with the specified document, start, and end
+///     spans.
 /// </remarks>
 /// <param name="document">The source document associated with the range.</param>
 /// <param name="start">The starting position of the range.</param>
@@ -14,27 +15,27 @@ namespace Silverfly.Text;
 public readonly struct SourceRange(SourceDocument document, SourceSpan start, SourceSpan end)
 {
     /// <summary>
-    /// Gets an empty source range.
+    ///     Gets an empty source range.
     /// </summary>
     public static SourceRange Empty { get; } = new();
 
     /// <summary>
-    /// Gets the source document associated with the range.
+    ///     Gets the source document associated with the range.
     /// </summary>
     public SourceDocument Document { get; } = document;
 
     /// <summary>
-    /// Gets the starting position of the range.
+    ///     Gets the starting position of the range.
     /// </summary>
     public SourceSpan Start { get; } = start;
 
     /// <summary>
-    /// Gets the ending position of the range.
+    ///     Gets the ending position of the range.
     /// </summary>
     public SourceSpan End { get; } = end;
 
     /// <summary>
-    /// Determines if the specified line and column are contained within this source range.
+    ///     Determines if the specified line and column are contained within this source range.
     /// </summary>
     /// <param name="line">The line number to check.</param>
     /// <param name="column">The column number to check.</param>
@@ -48,21 +49,21 @@ public readonly struct SourceRange(SourceDocument document, SourceSpan start, So
     }
 
     /// <summary>
-    /// Creates a new <see cref="SourceRange"/> instance from the specified parameters.
+    ///     Creates a new <see cref="SourceRange" /> instance from the specified parameters.
     /// </summary>
     /// <param name="document">The source document associated with the range.</param>
     /// <param name="startLine">The starting line number of the range.</param>
     /// <param name="startColumn">The starting column number of the range.</param>
     /// <param name="endLine">The ending line number of the range.</param>
     /// <param name="endColumn">The ending column number of the range.</param>
-    /// <returns>A new <see cref="SourceRange"/> instance representing the specified range.</returns>
+    /// <returns>A new <see cref="SourceRange" /> instance representing the specified range.</returns>
     public static SourceRange From(SourceDocument document, int startLine, int startColumn, int endLine, int endColumn)
     {
         return new SourceRange(document, new SourceSpan(startLine, startColumn), new SourceSpan(endLine, endColumn));
     }
 
     /// <summary>
-    /// Retrieves a substring from the document source.
+    ///     Retrieves a substring from the document source.
     /// </summary>
     /// <returns>A string representing the text within the specified range.</returns>
     /// <exception cref="ArgumentOutOfRangeException">Thrown when the specified range is out of the document lines.</exception>
@@ -73,7 +74,9 @@ public readonly struct SourceRange(SourceDocument document, SourceSpan start, So
         var endLine = End.Line - 1;
 
         if (startLine < 0 || endLine >= CountLines(source))
+        {
             throw new IndexOutOfRangeException("Range is out of document lines.");
+        }
 
         var startIdx = GetLineStartIndex(source, startLine) + Start.Column - 1;
         var endIdx = GetLineStartIndex(source, endLine) + End.Column;
@@ -88,7 +91,9 @@ public readonly struct SourceRange(SourceDocument document, SourceSpan start, So
         var endLine = End.Line - 1;
 
         if (startLine < 0 || endLine >= CountLines(source))
+        {
             throw new IndexOutOfRangeException("Range is out of document lines.");
+        }
 
         var startIdx = GetLineStartIndex(source, startLine);
         var endIdx = GetLineEndIndex(source, endLine) + 1;
@@ -102,7 +107,9 @@ public readonly struct SourceRange(SourceDocument document, SourceSpan start, So
         for (var i = 0; i < source.Length; i++)
         {
             if (source[i] == '\n')
+            {
                 lines++;
+            }
         }
 
         return lines + 1; // adding one because the last line may not end with a newline
@@ -114,9 +121,14 @@ public readonly struct SourceRange(SourceDocument document, SourceSpan start, So
         for (var i = 0; i < source.Length; i++)
         {
             if (currentLine == line)
+            {
                 return i;
+            }
+
             if (source[i] == '\n')
+            {
                 currentLine++;
+            }
         }
 
         throw new ArgumentOutOfRangeException(nameof(line), " line out of range.");
@@ -134,6 +146,7 @@ public readonly struct SourceRange(SourceDocument document, SourceSpan start, So
                 {
                     return i; // End of line is the character before the newline
                 }
+
                 currentLine++;
             }
         }
@@ -149,7 +162,7 @@ public readonly struct SourceRange(SourceDocument document, SourceSpan start, So
     }
 
     /// <summary>
-    /// Returns a string representation of the source range in the format: "{Filename}: {Start} - {End}".
+    ///     Returns a string representation of the source range in the format: "{Filename}: {Start} - {End}".
     /// </summary>
     /// <returns>A string representation of the source range.</returns>
     public override string ToString()

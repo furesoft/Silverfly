@@ -22,8 +22,12 @@ public class LambdaParselet : IInfixParselet
 
         var value = parser.ParseExpression();
 
-        return new LambdaNode(p.ToImmutableList(), value).WithRange(parser.Document, parameters.Range.Start, parser.LookAhead(0).GetSourceSpanEnd());
+        return new LambdaNode(p.ToImmutableList(), value).WithRange(parser.Document, parameters.Range.Start,
+            parser.LookAhead(0).GetSourceSpanEnd());
     }
 
-    public int GetBindingPower() => 100;
+    public int GetBindingPower()
+    {
+        return 100;
+    }
 }

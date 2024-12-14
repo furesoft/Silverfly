@@ -4,15 +4,15 @@ namespace Silverfly.Sample.Func;
 
 public class SampleNameAdvancer : INameAdvancer
 {
-    private static readonly List<char> _operators = [
+    private static readonly List<char> _operators =
+    [
         '+', '-', '*', '/'
     ];
+
     public bool IsNameStart(char c)
     {
         return char.IsLetter(c) || c == '\'';
     }
-
-    private static bool IsOperator(char c) => _operators.Contains(c);
 
     public void AdvanceName(Lexer lexer)
     {
@@ -20,18 +20,23 @@ public class SampleNameAdvancer : INameAdvancer
 
         while (lexer.IsNotAtEnd())
         {
-            if (IsOperator(lexer.Peek(0)))
+            if (IsOperator(lexer.Peek()))
             {
                 lexer.Advance();
                 return;
             }
 
-            if (!char.IsLetterOrDigit(lexer.Peek(0)) && lexer.Peek(0) != '_')
+            if (!char.IsLetterOrDigit(lexer.Peek()) && lexer.Peek() != '_')
             {
                 break;
             }
 
             lexer.Advance();
         }
+    }
+
+    private static bool IsOperator(char c)
+    {
+        return _operators.Contains(c);
     }
 }

@@ -19,5 +19,8 @@ public class TernaryOperatorParselet(Symbol lastSymbol, int bindingPower) : IInf
             .WithRange(firstExpr.Range.Document, firstExpr.Range.Start, token.GetSourceSpanEnd());
     }
 
-    public int GetBindingPower() => bindingPower;
+    public int GetBindingPower()
+    {
+        return bindingPower;
+    }
 }

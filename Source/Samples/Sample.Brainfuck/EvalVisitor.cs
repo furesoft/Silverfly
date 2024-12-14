@@ -6,25 +6,28 @@ namespace Sample.Brainfuck;
 
 public class EvaluationContext
 {
-    internal int _pointer = 0;
     internal char[] _cells = new char[100];
+    internal int _pointer;
 }
 
-public partial class EvalListener
+public class EvalListener
 {
-    public static CompositeListener<EvaluationContext, AstNode> Listener => CompositeListener<EvaluationContext, AstNode>
-                    .Build()
-                    .With(new PrintListener())
-                    .With(new ReadListener())
-                    .With(new DecrementListener())
-                    .With(new IncrementListener())
-                    .With(new IncrementCellListener())
-                    .With(new DecrementCellListener())
-                    .With(new BlockListener())
-                    .With(new LoopListener())
-                    .ToListener();
+    public static CompositeListener<EvaluationContext, AstNode> Listener
+    {
+        get => CompositeListener<EvaluationContext, AstNode>
+            .Build()
+            .With(new PrintListener())
+            .With(new ReadListener())
+            .With(new DecrementListener())
+            .With(new IncrementListener())
+            .With(new IncrementCellListener())
+            .With(new DecrementCellListener())
+            .With(new BlockListener())
+            .With(new LoopListener())
+            .ToListener();
+    }
 
-    class PrintListener : Listener<EvaluationContext, AstNode, PrintNode>
+    private class PrintListener : Listener<EvaluationContext, AstNode, PrintNode>
     {
         protected override void ListenToNode(EvaluationContext context, PrintNode node)
         {
@@ -32,7 +35,7 @@ public partial class EvalListener
         }
     }
 
-    class ReadListener : Listener<EvaluationContext, AstNode, PrintNode>
+    private class ReadListener : Listener<EvaluationContext, AstNode, PrintNode>
     {
         protected override void ListenToNode(EvaluationContext context, PrintNode node)
         {
@@ -40,7 +43,7 @@ public partial class EvalListener
         }
     }
 
-    class DecrementListener : Listener<EvaluationContext, AstNode, DecrementNode>
+    private class DecrementListener : Listener<EvaluationContext, AstNode, DecrementNode>
     {
         protected override void ListenToNode(EvaluationContext context, DecrementNode node)
         {
@@ -48,7 +51,7 @@ public partial class EvalListener
         }
     }
 
-    class IncrementListener : Listener<EvaluationContext, AstNode, DecrementNode>
+    private class IncrementListener : Listener<EvaluationContext, AstNode, DecrementNode>
     {
         protected override void ListenToNode(EvaluationContext context, DecrementNode node)
         {
@@ -56,7 +59,7 @@ public partial class EvalListener
         }
     }
 
-    class IncrementCellListener : Listener<EvaluationContext, AstNode, DecrementNode>
+    private class IncrementCellListener : Listener<EvaluationContext, AstNode, DecrementNode>
     {
         protected override void ListenToNode(EvaluationContext context, DecrementNode node)
         {
@@ -64,7 +67,7 @@ public partial class EvalListener
         }
     }
 
-    class DecrementCellListener : Listener<EvaluationContext, AstNode, DecrementNode>
+    private class DecrementCellListener : Listener<EvaluationContext, AstNode, DecrementNode>
     {
         protected override void ListenToNode(EvaluationContext context, DecrementNode node)
         {
@@ -72,7 +75,7 @@ public partial class EvalListener
         }
     }
 
-    class BlockListener : Listener<EvaluationContext, AstNode, BlockNode>
+    private class BlockListener : Listener<EvaluationContext, AstNode, BlockNode>
     {
         protected override void ListenToNode(EvaluationContext context, BlockNode node)
         {
@@ -83,7 +86,7 @@ public partial class EvalListener
         }
     }
 
-    class LoopListener : Listener<EvaluationContext, AstNode, LoopNode>
+    private class LoopListener : Listener<EvaluationContext, AstNode, LoopNode>
     {
         protected override void ListenToNode(EvaluationContext context, LoopNode node)
         {

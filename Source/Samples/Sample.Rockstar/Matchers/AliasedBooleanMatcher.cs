@@ -6,7 +6,7 @@ public class AliasedBooleanMatcher : IMatcher
 {
     public static readonly string[] TrueAliases = ["true", "right", "yes", "ok"];
     public static readonly string[] FalseAliases = ["false", "wrong", "no", "lies"];
-    
+
     public bool Match(Lexer lexer, char c)
     {
         return TrueAliases.Concat(FalseAliases).Any(alias => lexer.IsMatch(alias));
@@ -26,6 +26,7 @@ public class AliasedBooleanMatcher : IMatcher
             }
         }
 
-        return new(PredefinedSymbols.Boolean, lexer.Document.Source[oldIndex..index], line, oldColumn, lexer.Document);
+        return new Token(PredefinedSymbols.Boolean, lexer.Document.Source[oldIndex..index], line, oldColumn,
+            lexer.Document);
     }
 }

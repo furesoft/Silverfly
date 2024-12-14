@@ -1,10 +1,7 @@
-
 namespace Silverfly.Sample.Func.Values;
 
 public record ListValue : Value
 {
-    public List<Value> Value { get; }
-
     public ListValue(List<Value> Value)
     {
         this.Value = Value;
@@ -12,7 +9,12 @@ public record ListValue : Value
         Members.Define("length", this.Value.Count);
     }
 
-    public override bool IsTruthy() => true;
+    public List<Value> Value { get; }
+
+    public override bool IsTruthy()
+    {
+        return true;
+    }
 
     protected override Value GetByIndex(int index)
     {

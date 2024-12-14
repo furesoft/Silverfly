@@ -8,7 +8,11 @@ public class AnnotatedNode : AstNode
     {
         Properties.Set(nameof(Annotations), new List<CallNode>());
     }
-    public List<CallNode> Annotations => Properties.GetOrThrow<List<CallNode>>(nameof(Annotations));
+
+    public List<CallNode> Annotations
+    {
+        get => Properties.GetOrThrow<List<CallNode>>(nameof(Annotations));
+    }
 
     public bool HasAnnotation(string name)
     {

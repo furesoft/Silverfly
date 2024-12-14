@@ -21,7 +21,8 @@ internal class FuncPromptCallbacks : ReplPromptCallbacks
     }
     */
 
-    protected override Task<IReadOnlyList<CompletionItem>> GetCompletionItemsAsync(string text, int caret, TextSpan spanToBeReplaced, CancellationToken cancellationToken)
+    protected override Task<IReadOnlyList<CompletionItem>> GetCompletionItemsAsync(string text, int caret,
+        TextSpan spanToBeReplaced, CancellationToken cancellationToken)
     {
         var typedWord = text.AsSpan(spanToBeReplaced.Start, spanToBeReplaced.Length).ToString();
         var tree = Parser.Parse(text);
@@ -36,7 +37,7 @@ internal class FuncPromptCallbacks : ReplPromptCallbacks
 
         if (scope.IsRoot)
         {
-            items = scope.Bindings.ToList();//.Where(_ => !_.StartsWith("'") && !_.StartsWith("__"));
+            items = scope.Bindings.ToList(); //.Where(_ => !_.StartsWith("'") && !_.StartsWith("__"));
         }
         else
         {
@@ -59,13 +60,16 @@ internal class FuncPromptCallbacks : ReplPromptCallbacks
                     }
 
                     return new CompletionItem(
-                        replacementText: replacement,
-                        displayText: displayText,
-                        commitCharacterRules: [..new[]
-                        {
-                            new CharacterSetModificationRule(CharacterSetModificationKind.Add,
-                                [.. Characters])
-                        }]
+                        replacement,
+                        displayText,
+                        commitCharacterRules:
+                        [
+                            ..new[]
+                            {
+                                new CharacterSetModificationRule(CharacterSetModificationKind.Add,
+                                    [.. Characters])
+                            }
+                        ]
                     );
                 })
                 .ToArray()
@@ -90,7 +94,8 @@ internal class FuncPromptCallbacks : ReplPromptCallbacks
             {
                 return scope.Get(nameNode.Token.Text.ToString()).Members;
             }
-            else if (b.Left is NameNode n1 && b.Right is NameNode n2)
+
+            if (b.Left is NameNode n1 && b.Right is NameNode n2)
             {
                 var s = scope.Get(n1.Token.Text.ToString());
                 if (s is LambdaValue)
@@ -100,7 +105,8 @@ internal class FuncPromptCallbacks : ReplPromptCallbacks
 
                 return s.Get(n2.Token.Text.ToString()).Members;
             }
-            else if (b.Left is BinaryOperatorNode ib && ib.Operator.Text.Span == ".")
+
+            if (b.Left is BinaryOperatorNode ib && ib.Operator.Text.Span == ".")
             {
                 return GetScope(b.Left, scope);
             }

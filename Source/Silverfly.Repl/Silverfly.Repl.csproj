@@ -5,11 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="PrettyPrompt" Version="4.1.1" />
+    <PackageReference Include="PrettyPrompt" Version="4.1.1"/>
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All"/>
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Silverfly\Silverfly.csproj" />
+    <ProjectReference Include="..\Silverfly\Silverfly.csproj"/>
   </ItemGroup>
 </Project>

@@ -1,11 +1,16 @@
+using MrKWatkins.Ast.Processing;
 using MrKWatkins.Ast.Traversal;
 using Silverfly.Nodes;
 
 namespace Silverfly.Sample.Func;
 
-public partial class LiteralReplacer : MrKWatkins.Ast.Processing.Replacer<AstNode, LiteralNode>
+public class LiteralReplacer : Replacer<AstNode, LiteralNode>
 {
-    protected override ITraversal<AstNode> Traversal => DepthFirstPreOrderTraversal<AstNode>.Instance;
+    protected override ITraversal<AstNode> Traversal
+    {
+        get => DepthFirstPreOrderTraversal<AstNode>.Instance;
+    }
+
     protected override bool ShouldProcessChildren(AstNode node)
     {
         return true;

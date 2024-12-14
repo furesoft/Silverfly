@@ -8,31 +8,34 @@ using Silverfly.Nodes.Operators;
 namespace Silverfly;
 
 /// <summary>
-/// A visitor class that processes nodes in an abstract syntax tree (AST) and produces a string representation of each node.
+///     A visitor class that processes nodes in an abstract syntax tree (AST) and produces a string representation of each
+///     node.
 /// </summary>
 /// <remarks>
-/// This class derives from <see cref="NodeVisitor{T}"/> with <typeparamref name="string"/> as the return type.
-/// It provides implementations for visiting different types of nodes in the AST and generates a string output for each node.
-/// The actual behavior and string formatting are defined in the methods of this class that override the base class methods.
+///     This class derives from <see cref="NodeVisitor{T}" /> with <typeparamref name="string" /> as the return type.
+///     It provides implementations for visiting different types of nodes in the AST and generates a string output for each
+///     node.
+///     The actual behavior and string formatting are defined in the methods of this class that override the base class
+///     methods.
 /// </remarks>
 public static class PrintListener
 {
     public static CompositeListener<StringBuilder, AstNode> Listener = CompositeListener<StringBuilder, AstNode>
-            .Build()
-            .With(new GroupListener())
-            .With(new InvalidListener())
-            .With(new NameListener())
-            .With(new LiteralListener())
-            .With(new BinaryListener())
-            .With(new PrefixListener())
-            .With(new PostfixListener())
-            .With(new TernaryListener())
-            .With(new CallListener())
-            .With(new BlockListener())
-            .With(new UnknownListener())
-            .ToListener();
+        .Build()
+        .With(new GroupListener())
+        .With(new InvalidListener())
+        .With(new NameListener())
+        .With(new LiteralListener())
+        .With(new BinaryListener())
+        .With(new PrefixListener())
+        .With(new PostfixListener())
+        .With(new TernaryListener())
+        .With(new CallListener())
+        .With(new BlockListener())
+        .With(new UnknownListener())
+        .ToListener();
 
-    class GroupListener : Listener<StringBuilder, AstNode, GroupNode>
+    private class GroupListener : Listener<StringBuilder, AstNode, GroupNode>
     {
         protected override void ListenToNode(StringBuilder context, GroupNode group)
         {
@@ -42,7 +45,7 @@ public static class PrintListener
         }
     }
 
-    class InvalidListener : Listener<StringBuilder, AstNode, InvalidNode>
+    private class InvalidListener : Listener<StringBuilder, AstNode, InvalidNode>
     {
         protected override void ListenToNode(StringBuilder context, InvalidNode node)
         {
@@ -50,7 +53,7 @@ public static class PrintListener
         }
     }
 
-    class NameListener : Listener<StringBuilder, AstNode, NameNode>
+    private class NameListener : Listener<StringBuilder, AstNode, NameNode>
     {
         protected override void ListenToNode(StringBuilder context, NameNode node)
         {
@@ -58,7 +61,7 @@ public static class PrintListener
         }
     }
 
-    class LiteralListener : Listener<StringBuilder, AstNode, LiteralNode>
+    private class LiteralListener : Listener<StringBuilder, AstNode, LiteralNode>
     {
         protected override void ListenToNode(StringBuilder builder, LiteralNode node)
         {
@@ -66,7 +69,7 @@ public static class PrintListener
             {
                 builder.Append('(');
 
-                for (int i = 0; i < list.Count; i++)
+                for (var i = 0; i < list.Count; i++)
                 {
                     Listen(builder, list[i]);
                     if (i < list.Count - 1)
@@ -74,14 +77,15 @@ public static class PrintListener
                         builder.Append(", ");
                     }
                 }
+
                 builder.Append(')');
             }
 
-            builder.Append(node.Value.ToString());
+            builder.Append(node.Value);
         }
     }
 
-    class BinaryListener : Listener<StringBuilder, AstNode, BinaryOperatorNode>
+    private class BinaryListener : Listener<StringBuilder, AstNode, BinaryOperatorNode>
     {
         protected override void ListenToNode(StringBuilder builder, BinaryOperatorNode node)
         {
@@ -95,7 +99,7 @@ public static class PrintListener
         }
     }
 
-    class PrefixListener : Listener<StringBuilder, AstNode, PrefixOperatorNode>
+    private class PrefixListener : Listener<StringBuilder, AstNode, PrefixOperatorNode>
     {
         protected override void ListenToNode(StringBuilder builder, PrefixOperatorNode node)
         {
@@ -112,7 +116,7 @@ public static class PrintListener
         }
     }
 
-    class PostfixListener : Listener<StringBuilder, AstNode, PostfixOperatorNode>
+    private class PostfixListener : Listener<StringBuilder, AstNode, PostfixOperatorNode>
     {
         protected override void ListenToNode(StringBuilder builder, PostfixOperatorNode node)
         {
@@ -128,7 +132,7 @@ public static class PrintListener
         }
     }
 
-    class TernaryListener : Listener<StringBuilder, AstNode, TernaryOperatorNode>
+    private class TernaryListener : Listener<StringBuilder, AstNode, TernaryOperatorNode>
     {
         protected override void ListenToNode(StringBuilder builder, TernaryOperatorNode node)
         {
@@ -144,7 +148,7 @@ public static class PrintListener
         }
     }
 
-    class CallListener : Listener<StringBuilder, AstNode, CallNode>
+    private class CallListener : Listener<StringBuilder, AstNode, CallNode>
     {
         protected override void ListenToNode(StringBuilder builder, CallNode node)
         {
@@ -173,7 +177,7 @@ public static class PrintListener
         }
     }
 
-    class BlockListener : Listener<StringBuilder, AstNode, BlockNode>
+    private class BlockListener : Listener<StringBuilder, AstNode, BlockNode>
     {
         protected override void ListenToNode(StringBuilder builder, BlockNode node)
         {
@@ -187,11 +191,10 @@ public static class PrintListener
                     builder.Append(node.SeperatorSymbol.Name + " ");
                 }
             }
-
         }
     }
 
-    class UnknownListener : Listener<StringBuilder, AstNode>
+    private class UnknownListener : Listener<StringBuilder, AstNode>
     {
         protected override void ListenToNode(StringBuilder builder, AstNode node)
         {
@@ -205,11 +208,18 @@ public static class PrintListener
             {
                 var value = property.GetValue(node);
 
-                if (value == null) continue; // Skip null values
+                if (value == null)
+                {
+                    continue; // Skip null values
+                }
 
                 if (property.PropertyType == typeof(Token))
                 {
-                    if (!firstProperty) builder.Append(',');
+                    if (!firstProperty)
+                    {
+                        builder.Append(',');
+                    }
+
                     builder.Append($" {property.Name}={(Token)value}");
                     firstProperty = false;
                     continue;
@@ -220,10 +230,14 @@ public static class PrintListener
                     var list = value as ImmutableList<AstNode>;
                     if (list != null)
                     {
-                        if (!firstProperty) builder.Append(',');
+                        if (!firstProperty)
+                        {
+                            builder.Append(',');
+                        }
+
                         builder.Append($" {property.Name}=[");
 
-                        for (int i = 0; i < list.Count; i++)
+                        for (var i = 0; i < list.Count; i++)
                         {
                             Listen(builder, list[i]);
                             if (i < list.Count - 1)
@@ -237,7 +251,11 @@ public static class PrintListener
                     }
                     else
                     {
-                        if (!firstProperty) builder.Append(',');
+                        if (!firstProperty)
+                        {
+                            builder.Append(',');
+                        }
+
                         builder.Append($" {property.Name}=null");
                         firstProperty = false;
                     }
@@ -245,7 +263,11 @@ public static class PrintListener
 
                 if (property.PropertyType == typeof(AstNode))
                 {
-                    if (!firstProperty) builder.Append(',');
+                    if (!firstProperty)
+                    {
+                        builder.Append(',');
+                    }
+
                     builder.Append($" {property.Name}=");
                     Listen(builder, (AstNode)value);
                     firstProperty = false;
