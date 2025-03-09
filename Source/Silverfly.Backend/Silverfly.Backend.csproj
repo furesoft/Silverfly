@@ -16,7 +16,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="DistIL.Core" Version="0.11.1-preview" />
+      <PackageReference Include="DistIL.Core" Version="0.13.0-preview" />
     </ItemGroup>
 
 </Project>
