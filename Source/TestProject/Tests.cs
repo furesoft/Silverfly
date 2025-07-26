@@ -1,4 +1,5 @@
 using System.Runtime.CompilerServices;
+using NUnit.Framework;
 using Silverfly;
 using Silverfly.Helpers;
 using Silverfly.Testing;
