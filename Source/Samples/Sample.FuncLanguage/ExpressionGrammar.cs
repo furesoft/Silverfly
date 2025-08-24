@@ -54,7 +54,6 @@ internal class ExpressionGrammar : Parser
         def.Register("import", new ImportParselet());
         def.Register("module", new ModuleParselet());
         def.Register("@", new AnnotationParselet());
-        //parserDefinition.Register("def", new GeneratedParselet());
 
         def.Block(PredefinedSymbols.SOF, PredefinedSymbols.EOF,
             PredefinedSymbols.EOL);

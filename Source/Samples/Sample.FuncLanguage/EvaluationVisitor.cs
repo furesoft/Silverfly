@@ -39,13 +39,13 @@ public class EvaluationListener
             var leftVisited = context.Stack.Pop();
             var rightVisited = context.Stack.Pop();
 
-            if (node.Operator.Text.Span == "=")
+            if (node.Operator.Text.Span is "=")
             {
                 //ToDo: implement assignment
                 return;
             }
 
-            if (node.Operator.Text.Span == "..")
+            if (node.Operator.Text.Span is "..")
             {
                 context.Stack.Push(RangeValue.Create(leftVisited, rightVisited));
             }
@@ -56,7 +56,7 @@ public class EvaluationListener
                 return;
             }
 
-            if (node.Operator.Text.Span == ".")
+            if (node.Operator.Text.Span is ".")
             {
                 context.Stack.Push(leftVisited.Get(rightVisited));
                 return;

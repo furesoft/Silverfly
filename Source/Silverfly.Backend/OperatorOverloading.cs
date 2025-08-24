@@ -31,7 +31,7 @@ public static class OperatorOverloading
         ["explicit"] = "op_Explicit",
     };
 
-    public static bool TryGetOperator(this TypeDesc type, string op, out MethodDesc opMethod, params TypeDesc[] args)
+    public static bool TryGetOperator(this TypeDesc type, string op, out MethodDesc? opMethod, params TypeDesc[] args)
     {
         var nameMap = args.Length switch
         {
@@ -42,7 +42,7 @@ public static class OperatorOverloading
 
         if (nameMap!.TryGetValue(op, out var opMethodName))
         {
-            var candidate = type.FindMethod(opMethodName, new MethodSig(new TypeSig(), args.Select(type=> new TypeSig(type)).ToList(), false), throwIfNotFound: false);
+            var candidate = type.FindMethod(opMethodName, new MethodSig(new TypeSig(), args.Select(t => new TypeSig(t)).ToList(), false), throwIfNotFound: false);
 
             if (candidate != null)
             {
