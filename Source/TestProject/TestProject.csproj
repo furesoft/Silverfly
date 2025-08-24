@@ -7,8 +7,9 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+    <PackageReference Include="Verify" Version="31.0.0-beta.1" />
     <PackageReference Include="NUnit" Version="4.4.0" />
-    <PackageReference Include="NUnit3TestAdapter" Version="5.1.0" />
+    <PackageReference Include="Verify.NUnit" Version="31.0.0-beta.1" />
 
     <ProjectReference Include="..\Silverfly.Testing\Silverfly.Testing.csproj"/>
     <ProjectReference Include="..\Silverfly\Silverfly.csproj"/>

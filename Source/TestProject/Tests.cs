@@ -1,8 +1,9 @@
 using System.Runtime.CompilerServices;
 using NUnit.Framework;
 using Silverfly;
-using Silverfly.Helpers;
 using Silverfly.Testing;
+using VerifyNUnit;
+using VerifyTests;
 
 namespace TestProject;
 
@@ -252,7 +253,7 @@ public class Tests : SnapshotParserTestBase<TestParser>
 
         var result = Parser.ParseTypeName();
 
-        return Verify(result, Settings);
+        return Verifier.Verify(result, Settings);
     }
 
     [Test]
@@ -263,7 +264,7 @@ public class Tests : SnapshotParserTestBase<TestParser>
 
         var result = Parser.ParseTypeName();
 
-        return Verify(result, Settings);
+        return Verifier.Verify(result, Settings);
     }
 
     [Test]
@@ -274,7 +275,7 @@ public class Tests : SnapshotParserTestBase<TestParser>
 
         var result = Parser.ParseTypeName();
 
-        return Verify(result, Settings);
+        return Verifier.Verify(result, Settings);
     }
 
     [Test]
@@ -285,7 +286,7 @@ public class Tests : SnapshotParserTestBase<TestParser>
 
         var result = Parser.ParseTypeName();
 
-        return Verify(result, Settings);
+        return Verifier.Verify(result, Settings);
     }
 
     [Test]
@@ -296,7 +297,7 @@ public class Tests : SnapshotParserTestBase<TestParser>
 
         var result = Parser.ParseTypeName();
 
-        return Verify(result, Settings);
+        return Verifier.Verify(result, Settings);
     }
 
     [Test]
@@ -307,7 +308,7 @@ public class Tests : SnapshotParserTestBase<TestParser>
 
         var result = Parser.ParseTypeName();
 
-        return Verify(result, Settings);
+        return Verifier.Verify(result, Settings);
     }
 
     [Test]

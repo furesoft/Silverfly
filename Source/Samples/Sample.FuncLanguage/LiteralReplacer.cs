@@ -4,19 +4,11 @@ using Silverfly.Nodes;
 
 namespace Silverfly.Sample.Func;
 
-public class LiteralReplacer : Replacer<AstNode, LiteralNode>
+public class LiteralReplacer : NodeReplacer<AstNode, LiteralNode>
 {
-    protected override ITraversal<AstNode> Traversal
-    {
-        get => DepthFirstPreOrderTraversal<AstNode>.Instance;
-    }
+    protected override bool ShouldProcessDescendents(LiteralNode node) => false;
 
-    protected override bool ShouldProcessChildren(AstNode node)
-    {
-        return true;
-    }
-
-    protected override AstNode ReplaceNode(LiteralNode node)
+    protected override LiteralNode Replace(LiteralNode node)
     {
         if (node.Value is ulong value)
         {

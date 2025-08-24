@@ -1,0 +1,12 @@
+﻿{
+  $type: TestResult,
+  ParsedTree: hello; orld,
+  Document: {
+    Filename: test.src,
+    Source: hello;
+world,
+    Messages: [
+      test.src:1:6 Error: Unknown Character ';'
+    ]
+  }
+}
