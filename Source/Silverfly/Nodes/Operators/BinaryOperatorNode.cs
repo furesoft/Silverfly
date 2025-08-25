@@ -3,7 +3,7 @@ namespace Silverfly.Nodes.Operators;
 /// <summary>
 ///     A binary arithmetic expression like "a + b" or "c ^ d".
 /// </summary>
-public class BinaryOperatorNode : AstNode
+public class BinaryOperatorNode : ExpressionNode
 {
     public BinaryOperatorNode(AstNode leftExpr, Token @operator, AstNode rightExpr)
     {
