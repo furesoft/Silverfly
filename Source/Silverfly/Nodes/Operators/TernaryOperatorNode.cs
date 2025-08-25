@@ -3,7 +3,7 @@ namespace Silverfly.Nodes.Operators;
 /// <summary>
 ///     Represents a ternary operator node in an abstract syntax tree (AST).
 /// </summary>
-public class TernaryOperatorNode : AstNode
+public class TernaryOperatorNode : ExpressionNode
 {
     public TernaryOperatorNode(AstNode firstExpr, AstNode secondExpr, AstNode thirdExpr)
     {
