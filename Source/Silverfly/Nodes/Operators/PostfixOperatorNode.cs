@@ -3,7 +3,7 @@ namespace Silverfly.Nodes.Operators;
 /// <summary>
 ///     A postfix unary arithmetic expression like "a!"
 /// </summary>
-public class PostfixOperatorNode : AstNode
+public class PostfixOperatorNode : ExpressionNode
 {
     public PostfixOperatorNode(AstNode expr, Token @operator)
     {
