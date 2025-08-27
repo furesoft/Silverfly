@@ -5,7 +5,7 @@ using System.Collections.Immutable;
 
 namespace Silverfly.Helpers;
 
-public class TypeNameParser
+public class CSharpTypeNameParser : ITypeNameParser
 {
     public Symbol? Start { get; set; }
     public Symbol? End { get; set; }

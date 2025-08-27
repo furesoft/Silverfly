@@ -18,12 +18,12 @@ public class JsonGrammar : Parser
         lexer.AddSymbols(":", "{", "}");
     }
 
-    protected override void InitParser(ParserDefinition def)
+    protected override void InitParser(ParserDefinition parser)
     {
-        def.AddCommonLiterals();
+        parser.AddCommonLiterals();
 
-        def.Register("{", new ObjectParselet());
-        def.Register("null", new NullParselet());
-        def.Register("[", new JsonArrayParselet());
+        parser.Register("{", new ObjectParselet());
+        parser.Register("null", new NullParselet());
+        parser.Register("[", new JsonArrayParselet());
     }
 }

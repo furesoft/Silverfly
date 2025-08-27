@@ -26,36 +26,36 @@ internal class ExpressionGrammar : Parser
         lexer.AddSymbols("/*", "*/", "//", "\"", "->", "+", "-", "*", "/");
     }
 
-    protected override void InitParser(ParserDefinition def)
+    protected override void InitParser(ParserDefinition parser)
     {
-        def.PrecedenceLevels.AddPrecedence("Range");
+        parser.PrecedenceLevels.AddPrecedence("Range");
 
-        def.AddCommonLiterals();
-        def.AddArithmeticOperators();
+        parser.AddCommonLiterals();
+        parser.AddArithmeticOperators();
 
-        def.Register("(", new CallParselet(def.PrecedenceLevels.GetPrecedence("Call")));
-        def.Register("(", new TupleOrGroupParselet());
+        parser.Register("(", new CallParselet(parser.PrecedenceLevels.GetPrecedence("Call")));
+        parser.Register("(", new TupleOrGroupParselet());
 
-        def.Register(PredefinedSymbols.Name, new NameParselet());
+        parser.Register(PredefinedSymbols.Name, new NameParselet());
 
-        def.Register("let", new VariableBindingParselet());
-        def.Register("enum", new EnumParselet());
-        def.Postfix("!");
-        def.InfixLeft(".", DefaultPrecedenceLevels.Call);
-        def.InfixRight("=", DefaultPrecedenceLevels.Assignment);
-        def.InfixLeft("..", "Range");
-        def.Register("[", new IndexParselet(def.PrecedenceLevels.GetPrecedence("Range")));
+        parser.Register("let", new VariableBindingParselet());
+        parser.Register("enum", new EnumParselet());
+        parser.Postfix("!");
+        parser.InfixLeft(".", DefaultPrecedenceLevels.Call);
+        parser.InfixRight("=", DefaultPrecedenceLevels.Assignment);
+        parser.InfixLeft("..", "Range");
+        parser.Register("[", new IndexParselet(parser.PrecedenceLevels.GetPrecedence("Range")));
 
-        def.Register("[", new ListValueParselet());
+        parser.Register("[", new ListValueParselet());
 
-        def.Register("->", new LambdaParselet());
+        parser.Register("->", new LambdaParselet());
 
-        def.Register("if", new IfParselet());
-        def.Register("import", new ImportParselet());
-        def.Register("module", new ModuleParselet());
-        def.Register("@", new AnnotationParselet());
+        parser.Register("if", new IfParselet());
+        parser.Register("import", new ImportParselet());
+        parser.Register("module", new ModuleParselet());
+        parser.Register("@", new AnnotationParselet());
 
-        def.Block(PredefinedSymbols.SOF, PredefinedSymbols.EOF,
+        parser.Block(PredefinedSymbols.SOF, PredefinedSymbols.EOF,
             PredefinedSymbols.EOL);
     }
 }

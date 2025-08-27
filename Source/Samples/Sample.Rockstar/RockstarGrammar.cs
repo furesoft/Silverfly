@@ -45,23 +45,23 @@ public class RockstarGrammar : Parser
         lexer.Ignore(new MultiLineCommentIgnoreMatcher("(", ")"));
     }
 
-    protected override void InitParser(ParserDefinition def)
+    protected override void InitParser(ParserDefinition parser)
     {
-        def.Block(SOF, EOF, EOL);
+        parser.Block(SOF, EOF, EOL);
 
-        def.Register(PredefinedSymbols.Boolean, new AliasedBooleanParselet());
-        def.Register("#empty_string", new MappingParselet(""));
-        def.Register("#null", new MappingParselet(null));
-        def.Register("#pronoun", new MappingParselet(null));
+        parser.Register(PredefinedSymbols.Boolean, new AliasedBooleanParselet());
+        parser.Register("#empty_string", new MappingParselet(""));
+        parser.Register("#null", new MappingParselet(null));
+        parser.Register("#pronoun", new MappingParselet(null));
 
-        def.Register(new AssignmentParselet(), "let", "put");
-        def.Register("#poetic", new PoeticLiteralParselet());
+        parser.Register(new AssignmentParselet(), "let", "put");
+        parser.Register("#poetic", new PoeticLiteralParselet());
 
-        def.Register(Name, new NameParselet());
-        def.Register(Number, new NumberParselet());
+        parser.Register(Name, new NameParselet());
+        parser.Register(Number, new NumberParselet());
 
-        def.Register(new PrintParselet(), PrintParselet.Aliases);
+        parser.Register(new PrintParselet(), PrintParselet.Aliases);
 
-        def.Block("if", "#line");
+        parser.Block("if", "#line");
     }
 }

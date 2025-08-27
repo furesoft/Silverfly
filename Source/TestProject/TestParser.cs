@@ -6,29 +6,29 @@ namespace TestProject;
 
 public class TestParser : Parser
 {
-    protected override void InitParser(ParserDefinition def)
+    protected override void InitParser(ParserDefinition parser)
     {
-        def.Register(PredefinedSymbols.Name, new NameParselet());
+        parser.Register(PredefinedSymbols.Name, new NameParselet());
 
-        def.Register("(", new CallParselet(def.PrecedenceLevels.GetPrecedence("Call")));
+        parser.Register("(", new CallParselet(parser.PrecedenceLevels.GetPrecedence("Call")));
 
-        def.Ternary("?", ":", "Conditional");
-        def.InfixLeft(".", "Call");
+        parser.Ternary("?", ":", "Conditional");
+        parser.InfixLeft(".", "Call");
 
-        def.AddArithmeticOperators();
-        def.AddBitOperators();
-        def.AddLogicalOperators();
-        def.AddCommonLiterals();
-        def.AddCommonAssignmentOperators();
+        parser.AddArithmeticOperators();
+        parser.AddBitOperators();
+        parser.AddLogicalOperators();
+        parser.AddCommonLiterals();
+        parser.AddCommonAssignmentOperators();
 
-        def.Prefix("not");
-        def.Postfix("!");
+        parser.Prefix("not");
+        parser.Postfix("!");
 
-        def.InfixRight("^", "Exponent");
+        parser.InfixRight("^", "Exponent");
 
-        def.InfixLeft("->", "Product");
+        parser.InfixLeft("->", "Product");
 
-        def.Block(PredefinedSymbols.SOF, PredefinedSymbols.EOF,";");
+        parser.Block(PredefinedSymbols.SOF, PredefinedSymbols.EOF,";");
     }
 
     protected override void InitLexer(LexerConfig lexer)

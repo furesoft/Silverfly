@@ -38,7 +38,7 @@ public abstract partial class Parser
     {
         var token = LookAhead();
 
-        if (ParserDefinition._statementParselets.TryGetValue(token.Type, out var parselet))
+        if (ParserDefinition.StatementParselets.TryGetValue(token.Type, out var parselet))
         {
             Consume();
 
@@ -70,9 +70,9 @@ public abstract partial class Parser
         
         InitParser(ParserDefinition);
 
-        AddLexerSymbols(Lexer, ParserDefinition._prefixParselets);
-        AddLexerSymbols(Lexer, ParserDefinition._infixParselets);
-        AddLexerSymbols(Lexer, ParserDefinition._statementParselets);
+        AddLexerSymbols(Lexer, ParserDefinition.PrefixParselets);
+        AddLexerSymbols(Lexer, ParserDefinition.InfixParselets);
+        AddLexerSymbols(Lexer, ParserDefinition.StatementParselets);
 
         Lexer.Config.OrderSymbols();
 
@@ -140,7 +140,7 @@ public abstract partial class Parser
             return new InvalidNode(token).WithRange(token);
         }
 
-        if (!ParserDefinition._prefixParselets.TryGetValue(token.Type, out var prefix))
+        if (!ParserDefinition.PrefixParselets.TryGetValue(token.Type, out var prefix))
         {
             token.Document.AddMessage(MessageSeverity.Error, $"Failed to parse token '{token.Text}'", token.GetRange());
 
@@ -153,7 +153,7 @@ public abstract partial class Parser
         {
             token = Consume();
 
-            if (!ParserDefinition._infixParselets.TryGetValue(token.Type, out var infix))
+            if (!ParserDefinition.InfixParselets.TryGetValue(token.Type, out var infix))
             {
                 token.Document.Messages.Add(
                     Message.Error($"Failed to parse token '{token.Text}'", token.GetRange()));
@@ -187,6 +187,11 @@ public abstract partial class Parser
     /// <returns></returns>
     public TypeName? ParseTypeName()
     {
+        if (ParserDefinition._typeNameParser is null)
+        {
+            throw new InvalidOperationException("No typename parser registered in the parser definition.");
+        }
+
         return ParserDefinition._typeNameParser.TryParse(this, out var typename) ? typename : null;
     }
 
@@ -203,12 +208,12 @@ public abstract partial class Parser
     /// <summary>
     /// Initializes the parser with the specified parser definition.
     /// </summary>
-    /// <param name="def">The definition settings for initializing the parser.</param>
+    /// <param name="parser">The definition settings for initializing the parser.</param>
     /// <remarks>
     /// This abstract method must be implemented in derived classes to provide custom initialization logic for the parser.
-    /// The <paramref name="def"/> parameter contains the settings and rules that define how the parser should be configured.
+    /// The <paramref name="parser"/> parameter contains the settings and rules that define how the parser should be configured.
     /// </remarks>
-    protected abstract void InitParser(ParserDefinition def);
+    protected abstract void InitParser(ParserDefinition parser);
 
     /// <summary>
     /// Checks if the current symbol matches the expected symbol and consumes it if it does.
@@ -372,7 +377,7 @@ public abstract partial class Parser
 
     private int GetBindingPower()
     {
-        if (ParserDefinition._infixParselets.TryGetValue(LookAhead().Type, out var parselet))
+        if (ParserDefinition.InfixParselets.TryGetValue(LookAhead().Type, out var parselet))
         {
             return parselet.GetBindingPower();
         }

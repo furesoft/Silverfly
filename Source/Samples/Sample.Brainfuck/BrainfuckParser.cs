@@ -12,11 +12,11 @@ public class BrainfuckParser : Parser
         lexer.Ignore(new SingleLineCommentIgnoreMatcher("#"));
     }
 
-    protected override void InitParser(ParserDefinition def)
+    protected override void InitParser(ParserDefinition parser)
     {
-        def.Register(new OperationParselet(), "+", "-", "<", ">", ".", ",");
-        def.Register("[", new LoopParselet());
+        parser.Register(new OperationParselet(), "+", "-", "<", ">", ".", ",");
+        parser.Register("[", new LoopParselet());
 
-        def.Block(PredefinedSymbols.SOF, PredefinedSymbols.EOF);
+        parser.Block(PredefinedSymbols.SOF, PredefinedSymbols.EOF);
     }
 }

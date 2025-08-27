@@ -7,11 +7,11 @@ namespace Silverfly;
 
 public partial class ParserDefinition
 {
-    internal readonly Dictionary<Symbol, IInfixParselet> _infixParselets = [];
-    internal readonly Dictionary<Symbol, IPrefixParselet> _prefixParselets = [];
-    internal readonly Dictionary<Symbol, IStatementParselet> _statementParselets = [];
+    internal readonly Dictionary<Symbol, IInfixParselet> InfixParselets = [];
+    internal readonly Dictionary<Symbol, IPrefixParselet> PrefixParselets = [];
+    internal readonly Dictionary<Symbol, IStatementParselet> StatementParselets = [];
 
-    internal TypeNameParser _typeNameParser = new TypeNameParser();
+    internal ITypeNameParser _typeNameParser;
     public PrecedenceLevels PrecedenceLevels = new DefaultPrecedenceLevels();
 
     /// <summary>
@@ -21,7 +21,7 @@ public partial class ParserDefinition
     /// <param name="parselet">The prefix parselet to be registered.</param>
     public void Register(Symbol token, IPrefixParselet parselet)
     {
-        _prefixParselets[token] = parselet;
+        PrefixParselets[token] = parselet;
     }
 
     /// <summary>
@@ -31,7 +31,7 @@ public partial class ParserDefinition
     /// <param name="parselet">The infix parselet to be registered.</param>
     public void Register(Symbol token, IInfixParselet parselet)
     {
-        _infixParselets[token] = parselet;
+        InfixParselets[token] = parselet;
     }
 
     /// <summary>
@@ -41,7 +41,7 @@ public partial class ParserDefinition
     /// <param name="parselet">The statement parselet to be registered.</param>
     public void Register(Symbol token, IStatementParselet parselet)
     {
-        _statementParselets[token] = parselet;
+        StatementParselets[token] = parselet;
     }
 
     /// <summary>
@@ -162,17 +162,24 @@ public partial class ParserDefinition
             new TernaryOperatorParselet(secondSymbol, PrecedenceLevels.GetPrecedence(bindingPowerName)));
     }
 
+    /// <summary>
+    /// A C# style typename parser with generics support.
+    /// </summary>
+    /// <param name="genericStart"></param>
+    /// <param name="genericEnd"></param>
+    /// <param name="genericSeperator"></param>
     public void Typename(Symbol genericStart, Symbol genericEnd, Symbol genericSeperator)
     {
-        _typeNameParser.Start = genericStart;
-        _typeNameParser.End = genericEnd;
-        _typeNameParser.Separator = genericSeperator;
+        var parser = new CSharpTypeNameParser();
+        parser.Start = genericStart;
+        parser.End = genericEnd;
+        parser.Separator = genericSeperator;
+
+        _typeNameParser = parser;
     }
 
-    public void Typename()
+    public void Typename(ITypeNameParser typeNameParser)
     {
-        _typeNameParser.Start = null;
-        _typeNameParser.End = null;
-        _typeNameParser.Separator = null;
+        _typeNameParser = typeNameParser;
     }
 }
