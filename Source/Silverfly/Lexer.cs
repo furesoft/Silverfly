@@ -267,7 +267,10 @@ public sealed partial class Lexer
 
         if (Config.Symbols.ContainsKey(name))
         {
-            return new(name, nameSlice, _line, oldColumn, document);
+            Symbol symbol = name;
+            symbol.IsKeyword = Config.Keywords.Contains(name);
+
+            return new(symbol, nameSlice, _line, oldColumn, document);
         }
 
         return new(PredefinedSymbols.Name, nameSlice, _line, oldColumn, document);

@@ -75,6 +75,8 @@ public class Symbol
         return Name;
     }
 
+    public bool IsKeyword { get; internal set; }
+
     public string Punctuator()
     {
         if (this == PredefinedSymbols.Name || this == PredefinedSymbols.EOF || this == PredefinedSymbols.SOF ||
