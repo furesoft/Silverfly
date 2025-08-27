@@ -6,7 +6,7 @@ namespace Silverfly.Nodes;
 /// <summary>
 ///     A function call like "a(b, c, d)".
 /// </summary>
-public class CallNode : AstNode
+public class CallNode : ExpressionNode
 {
     public CallNode(AstNode functionExpr, ImmutableList<AstNode> arguments)
     {

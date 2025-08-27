@@ -3,7 +3,7 @@
 /// <summary>
 ///     Represents a literal node in an abstract syntax tree (AST), which holds a literal value.
 /// </summary>
-public class LiteralNode(object value, Token token) : AstNode
+public class LiteralNode(object value, Token token) : ExpressionNode
 {
     public object Value
     {

@@ -3,7 +3,7 @@ namespace Silverfly.Nodes;
 /// <summary>
 ///     A simple variable name expression like "abc".
 /// </summary>
-public class NameNode : AstNode
+public class NameNode : ExpressionNode
 {
     public NameNode(Token token)
     {

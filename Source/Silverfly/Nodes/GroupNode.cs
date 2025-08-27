@@ -4,7 +4,7 @@ namespace Silverfly.Nodes;
 ///     Represents a group node in an abstract syntax tree (AST), which represents an expression enclosed within grouping
 ///     symbols.
 /// </summary>
-public class GroupNode : AstNode
+public class GroupNode : ExpressionNode
 {
     public GroupNode(Symbol leftSymbol, Symbol rightSymbol, AstNode expr)
     {
