@@ -12,9 +12,16 @@ namespace Silverfly.Text.Formatting;
 public partial class MessageFormatter(Parser parser)
 {
     public static FormatterTheme Theme = new DefaultFormatterTheme();
+    static bool NO_COLOR = Environment.GetEnvironmentVariable("NO_COLOR") is not null;
 
     private void Write(string src, ConsoleColor color)
     {
+        if (NO_COLOR)
+        {
+            Console.Write(src);
+            return;
+        }
+
         Console.ForegroundColor = color;
         Console.Write(src);
         Theme.Reset();
@@ -22,6 +29,12 @@ public partial class MessageFormatter(Parser parser)
 
     private void WriteLine(string src, ConsoleColor color)
     {
+        if (NO_COLOR)
+        {
+            Console.WriteLine(src);
+            return;
+        }
+
         Console.ForegroundColor = color;
         Console.WriteLine(src);
         Theme.Reset();
