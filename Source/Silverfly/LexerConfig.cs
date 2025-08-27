@@ -169,9 +169,9 @@ public class LexerConfig
     /// Adds a matcher to identify boolean values ('true' and 'false').
     /// </summary>
     /// <param name="ignoreCasing">Flag indicating whether casing should be ignored when matching.</param>
-    public void MatchBoolean()
+    public void MatchBoolean(string trueSymbol = "true", string falseSymbol = "false")
     {
-        AddMatcher(new BooleanMatcher());
+        AddMatcher(new BooleanMatcher(trueSymbol, falseSymbol));
     }
 
     /// <summary>

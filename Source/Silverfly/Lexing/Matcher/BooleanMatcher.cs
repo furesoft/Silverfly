@@ -3,7 +3,7 @@
 /// <summary>
 ///     Represents a matcher that identifies boolean literals ("true" or "false") in the lexer input.
 /// </summary>
-public class BooleanMatcher : IMatcher
+public class BooleanMatcher(Symbol trueSymbol, Symbol falseSymbol) : IMatcher
 {
     /// <summary>
     ///     Determines whether the current lexer position matches a boolean literal ("true" or "false").
@@ -15,7 +15,7 @@ public class BooleanMatcher : IMatcher
     /// </returns>
     public bool Match(Lexer lexer, char c)
     {
-        return lexer.IsMatch("true", lexer.Config.IgnoreCasing) || lexer.IsMatch("false", lexer.Config.IgnoreCasing);
+        return lexer.IsMatch(trueSymbol.Name, lexer.Config.IgnoreCasing) || lexer.IsMatch(falseSymbol.Name, lexer.Config.IgnoreCasing);
     }
 
     /// <summary>
@@ -33,8 +33,8 @@ public class BooleanMatcher : IMatcher
         var oldColumn = column;
         var oldIndex = index;
 
-        lexer.AdvanceIfMatch("true");
-        lexer.AdvanceIfMatch("false");
+        lexer.AdvanceIfMatch(trueSymbol.Name);
+        lexer.AdvanceIfMatch(falseSymbol.Name);
 
         return new Token(PredefinedSymbols.Boolean, lexer.Document.Source[oldIndex..index], line, oldColumn,
             lexer.Document);
