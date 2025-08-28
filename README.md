@@ -42,7 +42,8 @@ public class Program
             var input = Console.ReadLine();
 
             var parsed = new ExpressionGrammar().Parse(input);
-            var evaluated = parsed.Tree.Accept(new EvaluationVisitor());
+            var context = new EvaluationContext();
+            EvaluationListener.Listener.Listen(context, parsed.Tree);
 
             Console.WriteLine("> " + evaluated);
         }
