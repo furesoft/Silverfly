@@ -54,9 +54,11 @@ public class LexerConfig
     /// <param name="keyword">The keyword to be added.</param>
     public void AddKeyword(string keyword)
     {
-        Keywords.Add(keyword);
+        Symbol symbol = keyword;
+        symbol.IsKeyword = true;
+        Keywords.Add(symbol);
 
-        Symbols.TryAdd(keyword, keyword);
+        Symbols.TryAdd(keyword, symbol);
     }
 
     /// <summary>
