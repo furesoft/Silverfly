@@ -53,7 +53,7 @@ public class Program
 
 For more detailed instructions and advanced usage, please refer to
 the [wiki](https://furesoft.gitbook.io/silverfly).
-A great example can be found [here](https://github.com/furesoft/Silverfly/tree/main/Source/Samples/Sample.FuncLanguage)
+A great example can be found [here](https://github.com/furesoft/Silverfly/blob/main/Source/Samples/Sample.FuncLanguage/ExpressionGrammar.cs)
 
 Silverfly uses the brilliant library from [MrKWatkins](https://github.com/MrKWatkins/Ast/) to build an AST.
 
