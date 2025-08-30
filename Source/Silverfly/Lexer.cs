@@ -15,6 +15,9 @@ public sealed partial class Lexer
     private int _index;
     private int _line = 1, _column = 1;
 
+    public int Line => _line;
+    public int Column => _column;
+
     public int CurrentIndex => _index;
 
     private ILexerContext _context;

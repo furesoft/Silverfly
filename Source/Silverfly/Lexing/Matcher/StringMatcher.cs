@@ -1,5 +1,6 @@
 using System;
 using System.Text;
+using System.Xml.Schema;
 using Silverfly.Text;
 
 namespace Silverfly.Lexing.Matcher;
@@ -94,7 +95,7 @@ public class StringMatcher(Symbol leftStr, Symbol rightStr, bool allowEscapeChar
     /// </summary>
     /// <param name="lexer">The lexer processing the input.</param>
     /// <param name="builder">The string builder to append the escape character to.</param>
-    private static void ParseEscapeChar(Lexer lexer, StringBuilder builder)
+    private void ParseEscapeChar(Lexer lexer, StringBuilder builder)
     {
         switch (lexer.Peek())
         {
@@ -110,12 +111,20 @@ public class StringMatcher(Symbol leftStr, Symbol rightStr, bool allowEscapeChar
             case 't':
                 builder.Append('\t');
                 break;
-            case '"':
-                builder.Append('"');
+            case 'f':
+                builder.Append('\f');
                 break;
             default:
+                if (lexer.IsMatch(leftStr))
+                {
+                    builder.Append(leftStr);
+                    break;
+                }
+
                 builder.Append('\\');
                 builder.Append(lexer.Peek());
+                lexer.Document.AddMessage(MessageSeverity.Error, "Invalid escape character",
+                    SourceRange.From(lexer.Document, lexer.Line, lexer.Column, lexer.Line, lexer.Column));
                 break;
         }
 

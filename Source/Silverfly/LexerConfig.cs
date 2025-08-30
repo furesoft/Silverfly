@@ -56,7 +56,7 @@ public class LexerConfig
     {
         Symbol symbol = keyword;
         symbol.IsKeyword = true;
-        Keywords.Add(symbol);
+        Keywords.Add(keyword);
 
         Symbols.TryAdd(keyword, symbol);
     }
