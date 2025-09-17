@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MrKWatkins.Ast" Version="0.9.132" />
+    <PackageReference Include="MrKWatkins.Ast" Version="0.9.133" />
     <PackageReference Include="System.Collections.Immutable" Version="10.0.0-preview.6.25358.103" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All"/>
   </ItemGroup>
