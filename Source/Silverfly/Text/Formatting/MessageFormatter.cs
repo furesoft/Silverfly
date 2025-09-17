@@ -46,7 +46,10 @@ public partial class MessageFormatter(Parser parser)
 
         Write("    ┌─ ", Theme.Border);
 
-        WriteLine(error.Message.Document.Filename, Theme.Filename);
+        if (error.Message.Document.Filename is not null)
+        {
+            WriteLine(error.Message.Document.Filename, Theme.Filename);
+        }
 
         for (var i = 0; i < error.SourceLines.Count; i++)
         {

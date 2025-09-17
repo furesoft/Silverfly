@@ -13,7 +13,7 @@ public class SourceDocument
     /// <summary>
     ///     Gets or sets the filename of the source document.
     /// </summary>
-    public string Filename { get; set; }
+    public string? Filename { get; set; }
 
     /// <summary>
     ///     Gets or sets the source code content as a read-only memory of characters.
