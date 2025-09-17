@@ -60,7 +60,7 @@ public partial class MessageFormatter(Parser parser)
 
             WriteUnderline(error);
 
-            WriteMessage(error);
+            WriteAddition(error);
         }
 
         Write("    \u2514─ ", Theme.Border);
@@ -85,16 +85,16 @@ public partial class MessageFormatter(Parser parser)
         var underline = new string(' ', highlightIndex) +
                         new string('~', error.Message.Range.End.Column - highlightIndex);
 
-        WriteLine($"    |{underline}^", Theme.Underline);
+        var severityColor = GetColorForSeverity(error.Message.Severity);
+        WriteLine($"    |{underline}^ {error.Message.Text}", severityColor);
     }
 
-    private void WriteMessage(CompilerError error)
+    private void WriteAddition(CompilerError error)
     {
-        var severityColor = GetColorForSeverity(error.Message.Severity);
-        Write("    | ", Theme.Border);
+        if (error.Message.Addition is null) return;
 
-        Write($"{error.Message.Severity}", severityColor);
-        WriteLine($": {error.Message.Text}", Theme.Foreground);
+        Write("    | ", Theme.Border);
+        WriteLine(error.Message.Addition, Theme.Foreground);
     }
 
     private ConsoleColor GetColorForSeverity(MessageSeverity severity)

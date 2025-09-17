@@ -20,5 +20,8 @@ internal class Repl : ReplInstance<ExpressionGrammar, FuncPromptCallbacks>
             var context = new EvaluationContext { Scope = Scope.Root };
             EvaluationListener.Listener.Listen(context, parsed.Tree);
         }
+        else {
+            Parser.PrintMessages();
+        }
     }
 }

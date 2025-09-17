@@ -33,6 +33,11 @@ public sealed class Message(MessageSeverity severity, string text, SourceRange r
     public string Text { get; } = text;
 
     /// <summary>
+    /// Additional context for the message
+    /// </summary>
+    public string? Addition { get; set; }
+
+    /// <summary>
     ///     Constructs an error message with the specified severity, text, and range.
     /// </summary>
     /// <param name="message">The error message text.</param>
