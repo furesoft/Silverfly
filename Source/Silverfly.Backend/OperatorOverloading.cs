@@ -19,6 +19,11 @@ public static class OperatorOverloading
         ["^"] = "op_ExclusiveOr",
         ["=="] = "op_Equality",
         ["!="] = "op_Inequality",
+
+        ["+="] = "op_AdditionAssignment",
+        ["-="] = "op_SubtractionAssignment",
+        ["*="] = "op_MultiplicationAssignment",
+        ["/="] = "op_DivisionAssignment",
     };
 
     public static readonly Dictionary<string, string> UnMap = new()
@@ -29,6 +34,10 @@ public static class OperatorOverloading
 
         ["implicit"] = "op_Implicit",
         ["explicit"] = "op_Explicit",
+
+        // instance operators
+        ["++"] = "op_IncrementAssignment",
+        ["--"] = "op_DecrementAssignment",
     };
 
     public static bool TryGetOperator(this TypeDesc type, string op, out MethodDesc? opMethod, params TypeDesc[] args)
