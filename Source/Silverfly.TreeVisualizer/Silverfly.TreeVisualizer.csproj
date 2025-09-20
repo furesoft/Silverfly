@@ -7,6 +7,7 @@
         <Title>Silverfly.TreeVisualizer</Title>
         <Description>A tool to view Silverfly trees</Description>
         <PackageTags>parser, pratt, silverfly, ast</PackageTags>
+        <OutputType>Exe</OutputType>
     </PropertyGroup>
 
     <ItemGroup>

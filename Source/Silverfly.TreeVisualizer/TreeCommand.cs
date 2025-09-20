@@ -89,7 +89,7 @@ internal sealed class TreeCommand : Command<TreeCommand.Settings>
         return null;
     }
 
-    private string[] ignorePropNames = ["Tag", "Range", "Parent"];
+    private readonly string[] _ignorePropNames = ["Tag", "Range", "Parent", "Properties"];
 
     private void BuildTree(IHasTreeNodes node, AstNode parsedTree)
     {
@@ -122,7 +122,7 @@ internal sealed class TreeCommand : Command<TreeCommand.Settings>
 
         foreach (var property in childType.GetProperties(BindingFlags.Instance | BindingFlags.Public))
         {
-            if (ignorePropNames.Contains(property.Name))
+            if (_ignorePropNames.Contains(property.Name))
             {
                 continue;
             }

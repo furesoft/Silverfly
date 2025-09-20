@@ -17,6 +17,9 @@ public static class AstNodeExtensions
             int i => ConstInt.CreateI(i),
             long l => ConstInt.CreateL(l),
 
+            ulong l => ConstInt.CreateL((long)l),
+            uint l => ConstInt.CreateI((int)l),
+
             sbyte sb => ConstInt.CreateI(sb),
             ushort us => ConstInt.CreateI(us),
 
