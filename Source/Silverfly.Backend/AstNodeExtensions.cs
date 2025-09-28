@@ -1,6 +1,7 @@
 ﻿using System;
 using DistIL.IR;
 using Silverfly.Nodes;
+using Silverfly.Nodes.Operators;
 
 namespace Silverfly.Backend;
 
@@ -44,5 +45,10 @@ public static class AstNodeExtensions
             "/" => BinaryOp.FDiv,
             _ => throw new ArgumentOutOfRangeException(nameof(op), op, null)
         };
+    }
+
+    public static BinaryOp MapBinOperator(BinaryOperatorNode node)
+    {
+        return MapBinOperator(node.Operator.Text.ToString());
     }
 }
