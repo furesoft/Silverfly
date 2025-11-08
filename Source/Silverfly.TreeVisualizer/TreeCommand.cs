@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Collections;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using Silverfly.Nodes;
 using Spectre.Console;
 using Spectre.Console.Cli;
@@ -23,7 +23,7 @@ internal sealed class TreeCommand : Command<TreeCommand.Settings>
         public string Source { get; set; }
     }
 
-    public override int Execute(CommandContext context, Settings settings)
+    public override int Execute(CommandContext context, Settings settings, CancellationToken cancellationToken)
     {
         var parserInstance = FindParser(settings);
 
@@ -120,43 +120,45 @@ internal sealed class TreeCommand : Command<TreeCommand.Settings>
             childNode = node;
         }
 
-        foreach (var property in childType.GetProperties(BindingFlags.Instance | BindingFlags.Public))
+        if (child is AstNode cnode)
         {
-            if (_ignorePropNames.Contains(property.Name))
+            foreach (var property in cnode.EnumerateProperties())
             {
-                continue;
-            }
-
-            var propValue = property.GetValue(child);
-
-            if (propValue is LiteralNode literal)
-            {
-                childNode.AddNode($"{property.Name}={literal.Value}");
-                continue;
-            }
-            if (propValue is NameNode nameNode)
-            {
-                childNode.AddNode($"{property.Name}={nameNode.Token}");
-                continue;
-            }
-
-            if (propValue is Token token)
-            {
-                childNode.AddNode($"{property.Name} '{token}'");
-                continue;
-            }
-            else if (propValue is IEnumerable enumerable)
-            {
-                var itemNode = childNode.AddNode($"{property.Name}");
-                foreach (var item in enumerable)
+                if (_ignorePropNames.Contains(property.Key))
                 {
-                    BuildTreeChild(itemNode, item);
+                    continue;
                 }
+
+                var propValue = property.Value;
+
+                if (propValue is LiteralNode literal)
+                {
+                    childNode.AddNode($"{property.Key}={literal.Value}");
+                    continue;
+                }
+                if (propValue is NameNode nameNode)
+                {
+                    childNode.AddNode($"{property.Key}={nameNode.Token}");
+                    continue;
+                }
+
+                if (propValue is Token token)
+                {
+                    childNode.AddNode($"{property.Key} '{token}'");
+                }
+              /*  else if (propValue is IEnumerable enumerable)
+                {
+                    var itemNode = childNode.AddNode($"{property.Key}");
+                    foreach (var item in enumerable)
+                    {
+                        BuildTreeChild(itemNode, item);
+                    }
+                }*/
             }
 
-            if (propValue is AstNode childBlock)
+            foreach (var c in cnode.Children)
             {
-                BuildTreeChild(childNode, childBlock);
+                BuildTreeChild(childNode, c);
             }
         }
     }

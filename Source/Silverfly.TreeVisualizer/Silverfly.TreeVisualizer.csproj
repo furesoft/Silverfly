@@ -11,8 +11,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Spectre.Console" Version="0.52.0" />
-      <PackageReference Include="Spectre.Console.Cli" Version="0.52.0" />
+      <PackageReference Include="Spectre.Console" Version="0.53.1-preview.0.2" />
+      <PackageReference Include="Spectre.Console.Cli" Version="0.53.1-preview.0.2" />
     </ItemGroup>
 
     <ItemGroup>
